@@ -1,0 +1,39 @@
+{
+  "name": "Born to Run - Treinamento e Saúde",
+  "short_name": "Born to Run",
+  "description": "Equipe de corrida e caminhada de Descalvado-SP. Treinamento personalizado com foco em saúde e qualidade de vida.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafaf9",
+  "theme_color": "#e81010",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR",
+  "categories": ["sports", "health", "fitness"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Área de Membros",
+      "url": "/dashboard",
+      "description": "Acesse seu dashboard de atleta"
+    },
+    {
+      "name": "Feed da Equipe",
+      "url": "/dashboard/feed",
+      "description": "Veja as atividades da equipe"
+    }
+  ]
+}
