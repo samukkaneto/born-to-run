@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate } from '@/lib/utils'
-import { Dumbbell, Calendar, Target, ChevronRight } from 'lucide-react'
+import { Dumbbell, Calendar, Target } from 'lucide-react'
 import type { Workout } from '@/types'
 
 const levelColors: Record<string, string> = {

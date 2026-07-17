@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { logout } from '@/lib/actions/auth'
 import { ShieldCheck, Dumbbell, Megaphone, Users, ArrowLeft } from 'lucide-react'
 
 const navItems = [

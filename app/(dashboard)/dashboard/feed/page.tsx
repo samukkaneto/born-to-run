@@ -58,7 +58,7 @@ export default async function FeedPage() {
           {enrichedPosts.map((post) => (
             <PostCard
               key={post.id}
-              post={post as Parameters<typeof PostCard>[0]['post']}
+              post={post}
               currentUserId={user.id}
               isAdmin={isAdmin}
             />

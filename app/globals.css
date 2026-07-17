@@ -62,8 +62,8 @@
   --color-destructive: var(--destructive);
 
   /* ── Typography ── */
-  --font-sans:    'Inter', 'Inter Fallback', system-ui, sans-serif;
-  --font-display: 'Barlow Condensed', 'Inter', system-ui, sans-serif;
+  --font-sans:    var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-display: var(--font-barlow), 'Barlow Condensed', system-ui, sans-serif;
 
   /* ── Radii ── */
   --radius-sm:  0.375rem;
@@ -103,6 +103,14 @@
   --sidebar-accent-foreground: #44403C;
   --sidebar-border: #E7E5E4;
   --sidebar-ring: #DC2626;
+}
+
+/* ── Aliases de marca usados em componentes via var() ── */
+:root {
+  --color-red:    #DC2626;
+  --color-green:  #16A34A;
+  --color-orange: #EA580C;
+  --color-bg:     #F9F7F5;
 }
 
 /* ── Force light appearance ── */
@@ -207,4 +215,129 @@ html {
   background: #DC2626;
   border-radius: 2px;
   margin: 0.5rem auto 0;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   DESIGN SYSTEM BORN TO RUN — classes de componente (Fase 3)
+   Fundo claro · vermelho #DC2626 principal · verde #16A34A
+   secundário · laranja #EA580C pontual · Inter + Barlow Condensed
+   ════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* ── Card ── */
+  .card {
+    background-color: #ffffff;
+    border: 1px solid #e7e5e4;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(28, 25, 23, 0.05);
+  }
+  .shadow-card-lg {
+    box-shadow: 0 8px 30px rgba(28, 25, 23, 0.08);
+  }
+
+  /* ── Botões ── */
+  .btn-primary,
+  .btn-secondary,
+  .btn-outline,
+  .btn-destructive {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    border-radius: 9999px;
+    padding: 0.625rem 1.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background-color: #dc2626;
+    color: #ffffff;
+    box-shadow: 0 1px 2px rgba(220, 38, 38, 0.3);
+  }
+  .btn-primary:hover { background-color: #b91c1c; }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .btn-secondary {
+    background-color: #16a34a;
+    color: #ffffff;
+  }
+  .btn-secondary:hover { background-color: #15803d; }
+  .btn-secondary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .btn-outline {
+    background-color: transparent;
+    color: #44403c;
+    border: 1.5px solid #d6d3d1;
+  }
+  .btn-outline:hover { border-color: #dc2626; color: #dc2626; }
+  .btn-outline:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .btn-destructive {
+    background-color: #fee2e2;
+    color: #b91c1c;
+  }
+  .btn-destructive:hover { background-color: #dc2626; color: #ffffff; }
+
+  /* ── Inputs ── */
+  .input-base {
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #d6d3d1;
+    border-radius: 0.75rem;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+    color: #1c1917;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .input-base::placeholder { color: #a8a29e; }
+  .input-base:focus {
+    outline: none;
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+  }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 9999px;
+    padding: 0.25rem 0.625rem;
+  }
+  .badge-red    { background-color: #fee2e2; color: #b91c1c; }
+  .badge-green  { background-color: #dcfce7; color: #15803d; }
+  .badge-orange { background-color: #ffedd5; color: #c2410c; }
+  .badge-gray   { background-color: #f5f5f4; color: #57534e; }
+
+  /* ── Títulos de seção ── */
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: #1c1917;
+  }
+  .section-subtitle {
+    color: #57534e;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    max-width: 42rem;
+  }
+
+  /* ── Divisores ── */
+  .divider-red {
+    height: 4px;
+    width: 3rem;
+    border-radius: 2px;
+    background-color: #dc2626;
+  }
 }
