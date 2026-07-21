@@ -2,6 +2,17 @@
 
 > Status funcionalidade por funcionalidade do projeto **Born to Run**, no estado atual. Cada item recebe uma classificação objetiva. Este documento existe para que ninguém confunda "tem tela" com "funciona".
 
+## Progresso da reconstrução (branch `abacus-fable-rebuild`)
+
+| Bloco | Escopo | Status |
+|---|---|---|
+| **Bloco 1** (Fases 1–4) | Arquitetura/limpeza, banco/segurança, design system, páginas públicas | ✅ Concluído |
+| **Bloco 2** (Fases 5–7) | Autenticação completa, área do aluno (dashboard), mini rede social/feed | ✅ Concluído |
+| **Bloco 3** | Treinos, comunicados (admin), painel do treinador reconstruído | ⏳ Pendente |
+| **Bloco 4** | PWA, acessibilidade, desempenho, testes, deploy | ⏳ Pendente |
+
+> **Nota importante:** as validações dos Blocos 1 e 2 foram feitas via build/typecheck/lint (zero erros) e renderização das rotas em modo dev. O `.env.local` contém apenas placeholders — o teste ponta a ponta com o Supabase real (login, posts, uploads) acontecerá quando as credenciais reais forem configuradas (previsto para o Bloco 4/deploy).
+
 ## Legenda de status
 
 | Símbolo | Status | Significado |
@@ -20,16 +31,16 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| `npm install` | 🟢 Concluído | Instala; 2 vulnerabilidades moderadas (postcss transitivo). |
-| `npm run dev` | 🔵 Parcial | Sobe, mas várias páginas internas quebram/estilo ausente. |
-| `npm run build` | 🔴 Quebrado | Falha em `TS2613` (PostCard sem default export). **Não deployável.** |
-| `npm run lint` | 🔴 Quebrado | 12 erros + 12 warnings. |
-| `npx tsc --noEmit` | 🔴 Quebrado | 1 erro visível; muitos mascarados por falta de tipos `Database`. |
-| Tipos `Database` do Supabase | ⚫ Ausente | Client sem tipagem → erros de coluna só em runtime. |
-| Variáveis de ambiente | 🔵 Parcial | `.env.local` só com placeholders; `.env.example` criado nesta branch. |
+| `npm install` | 🟢 Concluído | Instala sem erros. |
+| `npm run dev` | 🟢 Concluído | Sobe; rotas públicas e de auth renderizam; rotas protegidas redirecionam corretamente. |
+| `npm run build` | 🟢 Concluído | Build limpo, 23 rotas geradas. |
+| `npm run lint` | 🟢 Concluído | Zero erros, zero warnings. |
+| `npx tsc --noEmit` | 🟢 Concluído | Zero erros. |
+| Tipos `Database` do Supabase | ⚫ Ausente | Client sem tipagem gerada; queries usam tipos manuais de `types/index.ts`. Melhoria prevista. |
+| Variáveis de ambiente | 🔵 Parcial | `.env.example` documentado (inclui `NEXT_PUBLIC_SITE_URL`); `.env.local` só com placeholders. |
 | PWA / manifest | 🟢 Concluído | `manifest.json` válido, ícones 192/512, atalhos. |
-| `error.tsx` / `not-found.tsx` / `loading.tsx` | ⚫ Ausente | Sem boundaries de erro nem estados de carregamento. |
-| Testes (unit/integração/e2e) | ⚫ Ausente | Nenhum teste no projeto. |
+| `error.tsx` / `not-found.tsx` / `loading.tsx` | 🔵 Parcial | `notFound()` usado em rotas dinâmicas; boundaries globais previstos para o Bloco 4. |
+| Testes (unit/integração/e2e) | ⚫ Ausente | Previsto para o Bloco 4. |
 
 ---
 
@@ -37,12 +48,11 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| Tokens de cor `--color-btr-*` | 🟢 Concluído | Definidos no `globals.css` (Tailwind v4). |
-| Tipografia (Inter + Barlow Condensed) | 🔵 Parcial | Carregada no layout, mas config diverge (Outfit no `tailwind.config`). |
-| Classes utilitárias custom (`card`, `btn-*`, `badge*`, `section-title`, `input-base`, `divider-*`) | 🔴 Quebrado | **Não definidas** → estilo quebrado em muitas páginas. |
-| `tailwind.config.ts` | ⚫ Ausente (efetivo) | Formato v3, não carregado sob v4 → código morto. |
-| Animações/utilitários (`animate-*`, `card-lift`, `heading-accent`) | 🟢 Concluído | Definidos no `globals.css`. |
-| Consistência de fontes | 🟠 Precisa reconstruir | Barlow/Inter vs Outfit — decidir e unificar. |
+| Tokens de cor `--color-btr-*` | 🟢 Concluído | Off-white `#F9F7F5`, vermelho `#DC2626`, verde `#16A34A` no `globals.css` (Tailwind v4). |
+| Tipografia (Inter + Barlow Condensed) | 🟢 Concluído | Unificada; config morta (Outfit) removida no Bloco 1. |
+| Componentes de UI (`Button`, `Card`, `Input`, `Badge`, `Avatar`, `Container`, `Section`) | 🟢 Concluído | Biblioteca própria em `components/ui/`. |
+| Animações/utilitários | 🟢 Concluído | Definidos no `globals.css`. |
+| Consistência de fontes | 🟢 Concluído | Barlow Condensed (títulos) + Inter (texto). |
 
 ---
 
@@ -50,15 +60,14 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| Home `/` | 🔵 Parcial | Renderiza (hex hardcoded); estatísticas fictícias; H1 sem espaço; CTAs inconsistentes. |
-| Sobre `/sobre` | 🟡 Mockado | Conteúdo real mas estático; classes CSS indefinidas. |
-| Equipe `/equipe` | 🟡 Mockado | Bio do Robson (dados oficiais ok); CSS indefinido. |
-| Galeria `/galeria` | 🔴 Quebrado | 3 imagens quebradas + fotos irrelevantes (Torre Eiffel, panquecas, natação). |
-| Resultados `/resultados` | 🔵 Parcial | Renderiza; contraste insuficiente nas estatísticas. |
-| Contato `/contato` | 🟣 Visual sem funcionalidade | Formulário sem backend confirmado; contatos placeholder. |
-| História `/historia` | ⚫ Ausente | Retorna 404; conteúdo embutido em `/sobre`. |
-| Header (navegação) | 🟠 Precisa reconstruir | Âncoras `#sobre` só funcionam na home; WhatsApp placeholder. |
-| Footer | 🟠 Precisa reconstruir | CTAs/telefones inconsistentes. |
+| Home `/` | 🟢 Concluído | Reconstruída com dados oficiais; estatísticas reais (desde 2015, ~200 atletas, +200 corridas). |
+| Sobre `/sobre` | 🟢 Concluído | Conteúdo oficial; design system aplicado. |
+| Equipe `/equipe` | 🟢 Concluído | Bio do Robson Alves (CREF 119911-G/SP, World Athletics nível 1). |
+| Galeria `/galeria` | 🟢 Concluído | Apenas fotos reais da equipe; imagens irrelevantes removidas. |
+| Resultados `/resultados` | 🟢 Concluído | Contraste corrigido. |
+| Contato `/contato` | 🟢 Concluído | Formulário funcional; sem contatos inventados. |
+| Header (navegação) | 🟢 Concluído | Navegação por rotas reais; sem âncoras quebradas. |
+| Footer | 🟢 Concluído | Consistente; Instagram oficial @equipeborntorun. |
 
 ---
 
@@ -66,16 +75,15 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| Cadastro (`/cadastro`) | 🟢 Concluído | Via client Supabase; trigger cria profile. |
-| Login (`/login`) | 🔵 Parcial | Funciona; "Esqueceu a senha?" (`#`) e "Lembrar de mim" mortos. |
-| Recuperar senha (envio) | 🔴 Quebrado | `redirectTo` aponta p/ domínio Supabase, não do app. |
-| Recuperar senha (nova senha) | ⚫ Ausente | Rota `/recuperar-senha/nova` não existe. |
-| Logout (aluno) | 🔴 Quebrado | POST p/ `/auth/signout` inexistente; `logout()` correta não usada. |
-| Logout (admin) | 🔵 Parcial | Import de `logout` presente mas não usado (warning). |
-| Callback de auth | 🟢 Concluído | `app/auth/callback/route.ts` troca code por sessão. |
+| Cadastro (`/cadastro`) | 🟢 Concluído | Server action; trigger cria profile. |
+| Login (`/login`) | 🟢 Concluído | Redireciona por papel: admin → `/admin`, aluno → `/dashboard`. |
+| Recuperar senha (envio) | 🟢 Concluído | `redirectTo` corrigido: usa a origem do site (`NEXT_PUBLIC_SITE_URL` ou headers) + callback. |
+| Recuperar senha (nova senha) | 🟢 Concluído | Rota `/recuperar-senha/nova` criada; `updatePassword` valida senha (mín. 6) e confirmação. |
+| Logout (aluno e admin) | 🟢 Concluído | Server action `logout()` conectada aos layouts. |
+| Callback de auth | 🟢 Concluído | `app/auth/callback/route.ts` troca code por sessão, respeita `?next=`. |
 | Proteção de rotas (middleware) | 🟢 Concluído | Redireciona não autenticados de `/dashboard` e `/admin`. |
-| Reforço de admin no middleware | ⚫ Ausente | Só o layout admin checa role (sem defesa em profundidade). |
-| Actions de auth (`lib/actions/auth.ts`) | 🔵 Parcial | Corretas, mas páginas usam client direto (duplicação). |
+| Reforço de admin | 🟢 Concluído | Layout admin checa `role='admin'` server-side. |
+| Actions de auth (`lib/actions/auth.ts`) | 🟢 Concluído | Fonte única: login, cadastro, logout, reset e atualização de senha. |
 
 ---
 
@@ -83,21 +91,13 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| Feed principal `/dashboard` | 🔴 Quebrado | FK inexistente + colunas `content`/`image_url`; likes/comentários hardcoded 0. |
-| Feed alternativo `/dashboard/feed` | 🔴 Quebrado | Query ok, mas import default do PostCard quebra o build. |
-| Criar post (`lib/actions/feed.createPost`) | 🟣 Visual sem funcionalidade | Action correta existe, mas nenhum componente ativo a chama. |
-| Criar post (`app/actions/post.ts`) | 🔴 Quebrado | Insere colunas inexistentes. |
-| Curtir (`toggleLike`) | 🟣 Visual sem funcionalidade | Action correta; botão sem `onClick`. |
-| Comentar (`addComment`) | 🟣 Visual sem funcionalidade | Action correta; sem UI conectada. |
-| Excluir post (`deletePost`) | 🟣 Visual sem funcionalidade | Action correta; não chamada. |
-| Treinos `/dashboard/treinos` | 🔵 Parcial | Leitura funciona; sem privacidade por aluno. |
-| Treinos `/treinos` (linkada) | 🔴 Quebrado | FK inexistente + checa papel `treinador`. |
-| Criar treino (aluno via `app/actions/workouts.ts`) | 🔴 Quebrado | `assigned_to`/`treinador` inexistentes. |
-| Fotos `/fotos` | 🔴 Quebrado | Consulta coluna `image_url` (inexistente). |
-| Perfil `/dashboard/perfil` (`PerfilForm`) | 🟢 Concluído | Edição + upload de avatar. |
-| Perfil `/perfil` (`ProfileForm`) | 🔵 Parcial | Funciona; usa `any` (lint); duplica o anterior. |
-| Comunicados (aluno) | ⚫ Ausente | Sem tela dedicada; `/dashboard/comunicados` retorna 404. |
-| Logout no layout do dashboard | 🔴 Quebrado | Ver §4. |
+| Início `/dashboard` | 🟢 Concluído | Dashboard real: boas-vindas, atalhos, próximos treinos, últimos comunicados, atividade da equipe, contagem de posts. |
+| Feed `/dashboard/feed` | 🟢 Concluído | Lista posts com autor, foto, métricas, curtidas e comentários reais. |
+| Treinos `/dashboard/treinos` | 🟢 Concluído | Leitura de treinos agendados (visíveis a toda a equipe, conforme RLS atual). |
+| Comunicados `/dashboard/comunicados` | 🟢 Concluído | Central do aluno com destaque no mais recente e estado vazio. |
+| Perfil `/dashboard/perfil` | 🟢 Concluído | Edição de nome, bio, cidade, objetivo + upload de avatar (com validação de 5MB e erro visível). |
+| Perfil de membro `/dashboard/membros/[id]` | 🟢 Concluído | Perfil público: avatar, bio, badge de treinador, stats (posts, km) e últimas atividades. |
+| Navegação (sidebar + bottom nav mobile) | 🟢 Concluído | Estado ativo por rota; 5 itens: Início, Feed, Treinos, Comunicados, Perfil. |
 
 ---
 
@@ -105,14 +105,14 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| Listar posts | 🔴 Quebrado | Ambas as rotas de feed falham (colunas/import). |
-| Publicar post com foto | 🟣 Visual sem funcionalidade | Upload p/ `post-images` implementado na action correta, não conectado. |
-| Publicar métricas (distância/tempo/pace) | 🟣 Visual sem funcionalidade | Colunas existem; UI não conectada. |
-| Curtir / descurtir | 🟣 Visual sem funcionalidade | Sem handler no PostCard. |
-| Comentar | 🟣 Visual sem funcionalidade | Sem UI de comentários conectada. |
-| Excluir post (dono/admin) | 🟣 Visual sem funcionalidade | Action pronta, não chamada. |
-| Componentes de criação | 🟠 Precisa reconstruir | `CreatePost` vs `NewPostForm` (duplicados). |
-| PostCard | 🟠 Precisa reconstruir | Só named export; props estáticas; botões inertes. |
+| Listar posts | 🟢 Concluído | Query alinhada ao schema (caption, photo_url, métricas). |
+| Publicar post com foto | 🟢 Concluído | Upload p/ `post-images`; valida conteúdo vazio e foto >10MB; erro de upload visível. |
+| Publicar métricas (distância/tempo/pace) | 🟢 Concluído | Campos conectados. |
+| Curtir / descurtir | 🟢 Concluído | `toggleLike` conectado com atualização otimista. |
+| Comentar | 🟢 Concluído | `addComment` conectado; comentários listados no card. |
+| Excluir comentário | 🟢 Concluído | `deleteComment` (autor ou admin; RLS garante autorização). |
+| Excluir post (dono/admin) | 🟢 Concluído | `deletePost` conectado. |
+| Autor clicável | 🟢 Concluído | Nome/avatar linkam para o perfil do membro. |
 
 ---
 
@@ -120,13 +120,11 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| Listar treinos | 🔵 Parcial | `/dashboard/treinos` lê; sem filtro por aluno. |
-| Criar treino (admin) | 🟢 Concluído | `lib/actions/admin.createWorkout` alinhado ao schema. |
-| Excluir treino (admin) | 🟢 Concluído | `deleteWorkout` funciona. |
-| Privacidade por aluno (`assigned_to`) | ⚫ Ausente | Coluna não existe; RLS mostra todos os treinos a todos. |
-| Modal de criação (`CreateWorkoutModal`) | 🟠 Precisa reconstruir | Texto de privacidade falso; `any`. |
-| WorkoutCard | 🟢 Concluído | Exibição correta. |
-| Papel `treinador` | ⚫ Ausente | CHECK do schema só permite `member`/`admin`. |
+| Listar treinos (aluno) | 🟢 Concluído | Por nível e data. |
+| Criar treino (admin) | 🟢 Concluído | `createWorkout` alinhado ao schema. |
+| Editar treino (admin) | ⚫ Ausente | Previsto para o Bloco 3. |
+| Excluir treino (admin) | 🟢 Concluído | `deleteWorkout`. |
+| Privacidade por aluno (`assigned_to`) | ⚫ Ausente | Decisão de produto pendente; RLS atual mostra treinos a todos os membros. |
 
 ---
 
@@ -134,10 +132,10 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| Criar comunicado (admin) | 🟢 Concluído | `createAnnouncement` alinhado ao schema. |
-| Excluir comunicado (admin) | 🟢 Concluído | `deleteAnnouncement` funciona. |
-| Listar comunicados (admin) | 🟢 Concluído | Tela admin funcional. |
-| Consumo pelo aluno | ⚫ Ausente | Sem tela dedicada e funcional no fluxo do aluno. |
+| Criar comunicado (admin) | 🟢 Concluído | `createAnnouncement`. |
+| Editar comunicado (admin) | ⚫ Ausente | Previsto para o Bloco 3. |
+| Excluir comunicado (admin) | 🟢 Concluído | `deleteAnnouncement`. |
+| Consumo pelo aluno | 🟢 Concluído | `/dashboard/comunicados` + resumo no início do dashboard. |
 
 ---
 
@@ -146,13 +144,13 @@
 | Funcionalidade | Status | Observações |
 |---|---|---|
 | Autorização admin | 🟢 Concluído | Layout server-side checa `role='admin'`. |
-| Dashboard admin `/admin` | 🟢 Concluído | Contadores e atalhos. |
-| CRUD de treinos | 🟢 Concluído | Via `lib/actions/admin.ts`. |
-| CRUD de comunicados | 🟢 Concluído | Via `lib/actions/admin.ts`. |
+| Dashboard admin `/admin` | 🔵 Parcial | Funcional, mas com estilo divergente (CSS inline). Reconstrução no Bloco 3. |
+| CRUD de treinos | 🔵 Parcial | Create/delete ok; falta edição (Bloco 3). |
+| CRUD de comunicados | 🔵 Parcial | Create/delete ok; falta edição (Bloco 3). |
 | Listar membros | 🟢 Concluído | `/admin/membros`. |
-| Promover/rebaixar admin | 🟢 Concluído | `toggleAdminRole` (UPDATE tem policy admin). |
-| Remover membro | 🔴 Quebrado | `deleteMember` bloqueado silenciosamente (sem policy DELETE em `profiles`). |
-| Import morto `logout` no layout | 🟡 Mockado (ruído) | Warning de lint. |
+| Promover/rebaixar admin | 🟢 Concluído | `toggleAdminRole`. |
+| Remover membro | 🟢 Concluído | Policy DELETE em `profiles` adicionada na migration `0002`. |
+| Layout admin | 🟠 Precisa reconstruir | CSS inline fora do design system — Bloco 3. |
 
 ---
 
@@ -160,9 +158,9 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| Editar perfil (nome, bio, cidade, objetivo) | 🟢 Concluído | Ambos os formulários casam com o schema. |
-| Upload de avatar (`avatars`) | 🟢 Concluído | Restrito à pasta do usuário. |
-| Dois formulários de perfil | 🟠 Precisa reconstruir | `PerfilForm` vs `ProfileForm` — consolidar. |
+| Editar perfil (nome, bio, cidade, objetivo) | 🟢 Concluído | Formulário único (`PerfilForm`); duplicata removida no Bloco 1. |
+| Upload de avatar (`avatars`) | 🟢 Concluído | Restrito à pasta do usuário; valida 5MB; erro visível. |
+| Upload de foto de post (`post-images`) | 🟢 Concluído | Valida 10MB; erro visível. |
 
 ---
 
@@ -170,12 +168,12 @@
 
 | Item | Status | Observações |
 |---|---|---|
-| Schema (tabelas/índices/triggers) | 🟢 Concluído | Bem modelado. |
+| Schema (tabelas/índices/triggers) | 🟢 Concluído | `supabase/migrations/0001_schema_inicial.sql`. |
 | RLS habilitado | 🟢 Concluído | Em todas as tabelas. |
-| Policy DELETE em `profiles` | ⚫ Ausente | Remover membro falha. |
-| `WITH CHECK` em `profiles_update_admin` | 🔵 Parcial | Só `USING`; falta `WITH CHECK`. |
-| Privacidade de treinos (RLS) | 🟠 Precisa reconstruir | `USING (true)` expõe tudo. |
-| Storage buckets | 🟢 Concluído | `avatars` e `post-images` com policies. |
+| Policy DELETE em `profiles` | 🟢 Concluído | Migration `0002_correcoes_rls_fase2.sql`. |
+| `WITH CHECK` em `profiles_update_admin` | 🟢 Concluído | Corrigido na migration `0002`. |
+| Privacidade de treinos (RLS) | 🔵 Parcial | Treinos visíveis a todos os membros autenticados (decisão de produto pendente). |
+| Storage buckets | 🟢 Concluído | `avatars` (5MB) e `post-images` (10MB) com policies por usuário. |
 | Segredos versionados | 🟢 Concluído (ok) | Nenhuma chave real no repo; `.env*` ignorado. |
 
 ---
@@ -184,15 +182,15 @@
 
 | Status | Contagem aproximada de itens |
 |---|---|
-| 🟢 Concluído | ~22 |
-| 🔵 Parcial | ~12 |
-| 🟣 Visual sem funcionalidade | ~7 |
-| 🟡 Mockado / Estático | ~3 |
-| 🔴 Quebrado | ~16 |
-| ⚫ Ausente | ~11 |
-| 🟠 Precisa reconstruir | ~9 |
+| 🟢 Concluído | ~55 |
+| 🔵 Parcial | ~7 |
+| 🟣 Visual sem funcionalidade | 0 |
+| 🟡 Mockado / Estático | 0 |
+| 🔴 Quebrado | 0 |
+| ⚫ Ausente | ~5 |
+| 🟠 Precisa reconstruir | ~1 |
 
-> **Leitura rápida:** o painel administrativo e a fundação de dados estão majoritariamente **prontos**; a **área do aluno** (feed, treinos, fotos) e o **build** estão majoritariamente **quebrados**; o **site público** está **estático e com falhas de conteúdo/navegação**. A prioridade é: (1) fazer o build passar, (2) consolidar duplicações, (3) reconectar as actions corretas à UI, (4) corrigir conteúdo/navegação pública.
+> **Leitura rápida:** após os Blocos 1 e 2, o **build está limpo** (zero erros de build, lint e typecheck), o **site público**, a **autenticação**, a **área do aluno** e o **feed social** estão **concluídos e alinhados ao schema**. Restam: o **painel admin** (funcional, mas a reconstruir no Bloco 3, com edição de treinos/comunicados) e a fase de **qualidade/deploy** (Bloco 4: boundaries de erro, testes, acessibilidade, desempenho, deploy na Vercel com credenciais reais do Supabase).
 
 ---
 

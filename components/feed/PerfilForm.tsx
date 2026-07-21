@@ -29,12 +29,22 @@ export default function PerfilForm({ profile, userId }: {
   async function handleAvatar(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
+
+    if (file.size > 5 * 1024 * 1024) {
+      setMsg({ type: 'error', text: 'A foto deve ter no máximo 5 MB.' })
+      return
+    }
+
     setPreview(URL.createObjectURL(file))
+    setMsg(null)
 
     const ext  = file.name.split('.').pop()
     const path = `${userId}/${Date.now()}.${ext}`
     const { error } = await supabase.storage.from('avatars').upload(path, file, { upsert: true })
-    if (!error) {
+    if (error) {
+      setPreview(null)
+      setMsg({ type: 'error', text: 'Erro ao enviar a foto. Tente novamente.' })
+    } else {
       const { data } = supabase.storage.from('avatars').getPublicUrl(path)
       setAvatarUrl(data.publicUrl)
     }

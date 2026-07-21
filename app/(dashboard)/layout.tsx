@@ -3,13 +3,8 @@ import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/lib/actions/auth'
-import { Rss, Dumbbell, User, LogOut, ShieldCheck } from 'lucide-react'
-
-const navItems = [
-  { href: '/dashboard/feed', icon: Rss, label: 'Feed da Equipe' },
-  { href: '/dashboard/treinos', icon: Dumbbell, label: 'Treinos' },
-  { href: '/dashboard/perfil', icon: User, label: 'Meu Perfil' },
-]
+import { LogOut, ShieldCheck } from 'lucide-react'
+import { DashboardSidebarNav, DashboardBottomNav } from '@/components/dashboard/DashboardNav'
 
 export default async function DashboardLayout({
   children,
@@ -42,7 +37,7 @@ export default async function DashboardLayout({
       <header className="bg-white border-b border-stone-200 sticky top-0 z-30">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/dashboard/feed" className="flex items-center shrink-0">
+            <Link href="/dashboard" className="flex items-center shrink-0">
               <div className="relative w-[140px] h-[46px]">
                 <Image
                   src="/logo.png"
@@ -83,18 +78,7 @@ export default async function DashboardLayout({
       <div className="flex-1 flex max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Menu lateral (desktop) */}
         <aside className="hidden md:block w-60 flex-shrink-0 pr-8">
-          <nav className="space-y-1" aria-label="Navegação do painel">
-            {navItems.map(({ href, icon: Icon, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className="text-stone-700 hover:bg-white hover:text-[#DC2626] group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors"
-              >
-                <Icon className="text-stone-400 group-hover:text-[#DC2626] flex-shrink-0 mr-3 h-5 w-5" />
-                {label}
-              </Link>
-            ))}
-          </nav>
+          <DashboardSidebarNav />
         </aside>
 
         {/* Conteúdo */}
@@ -102,21 +86,7 @@ export default async function DashboardLayout({
       </div>
 
       {/* Navegação inferior (mobile) */}
-      <nav
-        className="md:hidden fixed bottom-0 w-full bg-white border-t border-stone-200 z-40 flex justify-around items-center h-16 px-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]"
-        aria-label="Navegação mobile do painel"
-      >
-        {navItems.map(({ href, icon: Icon, label }) => (
-          <Link
-            key={href}
-            href={href}
-            className="flex flex-col items-center justify-center w-full h-full text-stone-500 hover:text-[#DC2626]"
-          >
-            <Icon className="h-6 w-6" />
-            <span className="text-[10px] mt-1 font-medium">{label.split(' ')[0]}</span>
-          </Link>
-        ))}
-      </nav>
+      <DashboardBottomNav />
     </div>
   )
 }

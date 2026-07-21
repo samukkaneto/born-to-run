@@ -14,22 +14,30 @@ export async function createPost(formData: FormData) {
   const pace     = formData.get('pace') as string
   const file     = formData.get('photo') as File
 
+  if (!caption?.trim() && !distance && (!file || file.size === 0)) {
+    return { error: 'Escreva algo ou adicione os dados do treino para publicar.' }
+  }
+
   let photo_url: string | null = null
 
   // Upload da foto se existir
   if (file && file.size > 0) {
+    if (file.size > 10 * 1024 * 1024) {
+      return { error: 'A foto deve ter no máximo 10 MB.' }
+    }
     const ext = file.name.split('.').pop()
     const path = `${user.id}/${Date.now()}.${ext}`
     const { error: uploadError } = await supabase.storage
       .from('post-images')
       .upload(path, file, { upsert: true })
 
-    if (!uploadError) {
-      const { data: urlData } = supabase.storage
-        .from('post-images')
-        .getPublicUrl(path)
-      photo_url = urlData.publicUrl
+    if (uploadError) {
+      return { error: 'Erro ao enviar a foto. Tente novamente.' }
     }
+    const { data: urlData } = supabase.storage
+      .from('post-images')
+      .getPublicUrl(path)
+    photo_url = urlData.publicUrl
   }
 
   const { error } = await supabase.from('posts').insert({
@@ -85,6 +93,19 @@ export async function addComment(formData: FormData) {
   })
 
   if (error) return { error: 'Erro ao comentar.' }
+
+  revalidatePath('/dashboard/feed')
+  return { success: true }
+}
+
+export async function deleteComment(commentId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Não autenticado' }
+
+  // A RLS garante que só o autor ou um admin consegue excluir.
+  const { error } = await supabase.from('comments').delete().eq('id', commentId)
+  if (error) return { error: 'Erro ao excluir comentário.' }
 
   revalidatePath('/dashboard/feed')
   return { success: true }

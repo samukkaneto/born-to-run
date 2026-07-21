@@ -2,8 +2,9 @@
 
 import { useState, useTransition } from 'react'
 import Image from 'next/image'
-import { Heart, MessageCircle, Trash2, Loader2, Send } from 'lucide-react'
-import { toggleLike, addComment, deletePost } from '@/lib/actions/feed'
+import Link from 'next/link'
+import { Heart, MessageCircle, Trash2, Loader2, Send, X } from 'lucide-react'
+import { toggleLike, addComment, deletePost, deleteComment } from '@/lib/actions/feed'
 import { formatRelativeTime, getInitials } from '@/lib/utils'
 import type { Post, Comment } from '@/types'
 
@@ -58,7 +59,10 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
     <article className="card overflow-hidden">
       {/* Cabeçalho */}
       <div className="p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <Link
+          href={`/dashboard/membros/${post.user_id}`}
+          className="flex items-center gap-3 group/author min-w-0"
+        >
           <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center overflow-hidden shrink-0">
             {post.profiles?.avatar_url ? (
               <Image
@@ -74,13 +78,15 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
               </span>
             )}
           </div>
-          <div>
-            <p className="font-semibold text-stone-900 leading-tight">{authorName}</p>
+          <div className="min-w-0">
+            <p className="font-semibold text-stone-900 leading-tight truncate group-hover/author:text-[#DC2626] transition-colors">
+              {authorName}
+            </p>
             <p className="text-xs text-stone-500 mt-0.5">
               {formatRelativeTime(post.created_at)}
             </p>
           </div>
-        </div>
+        </Link>
         {canDelete && (
           <button
             onClick={handleDelete}
@@ -183,7 +189,7 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
       {showComments && (
         <div className="px-4 pb-4 border-t border-stone-50 pt-3 space-y-3">
           {comments.map((c) => (
-            <div key={c.id} className="flex items-start gap-2.5">
+            <div key={c.id} className="flex items-start gap-2.5 group/comment">
               <div className="w-7 h-7 rounded-full bg-stone-100 flex items-center justify-center shrink-0 text-[10px] font-bold text-stone-500">
                 {getInitials(c.profiles?.full_name || 'A')}
               </div>
@@ -193,6 +199,16 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
                 </span>{' '}
                 <span className="text-stone-600">{c.content}</span>
               </div>
+              {(c.user_id === currentUserId || isAdmin) && (
+                <button
+                  onClick={() => startTransition(() => { void deleteComment(c.id) })}
+                  disabled={isPending}
+                  className="p-1.5 text-stone-300 hover:text-[#DC2626] transition-colors rounded-full opacity-0 group-hover/comment:opacity-100 focus:opacity-100"
+                  aria-label="Excluir comentário"
+                >
+                  <X size={13} />
+                </button>
+              )}
             </div>
           ))}
 
