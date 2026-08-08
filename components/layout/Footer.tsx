@@ -135,10 +135,10 @@ export default function Footer() {
       {/* Barra inferior */}
       <div className="border-t border-[#2E2E2E]">
         <div className="container-main py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-xs text-[#78716C] text-center sm:text-left">
+          <p className="text-xs text-[#A8A29E] text-center sm:text-left">
             &copy; {CURRENT_YEAR} {site.name}. Todos os direitos reservados.
           </p>
-          <p className="text-xs text-[#78716C]">
+          <p className="text-xs text-[#A8A29E]">
             {site.location} · desde {site.foundedYear}
           </p>
         </div>

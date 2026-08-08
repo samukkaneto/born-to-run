@@ -72,7 +72,7 @@ export default function ToastProvider({ children }: { children: React.ReactNode 
           return (
             <div
               key={id}
-              role="status"
+              role={type === 'error' ? 'alert' : 'status'}
               className="animate-toast-in pointer-events-auto flex items-start gap-3 overflow-hidden rounded-lg border border-[#E5E1D8] bg-white shadow-card-lg"
             >
               <span className={`w-1.5 self-stretch ${bar}`} aria-hidden="true" />
@@ -81,7 +81,7 @@ export default function ToastProvider({ children }: { children: React.ReactNode 
               <button
                 type="button"
                 onClick={() => dismiss(id)}
-                className="p-3 text-[#A8A29E] transition-colors hover:text-[#171717]"
+                className="flex h-11 w-11 items-center justify-center text-[#57534E] transition-colors hover:text-[#171717]"
                 aria-label="Fechar aviso"
               >
                 <X size={14} />

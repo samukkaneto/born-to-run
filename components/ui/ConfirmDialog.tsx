@@ -9,6 +9,7 @@ interface ConfirmDialogProps {
   description: string
   confirmLabel?: string
   cancelLabel?: string
+  loadingLabel?: string
   loading?: boolean
   onConfirm: () => void
   onCancel: () => void
@@ -24,21 +25,48 @@ export default function ConfirmDialog({
   description,
   confirmLabel = 'Remover',
   cancelLabel = 'Cancelar',
+  loadingLabel = 'Processando…',
   loading = false,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
   const cancelRef = useRef<HTMLButtonElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const onCancelRef = useRef(onCancel)
+
+  useEffect(() => {
+    onCancelRef.current = onCancel
+  }, [onCancel])
 
   useEffect(() => {
     if (!open) return
+    const previousFocus = document.activeElement as HTMLElement | null
     cancelRef.current?.focus()
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onCancel()
+      if (e.key === 'Escape') onCancelRef.current()
+      if (e.key !== 'Tab') return
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )
+      if (!focusable?.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [open, onCancel])
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+      previousFocus?.focus()
+    }
+  }, [open])
 
   if (!open) return null
 
@@ -56,7 +84,7 @@ export default function ConfirmDialog({
         aria-label="Fechar diálogo"
         tabIndex={-1}
       />
-      <div className="animate-scale-in relative w-full max-w-md rounded-xl border border-[#E5E1D8] bg-white p-6 shadow-card-lg">
+      <div ref={dialogRef} className="animate-scale-in relative w-full max-w-md rounded-xl border border-[#E5E1D8] bg-white p-6 shadow-card-lg">
         <div className="flex items-start gap-4">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#FEE2E2]">
             <AlertTriangle size={20} className="text-[#DC2626]" aria-hidden="true" />
@@ -90,7 +118,7 @@ export default function ConfirmDialog({
             className="btn-primary text-sm"
           >
             {loading && <Loader2 size={15} className="animate-spin" aria-hidden="true" />}
-            {loading ? 'Removendo…' : confirmLabel}
+            {loading ? loadingLabel : confirmLabel}
           </button>
         </div>
       </div>

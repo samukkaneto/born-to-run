@@ -189,7 +189,7 @@ export default function SobrePage() {
           {values.map(({ icon: Icon, title, description }, i) => (
             <div key={title} className="card card-lift relative overflow-hidden p-8 text-left">
               <span
-                className="absolute top-4 right-6 select-none font-display text-5xl text-[#171717]/8"
+                className="absolute top-4 right-6 select-none font-display text-5xl text-[#78716C]"
                 aria-hidden="true"
               >
                 0{i + 1}

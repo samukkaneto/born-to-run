@@ -4,10 +4,14 @@ import type { Announcement } from '@/types'
 
 export default async function AdminComunicadosPage() {
   const supabase = await createClient()
-  const { data: announcements } = (await supabase
+  const { data: announcements, error } = (await supabase
     .from('announcements')
     .select('*')
-    .order('created_at', { ascending: false })) as { data: Announcement[] | null }
+    .order('created_at', { ascending: false })) as {
+      data: Announcement[] | null
+      error: { message: string } | null
+    }
+  if (error) throw new Error('Não foi possível carregar os comunicados.')
 
   return (
     <div className="animate-fade-in space-y-8">

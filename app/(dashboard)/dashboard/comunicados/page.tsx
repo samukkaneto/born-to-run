@@ -14,10 +14,14 @@ export default async function ComunicadosPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: announcements } = await supabase
+  const { data: announcements, error } = await supabase
     .from('announcements')
     .select('*')
-    .order('created_at', { ascending: false }) as { data: Announcement[] | null }
+    .order('created_at', { ascending: false }) as {
+      data: Announcement[] | null
+      error: { message: string } | null
+    }
+  if (error) throw new Error('Não foi possível carregar os comunicados.')
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">

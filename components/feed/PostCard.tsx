@@ -24,6 +24,7 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
   const [commentText, setCommentText] = useState('')
   const [isPending, startTransition] = useTransition()
   const [isLiking, startLike] = useTransition()
+  const [actionError, setActionError] = useState('')
 
   const authorName = post.profiles?.full_name || 'Atleta'
   const canDelete = post.user_id === currentUserId || isAdmin
@@ -31,15 +32,19 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
   const likesCount = post.likes_count ?? (post.likes ?? []).length
 
   function handleLike() {
-    startLike(() => {
-      void toggleLike(post.id)
+    setActionError('')
+    startLike(async () => {
+      const result = await toggleLike(post.id)
+      if (result.error) setActionError(result.error)
     })
   }
 
   function handleDelete() {
     if (!confirm('Excluir esta publicação?')) return
-    startTransition(() => {
-      void deletePost(post.id)
+    setActionError('')
+    startTransition(async () => {
+      const result = await deletePost(post.id)
+      if (result.error) setActionError(result.error)
     })
   }
 
@@ -51,7 +56,8 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
     formData.set('content', commentText.trim())
     startTransition(async () => {
       const result = await addComment(formData)
-      if (!result?.error) setCommentText('')
+      if (result?.error) setActionError(result.error)
+      else setCommentText('')
     })
   }
 
@@ -91,7 +97,7 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
           <button
             onClick={handleDelete}
             disabled={isPending}
-            className="p-2 text-stone-300 hover:text-[#DC2626] transition-colors rounded-full hover:bg-stone-50"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-stone-500 transition-colors hover:bg-stone-50 hover:text-[#DC2626]"
             aria-label="Excluir publicação"
           >
             <Trash2 size={16} />
@@ -166,6 +172,7 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
             post.user_has_liked ? 'text-[#DC2626]' : 'text-stone-500 hover:text-[#DC2626]'
           }`}
           aria-label={post.user_has_liked ? 'Remover curtida' : 'Curtir'}
+          aria-pressed={Boolean(post.user_has_liked)}
         >
           <Heart
             className={`w-5 h-5 transition-colors ${
@@ -185,6 +192,12 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
         </button>
       </div>
 
+      {actionError && (
+        <p role="alert" className="mx-4 mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+          {actionError}
+        </p>
+      )}
+
       {/* Comentários */}
       {showComments && (
         <div className="px-4 pb-4 border-t border-stone-50 pt-3 space-y-3">
@@ -201,9 +214,12 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
               </div>
               {(c.user_id === currentUserId || isAdmin) && (
                 <button
-                  onClick={() => startTransition(() => { void deleteComment(c.id) })}
+                  onClick={() => startTransition(async () => {
+                    const result = await deleteComment(c.id)
+                    if (result.error) setActionError(result.error)
+                  })}
                   disabled={isPending}
-                  className="p-1.5 text-stone-300 hover:text-[#DC2626] transition-colors rounded-full opacity-0 group-hover/comment:opacity-100 focus:opacity-100"
+                  className="flex h-11 w-11 items-center justify-center rounded-full text-stone-500 opacity-0 transition-colors hover:text-[#DC2626] focus:opacity-100 group-hover/comment:opacity-100"
                   aria-label="Excluir comentário"
                 >
                   <X size={13} />
@@ -217,13 +233,14 @@ export default function PostCard({ post, currentUserId, isAdmin = false }: PostC
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="Escreva um comentário..."
+              aria-label="Escreva um comentário"
               maxLength={500}
               className="input-base text-sm flex-1"
             />
             <button
               type="submit"
               disabled={isPending || !commentText.trim()}
-              className="p-2.5 rounded-full bg-[#DC2626] text-white hover:bg-[#B91C1C] transition-colors disabled:opacity-50"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#DC2626] text-white transition-colors hover:bg-[#B91C1C] disabled:opacity-50"
               aria-label="Enviar comentário"
             >
               {isPending ? (

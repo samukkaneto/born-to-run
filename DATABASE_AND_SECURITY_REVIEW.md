@@ -1,4 +1,6 @@
-# DATABASE_AND_SECURITY_REVIEW.md — Revisão de Banco e Segurança
+# ARQUIVO HISTÓRICO — DATABASE_AND_SECURITY_REVIEW.md
+
+> **Não usar como estado atual do banco.** A revisão antecede a migration de agosto de 2026. Consulte `CURRENT_IMPLEMENTATION_STATUS.md` e `SUPABASE_OPERATIONS.md`.
 
 > Revisão detalhada do banco de dados (Supabase/PostgreSQL), das políticas de RLS, do Storage, das permissões e dos riscos de segurança do **Born to Run**. Baseada em `supabase/schema.sql` (fonte da verdade), `lib/actions/*` e `middleware.ts`. Inclui inconsistências, melhorias, possíveis alterações de schema e um plano de migração. **Nenhum segredo é exposto neste documento.**
 

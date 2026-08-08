@@ -1,11 +1,10 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { formatDate, formatRelativeTime, getInitials } from '@/lib/utils'
+import { formatDate, formatRelativeTime, getInitials, getTodayCalendarDate } from '@/lib/utils'
 import {
   Rss, Dumbbell, Megaphone, User, ArrowRight, Calendar, MapPin,
 } from 'lucide-react'
-import type { Workout, Announcement } from '@/types'
 
 /**
  * Dashboard do aluno: resumo com boas-vindas, próximos treinos,
@@ -16,30 +15,30 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('full_name, cidade, objetivo')
     .eq('user_id', user.id)
     .single()
+  if (profileError) throw new Error('Não foi possível carregar seu painel.')
 
-  const today = new Date().toISOString().split('T')[0]
+  const today = getTodayCalendarDate()
 
-  const [{ data: workouts }, { data: announcements }, { data: recentPosts }, { count: myPostsCount }] =
-    await Promise.all([
+  const [workoutsResult, announcementsResult, postsResult, postsCountResult] = await Promise.all([
       supabase
         .from('workouts')
         .select('id, title, level, scheduled_date, objective')
         .gte('scheduled_date', today)
         .order('scheduled_date', { ascending: true })
-        .limit(3) as unknown as Promise<{ data: Workout[] | null }>,
+        .limit(3),
       supabase
         .from('announcements')
         .select('id, title, content, created_at')
         .order('created_at', { ascending: false })
-        .limit(3) as unknown as Promise<{ data: Announcement[] | null }>,
+        .limit(3),
       supabase
         .from('posts')
-        .select('id, caption, distance_km, created_at, profiles ( full_name, avatar_url )')
+        .select('id, caption, distance_km, created_at, profiles!posts_user_profile_fkey ( full_name )')
         .order('created_at', { ascending: false })
         .limit(4),
       supabase
@@ -47,6 +46,20 @@ export default async function DashboardPage() {
         .select('id', { count: 'exact', head: true })
         .eq('user_id', user.id),
     ])
+
+  if (
+    workoutsResult.error
+    || announcementsResult.error
+    || postsResult.error
+    || postsCountResult.error
+  ) {
+    throw new Error('Não foi possível carregar os dados do painel.')
+  }
+
+  const workouts = workoutsResult.data
+  const announcements = announcementsResult.data
+  const recentPosts = postsResult.data
+  const myPostsCount = postsCountResult.count
 
   const firstName = (profile?.full_name || 'Atleta').split(' ')[0]
 

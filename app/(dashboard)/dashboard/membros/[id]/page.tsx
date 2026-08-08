@@ -2,6 +2,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { redirect, notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createMediaUrl } from '@/lib/supabase/media'
+import { isUuid } from '@/lib/validation'
 import { formatDate, getInitials } from '@/lib/utils'
 import { ArrowLeft, MapPin, Target, Rss, ShieldCheck } from 'lucide-react'
 import type { Profile } from '@/types'
@@ -16,6 +18,7 @@ export default async function MembroPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  if (!isUuid(id)) notFound()
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -23,20 +26,24 @@ export default async function MembroPage({
   // Se for o próprio usuário, leva ao perfil editável.
   if (id === user.id) redirect('/dashboard/perfil')
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('*')
     .eq('user_id', id)
-    .single() as { data: Profile | null }
+    .maybeSingle() as { data: Profile | null; error: { message: string } | null }
 
+  if (profileError) throw new Error('Não foi possível carregar o perfil do atleta.')
   if (!profile) notFound()
 
-  const { data: posts, count } = await supabase
+  const avatarUrl = await createMediaUrl(supabase, 'avatars', profile.avatar_url)
+
+  const { data: posts, count, error: postsError } = await supabase
     .from('posts')
     .select('id, caption, distance_km, duration_minutes, pace, created_at', { count: 'exact' })
     .eq('user_id', id)
     .order('created_at', { ascending: false })
     .limit(10)
+  if (postsError) throw new Error('Não foi possível carregar as atividades do atleta.')
 
   const totalKm = (posts ?? []).reduce((sum, p) => sum + (Number(p.distance_km) || 0), 0)
 
@@ -53,9 +60,9 @@ export default async function MembroPage({
       <div className="card p-6">
         <div className="flex items-center gap-5">
           <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center overflow-hidden shrink-0">
-            {profile.avatar_url ? (
+            {avatarUrl ? (
               <Image
-                src={profile.avatar_url}
+                src={avatarUrl}
                 alt={`Avatar de ${profile.full_name}`}
                 width={80}
                 height={80}

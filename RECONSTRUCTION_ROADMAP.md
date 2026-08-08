@@ -1,4 +1,6 @@
-# RECONSTRUCTION_ROADMAP.md — Roteiro de Reconstrução
+# ARQUIVO HISTÓRICO — RECONSTRUCTION_ROADMAP.md
+
+> **Plano encerrado/substituído.** Não usar como backlog atual. Consulte `CURRENT_IMPLEMENTATION_STATUS.md`.
 
 > **Propósito:** documento vivo que registra o que já foi executado, o que está pendente e como cada etapa será abordada. Destinado a **agentes de IA e desenvolvedores** que precisem auditar, continuar ou revisar este projeto. Pode ser excluído após a conclusão total.
 >

@@ -1,5 +1,32 @@
 // Utilitários gerais do projeto
 
+export const APP_TIME_ZONE = 'America/Sao_Paulo'
+
+const CALENDAR_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/
+
+/**
+ * Retorna a data civil atual da Born to Run sem depender do fuso do servidor.
+ *
+ * Datas de treino são colunas PostgreSQL `date`, portanto representam um dia
+ * do calendário (não um instante UTC).
+ */
+export function getTodayCalendarDate(now = new Date()): string {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: APP_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(now)
+
+  const values = Object.fromEntries(
+    parts
+      .filter((part) => part.type !== 'literal')
+      .map((part) => [part.type, part.value]),
+  )
+
+  return `${values.year}-${values.month}-${values.day}`
+}
+
 /**
  * Formata pace em min/km a partir de duração (min) e distância (km)
  */
@@ -26,10 +53,22 @@ export function formatDuration(minutes: number): string {
  * Formata data para pt-BR
  */
 export function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('pt-BR', {
+  const calendarMatch = CALENDAR_DATE_PATTERN.exec(dateString)
+  const date = calendarMatch
+    ? new Date(Date.UTC(
+        Number(calendarMatch[1]),
+        Number(calendarMatch[2]) - 1,
+        Number(calendarMatch[3]),
+      ))
+    : new Date(dateString)
+
+  return date.toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
+    // Um `date` puro é formatado em UTC para manter exatamente o dia salvo;
+    // timestamps reais são exibidos no fuso oficial da equipe.
+    timeZone: calendarMatch ? 'UTC' : APP_TIME_ZONE,
   })
 }
 

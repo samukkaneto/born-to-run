@@ -1,4 +1,6 @@
-# FABLE_REBUILD_PLAN.md — Plano Mestre de Reconstrução (16 Fases)
+# ARQUIVO HISTÓRICO — FABLE_REBUILD_PLAN.md
+
+> **Plano anterior à reconstrução concluída em agosto de 2026.** A direção visual atual está em `README-FABLE5.md`; o estado técnico está em `CURRENT_IMPLEMENTATION_STATUS.md`.
 
 > **Este é o documento mais importante do repositório.** Ele guia toda a reconstrução do **Born to Run** de um projeto que **não compila** para um produto **estável, honesto, seguro e polido**. As fases estão ordenadas por dependência: **execute na sequência**. Não pule etapas — cada fase assume que as anteriores foram concluídas e validadas.
 

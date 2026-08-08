@@ -1,14 +1,22 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Dumbbell, Pencil, Plus, Search, Trash2, Calendar } from 'lucide-react'
-import { createWorkout, updateWorkout, deleteWorkout } from '@/lib/actions/admin'
+import {
+  Calendar,
+  Dumbbell,
+  Layers3,
+  Pencil,
+  Plus,
+  Search,
+  Trash2,
+  Users,
+} from 'lucide-react'
+import { createWorkout, deleteWorkout, updateWorkout } from '@/lib/actions/admin'
 import { formatDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/Toaster'
 import AdminModal from '@/components/admin/AdminModal'
-import AdminForm, { type AdminFormField } from '@/components/admin/AdminForm'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
-import type { Workout } from '@/types'
+import type { Profile, TrainingGroup, WorkoutWithAssignments } from '@/types'
 
 const LEVEL_LABELS: Record<string, string> = {
   iniciante: 'Iniciante',
@@ -20,198 +28,242 @@ const LEVEL_BADGES: Record<string, string> = {
   intermediario: 'badge-orange',
   avancado: 'badge-red',
 }
+const MEMBER_STATUS_LABELS: Record<Profile['membership_status'], string> = {
+  pending: 'Pendente',
+  active: 'Ativo',
+  suspended: 'Suspenso',
+  rejected: 'Recusado',
+}
 
-const WORKOUT_FIELDS: AdminFormField[] = [
-  { name: 'title', label: 'Título', type: 'text', required: true, placeholder: 'Ex: Treino de velocidade 5 km' },
-  { name: 'description', label: 'Descrição', type: 'textarea', required: true, placeholder: 'Descreva o treino detalhadamente…' },
-  { name: 'objective', label: 'Objetivo', type: 'text', required: true, placeholder: 'Ex: Melhorar pace, resistência…' },
-  {
-    name: 'level', label: 'Nível', type: 'select', required: true,
-    options: [
-      { value: 'iniciante', label: 'Iniciante' },
-      { value: 'intermediario', label: 'Intermediário' },
-      { value: 'avancado', label: 'Avançado' },
-    ],
-  },
-  { name: 'scheduled_date', label: 'Data (opcional)', type: 'date' },
-]
+function recipientLabel(workout: WorkoutWithAssignments) {
+  if (workout.audience === 'team') return 'Toda a equipe'
+  const memberCount = workout.workout_assignments?.filter((item) => item.athlete_user_id).length ?? 0
+  const groupCount = workout.workout_assignments?.filter((item) => item.group_id).length ?? 0
+  const parts = []
+  if (groupCount) parts.push(`${groupCount} grupo${groupCount === 1 ? '' : 's'}`)
+  if (memberCount) parts.push(`${memberCount} atleta${memberCount === 1 ? '' : 's'}`)
+  return parts.join(' + ') || 'Sem destinatários'
+}
 
-/** Gestão de treinos do painel do treinador: busca, filtro por nível,
- *  criação/edição em modal e remoção com confirmação + toasts. */
-export default function WorkoutsManager({ workouts }: { workouts: Workout[] }) {
+export default function WorkoutsManager({
+  workouts,
+  members,
+  groups,
+}: {
+  workouts: WorkoutWithAssignments[]
+  members: Profile[]
+  groups: TrainingGroup[]
+}) {
   const { toast } = useToast()
   const [search, setSearch] = useState('')
   const [level, setLevel] = useState('todos')
-  const [modal, setModal] = useState<'create' | Workout | null>(null)
-  const [toDelete, setToDelete] = useState<Workout | null>(null)
-  const [deleting, setDeleting] = useState(false)
+  const [memberSearch, setMemberSearch] = useState('')
+  const [modal, setModal] = useState<'create' | WorkoutWithAssignments | null>(null)
+  const [toDelete, setToDelete] = useState<WorkoutWithAssignments | null>(null)
+  const [audience, setAudience] = useState<'team' | 'targeted'>('team')
+  const [selectedMembers, setSelectedMembers] = useState<string[]>([])
+  const [selectedGroups, setSelectedGroups] = useState<string[]>([])
+  const [working, setWorking] = useState(false)
+  const [error, setError] = useState('')
+  const editing = modal && modal !== 'create' ? modal : null
+
+  const existingMemberIds = useMemo(
+    () => new Set(
+      editing?.workout_assignments
+        ?.flatMap((assignment) => assignment.athlete_user_id ? [assignment.athlete_user_id] : []) ?? [],
+    ),
+    [editing],
+  )
+  const existingGroupIds = useMemo(
+    () => new Set(
+      editing?.workout_assignments
+        ?.flatMap((assignment) => assignment.group_id ? [assignment.group_id] : []) ?? [],
+    ),
+    [editing],
+  )
+  const eligibleMembers = useMemo(
+    () => members.filter((member) =>
+      member.membership_status === 'active' || existingMemberIds.has(member.user_id),
+    ),
+    [members, existingMemberIds],
+  )
+  const eligibleGroups = useMemo(
+    () => groups.filter((group) => !group.archived_at || existingGroupIds.has(group.id)),
+    [groups, existingGroupIds],
+  )
 
   const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase()
-    return workouts.filter((w) => {
-      if (level !== 'todos' && w.level !== level) return false
-      if (!q) return true
-      return (
-        w.title.toLowerCase().includes(q) ||
-        w.description.toLowerCase().includes(q) ||
-        w.objective.toLowerCase().includes(q)
-      )
+    const query = search.trim().toLowerCase()
+    return workouts.filter((workout) => {
+      if (level !== 'todos' && workout.level !== level) return false
+      if (!query) return true
+      return [workout.title, workout.description, workout.objective]
+        .some((value) => value.toLowerCase().includes(query))
     })
   }, [workouts, search, level])
 
-  async function handleDelete() {
-    if (!toDelete) return
-    setDeleting(true)
-    const result = await deleteWorkout(toDelete.id)
-    setDeleting(false)
-    setToDelete(null)
-    if (result?.error) toast('error', result.error)
-    else toast('success', 'Treino removido com sucesso.')
+  const visibleMembers = useMemo(() => {
+    const query = memberSearch.trim().toLowerCase()
+    if (!query) return eligibleMembers
+    return eligibleMembers.filter((member) =>
+      [member.full_name, member.cidade].some((value) => (value || '').toLowerCase().includes(query)),
+    )
+  }, [eligibleMembers, memberSearch])
+
+  function openEditor(value: 'create' | WorkoutWithAssignments) {
+    setError('')
+    setMemberSearch('')
+    setModal(value)
+    if (value === 'create') {
+      setAudience('team')
+      setSelectedMembers([])
+      setSelectedGroups([])
+      return
+    }
+    setAudience(value.audience)
+    setSelectedMembers(
+      value.workout_assignments
+        ?.flatMap((assignment) => assignment.athlete_user_id ? [assignment.athlete_user_id] : []) ?? [],
+    )
+    setSelectedGroups(
+      value.workout_assignments
+        ?.flatMap((assignment) => assignment.group_id ? [assignment.group_id] : []) ?? [],
+    )
   }
 
-  const editing = modal !== null && modal !== 'create' ? modal : null
+  function toggleSelection(
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+    id: string,
+    checked: boolean,
+  ) {
+    setter((current) => checked ? [...new Set([...current, id])] : current.filter((value) => value !== id))
+  }
+
+  async function handleSave(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setWorking(true)
+    setError('')
+    try {
+      const formData = new FormData(event.currentTarget)
+      const result = editing
+        ? await updateWorkout(editing.id, formData)
+        : await createWorkout(formData)
+      if (result.error) {
+        setError(result.error)
+        return
+      }
+      toast('success', editing ? 'Treino atualizado com sucesso.' : 'Treino criado com sucesso.')
+      setModal(null)
+    } catch {
+      setError('Não foi possível salvar o treino. Tente novamente.')
+    } finally {
+      setWorking(false)
+    }
+  }
+
+  async function handleDelete() {
+    if (!toDelete) return
+    setWorking(true)
+    try {
+      const result = await deleteWorkout(toDelete.id)
+      if (result.error) toast('error', result.error)
+      else {
+        toast('success', 'Treino removido com sucesso.')
+        setToDelete(null)
+      }
+    } catch {
+      toast('error', 'Não foi possível remover o treino.')
+    } finally {
+      setWorking(false)
+    }
+  }
 
   return (
     <div className="space-y-6">
-      {/* Barra de ações */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
-          <Search
-            size={16}
-            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A8A29E]"
-            aria-hidden="true"
-          />
-          <input
-            type="search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar treino por título, descrição ou objetivo…"
-            className="input-base pl-10"
-            aria-label="Buscar treinos"
-          />
+          <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#78716C]" aria-hidden="true" />
+          <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar treino por título, descrição ou objetivo…" className="input-base pl-10" aria-label="Buscar treinos" />
         </div>
-        <select
-          value={level}
-          onChange={(e) => setLevel(e.target.value)}
-          className="input-base bg-white sm:w-48"
-          aria-label="Filtrar por nível"
-        >
+        <select value={level} onChange={(event) => setLevel(event.target.value)} className="input-base bg-white sm:w-48" aria-label="Filtrar por nível">
           <option value="todos">Todos os níveis</option>
           <option value="iniciante">Iniciante</option>
           <option value="intermediario">Intermediário</option>
           <option value="avancado">Avançado</option>
         </select>
-        <button type="button" onClick={() => setModal('create')} className="btn-primary">
-          <Plus size={16} aria-hidden="true" />
-          Novo treino
-        </button>
+        <button type="button" onClick={() => openEditor('create')} className="btn-primary"><Plus size={16} aria-hidden="true" /> Novo treino</button>
       </div>
 
-      {/* Lista */}
       <div className="space-y-3">
-        {filtered.length > 0 ? (
-          filtered.map((w) => (
-            <div key={w.id} className="card flex items-start gap-4 p-4 sm:p-5">
-              <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#FEE2E2] sm:flex">
-                <Dumbbell size={19} className="text-[#DC2626]" aria-hidden="true" />
+        {filtered.length > 0 ? filtered.map((workout) => (
+          <article key={workout.id} className="card flex items-start gap-4 p-4 sm:p-5">
+            <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#FEE2E2] sm:flex"><Dumbbell size={19} className="text-[#DC2626]" aria-hidden="true" /></div>
+            <div className="min-w-0 flex-1">
+              <div className="mb-1 flex flex-wrap items-center gap-2">
+                <h3 className="font-condensed text-base font-semibold uppercase tracking-[0.03em] text-[#171717]">{workout.title}</h3>
+                <span className={`badge ${LEVEL_BADGES[workout.level] || 'badge-gray'}`}>{LEVEL_LABELS[workout.level] || workout.level}</span>
+                <span className="badge badge-gray"><Users size={11} aria-hidden="true" /> {recipientLabel(workout)}</span>
               </div>
-              <div className="min-w-0 flex-1">
-                <div className="mb-1 flex flex-wrap items-center gap-2">
-                  <h3 className="font-condensed text-base font-semibold uppercase tracking-[0.03em] text-[#171717]">
-                    {w.title}
-                  </h3>
-                  <span className={`badge ${LEVEL_BADGES[w.level] || 'badge-gray'}`}>
-                    {LEVEL_LABELS[w.level] || w.level}
-                  </span>
-                </div>
-                <p className="line-clamp-2 text-sm text-[#57534E]">{w.description}</p>
-                <p className="mt-1.5 flex items-center gap-1.5 text-xs text-[#A8A29E]">
-                  <Calendar size={11} aria-hidden="true" />
-                  {w.scheduled_date ? formatDate(w.scheduled_date) : 'Sem data'} · {w.objective}
-                </p>
-              </div>
-              <div className="flex shrink-0 gap-1">
-                <button
-                  type="button"
-                  onClick={() => setModal(w)}
-                  className="rounded-lg p-2.5 text-[#A8A29E] transition-colors hover:bg-[#F5F5F4] hover:text-[#171717]"
-                  aria-label={`Editar treino ${w.title}`}
-                >
-                  <Pencil size={16} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setToDelete(w)}
-                  className="rounded-lg p-2.5 text-[#A8A29E] transition-colors hover:bg-[#FEE2E2] hover:text-[#DC2626]"
-                  aria-label={`Remover treino ${w.title}`}
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
+              <p className="line-clamp-2 text-sm text-[#57534E]">{workout.description}</p>
+              <p className="mt-1.5 flex items-center gap-1.5 text-xs text-[#57534E]"><Calendar size={11} aria-hidden="true" /> {workout.scheduled_date ? formatDate(workout.scheduled_date) : 'Sem data'} · {workout.objective}</p>
             </div>
-          ))
-        ) : (
-          <div className="card p-10 text-center text-[#A8A29E]">
-            <Dumbbell size={28} className="mx-auto mb-3 opacity-30" aria-hidden="true" />
-            <p className="text-sm">
-              {workouts.length === 0
-                ? 'Nenhum treino cadastrado ainda. Clique em "Novo treino" para começar.'
-                : 'Nenhum treino encontrado com esses filtros.'}
-            </p>
-          </div>
+            <div className="flex shrink-0 gap-1">
+              <button type="button" onClick={() => openEditor(workout)} className="min-h-11 rounded-lg p-2.5 text-[#57534E] transition-colors hover:bg-[#F5F5F4] hover:text-[#171717]" aria-label={`Editar treino ${workout.title}`}><Pencil size={16} /></button>
+              <button type="button" onClick={() => setToDelete(workout)} className="min-h-11 rounded-lg p-2.5 text-[#57534E] transition-colors hover:bg-[#FEE2E2] hover:text-[#DC2626]" aria-label={`Remover treino ${workout.title}`}><Trash2 size={16} /></button>
+            </div>
+          </article>
+        )) : (
+          <div className="card p-10 text-center text-[#57534E]"><Dumbbell size={28} className="mx-auto mb-3 opacity-40" aria-hidden="true" /><p className="text-sm">{workouts.length === 0 ? 'Nenhum treino cadastrado. Crie o primeiro plano para a equipe.' : 'Nenhum treino encontrado com esses filtros.'}</p></div>
         )}
       </div>
 
-      {/* Modal criar/editar */}
       <AdminModal
         open={modal !== null}
         title={editing ? 'Editar treino' : 'Novo treino'}
-        subtitle={
-          editing
-            ? 'As alterações aparecem imediatamente para os atletas.'
-            : 'O treino ficará visível para toda a equipe.'
-        }
-        onClose={() => setModal(null)}
+        subtitle="Defina o conteúdo e escolha exatamente quem receberá este treino."
+        onClose={() => !working && setModal(null)}
       >
-        <AdminForm
-          key={editing?.id ?? 'create'}
-          action={async (fd) =>
-            editing ? updateWorkout(editing.id, fd) : createWorkout(fd)
-          }
-          fields={WORKOUT_FIELDS}
-          submitLabel={editing ? 'Salvar alterações' : 'Criar treino'}
-          defaultValues={
-            editing
-              ? {
-                  title: editing.title,
-                  description: editing.description,
-                  objective: editing.objective,
-                  level: editing.level,
-                  scheduled_date: editing.scheduled_date ?? '',
-                }
-              : undefined
-          }
-          onSuccess={() => {
-            setModal(null)
-            toast('success', editing ? 'Treino atualizado com sucesso.' : 'Treino criado com sucesso.')
-          }}
-        />
+        <form key={editing?.id ?? 'create'} onSubmit={handleSave} className="space-y-4">
+          {audience === 'targeted' && selectedMembers.map((id) => <input key={`member-${id}`} type="hidden" name="member_ids" value={id} />)}
+          {audience === 'targeted' && selectedGroups.map((id) => <input key={`group-${id}`} type="hidden" name="group_ids" value={id} />)}
+          <div><label htmlFor="workout-title" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Título</label><input id="workout-title" name="title" defaultValue={editing?.title ?? ''} maxLength={160} required className="input-base" placeholder="Ex: Treino de velocidade 5 km" /></div>
+          <div><label htmlFor="workout-description" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Descrição</label><textarea id="workout-description" name="description" defaultValue={editing?.description ?? ''} maxLength={5000} rows={5} required className="input-base resize-none" placeholder="Descreva aquecimento, séries, pausas e desaquecimento…" /></div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div><label htmlFor="workout-objective" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Objetivo</label><input id="workout-objective" name="objective" defaultValue={editing?.objective ?? ''} maxLength={500} required className="input-base" placeholder="Ex: Melhorar o pace" /></div>
+            <div><label htmlFor="workout-level" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Nível</label><select id="workout-level" name="level" defaultValue={editing?.level ?? 'iniciante'} className="input-base bg-white"><option value="iniciante">Iniciante</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option></select></div>
+          </div>
+          <div><label htmlFor="workout-date" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Data opcional</label><input id="workout-date" name="scheduled_date" type="date" defaultValue={editing?.scheduled_date ?? ''} className="input-base" /></div>
+
+          <fieldset className="space-y-3 rounded-xl border border-[#E5E1D8] p-4">
+            <legend className="px-1 font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Destinatários</legend>
+            <label className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 ${audience === 'team' ? 'border-[#DC2626] bg-[#FFF7F7]' : 'border-[#E5E1D8]'}`}><input type="radio" name="audience" value="team" checked={audience === 'team'} onChange={() => setAudience('team')} className="mt-1 accent-[#DC2626]" /><span><strong className="block text-sm text-[#171717]">Toda a equipe</strong><span className="text-xs text-[#57534E]">Todos os atletas ativos verão o treino.</span></span></label>
+            <label className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 ${audience === 'targeted' ? 'border-[#DC2626] bg-[#FFF7F7]' : 'border-[#E5E1D8]'}`}><input type="radio" name="audience" value="targeted" checked={audience === 'targeted'} onChange={() => setAudience('targeted')} className="mt-1 accent-[#DC2626]" /><span><strong className="block text-sm text-[#171717]">Atletas e grupos específicos</strong><span className="text-xs text-[#57534E]">Combine uma ou mais turmas com seleções individuais.</span></span></label>
+
+            {audience === 'targeted' && (
+              <div className="grid gap-4 pt-2 sm:grid-cols-2">
+                <div>
+                  <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]"><Layers3 size={13} /> Grupos</p>
+                  <div className="max-h-44 space-y-1 overflow-y-auto rounded-lg border border-[#E5E1D8] p-2">
+                    {eligibleGroups.length > 0 ? eligibleGroups.map((group) => <label key={group.id} className="flex min-h-11 cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[#FAFAF9]"><input type="checkbox" checked={selectedGroups.includes(group.id)} onChange={(event) => toggleSelection(setSelectedGroups, group.id, event.target.checked)} className="accent-[#DC2626]" /><span className="min-w-0 flex-1 truncate">{group.name}</span>{group.archived_at && <span className="badge badge-orange shrink-0">Arquivado</span>}</label>) : <p className="p-3 text-center text-xs text-[#57534E]">Crie um grupo na área de membros.</p>}
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]"><Users size={13} /> Atletas</p>
+                  <div className="relative mb-2"><Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[#78716C]" /><input type="search" value={memberSearch} onChange={(event) => setMemberSearch(event.target.value)} className="input-base py-2 pl-8 text-xs" placeholder="Buscar…" aria-label="Buscar atleta destinatário" /></div>
+                  <div className="max-h-36 space-y-1 overflow-y-auto rounded-lg border border-[#E5E1D8] p-2">
+                    {visibleMembers.length > 0 ? visibleMembers.map((member) => <label key={member.user_id} className="flex min-h-11 cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[#FAFAF9]"><input type="checkbox" checked={selectedMembers.includes(member.user_id)} onChange={(event) => toggleSelection(setSelectedMembers, member.user_id, event.target.checked)} className="accent-[#DC2626]" /><span className="min-w-0 flex-1 truncate">{member.full_name}</span>{member.membership_status !== 'active' && <span className="badge badge-gray shrink-0">{MEMBER_STATUS_LABELS[member.membership_status]}</span>}</label>) : <p className="p-3 text-center text-xs text-[#57534E]">Nenhum atleta encontrado.</p>}
+                  </div>
+                </div>
+              </div>
+            )}
+          </fieldset>
+
+          {error && <p role="alert" className="rounded-lg border border-[#FECACA] bg-[#FEE2E2] px-3 py-2 text-sm text-[#B91C1C]">{error}</p>}
+          <button type="submit" disabled={working} className="btn-primary w-full sm:w-auto">{working ? 'Salvando…' : editing ? 'Salvar alterações' : 'Criar treino'}</button>
+        </form>
       </AdminModal>
 
-      {/* Confirmação de remoção */}
-      <ConfirmDialog
-        open={toDelete !== null}
-        title="Confirmar remoção"
-        description={
-          toDelete
-            ? `O treino "${toDelete.title}" será removido para toda a equipe. Esta ação exige confirmação e não pode ser desfeita.`
-            : ''
-        }
-        confirmLabel="Remover treino"
-        loading={deleting}
-        onConfirm={handleDelete}
-        onCancel={() => setToDelete(null)}
-      />
+      <ConfirmDialog open={toDelete !== null} title="Confirmar remoção" description={toDelete ? `O treino “${toDelete.title}” será removido dos destinatários. Esta ação não pode ser desfeita.` : ''} confirmLabel="Remover treino" loadingLabel="Removendo…" loading={working} onConfirm={handleDelete} onCancel={() => !working && setToDelete(null)} />
     </div>
   )
 }

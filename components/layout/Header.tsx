@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -22,6 +22,7 @@ const navLinks = [
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -29,6 +30,23 @@ export default function Header() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const previousFocus = document.activeElement as HTMLElement | null
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      event.preventDefault()
+      setMenuOpen(false)
+      requestAnimationFrame(() => {
+        if (previousFocus?.isConnected) previousFocus.focus()
+        else menuButtonRef.current?.focus()
+      })
+    }
+
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [menuOpen])
 
   return (
     <header
@@ -70,8 +88,8 @@ export default function Header() {
                     'font-condensed text-[15px] font-medium uppercase tracking-wide transition-colors duration-200 relative pb-1',
                     'after:absolute after:bottom-0 after:left-0 after:h-[3px] after:bg-[#DC2626] after:transition-all after:duration-200',
                     active
-                      ? 'text-[#DC2626] after:w-full'
-                      : 'text-[#F7F4EF] hover:text-[#DC2626] after:w-0 hover:after:w-full'
+                      ? 'text-[#F87171] after:w-full'
+                      : 'text-[#F7F4EF] hover:text-[#F87171] after:w-0 hover:after:w-full'
                   )}
                 >
                   {link.label}
@@ -99,6 +117,7 @@ export default function Header() {
 
           {/* Hamburger mobile */}
           <button
+            ref={menuButtonRef}
             type="button"
             aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={menuOpen}
@@ -114,6 +133,8 @@ export default function Header() {
       {/* Menu mobile — painel carbono */}
       <div
         id="mobile-menu"
+        aria-hidden={!menuOpen}
+        inert={!menuOpen}
         className={cn(
           'md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-[#171717] border-t border-[#2E2E2E]',
           menuOpen ? 'max-h-[440px] opacity-100' : 'max-h-0 opacity-0'
@@ -128,8 +149,8 @@ export default function Header() {
               className={cn(
                 'block px-3 py-3.5 rounded-lg font-condensed text-lg font-medium uppercase tracking-wide transition-colors',
                 pathname === link.href
-                  ? 'text-[#DC2626]'
-                  : 'text-[#F7F4EF] hover:text-[#DC2626]'
+                  ? 'text-[#F87171]'
+                  : 'text-[#F7F4EF] hover:text-[#F87171]'
               )}
             >
               {link.label}

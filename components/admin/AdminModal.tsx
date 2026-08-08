@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 
 interface AdminModalProps {
@@ -19,18 +19,43 @@ export default function AdminModal({
   onClose,
   children,
 }: AdminModalProps) {
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const onCloseRef = useRef(onClose)
+
+  useEffect(() => {
+    onCloseRef.current = onClose
+  }, [onClose])
+
   useEffect(() => {
     if (!open) return
+    const previousFocus = document.activeElement as HTMLElement | null
+    closeRef.current?.focus()
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') onCloseRef.current()
+      if (e.key !== 'Tab') return
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )
+      if (!focusable?.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
+      previousFocus?.focus()
     }
-  }, [open, onClose])
+  }, [open])
 
   if (!open) return null
 
@@ -48,7 +73,7 @@ export default function AdminModal({
         aria-label="Fechar janela"
         tabIndex={-1}
       />
-      <div className="animate-scale-in relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-xl border border-[#E5E1D8] bg-white shadow-card-lg sm:rounded-xl">
+      <div ref={dialogRef} className="animate-scale-in relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-xl border border-[#E5E1D8] bg-white shadow-card-lg sm:rounded-xl">
         <div className="sticky top-0 flex items-start justify-between gap-4 border-b border-[#E5E1D8] bg-white px-6 py-4">
           <div>
             <h2
@@ -62,6 +87,7 @@ export default function AdminModal({
             )}
           </div>
           <button
+            ref={closeRef}
             type="button"
             onClick={onClose}
             className="rounded-lg p-2 text-[#A8A29E] transition-colors hover:bg-[#F5F5F4] hover:text-[#171717]"

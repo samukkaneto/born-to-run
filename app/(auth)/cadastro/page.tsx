@@ -1,22 +1,15 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useActionState } from 'react'
 import Link from 'next/link'
 import { AlertCircle, ArrowRight, Loader2 } from 'lucide-react'
 import Input from '@/components/ui/Input'
-import { signup } from '@/lib/actions/auth'
+import { signup, type AuthActionState } from '@/lib/actions/auth'
+
+const initialState: AuthActionState = {}
 
 export default function CadastroPage() {
-  const [error, setError] = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
-
-  function handleSubmit(formData: FormData) {
-    setError(null)
-    startTransition(async () => {
-      const result = await signup(formData)
-      if (result?.error) setError(result.error)
-    })
-  }
+  const [state, formAction, isPending] = useActionState(signup, initialState)
 
   return (
     <div className="card w-full space-y-8 p-8 sm:p-10">
@@ -35,11 +28,14 @@ export default function CadastroPage() {
         </p>
       </div>
 
-      <form action={handleSubmit} className="space-y-5">
-        {error && (
-          <div className="flex items-start gap-3 rounded-lg bg-red-50 p-4 text-sm text-red-700">
+      <form action={formAction} className="space-y-5">
+        {!isPending && state.error && (
+          <div
+            role="alert"
+            className="flex items-start gap-3 rounded-lg bg-red-50 p-4 text-sm text-red-700"
+          >
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-            <p>{error}</p>
+            <p>{state.error}</p>
           </div>
         )}
 
@@ -68,8 +64,8 @@ export default function CadastroPage() {
           type="password"
           autoComplete="new-password"
           required
-          minLength={6}
-          placeholder="Mínimo de 6 caracteres"
+          minLength={8}
+          placeholder="8+ caracteres, com letra e número"
         />
 
         <button

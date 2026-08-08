@@ -46,7 +46,7 @@ export default function AuthLayout({
 
         {/* Tagline editorial */}
         <div className="relative z-10">
-          <p className="section-kicker mb-5">
+          <p className="section-kicker section-kicker-on-dark mb-5">
             Área do atleta · desde {site.foundedYear}
           </p>
           <p className="font-display text-5xl uppercase leading-[0.95] text-white xl:text-6xl">
@@ -98,7 +98,7 @@ export default function AuthLayout({
 
         <div className="w-full max-w-md">{children}</div>
 
-        <p className="mt-8 text-center text-xs text-[#78716C]">
+        <p className="mt-8 text-center text-xs text-[#57534E]">
           © {new Date().getFullYear()} {site.shortName} · {site.location} ·{' '}
           <Link href="/" className="transition-colors hover:text-[#DC2626]">
             Voltar ao site

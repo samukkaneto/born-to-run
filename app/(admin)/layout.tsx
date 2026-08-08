@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/lib/actions/auth'
+import { getAccessContext } from '@/lib/auth/access'
 import { LogOut, ShieldCheck } from 'lucide-react'
 import AdminNav, { AdminNavMobile } from '@/components/admin/AdminNav'
 import ToastProvider from '@/components/ui/Toaster'
@@ -12,18 +12,10 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { user, profile } = await getAccessContext()
   if (!user) redirect('/login')
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role, full_name')
-    .eq('user_id', user.id)
-    .single()
-
+  if (!profile || profile.membership_status === 'pending') redirect('/acesso-pendente')
+  if (profile.membership_status !== 'active') redirect('/acesso-bloqueado')
   if (profile?.role !== 'admin') redirect('/dashboard')
 
   const firstName = (profile?.full_name || 'Treinador').split(' ')[0]
@@ -31,6 +23,9 @@ export default async function AdminLayout({
   return (
     <ToastProvider>
       <div className="flex min-h-screen bg-[#F7F4EF]">
+        <a href="#conteudo-principal" className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-lg bg-white px-4 py-3 font-semibold text-[#171717] shadow-card-lg transition-transform focus:translate-y-0">
+          Pular para o conteúdo
+        </a>
         {/* ── Sidebar carbono fixa (desktop) ── */}
         <aside className="panel-carbon fixed inset-y-0 left-0 z-40 hidden w-64 flex-col md:flex">
           <div className="border-b border-[#2E2E2E] px-5 py-5">
@@ -115,7 +110,7 @@ export default async function AdminLayout({
           </div>
 
           {/* Conteúdo */}
-          <main className="min-w-0 flex-1 px-4 py-8 sm:px-6 lg:px-8">
+          <main id="conteudo-principal" tabIndex={-1} className="min-w-0 flex-1 px-4 py-8 sm:px-6 lg:px-8">
             <div className="mx-auto w-full max-w-5xl">{children}</div>
           </main>
         </div>

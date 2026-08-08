@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/lib/actions/auth'
+import { getAccessContext } from '@/lib/auth/access'
 import { LogOut } from 'lucide-react'
 import {
   DashboardSidebarNav,
@@ -14,21 +14,17 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = await createClient()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { user, profile } = await getAccessContext()
 
   if (!user) {
     redirect('/login')
   }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('full_name, role')
-    .eq('user_id', user.id)
-    .single()
+  if (!profile || profile.membership_status === 'pending') {
+    redirect('/acesso-pendente')
+  }
+  if (profile.membership_status !== 'active') {
+    redirect('/acesso-bloqueado')
+  }
 
   const isAdmin = profile?.role === 'admin'
   const firstName =
@@ -36,6 +32,9 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-[#F7F4EF]">
+      <a href="#conteudo-principal" className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-lg bg-white px-4 py-3 font-semibold text-[#171717] shadow-card-lg transition-transform focus:translate-y-0">
+        Pular para o conteúdo
+      </a>
       {/* ── Sidebar carbono fixa (desktop) ── */}
       <aside className="panel-carbon fixed inset-y-0 left-0 z-40 hidden w-64 flex-col md:flex">
         <div className="border-b border-[#2E2E2E] px-5 py-5">
@@ -113,7 +112,7 @@ export default async function DashboardLayout({
         </div>
 
         {/* Conteúdo */}
-        <main className="min-w-0 flex-1 px-4 py-8 pb-24 sm:px-6 md:pb-8 lg:px-8">
+        <main id="conteudo-principal" tabIndex={-1} className="min-w-0 flex-1 px-4 py-8 pb-24 sm:px-6 md:pb-8 lg:px-8">
           <div className="mx-auto w-full max-w-5xl">{children}</div>
         </main>
       </div>

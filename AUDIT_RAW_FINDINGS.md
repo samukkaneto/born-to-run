@@ -1,4 +1,6 @@
-# AUDIT_RAW_FINDINGS.md — Auditoria Técnica Bruta do Repositório `born-to-run`
+# ARQUIVO HISTÓRICO — AUDIT_RAW_FINDINGS.md
+
+> Evidências da auditoria inicial, preservadas para rastreabilidade. Não usar como descrição do código atual; consulte `CURRENT_IMPLEMENTATION_STATUS.md`.
 
 > **Documento de achados brutos.** Este arquivo consolida TODOS os achados da auditoria técnica do repositório `samukkaneto/born-to-run`. É um documento de trabalho (raw findings) que servirá de insumo para os documentos finais de auditoria. **Nenhum código-fonte foi alterado**; apenas este arquivo foi criado.
 

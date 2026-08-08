@@ -1,4 +1,6 @@
-# ABACUS_PROJECT_AUDIT.md — Auditoria Completa do Estado Atual
+# ARQUIVO HISTÓRICO — ABACUS_PROJECT_AUDIT.md
+
+> **Não representa o estado atual.** Auditoria anterior às correções de agosto de 2026. Consulte `CURRENT_IMPLEMENTATION_STATUS.md`.
 
 > **Documento crítico e honesto.** Esta é a avaliação consolidada do estado real do projeto **Born to Run — Treinamento e Saúde**, baseada na auditoria técnica bruta (`AUDIT_RAW_FINDINGS.md`) e na inspeção visual (`VISUAL_INSPECTION_REPORT.md`). O objetivo não é agradar, e sim expor com precisão o que existe, o que está quebrado e o que precisa ser reconstruído. Nenhum problema foi suavizado.
 

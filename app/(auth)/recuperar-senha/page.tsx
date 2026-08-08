@@ -1,25 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useActionState } from 'react'
 import Link from 'next/link'
 import { Mail, Loader2, ArrowLeft, CheckCircle } from 'lucide-react'
-import { resetPassword } from '@/lib/actions/auth'
+import { resetPassword, type AuthActionState } from '@/lib/actions/auth'
+
+const initialState: AuthActionState = {}
 
 export default function RecuperarSenhaPage() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError]     = useState('')
-  const [success, setSuccess] = useState('')
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    setSuccess('')
-    const data = await resetPassword(new FormData(e.currentTarget))
-    if (data?.error)   setError(data.error)
-    if (data?.success) setSuccess(data.success)
-    setLoading(false)
-  }
+  const [state, formAction, isPending] = useActionState(resetPassword, initialState)
 
   return (
     <>
@@ -37,13 +26,13 @@ export default function RecuperarSenhaPage() {
         </p>
       </div>
 
-      {success ? (
+      {state.success ? (
         <div className="card p-8 text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle size={32} className="text-[var(--color-green)]" />
           </div>
           <h2 className="font-display font-bold text-stone-800 text-xl mb-2">E-mail enviado!</h2>
-          <p className="text-stone-500 text-sm mb-6">
+          <p role="status" className="text-stone-500 text-sm mb-6">
             Verifique sua caixa de entrada e clique no link de redefinição de senha.
           </p>
           <Link href="/login" className="btn-primary w-full justify-center">
@@ -51,7 +40,7 @@ export default function RecuperarSenhaPage() {
           </Link>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form action={formAction} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-semibold text-stone-700 mb-1.5">
               E-mail da conta
@@ -69,19 +58,22 @@ export default function RecuperarSenhaPage() {
             </div>
           </div>
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg">
-              {error}
+          {!isPending && state.error && (
+            <div
+              role="alert"
+              className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg"
+            >
+              {state.error}
             </div>
           )}
 
           <button
             id="reset-submit-btn"
             type="submit"
-            disabled={loading}
+            disabled={isPending}
             className="btn-primary w-full justify-center py-3"
           >
-            {loading ? (
+            {isPending ? (
               <><Loader2 size={18} className="animate-spin" /> Enviando...</>
             ) : (
               'Enviar link de redefinição'

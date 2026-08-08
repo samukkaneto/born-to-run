@@ -1,136 +1,182 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { createClient } from '@/lib/supabase/server'
+import { getAccessContext } from '@/lib/auth/access'
+import { removeMedia } from '@/lib/supabase/media'
+import {
+  cleanText,
+  isUuid,
+  parseOptionalInteger,
+  parseOptionalPositiveNumber,
+  parsePace,
+  validateImageFile,
+} from '@/lib/validation'
 
-export async function createPost(formData: FormData) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Não autenticado' }
+export type FeedActionResult = {
+  success?: boolean
+  error?: string
+  liked?: boolean
+}
 
-  const caption  = formData.get('caption') as string
-  const distance = formData.get('distance') as string
-  const duration = formData.get('duration') as string
-  const pace     = formData.get('pace') as string
-  const file     = formData.get('photo') as File
+async function requireActiveMember() {
+  const context = await getAccessContext()
+  if (!context.user) return { ...context, accessError: 'Não autenticado.' }
+  if (context.profile?.membership_status !== 'active') {
+    return { ...context, accessError: 'Seu acesso à comunidade não está ativo.' }
+  }
+  return { ...context, accessError: null }
+}
 
-  if (!caption?.trim() && !distance && (!file || file.size === 0)) {
-    return { error: 'Escreva algo ou adicione os dados do treino para publicar.' }
+export async function createPost(formData: FormData): Promise<FeedActionResult> {
+  const { supabase, user, accessError } = await requireActiveMember()
+  if (accessError || !user) return { error: accessError ?? 'Não autenticado.' }
+
+  const caption = cleanText(formData.get('caption'), 1000)
+  const distance = parseOptionalPositiveNumber(formData.get('distance'), 999.99)
+  const duration = parseOptionalInteger(formData.get('duration'), 10080)
+  const pace = parsePace(formData.get('pace'))
+  const fileEntry = formData.get('photo')
+  const file = fileEntry instanceof File && fileEntry.size > 0 ? fileEntry : null
+
+  if (distance === 'invalid') return { error: 'Informe uma distância válida de até 999,99 km.' }
+  if (duration === 'invalid') return { error: 'Informe uma duração válida em minutos.' }
+  if (pace === 'invalid') return { error: 'Informe o pace no formato mm:ss, por exemplo 05:30.' }
+  if (!caption && distance === null && duration === null && pace === null && !file) {
+    return { error: 'Escreva algo, envie uma foto ou adicione os dados do treino.' }
   }
 
-  let photo_url: string | null = null
+  let photoPath: string | null = null
+  if (file) {
+    const validation = await validateImageFile(file, 10 * 1024 * 1024)
+    if ('error' in validation) return { error: validation.error }
 
-  // Upload da foto se existir
-  if (file && file.size > 0) {
-    if (file.size > 10 * 1024 * 1024) {
-      return { error: 'A foto deve ter no máximo 10 MB.' }
-    }
-    const ext = file.name.split('.').pop()
-    const path = `${user.id}/${Date.now()}.${ext}`
+    photoPath = `${user.id}/${crypto.randomUUID()}.${validation.extension}`
     const { error: uploadError } = await supabase.storage
       .from('post-images')
-      .upload(path, file, { upsert: true })
+      .upload(photoPath, file, {
+        cacheControl: '3600',
+        contentType: file.type,
+        upsert: false,
+      })
 
-    if (uploadError) {
-      return { error: 'Erro ao enviar a foto. Tente novamente.' }
-    }
-    const { data: urlData } = supabase.storage
-      .from('post-images')
-      .getPublicUrl(path)
-    photo_url = urlData.publicUrl
+    if (uploadError) return { error: 'Erro ao enviar a foto. Tente novamente.' }
   }
 
-  const { error } = await supabase.from('posts').insert({
-    user_id:          user.id,
-    caption:          caption || null,
-    photo_url,
-    distance_km:      distance ? parseFloat(distance) : null,
-    duration_minutes: duration ? parseInt(duration) : null,
-    pace:             pace || null,
-  })
+  const { error } = await supabase
+    .from('posts')
+    .insert({
+      user_id: user.id,
+      caption: caption || null,
+      photo_url: photoPath,
+      distance_km: distance,
+      duration_minutes: duration,
+      pace,
+    })
+    .select('id')
+    .single()
 
-  if (error) return { error: 'Erro ao publicar. Tente novamente.' }
+  if (error) {
+    await removeMedia(supabase, 'post-images', photoPath)
+    return { error: 'Erro ao publicar. A foto enviada foi descartada com segurança.' }
+  }
 
   revalidatePath('/dashboard/feed')
+  revalidatePath('/dashboard')
   return { success: true }
 }
 
-export async function toggleLike(postId: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return
+export async function toggleLike(postId: string): Promise<FeedActionResult> {
+  if (!isUuid(postId)) return { error: 'Publicação inválida.' }
+  const { supabase, user, accessError } = await requireActiveMember()
+  if (accessError || !user) return { error: accessError ?? 'Não autenticado.' }
 
-  const { data: existing } = await supabase
+  const { data: existing, error: lookupError } = await supabase
     .from('likes')
     .select('id')
     .eq('post_id', postId)
     .eq('user_id', user.id)
-    .single()
+    .maybeSingle()
+
+  if (lookupError) return { error: 'Não foi possível atualizar a curtida.' }
 
   if (existing) {
-    await supabase.from('likes').delete().eq('id', existing.id)
+    const { data, error } = await supabase
+      .from('likes')
+      .delete()
+      .eq('id', existing.id)
+      .select('id')
+      .maybeSingle()
+    if (error || !data) return { error: 'Não foi possível remover a curtida.' }
   } else {
-    await supabase.from('likes').insert({ post_id: postId, user_id: user.id })
+    const { error } = await supabase
+      .from('likes')
+      .insert({ post_id: postId, user_id: user.id })
+    if (error) return { error: 'Não foi possível curtir a publicação.' }
   }
 
   revalidatePath('/dashboard/feed')
+  return { success: true, liked: !existing }
 }
 
-export async function addComment(formData: FormData) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Não autenticado' }
+export async function addComment(formData: FormData): Promise<FeedActionResult> {
+  const { supabase, user, accessError } = await requireActiveMember()
+  if (accessError || !user) return { error: accessError ?? 'Não autenticado.' }
 
-  const postId  = formData.get('post_id') as string
-  const content = formData.get('content') as string
+  const postId = String(formData.get('post_id') ?? '')
+  const content = cleanText(formData.get('content'), 500)
+  if (!isUuid(postId)) return { error: 'Publicação inválida.' }
+  if (!content) return { error: 'Escreva um comentário antes de enviar.' }
 
-  if (!content.trim()) return { error: 'Comentário vazio' }
+  const { error } = await supabase
+    .from('comments')
+    .insert({ post_id: postId, user_id: user.id, content })
 
-  const { error } = await supabase.from('comments').insert({
-    post_id: postId,
-    user_id: user.id,
-    content: content.trim(),
-  })
-
-  if (error) return { error: 'Erro ao comentar.' }
+  if (error) return { error: 'Erro ao comentar. Tente novamente.' }
 
   revalidatePath('/dashboard/feed')
   return { success: true }
 }
 
-export async function deleteComment(commentId: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Não autenticado' }
+export async function deleteComment(commentId: string): Promise<FeedActionResult> {
+  if (!isUuid(commentId)) return { error: 'Comentário inválido.' }
+  const { supabase, user, accessError } = await requireActiveMember()
+  if (accessError || !user) return { error: accessError ?? 'Não autenticado.' }
 
-  // A RLS garante que só o autor ou um admin consegue excluir.
-  const { error } = await supabase.from('comments').delete().eq('id', commentId)
-  if (error) return { error: 'Erro ao excluir comentário.' }
+  const { data, error } = await supabase
+    .from('comments')
+    .delete()
+    .eq('id', commentId)
+    .select('id')
+    .maybeSingle()
+
+  if (error || !data) return { error: 'Você não pode excluir este comentário.' }
 
   revalidatePath('/dashboard/feed')
   return { success: true }
 }
 
-export async function deletePost(postId: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return
+export async function deletePost(postId: string): Promise<FeedActionResult> {
+  if (!isUuid(postId)) return { error: 'Publicação inválida.' }
+  const { supabase, user, accessError } = await requireActiveMember()
+  if (accessError || !user) return { error: accessError ?? 'Não autenticado.' }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('user_id', user.id)
-    .single()
-
-  const { data: post } = await supabase
+  const { data: post, error: lookupError } = await supabase
     .from('posts')
-    .select('user_id')
+    .select('id, photo_url')
     .eq('id', postId)
-    .single()
+    .maybeSingle()
+  if (lookupError || !post) return { error: 'Publicação não encontrada.' }
 
-  if (!post) return
-  if (post.user_id !== user.id && profile?.role !== 'admin') return
+  const { data: deleted, error } = await supabase
+    .from('posts')
+    .delete()
+    .eq('id', postId)
+    .select('id')
+    .maybeSingle()
+  if (error || !deleted) return { error: 'Você não pode excluir esta publicação.' }
 
-  await supabase.from('posts').delete().eq('id', postId)
+  await removeMedia(supabase, 'post-images', post.photo_url)
   revalidatePath('/dashboard/feed')
+  revalidatePath('/dashboard')
+  return { success: true }
 }

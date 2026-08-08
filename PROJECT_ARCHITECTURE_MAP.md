@@ -1,4 +1,6 @@
-# PROJECT_ARCHITECTURE_MAP.md — Mapa Arquitetural
+# ARQUIVO HISTÓRICO — PROJECT_ARCHITECTURE_MAP.md
+
+> **Não usar como descrição do código atual.** Snapshot anterior à reconstrução de agosto de 2026. Consulte `README-FABLE5.md` e `CURRENT_IMPLEMENTATION_STATUS.md`.
 
 > Mapa completo de como o projeto **Born to Run** está organizado hoje: diretórios, rotas, layouts, componentes, integrações, banco de dados, RLS, storage, autenticação e fluxos. Este documento descreve a **realidade atual** (incluindo duplicações e código quebrado), servindo de referência para a reconstrução. Marcações: ✅ correto/funcional · ⚠️ parcial/alerta · ❌ quebrado · 💀 código morto/duplicado.
 

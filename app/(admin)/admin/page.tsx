@@ -1,21 +1,30 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Users, Dumbbell, Megaphone, Rss, ArrowRight, Plus } from 'lucide-react'
+import { Users, Dumbbell, Megaphone, Rss, ArrowRight, Plus, Clock3 } from 'lucide-react'
 
 export default async function AdminPage() {
   const supabase = await createClient()
 
+  const countResults = await Promise.all([
+    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    supabase.from('workouts').select('*', { count: 'exact', head: true }),
+    supabase.from('announcements').select('*', { count: 'exact', head: true }),
+    supabase.from('posts').select('*', { count: 'exact', head: true }),
+    supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .eq('membership_status', 'pending'),
+  ])
+  if (countResults.some((result) => result.error)) {
+    throw new Error('Não foi possível carregar os indicadores do painel.')
+  }
   const [
     { count: membersCount },
     { count: workoutsCount },
     { count: announcementsCount },
     { count: postsCount },
-  ] = await Promise.all([
-    supabase.from('profiles').select('*', { count: 'exact', head: true }),
-    supabase.from('workouts').select('*', { count: 'exact', head: true }),
-    supabase.from('announcements').select('*', { count: 'exact', head: true }),
-    supabase.from('posts').select('*', { count: 'exact', head: true }),
-  ])
+    { count: pendingCount },
+  ] = countResults
 
   const cards = [
     { icon: Users,     label: 'Membros',       value: membersCount ?? 0,       href: '/admin/membros',     color: '#DC2626', bg: '#FEE2E2' },
@@ -36,6 +45,24 @@ export default async function AdminPage() {
           Acompanhe os números da Born to Run e gerencie treinos, comunicados e membros.
         </p>
       </div>
+
+      {(pendingCount ?? 0) > 0 && (
+        <Link
+          href="/admin/membros"
+          className="card flex items-center gap-4 border-l-4 border-l-orange-600 p-4 transition-transform hover:-translate-y-0.5"
+        >
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-700">
+            <Clock3 size={21} aria-hidden="true" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <strong className="block text-sm text-[#171717]">
+              {pendingCount} cadastro{pendingCount === 1 ? '' : 's'} aguardando análise
+            </strong>
+            <span className="text-xs text-[#57534E]">Revise quem pode entrar na comunidade fechada.</span>
+          </span>
+          <ArrowRight size={16} className="text-[#DC2626]" aria-hidden="true" />
+        </Link>
+      )}
 
       {/* Cards de contadores */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

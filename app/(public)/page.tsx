@@ -96,7 +96,7 @@ export default function HomePage() {
                 </Link>
               </div>
               {/* Assinatura técnica */}
-              <p className="mt-10 font-condensed text-xs uppercase tracking-[0.22em] text-[#78716C]">
+              <p className="mt-10 font-condensed text-xs uppercase tracking-[0.22em] text-[#57534E]">
                 Corrida de rua · Caminhada · Saúde e performance
               </p>
             </div>
@@ -233,7 +233,7 @@ export default function HomePage() {
                 className="card card-lift p-8 relative overflow-hidden"
               >
                 <span
-                  className="absolute top-4 right-6 font-display text-5xl text-[#171717]/8 select-none"
+                  className="absolute top-4 right-6 font-display text-5xl text-[#78716C] select-none"
                   aria-hidden="true"
                 >
                   {number}
@@ -256,7 +256,7 @@ export default function HomePage() {
         <div className="container-main">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="section-kicker mb-5">03 · Área da equipe</p>
+              <p className="section-kicker section-kicker-on-dark mb-5">03 · Área da equipe</p>
               <h2 className="section-title text-white">
                 Sua central <span className="accent">de atleta</span>
               </h2>
@@ -319,7 +319,7 @@ export default function HomePage() {
               href={site.social.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold text-[#DC2626] hover:underline inline-flex items-center gap-1"
+              className="font-semibold text-[#B91C1C] hover:underline inline-flex items-center gap-1"
             >
               <InstagramIcon className="inline-block" />@
               {site.social.instagramHandle}

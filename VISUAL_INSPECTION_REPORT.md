@@ -1,4 +1,6 @@
-# Relatório de Inspeção Visual — Born to Run
+# ARQUIVO HISTÓRICO — Relatório de Inspeção Visual — Born to Run
+
+> Inspeção da versão anterior. A direção visual vigente está em `README-FABLE5.md` e nas imagens de `design-refs/`.
 
 **Data:** 17/07/2026  
 **Projeto:** Born to Run — Treinamento e Saúde  

@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createMediaUrl } from '@/lib/supabase/media'
 import PerfilForm from '@/components/feed/PerfilForm'
 import { formatDate } from '@/lib/utils'
 import { User, MapPin, Target, Rss } from 'lucide-react'
@@ -10,21 +11,28 @@ export default async function PerfilPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('*')
     .eq('user_id', user.id)
-    .single() as { data: Profile | null }
+    .maybeSingle() as { data: Profile | null; error: { message: string } | null }
 
-  if (!profile) redirect('/login')
+  if (profileError) throw new Error('Não foi possível carregar o perfil.')
+  if (!profile) throw new Error('O perfil autenticado não foi encontrado.')
+
+  const profileForView: Profile = {
+    ...profile,
+    avatar_url: await createMediaUrl(supabase, 'avatars', profile.avatar_url),
+  }
 
   // Histórico de posts
-  const { data: posts, count } = await supabase
+  const { data: posts, count, error: postsError } = await supabase
     .from('posts')
     .select('id, caption, distance_km, created_at', { count: 'exact' })
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
     .limit(5)
+  if (postsError) throw new Error('Não foi possível carregar as atividades do perfil.')
 
   return (
     <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
@@ -37,8 +45,8 @@ export default async function PerfilPage() {
       <div className="grid grid-cols-3 gap-3">
         {[
           { icon: Rss,    value: count ?? 0,                label: 'Posts'           },
-          { icon: MapPin, value: profile.cidade || '—',     label: 'Cidade'          },
-          { icon: Target, value: profile.objetivo ? '✓' : '—', label: 'Objetivo'     },
+          { icon: MapPin, value: profileForView.cidade || '—',     label: 'Cidade'          },
+          { icon: Target, value: profileForView.objetivo ? '✓' : '—', label: 'Objetivo'     },
         ].map(({ icon: Icon, value, label }) => (
           <div key={label} className="card p-4 text-center">
             <Icon size={18} className="mx-auto mb-1 text-[var(--color-red)]" />
@@ -54,7 +62,7 @@ export default async function PerfilPage() {
           <User size={18} className="text-[var(--color-red)]" />
           Editar informações
         </h2>
-        <PerfilForm profile={profile} userId={user.id} />
+        <PerfilForm profile={profileForView} />
       </div>
 
       {/* Histórico de posts */}

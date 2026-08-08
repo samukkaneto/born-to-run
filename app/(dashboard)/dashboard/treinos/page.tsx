@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { formatDate } from '@/lib/utils'
+import { formatDate, getTodayCalendarDate } from '@/lib/utils'
 import { Dumbbell, Calendar, Target } from 'lucide-react'
 import type { Workout } from '@/types'
 
@@ -18,24 +18,34 @@ export default async function TreinosPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: upcoming } = await supabase
-    .from('workouts')
-    .select('*')
-    .gte('scheduled_date', new Date().toISOString().split('T')[0])
-    .order('scheduled_date', { ascending: true }) as { data: Workout[] | null }
+  const today = getTodayCalendarDate()
 
-  const { data: past } = await supabase
-    .from('workouts')
-    .select('*')
-    .lt('scheduled_date', new Date().toISOString().split('T')[0])
-    .order('scheduled_date', { ascending: false })
-    .limit(10) as { data: Workout[] | null }
+  const [upcomingResult, pastResult, undatedResult] = await Promise.all([
+    supabase
+      .from('workouts')
+      .select('*')
+      .gte('scheduled_date', today)
+      .order('scheduled_date', { ascending: true }),
+    supabase
+      .from('workouts')
+      .select('*')
+      .lt('scheduled_date', today)
+      .order('scheduled_date', { ascending: false })
+      .limit(10),
+    supabase
+      .from('workouts')
+      .select('*')
+      .is('scheduled_date', null)
+      .order('created_at', { ascending: false }),
+  ])
 
-  const { data: undated } = await supabase
-    .from('workouts')
-    .select('*')
-    .is('scheduled_date', null)
-    .order('created_at', { ascending: false }) as { data: Workout[] | null }
+  if (upcomingResult.error || pastResult.error || undatedResult.error) {
+    throw new Error('Não foi possível carregar seus treinos.')
+  }
+
+  const upcoming = upcomingResult.data as Workout[]
+  const past = pastResult.data as Workout[]
+  const undated = undatedResult.data as Workout[]
 
   function WorkoutCard({ w }: { w: Workout }) {
     return (

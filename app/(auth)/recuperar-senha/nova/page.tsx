@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useActionState } from 'react'
 import { Lock, Loader2, AlertCircle } from 'lucide-react'
-import { updatePassword } from '@/lib/actions/auth'
+import { updatePassword, type AuthActionState } from '@/lib/actions/auth'
+
+const initialState: AuthActionState = {}
 
 /**
  * Página acessada pelo link de recuperação enviado por e-mail.
@@ -10,18 +12,7 @@ import { updatePassword } from '@/lib/actions/auth'
  * para cá, onde o usuário define a nova senha.
  */
 export default function NovaSenhaPage() {
-  const [error, setError] = useState('')
-  const [isPending, startTransition] = useTransition()
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setError('')
-    const formData = new FormData(e.currentTarget)
-    startTransition(async () => {
-      const result = await updatePassword(formData)
-      if (result?.error) setError(result.error)
-    })
-  }
+  const [state, formAction, isPending] = useActionState(updatePassword, initialState)
 
   return (
     <>
@@ -34,7 +25,7 @@ export default function NovaSenhaPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form action={formAction} className="space-y-4">
         <div>
           <label htmlFor="password" className="block text-sm font-semibold text-stone-700 mb-1.5">
             Nova senha
@@ -46,8 +37,8 @@ export default function NovaSenhaPage() {
               name="password"
               type="password"
               required
-              minLength={6}
-              placeholder="Mínimo 6 caracteres"
+              minLength={8}
+              placeholder="8+ caracteres, com letra e número"
               className="input-base pl-10"
             />
           </div>
@@ -64,17 +55,20 @@ export default function NovaSenhaPage() {
               name="confirm"
               type="password"
               required
-              minLength={6}
+              minLength={8}
               placeholder="Repita a nova senha"
               className="input-base pl-10"
             />
           </div>
         </div>
 
-        {error && (
-          <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg">
+        {!isPending && state.error && (
+          <div
+            role="alert"
+            className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg"
+          >
             <AlertCircle size={16} className="shrink-0" />
-            {error}
+            {state.error}
           </div>
         )}
 
