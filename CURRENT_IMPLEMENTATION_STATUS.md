@@ -1,0 +1,109 @@
+# Born to Run — status real de implementação
+
+Atualizado em **08/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de publicação ou decisão do proprietário.
+
+## Resumo executivo
+
+O projeto deixou de ser apenas um protótipo visual. O código atual já contém o site institucional, a área privada do atleta, o feed social e o painel do treinador conectados ao Supabase real. A base foi reformulada como **comunidade esportiva fechada**: novos cadastros aguardam aprovação, conteúdo interno exige associação ativa e treinos podem ser destinados à equipe inteira, a grupos ou a atletas escolhidos.
+
+O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 48 testes unitários e 12 testes públicos de navegador passaram. Um preview final da Vercel também foi validado com login, publicação, curtida e comentário reais; todos os dados técnicos foram removidos depois. As variáveis gerenciadas e o staged deployment de produção já foram validados, mas o domínio público continua deliberadamente na versão antiga até o commit estar recuperável no GitHub.
+
+## Estado por área
+
+| Área | Estado | Evidência / observação |
+|---|---|---|
+| Site institucional | Implementado e validado | Home, Sobre, Galeria, Contato, header/footer e páginas responsivas; desktop e Pixel 7 passaram no E2E. |
+| Identidade visual Fable 5 | Implementada, ainda refinável | A direção atual foi preservada; a Fable pode redesenhar componentes sem alterar contratos funcionais. |
+| Autenticação | Implementada e validada | Login real e erros de credencial foram validados no preview; cadastro/recuperação ainda dependem de SMTP próprio para validar a entrega de e-mail. |
+| Comunidade fechada | Implementada e validada no banco | Cadastro entra como `pending`; somente `active` acessa conteúdo interno. |
+| Aprovação de membros | Implementada e validada | Admin aprova, rejeita, suspende ou reativa; autorização foi testada no banco e o painel passou em smoke autenticado anterior. |
+| Feed social | MVP implementado e validado | Posts, fotos privadas, métricas, curtidas, comentários e paginação keyset por cursor; escrita real passou no preview final. |
+| Perfis | Perfil básico implementado | Edição segura e avatar privado; evolução analítica com gráficos/tendências ainda não existe. |
+| Treinos | Implementado e validado | CRUD e audiência para equipe, grupos e atletas; treino direcionado foi validado em E2E autenticado e no banco. |
+| Grupos | Implementado e validado | Criar, editar, arquivar/reativar e gerenciar integrantes, preservando destinatários históricos. |
+| Comunicados | Implementado | CRUD do treinador e leitura pelos membros ativos. |
+| Painel do treinador | Implementado e validado | Dashboard, aprovações, membros, grupos, treinos e comunicados; grupo e treino direcionado passaram em smoke autenticado. |
+| PWA/responsividade | Parcial | Manifesto e navegação adaptada; instalação, offline e push não foram validados. Não é binário nativo. |
+| Supabase remoto | Sincronizado | Cinco migrations aplicadas; estado atual termina em `20260808192626_endurece_mutacoes_e_midias`. |
+| Vercel | Staged production aprovado | Deploy `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk` está `READY`; variáveis Supabase estão gerenciadas, rotas públicas/guard foram verificadas e o domínio público antigo não foi sobrescrito. |
+| GitHub | CLI instalada; OAuth pendente | Trabalho atual está em `codex/finish-born-to-run`, derivada de `abacus-fable-rebuild`; falta autorizar a conta para push e PR. |
+
+## Regras de produto consolidadas
+
+- Garmin Connect, Strava e Sports Tracker são referências de experiência social/esportiva, não integrações desta entrega.
+- A área interna pertence somente à equipe Born to Run; estar autenticado não basta, a associação precisa estar ativa.
+- O treinador administra o acesso e pode prescrever um treino para toda a equipe, grupos ou atletas individuais.
+- Atletas podem publicar atividade com texto, fotografia e métricas, curtir e comentar.
+- Site institucional e aplicativo privado coexistem no mesmo projeto.
+- O aplicativo deve transmitir experiência mobile premium; a implementação atual é Next.js/PWA e também funciona no desktop.
+
+## Banco de dados e segurança
+
+A migration canônica e o snapshot `supabase/schema.sql` incluem:
+
+- `profiles` com papéis `member/admin` e status `pending/active/suspended/rejected`;
+- `training_groups`, `training_group_members` e `workout_assignments`;
+- relações diretas de autores do feed com `profiles`, compatíveis com PostgREST;
+- RLS em todas as tabelas de negócio, exigindo membro ativo para conteúdo privado;
+- proteção no banco contra autoelevação de `role` ou mudança indevida de status;
+- RPCs administrativas atômicas e verificadas;
+- buckets `avatars` e `post-images` privados, com caminhos por usuário e URLs temporárias assinadas;
+- funções endurecidas com `search_path` fixo, grants explícitos e índices das relações/policies.
+- chaves `id`/`created_at` do feed geradas obrigatoriamente pelo banco e posts imutáveis pela Data API.
+- mutações de grupos, atribuições e criação/edição de treinos restritas aos RPCs atômicos, sem atalho administrativo pela Data API;
+- validação no banco para que `avatar_url` e `photo_url` usem somente o formato `UUID_DO_USUÁRIO/UUID_DO_ARQUIVO.(jpg|png|webp)` do próprio autor.
+
+### Testes reais já executados no Supabase
+
+Os testes abaixo foram executados dentro de transações e revertidos, sem deixar dados artificiais:
+
+1. membro comum não conseguiu se promover a admin;
+2. membro comum não conseguiu chamar RPC administrativa;
+3. usuário pendente não conseguiu publicar;
+4. atleta A viu treino da equipe, treino direto para A e treino de seu grupo;
+5. atleta B viu treino da equipe e treino direto para B, mas não o grupo de A;
+6. membro ativo enviou arquivo apenas no próprio caminho;
+7. upload em caminho alheio e upload por usuário pendente foram bloqueados;
+8. 12/12 testes adicionais confirmaram inserts normais do feed e bloquearam IDs, datas e updates forjados.
+9. a quinta migration passou em um preflight remoto transacional de 47/47 asserções, com rollback comprovado antes da aplicação definitiva;
+10. após a aplicação, funções, triggers e grants esperados foram confirmados e o banco permaneceu com 1 admin ativo, zero órfãos e zero conteúdo técnico.
+
+O banco preserva 1 perfil administrador ativo e continua sem conteúdo fictício em posts, comentários, curtidas, treinos, comunicados ou grupos.
+
+## Qualidade verificada
+
+| Gate | Resultado atual |
+|---|---|
+| ESLint | Aprovado, sem erros |
+| TypeScript (`tsc --noEmit`) | Aprovado |
+| Build Next.js 16.3.0 | Aprovado, 27 rotas |
+| Testes unitários | 48/48 aprovados, incluindo paginação e cursores adulterados |
+| `npm audit` | 0 vulnerabilidades conhecidas |
+| Tipos do Supabase | Gerados a partir do banco remoto |
+| Boundaries de erro/loading/not-found | Implementados |
+| Acessibilidade básica | Skip links, foco visível, modais com foco, redução de movimento e controles ampliados |
+| Testes pgTAP versionados | 47 asserções; a suíte combinada passou remotamente dentro de transação revertida antes da quinta migration |
+| E2E público | 12/12 aprovados em Desktop Chrome e Pixel 7; zero violações axe sérias/críticas |
+| E2E autenticado hospedado | Login, feed, publicação, curtida, comentário, painel admin, grupo e treino dirigido validados; dados técnicos removidos |
+| Vercel | Preview autenticado validado; staged production `READY`, 27 rotas, respostas 200/307 corretas e sem erros nos logs consultados |
+
+## Pendências antes de chamar de produção concluída
+
+1. concluir a autorização OAuth do GitHub CLI 2.97.0, publicar a branch e abrir PR;
+2. após o push/PR, promover o staged deployment `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk` e verificar domínio/logs; o rollback é `dpl_3GyqEDBXYJcqndUWVRZGSzviMDik`;
+3. configurar SMTP próprio e validar cadastro, confirmação e recuperação com caixa de e-mail real;
+4. habilitar no Supabase Auth a proteção contra senhas vazadas;
+5. tratar instalação/offline/push e empacotamento nativo como fase própria, caso o objetivo passe de PWA para lojas de aplicativos.
+
+## Orientação para Abacus AI / Fable 5
+
+Leia primeiro `README-FABLE5.md`. O redesign pode ter liberdade visual ampla, mas deve preservar os fluxos e contratos acima. Em particular, não voltar a:
+
+- liberar todos os usuários apenas por estarem autenticados;
+- permitir atualização direta de `role` ou status pelo navegador;
+- apagar somente `profiles` como se isso revogasse uma conta Auth;
+- usar `getPublicUrl` para os buckets privados;
+- remover a audiência de grupos/atletas dos treinos;
+- tratar Garmin ou Strava como integração já solicitada.
+
+Este documento deve ser atualizado sempre que uma etapa técnica, deploy ou decisão de produto mudar de estado.

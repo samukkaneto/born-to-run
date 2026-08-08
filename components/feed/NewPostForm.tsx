@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import { ImagePlus, X, Loader2, MapPin, Clock, Zap } from 'lucide-react'
 import { createPost } from '@/lib/actions/feed'
@@ -16,24 +16,35 @@ export default function NewPostForm({ avatarUrl, fullName }: {
   const fileRef = useRef<HTMLInputElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview)
+    }
+  }, [preview])
+
   function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
     setPreview(URL.createObjectURL(file))
+    setError('')
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const result = await createPost(new FormData(e.currentTarget))
-    if (result?.error) {
-      setError(result.error)
-      setLoading(false)
-    } else {
-      formRef.current?.reset()
-      setPreview(null)
-      setExpanded(false)
+    try {
+      const result = await createPost(new FormData(e.currentTarget))
+      if (result?.error) {
+        setError(result.error)
+      } else {
+        formRef.current?.reset()
+        setPreview(null)
+        setExpanded(false)
+      }
+    } catch {
+      setError('Não foi possível publicar agora. Tente novamente.')
+    } finally {
       setLoading(false)
     }
   }
@@ -51,6 +62,7 @@ export default function NewPostForm({ avatarUrl, fullName }: {
           }
         </div>
         <button
+          type="button"
           onClick={() => setExpanded(true)}
           className="flex-1 text-left bg-stone-50 hover:bg-stone-100 transition-colors
                      rounded-xl px-4 py-2.5 text-stone-400 text-sm cursor-text"
@@ -64,7 +76,9 @@ export default function NewPostForm({ avatarUrl, fullName }: {
         <form ref={formRef} onSubmit={handleSubmit} className="mt-4 space-y-4 animate-slide-up">
           {/* Legenda */}
           <textarea
+            id="post-caption"
             name="caption"
+            aria-label="Legenda da publicação"
             placeholder="Conte como foi o treino..."
             rows={3}
             maxLength={500}
@@ -74,24 +88,24 @@ export default function NewPostForm({ avatarUrl, fullName }: {
           {/* Dados do treino */}
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="text-xs text-stone-500 font-semibold flex items-center gap-1 mb-1">
+              <label htmlFor="post-distance" className="text-xs text-stone-500 font-semibold flex items-center gap-1 mb-1">
                 <MapPin size={11} /> Distância (km)
               </label>
-              <input name="distance" type="number" step="0.1" min="0" max="999"
+              <input id="post-distance" name="distance" type="number" step="0.01" min="0.01" max="999.99"
                      placeholder="Ex: 5.2" className="input-base text-sm" />
             </div>
             <div>
-              <label className="text-xs text-stone-500 font-semibold flex items-center gap-1 mb-1">
+              <label htmlFor="post-duration" className="text-xs text-stone-500 font-semibold flex items-center gap-1 mb-1">
                 <Clock size={11} /> Duração (min)
               </label>
-              <input name="duration" type="number" min="0" max="9999"
+              <input id="post-duration" name="duration" type="number" min="1" max="10080"
                      placeholder="Ex: 30" className="input-base text-sm" />
             </div>
             <div>
-              <label className="text-xs text-stone-500 font-semibold flex items-center gap-1 mb-1">
+              <label htmlFor="post-pace" className="text-xs text-stone-500 font-semibold flex items-center gap-1 mb-1">
                 <Zap size={11} /> Pace (min/km)
               </label>
-              <input name="pace" type="text" placeholder="Ex: 5:30"
+              <input id="post-pace" name="pace" type="text" inputMode="numeric" pattern="[0-9]{1,2}:[0-5][0-9]" placeholder="Ex: 05:30"
                      className="input-base text-sm" />
             </div>
           </div>
@@ -101,7 +115,7 @@ export default function NewPostForm({ avatarUrl, fullName }: {
             <div className="relative aspect-video rounded-xl overflow-hidden">
               <Image src={preview} alt="Preview" fill style={{ objectFit: 'cover' }} />
               <button type="button" onClick={() => { setPreview(null); if (fileRef.current) fileRef.current.value = '' }}
-                      className="absolute top-2 right-2 w-8 h-8 bg-black/60 rounded-full flex items-center justify-center text-white hover:bg-black/80">
+                      className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80" aria-label="Remover foto selecionada">
                 <X size={14} />
               </button>
             </div>
@@ -112,7 +126,7 @@ export default function NewPostForm({ avatarUrl, fullName }: {
                  onChange={handleFile} className="hidden" id="post-photo-input" />
 
           {error && (
-            <p className="text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg">{error}</p>
+            <p role="alert" className="text-red-700 text-sm bg-red-50 px-3 py-2 rounded-lg">{error}</p>
           )}
 
           {/* Ações */}
@@ -124,7 +138,7 @@ export default function NewPostForm({ avatarUrl, fullName }: {
               Foto
             </label>
             <div className="flex gap-2">
-              <button type="button" onClick={() => { setExpanded(false); setPreview(null) }}
+              <button type="button" onClick={() => { setExpanded(false); setPreview(null); if (fileRef.current) fileRef.current.value = '' }}
                       className="btn-outline py-1.5 px-4 text-sm">
                 Cancelar
               </button>

@@ -1,4 +1,6 @@
-# Born to Run - Technical Handover Document
+# ARQUIVO HISTÓRICO — Born to Run - Technical Handover Document
+
+> **Não usar como descrição do código atual.** Este snapshot é anterior à reconstrução de agosto de 2026. Consulte `README-FABLE5.md`, `CURRENT_IMPLEMENTATION_STATUS.md` e `SUPABASE_OPERATIONS.md`.
 
 > **To the Next AI Agent / Assistant:**
 > You are taking over the development of the **Born to Run - Treinamento e Saúde** web application. This document outlines the current state of the architecture, database, and features. Please read this carefully to context-switch into the project seamlessly.

@@ -1,154 +1,96 @@
-# Born to Run — Treinamento e Saúde 🏃
+# Born to Run — Treinamento e Saúde
 
-Plataforma web completa para a equipe de corrida e caminhada **Born to Run**, de Descalvado-SP, fundada em 2015 pelo Prof. Robson Alves (CREF 119911-G/SP).
+Site institucional e aplicativo privado da equipe Born to Run, de Descalvado–SP. A área autenticada funciona como uma comunidade esportiva fechada: feed de treinos, fotos, métricas, curtidas, comentários, comunicados, grupos e prescrição de treinos pelo treinador.
 
-## Stack Tecnológica
+## Leia primeiro
 
-| Camada | Tecnologia |
-|---|---|
-| Front-end | Next.js 16 (App Router) + React + TypeScript |
-| Estilização | Tailwind CSS + CSS customizado |
-| Banco de Dados | Supabase (PostgreSQL + RLS) |
-| Autenticação | Supabase Auth |
-| Storage | Supabase Storage |
-| Deploy | Vercel |
+- `README-FABLE5.md` — visão do produto e direção visual para Abacus/Fable.
+- `CURRENT_IMPLEMENTATION_STATUS.md` — estado técnico e pendências reais.
+- `SUPABASE_OPERATIONS.md` — migrations, recuperação de admin, advisors e smoke test.
 
----
+Os demais documentos de auditoria/reconstrução são históricos e têm um aviso no topo.
 
-## Pré-requisitos
+## Stack
 
-- Node.js 18+
-- Conta no [Supabase](https://supabase.com)
-- Conta na [Vercel](https://vercel.com)
+- Next.js 16.3.0, React 19.2.4 e TypeScript;
+- Tailwind CSS 4 e design system próprio;
+- Supabase Auth, PostgreSQL/RLS e Storage privado;
+- Vercel como plataforma de deploy;
+- Vitest, Playwright, axe e pgTAP para qualidade.
 
----
+## Desenvolvimento local
 
-## Configuração Local
+Requer Node.js 24 (mesma versão configurada na Vercel).
 
-### 1. Clonar e instalar
 ```bash
-git clone <seu-repo>
-cd born-to-run
-npm install
-```
-
-### 2. Variáveis de ambiente
-Crie (ou edite) o arquivo `.env.local` na raiz:
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://SEU_PROJECT_ID.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anon_publica
-```
-
-### 3. Banco de dados (Supabase)
-Execute o arquivo `supabase/schema.sql` no **SQL Editor** do Supabase:
-- Acesse: `https://supabase.com/dashboard/project/SEU_ID/sql/new`
-- Cole o conteúdo do arquivo e clique em **Run**
-
-### 4. Tornar Robson administrador
-Após o primeiro login com o e-mail do Robson, execute no SQL Editor:
-```sql
-UPDATE public.profiles
-SET role = 'admin'
-WHERE user_id = (
-  SELECT id FROM auth.users WHERE email = 'email-do-robson@exemplo.com'
-);
-```
-
-### 5. Imagens (necessárias na pasta `/public`)
-| Arquivo | Descrição |
-|---|---|
-| `logo.png` | Logo da Born to Run (PNG transparente) |
-| `robson-portrait.jpg` | Foto do Robson em campo |
-| `robson-running.jpg` | Foto do Robson correndo |
-| `team-group.jpg` | Foto do grupo com banner |
-
-### 6. Rodar localmente
-```bash
+npm ci
+Copy-Item .env.example .env.local
 npm run dev
 ```
-Acesse: [http://localhost:3000](http://localhost:3000)
 
----
+Em outros sistemas, use o comando equivalente para copiar `.env.example` para `.env.local`. Preencha somente:
 
-## Deploy na Vercel
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SITE_URL=http://127.0.0.1:3000
+```
 
-### Método 1 — Interface (recomendado)
-1. Acesse [vercel.com](https://vercel.com) e clique em **Add New Project**
-2. Conecte seu repositório GitHub
-3. Em **Environment Variables**, adicione:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-4. Clique em **Deploy**
+As variáveis `NEXT_PUBLIC_*` chegam ao navegador e nunca podem conter `service_role` ou outro segredo administrativo.
 
-### Método 2 — CLI
+## Banco de dados
+
+Não cole `supabase/schema.sql` sobre um ambiente existente e não edite migrations já aplicadas. Use a CLI e migrations timestampadas:
+
 ```bash
-npm i -g vercel
-vercel --prod
+npx supabase link --project-ref SEU_PROJECT_ID
+npx supabase db push
 ```
 
----
+O estado remoto atual termina em `20260808174648_protege_chaves_feed`. Consulte `SUPABASE_OPERATIONS.md` antes de bootstrap, recuperação ou mudança de acesso.
 
-## Estrutura do Projeto
+## Gates de qualidade
 
-```
-born-to-run/
-├── app/
-│   ├── (public)/        → Páginas públicas (/, /sobre, /galeria, /equipe, /resultados, /contato)
-│   ├── (auth)/          → Login, Cadastro, Recuperar Senha
-│   ├── (dashboard)/     → Área de membros (Feed, Treinos, Perfil)
-│   └── (admin)/         → Painel administrativo (Robson)
-├── components/
-│   ├── layout/          → Header, Footer
-│   ├── feed/            → PostCard, NewPostForm, PerfilForm
-│   └── admin/           → AdminForm
-├── lib/
-│   ├── supabase/        → client.ts, server.ts, middleware.ts
-│   ├── actions/         → auth.ts, feed.ts, admin.ts
-│   └── utils.ts
-├── supabase/
-│   └── schema.sql       → Script SQL completo com RLS
-└── types/
-    └── index.ts         → Tipos TypeScript globais
+```bash
+npm run lint
+npm run typecheck
+npm run test:unit
+npm run build
+npm run test:e2e
 ```
 
----
+Com Docker e o Supabase local em execução:
 
-## Funcionalidades
+```bash
+npx supabase start
+npm run test:db
+```
 
-### Área Pública
-- 🏠 Home com hero, estatísticas e CTAs
-- 📖 Sobre — história da equipe desde 2015
-- 🖼️ Galeria com filtros por categoria
-- 📊 Resultados — evolução dos atletas
-- 👤 Equipe — perfil do Prof. Robson Alves
-- 📱 Contato — WhatsApp, Instagram, CREF
+`npm run check` executa lint, TypeScript, unitários e build. O banco permanece separado porque depende de Docker.
 
-### Área de Membros (`/dashboard`)
-- 📋 Dashboard com treinos e comunicados
-- 📰 Feed social (post, curtir, comentar)
-- 💪 Listagem de treinos por nível
-- 👤 Edição de perfil com foto
+## Estrutura principal
 
-### Painel Admin (`/admin`)
-- 📊 Visão geral com contagens
-- ➕ CRUD de treinos
-- 📢 CRUD de comunicados
-- 👥 Gerenciamento de membros + promoção/remoção de admin
+```text
+app/(public)       site institucional
+app/(auth)         login, cadastro, recuperação e estados de acesso
+app/(dashboard)    área do atleta
+app/(admin)        painel de gestão da equipe
+components         UI, feed, dashboard e administração
+lib/actions        Server Actions validadas
+lib/auth           autorização e destinos seguros
+lib/supabase       clientes e mídia privada
+supabase/migrations migrations imutáveis
+supabase/tests     regressão de RLS/Storage com pgTAP
+design-refs        seis pranchas visuais para Fable 5
+```
 
----
+## Regras essenciais
 
-## Segurança (RLS)
+- Cadastro novo fica pendente até aprovação.
+- Somente membro ativo acessa a comunidade.
+- Papel/status não são atualizados diretamente pelo navegador.
+- Buckets de avatar e feed são privados e usam URLs assinadas.
+- Treinos podem atender à equipe inteira, grupos ou atletas.
+- Garmin/Strava são referências de experiência, não integrações desta versão.
 
-Todas as tabelas possuem **Row Level Security** configurada:
-- Membros só veem dados autenticados
-- Membros só editam/deletam o próprio conteúdo
-- Somente admins criam treinos e comunicados
-- Somente admins podem gerenciar membros
-
----
-
-## Contato
-
-**Prof. Robson Alves** — CREF 119911-G/SP  
-📍 Descalvado-SP  
-📸 [@equipeborntorun](https://instagram.com/equipeborntorun)
+Conteúdo oficial: equipe fundada em 2015, aproximadamente 200 atletas, mais de 200 participações, Instagram `@equipeborntorun` e Robson Alves (CREF 119911-G/SP, Treinador Nível 1 World Athletics). Não invente contatos, endereço, resultados ou pessoas.

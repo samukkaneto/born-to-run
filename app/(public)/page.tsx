@@ -1,514 +1,342 @@
-import type { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import {
+  ArrowRight,
+  ArrowUpRight,
   Users,
   Trophy,
-  Calendar,
-  ArrowRight,
-  Heart,
-  TrendingUp,
-  Zap,
-  MessageCircle,
-  CheckCircle,
-  Star,
-  MapPin,
-  Clock,
-  ChevronRight,
+  Flag,
+  HeartPulse,
   Footprints,
-  Award,
-  Shield,
-  Sunrise,
+  Target,
 } from 'lucide-react'
+import InstagramIcon from '@/components/ui/InstagramIcon'
+import { site } from '@/lib/site'
 
-export const metadata: Metadata = {
-  title: 'Born to Run — Treinamento e Saúde | Corrida de Rua e Caminhada',
+export const metadata = {
+  title: 'Born to Run — Treinamento e Saúde | Corrida de rua em Descalvado-SP',
 }
 
-// ── Data ──────────────────────────────────────────────────────────────
-
 const stats = [
-  { value: '500+', label: 'Atletas Ativos', icon: Users },
-  { value: '8 anos', label: 'de Experiência', icon: Trophy },
-  { value: '120+', label: 'Eventos Realizados', icon: Calendar },
-  { value: '98%', label: 'de Satisfação', icon: Heart },
+  {
+    icon: Users,
+    value: site.stats.athletes,
+    label: site.stats.athletesLabel,
+    color: '#16A34A',
+  },
+  {
+    icon: Trophy,
+    value: site.stats.races,
+    label: site.stats.racesLabel,
+    color: '#DC2626',
+  },
+  {
+    icon: Flag,
+    value: `Desde ${site.stats.since}`,
+    label: site.stats.sinceLabel,
+    color: '#F97316',
+  },
 ]
 
-const services = [
+const pillars = [
   {
     icon: Footprints,
-    title: 'Corrida de Rua',
-    description:
-      'Treinamentos periodizados para 5 km, 10 km, meia maratona e maratona. Para iniciantes e atletas experientes.',
-    tag: 'mais popular',
-    color: 'red',
-  },
-  {
-    icon: Sunrise,
-    title: 'Caminhada Orientada',
-    description:
-      'Grupos de caminhada com foco em saúde cardiovascular, condicionamento e qualidade de vida para todas as idades.',
-    tag: null,
-    color: 'green',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Assessoria Online',
-    description:
-      'Planilhas de treino personalizadas, acompanhamento remoto por aplicativo e suporte direto com o treinador.',
-    tag: null,
-    color: 'green',
-  },
-  {
-    icon: Zap,
-    title: 'Treino Funcional',
-    description:
-      'Sessões de fortalecimento muscular específico para corredores: core, mobilidade e prevenção de lesões.',
-    tag: null,
-    color: 'red',
-  },
-  {
-    icon: Users,
-    title: 'Grupos de Treino',
-    description:
-      'Treinos em grupo nas manhãs e finais de semana. Comunidade vibrante, motivação coletiva e amizades duradouras.',
-    tag: null,
-    color: 'green',
-  },
-  {
-    icon: Award,
-    title: 'Preparação para Provas',
-    description:
-      'Planejamento completo de pico de forma para a sua prova alvo: carga, recuperação, estratégia de pace e nutrição.',
-    tag: null,
-    color: 'red',
-  },
-]
-
-const steps = [
-  {
     number: '01',
-    title: 'Avaliação Inicial',
-    description:
-      'Conversamos sobre seus objetivos, histórico de treino e disponibilidade de tempo. Sem julgamentos, só evolução.',
-    icon: Shield,
+    title: 'Corrida e caminhada',
+    text: 'Treinos de corrida de rua e caminhada para todos os níveis — do primeiro passo de quem está começando ao atleta que busca performance.',
   },
   {
+    icon: HeartPulse,
     number: '02',
-    title: 'Plano Personalizado',
-    description:
-      'Montamos um plano de treinamento sob medida para o seu ritmo, nível e objetivo. Semanal, periodizado e realista.',
-    icon: Calendar,
+    title: 'Saúde em primeiro lugar',
+    text: 'Orientação de um educador físico registrado, com progressão respeitando o corpo, o histórico e o ritmo de cada aluno.',
   },
   {
+    icon: Target,
     number: '03',
-    title: 'Treine com a Equipe',
-    description:
-      'Você passa a fazer parte da nossa equipe. Treinos presenciais ou online, sempre com acompanhamento de perto.',
-    icon: Users,
-  },
-  {
-    number: '04',
-    title: 'Evolua e Supere-se',
-    description:
-      'Acompanhe sua evolução, bata seus recordes pessoais e alcance a linha de chegada com saúde e confiança.',
-    icon: Trophy,
+    title: 'Objetivos individuais',
+    text: 'Cada atleta tem sua meta: qualidade de vida, emagrecimento, os primeiros 5 km ou provas de fundo. O treino se adapta a você.',
   },
 ]
-
-const testimonials = [
-  {
-    name: 'Fernanda Rocha',
-    role: 'Corredora — 10 km',
-    text:
-      'Comecei sem conseguir correr 1 km sequer. Em 6 meses completei minha primeira corrida de 10 km. A equipe me deu toda a estrutura e o incentivo que eu precisava.',
-    rating: 5,
-    location: 'São Paulo, SP',
-  },
-  {
-    name: 'Carlos Mendes',
-    role: 'Maratonista',
-    text:
-      'O planejamento para a minha maratona foi impecável. Cheguei no dia da prova na melhor forma da minha vida. Treinamento sério, equipe humana e comprometida.',
-    rating: 5,
-    location: 'Belo Horizonte, MG',
-  },
-  {
-    name: 'Ana Beatriz Lima',
-    role: 'Caminhada e saúde',
-    text:
-      'Não tinha jeito para esportes, mas a Born to Run me mostrou que todo mundo tem um ritmo. Os grupos de caminhada mudaram minha rotina e minha saúde.',
-    rating: 5,
-    location: 'Rio de Janeiro, RJ',
-  },
-]
-
-const highlights = [
-  { icon: MapPin, text: 'Treinos ao ar livre e em parques' },
-  { icon: Clock, text: 'Horários flexíveis: manhã, tarde e noite' },
-  { icon: Shield, text: 'Acompanhamento com profissional certificado' },
-  { icon: MessageCircle, text: 'Suporte direto pelo WhatsApp' },
-]
-
-const WHATSAPP_URL = 'https://wa.me/5519900000000'
-
-// ── Page ──────────────────────────────────────────────────────────────
 
 export default function HomePage() {
   return (
     <>
-      {/* ── HERO ──────────────────────────────────────── */}
-        <section
-          id="inicio"
-          className="relative w-full min-h-[100svh] flex items-end md:items-center overflow-hidden"
-          aria-label="Seção de destaque"
-        >
-          {/* Background photo */}
-          <div className="absolute inset-0">
-            <Image
-              src="/team-group.jpg"
-              alt="Equipe Born to Run treinando ao ar livre"
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
-              priority
-              quality={90}
-              sizes="100vw"
-            />
-            {/* Overlay */}
-            <div className="absolute inset-0 hero-overlay" aria-hidden="true" />
-          </div>
-
-          <div className="container-main relative z-10 pb-16 pt-28 md:pt-0 md:py-0">
-            <div className="max-w-2xl animate-slide-up">
-              {/* Eyebrow */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#DC2626]/10 border border-[#DC2626]/20 mb-6">
-                <span className="w-2 h-2 rounded-full bg-[#DC2626] animate-pulse" aria-hidden="true" />
-                <span className="text-xs font-bold text-[#DC2626] uppercase tracking-wider">
-                  Assessoria Esportiva
-                </span>
-              </div>
-
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-black text-[#1C1917] leading-[0.95] tracking-tight mb-6 text-balance">
-                Sua transformação
-                <br />
-                começa com o{' '}
-                <span className="text-[#DC2626]">primeiro passo</span>
-              </h1>
-
-              <p className="text-lg text-[#44403C] mb-8 leading-relaxed max-w-xl font-medium">
-                A Born to Run é a equipe de corrida e caminhada que une saúde,
-                comunidade e performance. Para quem quer começar ou ir mais longe.
+      {/* ══ HERO EDITORIAL ══ */}
+      <section className="relative overflow-hidden bg-[#F7F4EF] route-texture">
+        {/* linha técnica vertical decorativa */}
+        <div
+          className="hidden lg:block absolute top-0 bottom-0 left-[62%] w-px bg-[#171717]/10"
+          aria-hidden="true"
+        />
+        <div className="container-main relative z-10 pt-12 pb-16 md:pt-20 md:pb-24">
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+            {/* Texto */}
+            <div className="lg:col-span-7">
+              <p className="section-kicker mb-6">
+                Equipe de corrida · {site.location} · desde {site.foundedYear}
               </p>
-
-              {/* Highlights list */}
-              <ul className="flex flex-col gap-2 mb-10" aria-label="Diferenciais">
-                {highlights.map(({ icon: Icon, text }) => (
-                  <li key={text} className="flex items-center gap-2.5 text-sm font-medium text-[#44403C]">
-                    <Icon size={16} className="text-[#DC2626] shrink-0" aria-hidden="true" />
-                    {text}
-                  </li>
-                ))}
-              </ul>
-
-              {/* CTA buttons */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <a
-                  href="#modalidades"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-base bg-[#DC2626] text-white hover:bg-[#B91C1C] transition-colors duration-200 shadow-md"
-                >
-                  Ver Modalidades
-                  <ChevronRight size={18} aria-hidden="true" />
-                </a>
-                <a
-                  href={WHATSAPP_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-base bg-white text-[#16A34A] border-2 border-[#16A34A] hover:bg-[#16A34A] hover:text-white transition-all duration-200 shadow-sm"
-                >
-                  <MessageCircle size={18} aria-hidden="true" />
-                  Fale Conosco
-                </a>
+              <h1 className="hero-title">
+                Corra com propósito.
+                <br />
+                <span className="accent">Evolua em equipe.</span>
+              </h1>
+              <p className="mt-7 text-lg md:text-xl text-[#44403C] leading-relaxed max-w-xl">
+                Somos a {site.name}: uma equipe de corrida de rua e caminhada
+                de {site.location} que acredita que todo mundo nasceu para
+                correr — cada um no seu ritmo, todos juntos.
+              </p>
+              <div className="mt-9 flex flex-col sm:flex-row gap-3">
+                <Link href="/cadastro" className="btn-primary text-base px-8 py-3.5">
+                  Comece agora
+                  <ArrowRight size={18} aria-hidden="true" />
+                </Link>
+                <Link href="/sobre" className="btn-outline text-base px-8 py-3.5">
+                  Conheça a equipe
+                </Link>
               </div>
+              {/* Assinatura técnica */}
+              <p className="mt-10 font-condensed text-xs uppercase tracking-[0.22em] text-[#57534E]">
+                Corrida de rua · Caminhada · Saúde e performance
+              </p>
             </div>
-          </div>
-        </section>
 
-        {/* ── STATS BAR ─────────────────────────────────── */}
-        <section aria-label="Números da equipe" className="bg-[#DC2626]">
-          <div className="container-main py-0">
-            <ul className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[#B91C1C]/40 divide-y md:divide-y-0">
-              {stats.map(({ value, label, icon: Icon }) => (
-                <li
-                  key={label}
-                  className="flex flex-col items-center justify-center gap-1.5 py-8 px-4 text-center"
-                >
-                  <Icon size={22} className="text-white/70" aria-hidden="true" />
-                  <span className="font-display font-black text-4xl text-white leading-none">
-                    {value}
-                  </span>
-                  <span className="text-xs font-semibold text-white/75 uppercase tracking-wider">
-                    {label}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* ── ABOUT ──────────────────────────────────────── */}
-        <section id="sobre" className="bg-[#F9F7F5] py-20 md:py-28">
-          <div className="container-main">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              {/* Image side */}
-              <div className="relative">
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
-                  <Image
-                    src="/team-group.jpg"
-                    alt="Equipe Born to Run em treino coletivo"
-                    fill
-                    style={{ objectFit: 'cover', objectPosition: 'center 30%' }}
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
-                </div>
-                {/* Floating card */}
-                <div className="absolute -bottom-5 -right-4 md:-right-8 bg-white rounded-2xl shadow-xl p-5 max-w-[200px]">
-                  <div className="flex items-center gap-2 mb-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        size={14}
-                        className="text-[#EA580C] fill-[#EA580C]"
-                        aria-hidden="true"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-xs font-semibold text-[#1C1917] leading-tight">
-                    &quot;Mudou minha vida por completo!&quot;
-                  </p>
-                  <p className="text-xs text-[#57534E] mt-1">— Mariana S.</p>
-                </div>
-                {/* Red accent bar */}
+            {/* Foto editorial com moldura deslocada */}
+            <div className="lg:col-span-5">
+              <div className="relative max-w-md mx-auto lg:max-w-none">
                 <div
-                  className="absolute -left-3 top-8 w-1.5 h-24 bg-[#DC2626] rounded-full"
+                  className="absolute -top-3 -left-3 w-full h-full border-2 border-[#DC2626] rounded-xl"
                   aria-hidden="true"
                 />
-              </div>
-
-              {/* Text side */}
-              <div>
-                <p className="text-xs font-bold text-[#DC2626] uppercase tracking-widest mb-3">
-                  Quem Somos
-                </p>
-                <h2 className="font-display font-black text-4xl md:text-5xl text-[#1C1917] leading-tight mb-6 text-balance heading-accent">
-                  Mais do que correr.<br />É sobre viver melhor.
-                </h2>
-                <p className="text-base text-[#57534E] leading-relaxed mb-5">
-                  A Born to Run nasceu da paixão pela corrida de rua e pelo impacto
-                  que ela tem na vida das pessoas. Somos uma equipe de treinadores
-                  certificados, corredores de elite e apaixonados por saúde que
-                  acreditam que qualquer pessoa pode ser um atleta.
-                </p>
-                <p className="text-base text-[#57534E] leading-relaxed mb-8">
-                  Nossa missão é proporcionar treinamentos de excelência, com
-                  metodologia científica, ambiente acolhedor e foco total na
-                  evolução de cada atleta — seja ele um iniciante ou alguém que
-                  quer quebrar seu recorde pessoal.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <a
-                    href="#como-funciona"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm bg-[#DC2626] text-white hover:bg-[#B91C1C] transition-colors"
-                  >
-                    Como Funciona
-                    <ArrowRight size={16} aria-hidden="true" />
-                  </a>
-                  <a
-                    href={WHATSAPP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm border-2 border-[#DC2626] text-[#DC2626] hover:bg-[#DC2626] hover:text-white transition-all"
-                  >
-                    Fale com um Treinador
-                  </a>
+                <div className="relative aspect-[4/5] rounded-xl overflow-hidden shadow-card-lg">
+                  <Image
+                    src="/team-group.jpg"
+                    alt="Equipe Born to Run reunida antes do treino"
+                    fill
+                    priority
+                    style={{ objectFit: 'cover', objectPosition: 'center' }}
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                  />
+                </div>
+                {/* Selo carbono sobreposto */}
+                <div className="absolute -bottom-5 left-4 sm:left-6 panel-carbon rounded-lg px-5 py-3 shadow-card-lg">
+                  <p className="font-display text-2xl leading-none text-white">
+                    {site.stats.athletes}
+                  </p>
+                  <p className="font-condensed text-[11px] uppercase tracking-[0.15em] text-[#A8A29E] mt-1">
+                    atletas na equipe
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── SERVICES ───────────────────────────────────── */}
-        <section id="modalidades" className="bg-white py-20 md:py-28">
-          <div className="container-main">
-            <div className="text-center mb-14">
-              <p className="text-xs font-bold text-[#DC2626] uppercase tracking-widest mb-3">
-                Modalidades
-              </p>
-              <h2 className="font-display font-black text-4xl md:text-5xl text-[#1C1917] leading-tight mb-4 heading-accent-center">
-                Treinamento para cada objetivo
-              </h2>
-              <p className="text-base text-[#57534E] max-w-xl mx-auto leading-relaxed">
-                Do primeiro treino à maratona, temos o programa certo para você
-                evoluir no seu próprio ritmo.
-              </p>
-            </div>
-
-            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map(({ icon: Icon, title, description, tag, color }) => (
-                <li key={title}>
-                  <article className="bg-white rounded-2xl border border-[#E7E5E4] p-7 card-lift h-full flex flex-col shadow-sm">
-                    <div
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${
-                        color === 'red'
-                          ? 'bg-[#FEE2E2] text-[#DC2626]'
-                          : 'bg-[#DCFCE7] text-[#16A34A]'
-                      }`}
-                    >
-                      <Icon size={24} aria-hidden="true" />
-                    </div>
-
-                    {tag && (
-                      <span className="inline-block mb-3 px-2.5 py-0.5 rounded-full bg-[#EA580C]/10 text-[#EA580C] text-xs font-bold uppercase tracking-wide">
-                        {tag}
-                      </span>
-                    )}
-
-                    <h3 className="font-display font-black text-xl text-[#1C1917] mb-2 leading-tight">
-                      {title}
-                    </h3>
-                    <p className="text-sm text-[#57534E] leading-relaxed flex-1">{description}</p>
-
-                    <a
-                      href={WHATSAPP_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`mt-6 inline-flex items-center gap-1.5 text-sm font-bold transition-colors ${
-                        color === 'red'
-                          ? 'text-[#DC2626] hover:text-[#B91C1C]'
-                          : 'text-[#16A34A] hover:text-[#15803D]'
-                      }`}
-                    >
-                      Saber mais
-                      <ArrowRight size={14} aria-hidden="true" />
-                    </a>
-                  </article>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* ── HOW IT WORKS ────────────────────────────────── */}
-        <section id="como-funciona" className="bg-[#F9F7F5] py-20 md:py-28">
-          <div className="container-main">
-            <div className="text-center mb-14">
-              <p className="text-xs font-bold text-[#DC2626] uppercase tracking-widest mb-3">
-                Passo a Passo
-              </p>
-              <h2 className="font-display font-black text-4xl md:text-5xl text-[#1C1917] leading-tight mb-4 heading-accent-center">
-                Como funciona?
-              </h2>
-              <p className="text-base text-[#57534E] max-w-xl mx-auto leading-relaxed">
-                Entrar para a equipe é simples. Veja como você começa sua jornada.
-              </p>
-            </div>
-
-            <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-              {steps.map(({ number, title, description, icon: Icon }, idx) => (
-                <li key={number} className="relative">
-                  {idx < steps.length - 1 && (
-                    <div
-                      className="hidden lg:block absolute top-8 left-[calc(50%+32px)] w-[calc(100%-64px)] h-px bg-[#E7E5E4]"
-                      aria-hidden="true"
-                    />
-                  )}
-                  <div className="bg-white rounded-2xl border border-[#E7E5E4] p-7 shadow-sm h-full flex flex-col card-lift">
-                    <div className="flex items-center gap-3 mb-5">
-                      <span className="font-display font-black text-4xl text-[#E7E5E4] leading-none">
-                        {number}
-                      </span>
-                      <div className="w-10 h-10 rounded-xl bg-[#FEE2E2] flex items-center justify-center shrink-0">
-                        <Icon size={20} className="text-[#DC2626]" aria-hidden="true" />
-                      </div>
-                    </div>
-                    <h3 className="font-display font-black text-xl text-[#1C1917] mb-2 leading-tight">
-                      {title}
-                    </h3>
-                    <p className="text-sm text-[#57534E] leading-relaxed">{description}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-
-            <div className="text-center mt-12">
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-base bg-[#DC2626] text-white hover:bg-[#B91C1C] transition-colors shadow-md"
+      {/* ══ FAIXA DE NÚMEROS (carbono) ══ */}
+      <section className="bg-[#171717]" aria-label="Números da equipe">
+        <div className="container-main py-10 md:py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-4">
+            {stats.map(({ icon: Icon, value, label, color }, i) => (
+              <div
+                key={label}
+                className={`flex items-center gap-4 justify-center sm:justify-start ${
+                  i > 0 ? 'sm:border-l sm:border-[#2E2E2E] sm:pl-8' : ''
+                }`}
               >
-                <MessageCircle size={18} aria-hidden="true" />
-                Quero começar agora
-              </a>
-            </div>
+                <div
+                  className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: `${color}1F` }}
+                >
+                  <Icon size={22} style={{ color }} aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="font-display text-4xl md:text-5xl text-white leading-none">
+                    {value}
+                  </p>
+                  <p className="font-condensed text-xs uppercase tracking-[0.15em] text-[#A8A29E] mt-1.5">
+                    {label}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── TESTIMONIALS ────────────────────────────────── */}
-        <section id="depoimentos" className="bg-white py-20 md:py-28">
-          <div className="container-main">
-            <div className="text-center mb-14">
-              <p className="text-xs font-bold text-[#DC2626] uppercase tracking-widest mb-3">
-                Depoimentos
-              </p>
-              <h2 className="font-display font-black text-4xl md:text-5xl text-[#1C1917] leading-tight mb-4 heading-accent-center">
-                Quem já correu com a gente
+      {/* ══ 01 · QUEM SOMOS ══ */}
+      <section className="py-16 md:py-24 bg-[#F7F4EF]">
+        <div className="container-main">
+          <div className="grid md:grid-cols-12 gap-10 lg:gap-14 items-center">
+            <div className="md:col-span-5 order-2 md:order-1">
+              <div className="relative">
+                <div
+                  className="absolute -bottom-3 -right-3 w-full h-full border-2 border-[#171717] rounded-xl"
+                  aria-hidden="true"
+                />
+                <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-card-lg">
+                  <Image
+                    src="/robson-running.jpg"
+                    alt="Treinador Robson Alves correndo"
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    sizes="(max-width: 768px) 100vw, 42vw"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="md:col-span-7 order-1 md:order-2">
+              <p className="section-kicker mb-5">01 · Quem somos</p>
+              <h2 className="section-title">
+                Nascemos <span className="accent">para correr</span>
               </h2>
-              <p className="text-base text-[#57534E] max-w-xl mx-auto leading-relaxed">
-                Histórias reais de atletas que transformaram sua saúde e sua vida
-                com a Born to Run.
+              <p className="text-[#44403C] leading-relaxed mt-6 mb-4">
+                Fundada em {site.foundedYear} em {site.location}, a Born to Run
+                é mais que uma assessoria esportiva: é uma equipe que treina,
+                compete e comemora junto. Ao longo de quase uma década reunimos
+                cerca de <strong>{site.stats.athletes} atletas</strong> e
+                somamos <strong>{site.stats.races} participações em corridas</strong>{' '}
+                por todo o estado.
               </p>
+              <p className="text-[#44403C] leading-relaxed mb-8">
+                O comando técnico é do educador físico{' '}
+                <strong>{site.coach.name}</strong> ({site.coach.cref}),
+                especialista em corridas de meio fundo e fundo e treinador
+                nível 1 pela World Athletics.
+              </p>
+              <Link href="/sobre" className="btn-dark">
+                Nossa história completa
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
             </div>
-
-            <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map(({ name, role, text, rating, location }) => (
-                <li key={name}>
-                  <article className="bg-[#F9F7F5] rounded-2xl border border-[#E7E5E4] p-7 card-lift h-full flex flex-col">
-                    <div className="flex items-center gap-1 mb-4" aria-label={`${rating} de 5 estrelas`}>
-                      {[...Array(rating)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={16}
-                          className="text-[#EA580C] fill-[#EA580C]"
-                          aria-hidden="true"
-                        />
-                      ))}
-                    </div>
-
-                    <blockquote className="text-sm text-[#44403C] leading-relaxed flex-1 mb-6">
-                      &ldquo;{text}&rdquo;
-                    </blockquote>
-
-                    <footer className="flex items-center gap-3 pt-5 border-t border-[#E7E5E4]">
-                      <div
-                        className="w-10 h-10 rounded-full bg-[#DC2626] flex items-center justify-center text-white font-black text-sm shrink-0"
-                        aria-hidden="true"
-                      >
-                        {name.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-[#1C1917]">{name}</p>
-                        <p className="text-xs text-[#57534E]">{role}</p>
-                        <p className="text-xs text-[#A8A29E] flex items-center gap-1 mt-0.5">
-                          <MapPin size={10} aria-hidden="true" />
-                          {location}
-                        </p>
-                      </div>
-                    </footer>
-                  </article>
-                </li>
-              ))}
-            </ul>
           </div>
-        </section>
+        </div>
+      </section>
+
+      {/* ══ 02 · METODOLOGIA ══ */}
+      <section className="py-16 md:py-24 bg-white border-y border-[#E5E1D8]">
+        <div className="container-main">
+          <div className="max-w-2xl mb-12">
+            <p className="section-kicker mb-5">02 · Metodologia</p>
+            <h2 className="section-title">
+              Treino sério, <span className="accent">para todo mundo</span>
+            </h2>
+            <p className="section-subtitle mt-5">
+              Do sedentarismo à linha de chegada: nosso trabalho é construir o
+              caminho com segurança e consistência.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {pillars.map(({ icon: Icon, number, title, text }) => (
+              <div
+                key={title}
+                className="card card-lift p-8 relative overflow-hidden"
+              >
+                <span
+                  className="absolute top-4 right-6 font-display text-5xl text-[#78716C] select-none"
+                  aria-hidden="true"
+                >
+                  {number}
+                </span>
+                <div className="w-12 h-12 rounded-lg bg-[#FEE2E2] flex items-center justify-center mb-5">
+                  <Icon size={22} className="text-[#DC2626]" aria-hidden="true" />
+                </div>
+                <h3 className="font-condensed font-semibold text-lg text-[#171717] uppercase tracking-wide mb-2">
+                  {title}
+                </h3>
+                <p className="text-[#57534E] text-sm leading-relaxed">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ 03 · ÁREA DA EQUIPE (painel carbono) ══ */}
+      <section className="bg-[#171717] py-16 md:py-24">
+        <div className="container-main">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="section-kicker section-kicker-on-dark mb-5">03 · Área da equipe</p>
+              <h2 className="section-title text-white">
+                Sua central <span className="accent">de atleta</span>
+              </h2>
+              <p className="text-[#A8A29E] leading-relaxed mt-6 mb-8">
+                Quem faz parte da Born to Run tem acesso à área de membros:
+                feed da equipe para compartilhar treinos e conquistas,
+                planilhas publicadas pelo treinador e comunicados oficiais —
+                tudo em um só lugar.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link href="/cadastro" className="btn-primary">
+                  Criar minha conta
+                </Link>
+                <Link
+                  href="/login"
+                  className="btn-outline border-[#57534E] text-[#D6D3D1] hover:bg-white hover:text-[#171717] hover:border-white"
+                >
+                  Já sou da equipe
+                </Link>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { title: 'Feed', text: 'Compartilhe suas corridas e conquistas' },
+                { title: 'Treinos', text: 'Planilhas publicadas pelo treinador' },
+                { title: 'Avisos', text: 'Comunicados oficiais da equipe' },
+              ].map(({ title, text }) => (
+                <div
+                  key={title}
+                  className="rounded-lg bg-[#232323] border border-[#2E2E2E] p-5 group hover:border-[#DC2626] transition-colors"
+                >
+                  <ArrowUpRight
+                    size={18}
+                    className="text-[#DC2626] mb-3"
+                    aria-hidden="true"
+                  />
+                  <p className="font-display text-xl text-white uppercase leading-none">
+                    {title}
+                  </p>
+                  <p className="text-[#A8A29E] text-xs mt-2 leading-relaxed">
+                    {text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ 04 · COMUNIDADE / CTA FINAL ══ */}
+      <section className="py-16 md:py-24 bg-[#F7F4EF]">
+        <div className="container-main text-center">
+          <p className="section-kicker mb-5 justify-center">04 · Comunidade</p>
+          <h2 className="section-title mx-auto">
+            Pronto para <span className="accent">o primeiro passo?</span>
+          </h2>
+          <p className="section-subtitle mx-auto mt-5 mb-9">
+            Acompanhe o dia a dia da equipe no Instagram{' '}
+            <a
+              href={site.social.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[#B91C1C] hover:underline inline-flex items-center gap-1"
+            >
+              <InstagramIcon className="inline-block" />@
+              {site.social.instagramHandle}
+            </a>{' '}
+            ou fale com a gente pela página de contato.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/cadastro" className="btn-primary text-base px-8 py-3.5">
+              Comece agora
+              <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+            <Link href="/contato" className="btn-outline text-base px-8 py-3.5">
+              Falar com a equipe
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   )
 }
