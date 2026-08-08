@@ -6,7 +6,7 @@ Atualizado em **08/08/2026**. Este arquivo separa o que já está implementado e
 
 O projeto deixou de ser apenas um protótipo visual. O código atual já contém o site institucional, a área privada do atleta, o feed social e o painel do treinador conectados ao Supabase real. A base foi reformulada como **comunidade esportiva fechada**: novos cadastros aguardam aprovação, conteúdo interno exige associação ativa e treinos podem ser destinados à equipe inteira, a grupos ou a atletas escolhidos.
 
-O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 48 testes unitários e 12 testes públicos de navegador passaram. Um preview final da Vercel também foi validado com login, publicação, curtida e comentário reais; todos os dados técnicos foram removidos depois. As variáveis gerenciadas e o staged deployment de produção já foram validados, mas o domínio público continua deliberadamente na versão antiga até o commit estar recuperável no GitHub.
+O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 48 testes unitários e 12 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. O código foi publicado no GitHub, o PR [#1](https://github.com/samukkaneto/born-to-run/pull/1) foi mesclado em `main`, os dois workflows de qualidade ficaram verdes e a versão validada está em produção em **https://born-to-run-seven.vercel.app**.
 
 ## Estado por área
 
@@ -25,8 +25,8 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 | Painel do treinador | Implementado e validado | Dashboard, aprovações, membros, grupos, treinos e comunicados; grupo e treino direcionado passaram em smoke autenticado. |
 | PWA/responsividade | Parcial | Manifesto e navegação adaptada; instalação, offline e push não foram validados. Não é binário nativo. |
 | Supabase remoto | Sincronizado | Cinco migrations aplicadas; estado atual termina em `20260808192626_endurece_mutacoes_e_midias`. |
-| Vercel | Staged production aprovado | Deploy `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk` está `READY`; variáveis Supabase estão gerenciadas, rotas públicas/guard foram verificadas e o domínio público antigo não foi sobrescrito. |
-| GitHub | CLI instalada; OAuth pendente | Trabalho atual está em `codex/finish-born-to-run`, derivada de `abacus-fable-rebuild`; falta autorizar a conta para push e PR. |
+| Vercel | Produção publicada e saudável | Deploy `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk` está `READY` no domínio público; variáveis Supabase estão gerenciadas, rotas públicas/guard e logs foram verificados. A integração Git foi reconectada ao repositório GitHub atual; o deployment anterior `dpl_3GyqEDBXYJcqndUWVRZGSzviMDik` permanece como rollback conhecido. |
+| GitHub | Publicado, revisado e mesclado | PR [#1](https://github.com/samukkaneto/born-to-run/pull/1) mesclado em `main` no commit `21d15aa`; CI da branch e do merge concluídos com sucesso. |
 
 ## Regras de produto consolidadas
 
@@ -85,15 +85,17 @@ O banco preserva 1 perfil administrador ativo e continua sem conteúdo fictício
 | Testes pgTAP versionados | 47 asserções; a suíte combinada passou remotamente dentro de transação revertida antes da quinta migration |
 | E2E público | 12/12 aprovados em Desktop Chrome e Pixel 7; zero violações axe sérias/críticas |
 | E2E autenticado hospedado | Login, feed, publicação, curtida, comentário, painel admin, grupo e treino dirigido validados; dados técnicos removidos |
-| Vercel | Preview autenticado validado; staged production `READY`, 27 rotas, respostas 200/307 corretas e sem erros nos logs consultados |
+| Vercel | Produção `READY` no domínio canônico, 27 rotas, respostas 200/307 corretas e sem erros nos logs consultados |
+| GitHub Actions | Runs `31275354335` e `31275507684` aprovadas integralmente na branch e no merge em `main` |
 
-## Pendências antes de chamar de produção concluída
+## Pendências operacionais pós-publicação
 
-1. concluir a autorização OAuth do GitHub CLI 2.97.0, publicar a branch e abrir PR;
-2. após o push/PR, promover o staged deployment `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk` e verificar domínio/logs; o rollback é `dpl_3GyqEDBXYJcqndUWVRZGSzviMDik`;
-3. configurar SMTP próprio e validar cadastro, confirmação e recuperação com caixa de e-mail real;
-4. habilitar no Supabase Auth a proteção contra senhas vazadas;
-5. tratar instalação/offline/push e empacotamento nativo como fase própria, caso o objetivo passe de PWA para lojas de aplicativos.
+O MVP web está publicado. Os itens abaixo são melhorias operacionais ou fases posteriores e não anulam a entrega atual:
+
+1. configurar SMTP próprio e validar cadastro, confirmação e recuperação com caixa de e-mail real;
+2. habilitar no Supabase Auth a proteção contra senhas vazadas;
+3. em uma evolução coordenada de banco e código, mascarar `status_note`, `reviewed_at` e `reviewed_by` de outros perfis ativos e validar também a existência física do objeto de mídia, não somente o formato/proprietário do caminho;
+4. tratar instalação/offline/push e empacotamento nativo como fase própria, caso o objetivo passe de PWA para lojas de aplicativos.
 
 ## Orientação para Abacus AI / Fable 5
 
