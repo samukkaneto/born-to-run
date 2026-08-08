@@ -3,8 +3,11 @@ import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/lib/actions/auth'
-import { LogOut, ShieldCheck } from 'lucide-react'
-import { DashboardSidebarNav, DashboardBottomNav } from '@/components/dashboard/DashboardNav'
+import { LogOut } from 'lucide-react'
+import {
+  DashboardSidebarNav,
+  DashboardBottomNav,
+} from '@/components/dashboard/DashboardNav'
 
 export default async function DashboardLayout({
   children,
@@ -32,57 +35,87 @@ export default async function DashboardLayout({
     (profile?.full_name || user.user_metadata?.full_name || 'Atleta').split(' ')[0]
 
   return (
-    <div className="min-h-screen bg-[#F9F7F5] flex flex-col">
-      {/* Barra superior */}
-      <header className="bg-white border-b border-stone-200 sticky top-0 z-30">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/dashboard" className="flex items-center shrink-0">
-              <div className="relative w-[140px] h-[46px]">
+    <div className="flex min-h-screen bg-[#F7F4EF]">
+      {/* ── Sidebar carbono fixa (desktop) ── */}
+      <aside className="panel-carbon fixed inset-y-0 left-0 z-40 hidden w-64 flex-col md:flex">
+        <div className="border-b border-[#2E2E2E] px-5 py-5">
+          <Link href="/dashboard" className="inline-flex" aria-label="Início do painel">
+            <div className="relative h-[46px] w-[150px]">
+              <Image
+                src="/logo.png"
+                alt="Born to Run — Treinamento e Saúde"
+                fill
+                style={{ objectFit: 'contain', objectPosition: 'left center' }}
+                sizes="150px"
+              />
+            </div>
+          </Link>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-3 py-5">
+          <p className="mb-3 px-3.5 font-condensed text-[11px] font-semibold uppercase tracking-[0.2em] text-[#57534E]">
+            Área do atleta
+          </p>
+          <DashboardSidebarNav isAdmin={isAdmin} />
+        </div>
+
+        <div className="border-t border-[#2E2E2E] p-3">
+          <form action={logout}>
+            <button
+              type="submit"
+              className="flex w-full items-center gap-3 rounded-lg px-3.5 py-3 font-condensed text-sm font-medium uppercase tracking-[0.08em] text-[#A8A29E] transition-colors hover:bg-[#232323] hover:text-white"
+            >
+              <LogOut className="h-5 w-5 text-[#78716C]" aria-hidden="true" />
+              Sair da conta
+            </button>
+          </form>
+        </div>
+      </aside>
+
+      {/* ── Coluna principal ── */}
+      <div className="flex min-w-0 flex-1 flex-col md:pl-64">
+        {/* Topbar mobile (carbono — logo exige fundo escuro) */}
+        <header className="panel-carbon sticky top-0 z-30 md:hidden">
+          <div className="flex h-16 items-center justify-between px-4">
+            <Link href="/dashboard" className="flex shrink-0 items-center">
+              <div className="relative h-[42px] w-[130px]">
                 <Image
                   src="/logo.png"
                   alt="Born to Run"
                   fill
                   style={{ objectFit: 'contain', objectPosition: 'left center' }}
-                  sizes="140px"
+                  sizes="130px"
                 />
               </div>
             </Link>
-            <div className="flex items-center gap-3">
-              {isAdmin && (
-                <Link
-                  href="/admin"
-                  className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-stone-600 hover:text-[#DC2626] border border-stone-200 rounded-full px-3 py-1.5 transition-colors"
-                >
-                  <ShieldCheck size={14} />
-                  Painel Admin
-                </Link>
-              )}
-              <span className="text-sm text-stone-500 hidden sm:block">
-                Olá, {firstName}
-              </span>
-              <form action={logout}>
-                <button
-                  type="submit"
-                  className="p-2 text-stone-400 hover:text-[#DC2626] transition-colors rounded-full hover:bg-stone-100"
-                  aria-label="Sair da conta"
-                >
-                  <LogOut className="w-5 h-5" />
-                </button>
-              </form>
-            </div>
+            <form action={logout}>
+              <button
+                type="submit"
+                className="rounded-lg p-2.5 text-[#A8A29E] transition-colors hover:bg-[#232323] hover:text-white"
+                aria-label="Sair da conta"
+              >
+                <LogOut className="h-5 w-5" />
+              </button>
+            </form>
+          </div>
+        </header>
+
+        {/* Barra de saudação (desktop) */}
+        <div className="hidden border-b border-[#E5E1D8] bg-white md:block">
+          <div className="flex h-16 items-center justify-between px-6 lg:px-8">
+            <p className="font-condensed text-sm font-medium uppercase tracking-[0.12em] text-[#57534E]">
+              Olá, <span className="text-[#171717]">{firstName}</span> — bom treino hoje!
+            </p>
+            <span className="font-condensed text-xs uppercase tracking-[0.18em] text-[#A8A29E]">
+              Born to Run · área do atleta
+            </span>
           </div>
         </div>
-      </header>
-
-      <div className="flex-1 flex max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Menu lateral (desktop) */}
-        <aside className="hidden md:block w-60 flex-shrink-0 pr-8">
-          <DashboardSidebarNav />
-        </aside>
 
         {/* Conteúdo */}
-        <main className="flex-1 pb-20 md:pb-0 min-w-0">{children}</main>
+        <main className="min-w-0 flex-1 px-4 py-8 pb-24 sm:px-6 md:pb-8 lg:px-8">
+          <div className="mx-auto w-full max-w-5xl">{children}</div>
+        </main>
       </div>
 
       {/* Navegação inferior (mobile) */}

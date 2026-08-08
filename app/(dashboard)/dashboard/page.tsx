@@ -59,14 +59,16 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 animate-fade-in">
-      {/* Boas-vindas */}
+      {/* Boas-vindas editorial */}
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-black text-stone-900">
-          Olá, {firstName}! 👋
+        <p className="section-kicker mb-3">Painel do atleta</p>
+        <h1 className="font-display text-4xl sm:text-5xl uppercase leading-[0.95] text-[#171717]">
+          Olá, {firstName}!{' '}
+          <span className="text-[#DC2626]">Seu próximo passo começa agora.</span>
         </h1>
-        <p className="text-stone-500 text-sm mt-1">
+        <p className="text-[#57534E] text-sm mt-3">
           {profile?.objetivo
-            ? <>Seu objetivo: <span className="font-medium text-stone-700">{profile.objetivo}</span></>
+            ? <>Seu objetivo: <span className="font-medium text-[#171717]">{profile.objetivo}</span></>
             : 'Bem-vindo(a) à área de membros da Born to Run.'}
         </p>
       </div>

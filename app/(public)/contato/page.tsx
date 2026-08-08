@@ -16,9 +16,11 @@ export default function ContatoPage() {
   return (
     <main>
       <Section
+        kicker="05 · Contato"
         title="Fale com a gente"
         subtitle="Quer começar a correr ou entrar para a equipe? Manda uma mensagem."
         centered
+        className="route-texture"
       >
         <Container>
           <div className="grid gap-10 lg:grid-cols-5">
@@ -30,11 +32,11 @@ export default function ContatoPage() {
                 rel="noopener noreferrer"
                 className="card flex items-start gap-4 p-6 transition-shadow hover:shadow-card-lg"
               >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-50">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#FEE2E2]">
                   <InstagramIcon className="h-6 w-6 text-[var(--color-red)]" />
                 </span>
                 <div>
-                  <h3 className="font-[family-name:var(--font-barlow)] text-lg font-bold uppercase tracking-wide text-neutral-900">
+                  <h3 className="font-condensed text-base font-semibold uppercase tracking-[0.08em] text-[#171717]">
                     Instagram
                   </h3>
                   <p className="text-neutral-600">
@@ -47,11 +49,11 @@ export default function ContatoPage() {
               </a>
 
               <div className="card flex items-start gap-4 p-6">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-50">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#DCFCE7]">
                   <MapPin className="h-6 w-6 text-[var(--color-green)]" />
                 </span>
                 <div>
-                  <h3 className="font-[family-name:var(--font-barlow)] text-lg font-bold uppercase tracking-wide text-neutral-900">
+                  <h3 className="font-condensed text-base font-semibold uppercase tracking-[0.08em] text-[#171717]">
                     Onde estamos
                   </h3>
                   <p className="text-neutral-600">{site.location}</p>
@@ -62,11 +64,11 @@ export default function ContatoPage() {
               </div>
 
               <div className="card flex items-start gap-4 p-6">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-orange-50">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#FFEDD5]">
                   <Users className="h-6 w-6 text-[var(--color-orange)]" />
                 </span>
                 <div>
-                  <h3 className="font-[family-name:var(--font-barlow)] text-lg font-bold uppercase tracking-wide text-neutral-900">
+                  <h3 className="font-condensed text-base font-semibold uppercase tracking-[0.08em] text-[#171717]">
                     Já é atleta?
                   </h3>
                   <p className="text-neutral-600">

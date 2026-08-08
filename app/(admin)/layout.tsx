@@ -1,87 +1,125 @@
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { ShieldCheck, Dumbbell, Megaphone, Users, ArrowLeft } from 'lucide-react'
+import { logout } from '@/lib/actions/auth'
+import { LogOut, ShieldCheck } from 'lucide-react'
+import AdminNav, { AdminNavMobile } from '@/components/admin/AdminNav'
+import ToastProvider from '@/components/ui/Toaster'
 
-const navItems = [
-  { href: '/admin',             icon: ShieldCheck, label: 'Visão Geral' },
-  { href: '/admin/treinos',     icon: Dumbbell,    label: 'Treinos'     },
-  { href: '/admin/comunicados', icon: Megaphone,   label: 'Comunicados' },
-  { href: '/admin/membros',     icon: Users,       label: 'Membros'     },
-]
-
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
   const { data: profile } = await supabase
-    .from('profiles').select('role').eq('user_id', user.id).single()
+    .from('profiles')
+    .select('role, full_name')
+    .eq('user_id', user.id)
+    .single()
 
   if (profile?.role !== 'admin') redirect('/dashboard')
 
-  return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#fafaf9' }}>
-      {/* Header */}
-      <header style={{
-        backgroundColor: '#18181b', color: '#fff', padding: '0 32px',
-        height: '56px', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 40,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{
-            width: '32px', height: '32px', backgroundColor: '#e81010',
-            borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <ShieldCheck size={16} />
-          </div>
-          <div>
-            <span style={{ fontWeight: 700, fontSize: '15px' }}>Painel Admin</span>
-            <span style={{ color: '#71717a', fontSize: '12px', marginLeft: '8px' }}>Born to Run</span>
-          </div>
-        </div>
-        <Link href="/dashboard" style={{
-          display: 'flex', alignItems: 'center', gap: '6px',
-          color: '#a1a1aa', textDecoration: 'none', fontSize: '13px',
-          transition: 'color 0.2s',
-        }}>
-          <ArrowLeft size={14} /> Voltar ao Dashboard
-        </Link>
-      </header>
+  const firstName = (profile?.full_name || 'Treinador').split(' ')[0]
 
-      {/* Body */}
-      <div style={{ display: 'flex', maxWidth: '1100px', margin: '0 auto', padding: '32px 24px', gap: '28px' }}>
-        {/* Sidebar */}
-        <aside style={{
-          width: '200px', minWidth: '200px', flexShrink: 0,
-        }}>
-          <nav style={{
-            backgroundColor: '#fff', borderRadius: '14px',
-            border: '1px solid #e7e5e4', padding: '8px', overflow: 'hidden',
-          }}>
-            {navItems.map(({ href, icon: Icon, label }) => (
-              <Link key={href} href={href} style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                padding: '10px 12px', borderRadius: '8px',
-                color: '#57534e', textDecoration: 'none',
-                fontSize: '13px', fontWeight: 500, marginBottom: '2px',
-              }} className="admin-nav-link">
-                <Icon size={16} />
-                {label}
-              </Link>
-            ))}
-          </nav>
+  return (
+    <ToastProvider>
+      <div className="flex min-h-screen bg-[#F7F4EF]">
+        {/* ── Sidebar carbono fixa (desktop) ── */}
+        <aside className="panel-carbon fixed inset-y-0 left-0 z-40 hidden w-64 flex-col md:flex">
+          <div className="border-b border-[#2E2E2E] px-5 py-5">
+            <Link href="/admin" className="inline-flex" aria-label="Painel do treinador">
+              <div className="relative h-[46px] w-[150px]">
+                <Image
+                  src="/logo.png"
+                  alt="Born to Run — Treinamento e Saúde"
+                  fill
+                  style={{ objectFit: 'contain', objectPosition: 'left center' }}
+                  sizes="150px"
+                />
+              </div>
+            </Link>
+            <p className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-[#DC2626] px-2.5 py-1 font-condensed text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
+              <ShieldCheck size={12} aria-hidden="true" />
+              Painel do treinador
+            </p>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-3 py-5">
+            <AdminNav />
+          </div>
+
+          <div className="border-t border-[#2E2E2E] p-3">
+            <form action={logout}>
+              <button
+                type="submit"
+                className="flex w-full items-center gap-3 rounded-lg px-3.5 py-3 font-condensed text-sm font-medium uppercase tracking-[0.08em] text-[#A8A29E] transition-colors hover:bg-[#232323] hover:text-white"
+              >
+                <LogOut className="h-5 w-5 text-[#78716C]" aria-hidden="true" />
+                Sair da conta
+              </button>
+            </form>
+          </div>
         </aside>
 
-        {/* Content */}
-        <main style={{ flex: 1, minWidth: 0 }}>
-          {children}
-        </main>
-      </div>
+        {/* ── Coluna principal ── */}
+        <div className="flex min-w-0 flex-1 flex-col md:pl-64">
+          {/* Topo mobile (carbono) */}
+          <header className="panel-carbon sticky top-0 z-30 md:hidden">
+            <div className="flex h-16 items-center justify-between px-4">
+              <Link href="/admin" className="flex shrink-0 items-center gap-3">
+                <div className="relative h-[40px] w-[124px]">
+                  <Image
+                    src="/logo.png"
+                    alt="Born to Run"
+                    fill
+                    style={{ objectFit: 'contain', objectPosition: 'left center' }}
+                    sizes="124px"
+                  />
+                </div>
+                <span className="rounded-md bg-[#DC2626] px-2 py-0.5 font-condensed text-[10px] font-semibold uppercase tracking-[0.12em] text-white">
+                  Treinador
+                </span>
+              </Link>
+              <form action={logout}>
+                <button
+                  type="submit"
+                  className="rounded-lg p-2.5 text-[#A8A29E] transition-colors hover:bg-[#232323] hover:text-white"
+                  aria-label="Sair da conta"
+                >
+                  <LogOut className="h-5 w-5" />
+                </button>
+              </form>
+            </div>
+            <div className="border-t border-[#2E2E2E]">
+              <AdminNavMobile />
+            </div>
+          </header>
 
-      <style>{`
-        .admin-nav-link:hover { background: #f5f5f4; color: #e81010; }
-      `}</style>
-    </div>
+          {/* Barra de contexto (desktop) */}
+          <div className="hidden border-b border-[#E5E1D8] bg-white md:block">
+            <div className="flex h-16 items-center justify-between px-6 lg:px-8">
+              <p className="font-condensed text-sm font-medium uppercase tracking-[0.12em] text-[#57534E]">
+                Olá, <span className="text-[#171717]">{firstName}</span> — gestão da equipe
+              </p>
+              <span className="font-condensed text-xs uppercase tracking-[0.18em] text-[#A8A29E]">
+                Born to Run · painel do treinador
+              </span>
+            </div>
+          </div>
+
+          {/* Conteúdo */}
+          <main className="min-w-0 flex-1 px-4 py-8 sm:px-6 lg:px-8">
+            <div className="mx-auto w-full max-w-5xl">{children}</div>
+          </main>
+        </div>
+      </div>
+    </ToastProvider>
   )
 }

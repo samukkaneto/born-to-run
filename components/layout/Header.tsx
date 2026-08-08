@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, LogIn } from 'lucide-react'
+import { Menu, X, User } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navLinks = [
@@ -14,6 +14,11 @@ const navLinks = [
   { label: 'Contato', href: '/contato' },
 ]
 
+/**
+ * Header público — barra carbono (#171717) com o logo original
+ * (texto branco + eletrocardiograma colorido), navegação clara e
+ * CTAs no estilo editorial das pranchas Fable 5.
+ */
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -28,34 +33,32 @@ export default function Header() {
   return (
     <header
       className={cn(
-        'fixed top-0 inset-x-0 z-50 transition-all duration-300',
-        scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-[0_2px_16px_rgba(0,0,0,0.07)]'
-          : 'bg-white/90 backdrop-blur-sm'
+        'fixed top-0 inset-x-0 z-50 bg-[#171717] transition-shadow duration-300',
+        scrolled && 'shadow-[0_4px_24px_rgba(0,0,0,0.35)]'
       )}
     >
       <div className="container-main">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
+        <div className="flex items-center justify-between h-16 md:h-[76px]">
+          {/* Logo — texto branco funciona sobre o carbono */}
           <Link
             href="/"
             className="relative flex items-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-md"
             aria-label="Born to Run — página inicial"
           >
-            <div className="relative w-[170px] h-[54px] md:w-[210px] md:h-[66px]">
+            <div className="relative w-[150px] h-[52px] md:w-[190px] md:h-[64px]">
               <Image
                 src="/logo.png"
                 alt="Born to Run — Treinamento e Saúde"
                 fill
                 style={{ objectFit: 'contain', objectPosition: 'left center' }}
                 priority
-                sizes="(max-width: 768px) 170px, 210px"
+                sizes="(max-width: 768px) 150px, 190px"
               />
             </div>
           </Link>
 
           {/* Navegação desktop */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8" aria-label="Navegação principal">
+          <nav className="hidden md:flex items-center gap-7 lg:gap-9" aria-label="Navegação principal">
             {navLinks.map((link) => {
               const active = pathname === link.href
               return (
@@ -64,11 +67,11 @@ export default function Header() {
                   href={link.href}
                   aria-current={active ? 'page' : undefined}
                   className={cn(
-                    'text-sm font-semibold transition-colors duration-200 relative pb-0.5',
-                    'after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-[#DC2626] after:transition-all after:duration-200',
+                    'font-condensed text-[15px] font-medium uppercase tracking-wide transition-colors duration-200 relative pb-1',
+                    'after:absolute after:bottom-0 after:left-0 after:h-[3px] after:bg-[#DC2626] after:transition-all after:duration-200',
                     active
                       ? 'text-[#DC2626] after:w-full'
-                      : 'text-[#44403C] hover:text-[#DC2626] after:w-0 hover:after:w-full'
+                      : 'text-[#F7F4EF] hover:text-[#DC2626] after:w-0 hover:after:w-full'
                   )}
                 >
                   {link.label}
@@ -81,13 +84,16 @@ export default function Header() {
           <div className="hidden md:flex items-center gap-3 ml-6">
             <Link
               href="/login"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#44403C] hover:text-[#DC2626] transition-colors px-3 py-2"
+              className="inline-flex items-center gap-2 font-condensed text-sm font-medium uppercase tracking-wide text-[#F7F4EF] border border-[#3d3d3d] hover:border-[#F7F4EF] rounded-lg px-4 py-2.5 transition-colors"
             >
-              <LogIn size={16} aria-hidden="true" />
-              Entrar
+              <User size={15} aria-hidden="true" />
+              Área do atleta
             </Link>
-            <Link href="/cadastro" className="btn-primary text-sm">
-              Comece Agora
+            <Link
+              href="/cadastro"
+              className="inline-flex items-center font-condensed text-sm font-semibold uppercase tracking-wide bg-[#DC2626] hover:bg-[#B91C1C] text-white rounded-lg px-5 py-2.5 transition-colors"
+            >
+              Conheça a equipe
             </Link>
           </div>
 
@@ -98,19 +104,19 @@ export default function Header() {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((v) => !v)}
-            className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg text-[#44403C] hover:bg-[#F5F5F4] transition-colors"
+            className="md:hidden flex items-center justify-center w-12 h-12 rounded-lg text-[#F7F4EF] hover:bg-[#232323] transition-colors"
           >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Menu mobile */}
+      {/* Menu mobile — painel carbono */}
       <div
         id="mobile-menu"
         className={cn(
-          'md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-white border-t border-[#E7E5E4]',
-          menuOpen ? 'max-h-[420px] opacity-100' : 'max-h-0 opacity-0'
+          'md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-[#171717] border-t border-[#2E2E2E]',
+          menuOpen ? 'max-h-[440px] opacity-100' : 'max-h-0 opacity-0'
         )}
       >
         <nav className="container-main py-4 flex flex-col gap-1" aria-label="Navegação mobile">
@@ -120,31 +126,24 @@ export default function Header() {
               href={link.href}
               onClick={() => setMenuOpen(false)}
               className={cn(
-                'block px-3 py-3 rounded-lg text-base font-semibold transition-colors',
+                'block px-3 py-3.5 rounded-lg font-condensed text-lg font-medium uppercase tracking-wide transition-colors',
                 pathname === link.href
-                  ? 'text-[#DC2626] bg-[#FEE2E2]'
-                  : 'text-[#44403C] hover:text-[#DC2626] hover:bg-[#FEE2E2]'
+                  ? 'text-[#DC2626]'
+                  : 'text-[#F7F4EF] hover:text-[#DC2626]'
               )}
             >
               {link.label}
             </Link>
           ))}
 
-          <div className="flex flex-col gap-2 pt-3 border-t border-[#E7E5E4] mt-2">
+          <div className="pt-3 border-t border-[#2E2E2E] mt-2 pb-2">
             <Link
               href="/login"
               onClick={() => setMenuOpen(false)}
-              className="btn-outline justify-center py-3 text-base"
+              className="flex items-center justify-center gap-2 font-condensed text-base font-medium uppercase tracking-wide text-[#171717] bg-[#F7F4EF] rounded-lg px-4 py-3.5 transition-colors hover:bg-white"
             >
-              <LogIn size={17} aria-hidden="true" />
-              Entrar
-            </Link>
-            <Link
-              href="/cadastro"
-              onClick={() => setMenuOpen(false)}
-              className="btn-primary justify-center py-3 text-base"
-            >
-              Comece Agora
+              <User size={17} aria-hidden="true" />
+              Área do atleta
             </Link>
           </div>
         </nav>

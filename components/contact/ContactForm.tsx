@@ -52,7 +52,7 @@ export default function ContactForm() {
         <span className="flex h-14 w-14 items-center justify-center rounded-full bg-green-50">
           <CheckCircle2 className="h-7 w-7 text-[var(--color-green)]" />
         </span>
-        <h3 className="font-[family-name:var(--font-barlow)] text-2xl font-bold uppercase tracking-wide text-neutral-900">
+        <h3 className="font-display text-2xl font-bold uppercase tracking-wide text-neutral-900">
           Mensagem pronta, {form.name.trim().split(' ')[0]}!
         </h3>
         <p className="max-w-md text-neutral-600">

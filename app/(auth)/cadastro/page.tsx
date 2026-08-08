@@ -21,7 +21,7 @@ export default function CadastroPage() {
   return (
     <div className="card w-full space-y-8 p-8 sm:p-10">
       <div className="text-center">
-        <h1 className="font-[family-name:var(--font-barlow)] text-3xl font-bold uppercase tracking-wide text-neutral-900">
+        <h1 className="font-display text-3xl font-bold uppercase tracking-wide text-neutral-900">
           Crie sua conta
         </h1>
         <p className="mt-2 text-sm text-neutral-600">

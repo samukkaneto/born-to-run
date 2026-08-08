@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Barlow_Condensed } from 'next/font/google'
+import { Inter, Bebas_Neue, Oswald } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({
@@ -8,10 +8,19 @@ const inter = Inter({
   display: 'swap',
 })
 
-const barlowCondensed = Barlow_Condensed({
+/** Títulos condensados atléticos — identidade editorial Born to Run */
+const bebasNeue = Bebas_Neue({
   subsets: ['latin'],
-  weight: ['400', '600', '700', '800', '900'],
-  variable: '--font-barlow',
+  weight: '400',
+  variable: '--font-bebas',
+  display: 'swap',
+})
+
+/** Subtítulos condensados (Oswald SemiBold) */
+const oswald = Oswald({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  variable: '--font-oswald',
   display: 'swap',
 })
 
@@ -59,9 +68,9 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`light bg-[#F9F7F5] ${inter.variable} ${barlowCondensed.variable}`}
+      className={`light bg-[#F7F4EF] ${inter.variable} ${bebasNeue.variable} ${oswald.variable}`}
     >
-      <body className="font-sans antialiased text-[#1C1917]">
+      <body className="font-sans antialiased text-[#171717]">
         {children}
       </body>
     </html>

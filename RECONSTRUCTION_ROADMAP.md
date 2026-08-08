@@ -28,7 +28,7 @@ O plano original (`FABLE_REBUILD_PLAN.md`) definiu 16 fases técnicas. Para exec
 |---|---|---|---|---|
 | **1** | 1–4 | Arquitetura/limpeza, banco/segurança, design system, componentes globais e páginas públicas | ✅ Concluído | `a8dd2db` |
 | **2** | 5–7 (+ parte de 8, 10) | Autenticação completa, área do aluno, dashboard, feed social, comunicados do aluno | ✅ Concluído | `6c768fa` |
-| **3** | 9, 11 (+ resto de 8, 10) | Painel admin reconstruído, edição de treinos/comunicados, moderação, gestão de membros | ⏳ Pendente | — |
+| **3** | 9, 11 (+ resto de 8, 10) | Painel admin reconstruído, edição de treinos/comunicados, moderação, gestão de membros + redesign visual premium (Fable 5) em todo o site | ✅ Concluído | branch `abacus-fable-rebuild` |
 | **4** | 12–16 | PWA, acessibilidade, desempenho, testes, deploy na Vercel | ⏳ Pendente | — |
 
 ---
@@ -60,89 +60,47 @@ O plano original (`FABLE_REBUILD_PLAN.md`) definiu 16 fases técnicas. Para exec
 | **Navegação** | `DashboardSidebarNav` (desktop) + `DashboardBottomNav` (mobile) com estado ativo por `usePathname`. 5 itens: Início, Feed, Treinos, Comunicados, Perfil. |
 | **Upload de avatar** | Validação de 5MB com erro visível (antes falhava silencioso). |
 
+### Bloco 3 — Painel Admin, CRUD Completo e Redesign Premium (Fases 9, 11) ✅
+
+**Branch:** `abacus-fable-rebuild` • **Validação:** build/lint/typecheck zero erros, 24 rotas geradas, smoke test das rotas públicas (200) e protegidas (redirect correto para /login)
+
+Este bloco entregou duas frentes: o painel do treinador completo e um **redesign visual premium** de todo o site, guiado pelas pranchas de referência do usuário (`design-refs/`) e pelo `README-FABLE5.md`.
+
+#### Redesign visual premium (identidade editorial esportiva)
+
+| Entrega | Detalhes |
+|---|---|
+| **Nova paleta** | Off-white `#F7F4EF` (fundo), carbono `#171717` (header, sidebars, painéis), vermelho `#DC2626` (ação), verde `#16A34A` (êxito/stats), laranja `#F97316` (traço/aviso). |
+| **Nova tipografia** | Bebas Neue (títulos display), Oswald (rótulos condensados, navegação), Inter (corpo). Substitui a Barlow Condensed. |
+| **Linguagem editorial** | Kickers numerados (“01 · Sobre”), tagline “CORRA COM PROPÓSITO. EVOLUA EM EQUIPE.”, molduras vermelhas deslocadas nas fotos, faixas de estatísticas em carbono. |
+| **Header/rodapé carbono** | O logo tem texto branco e só funciona em fundo escuro — todos os headers, sidebars e o footer agora são carbono. |
+| **Páginas públicas** | Home, Sobre, Galeria e Contato reescritas no novo padrão (hero editorial, seções numeradas, CTA em painel carbono). |
+| **Autenticação** | Layout dividido: painel esquerdo com foto real, overlay carbono, logo e tagline; formulários no novo design. |
+| **Dashboard do aluno** | Sidebar carbono fixa no desktop, topbar mobile carbono, bottom nav com botão central vermelho “+”, saudação editorial. |
+
+#### Painel do treinador (CRUD completo)
+
+| Entrega | Detalhes |
+|---|---|
+| **Layout admin sem CSS inline** | `app/(admin)/layout.tsx` reescrito com o design system: sidebar carbono com selo “Painel do Treinador”, nav mobile horizontal, tudo dentro de `ToastProvider`. Novos `components/admin/AdminNav.tsx` e `app/(admin)/admin/loading.tsx` (skeleton). |
+| **Edição de treinos** | Nova action `updateWorkout` com validação de formulário; `WorkoutsManager` com busca, filtro por nível, modal criar/editar pré-preenchido, confirmação de exclusão e toasts. |
+| **Edição de comunicados** | Nova action `updateAnnouncement`; `AnnouncementsManager` com o mesmo padrão (busca, modal, confirmação, toasts). |
+| **Gestão de membros** | `MembersTable`: busca, badges de papel, link “Ver perfil” (`/dashboard/membros/[id]`), promover/rebaixar e remover com `ConfirmDialog` + toasts; proteção contra auto-remoção/auto-rebaixamento (na UI e nas actions). |
+| **Segurança das actions** | `requireAdmin()` em todas as actions de `lib/actions/admin.ts`; validação de campos; retorno padronizado `{ success | error }`; `revalidatePath` nas rotas afetadas. |
+| **Novos componentes de UI** | `Toaster` (toasts com auto-dismiss), `ConfirmDialog` (confirmação acessível com Escape/foco), `AdminModal`, `AdminForm` com valores padrão para edição. |
+| **Moderação do feed** | Mantida inline no feed (admin exclui qualquer post/comentário via PostCard) — decisão: tela separada não é necessária nesta fase. |
+
+#### Critérios de conclusão do Bloco 3
+- [x] Build, lint e typecheck: zero erros
+- [x] Painel admin com design system aplicado (sem CSS inline)
+- [x] CRUD completo de treinos: criar, editar, excluir
+- [x] CRUD completo de comunicados: criar, editar, excluir
+- [x] Gestão de membros com confirmação e feedback
+- [x] Commit + push para GitHub
+
 ---
 
 ## O que falta fazer
-
-### Bloco 3 — Painel Admin e CRUD Completo (Fases 9, 11) ⏳
-
-**Estimativa de créditos:** 9.000–13.000
-
-Este bloco foca em tornar o painel administrativo profissional e completar as operações CRUD que hoje só têm create/delete.
-
-#### 3.1 — Reconstrução visual do painel admin
-
-**Problema atual:** o layout admin (`app/(admin)/layout.tsx`) usa CSS inline fora do design system. As telas admin têm estilo divergente do resto da aplicação.
-
-**O que será feito:**
-- Reconstruir o layout admin usando os tokens e componentes do design system (`components/ui/`).
-- Sidebar admin com navegação clara: Dashboard, Treinos, Comunicados, Membros.
-- Responsividade mobile (bottom nav ou menu hambúrguer).
-
-**Arquivos afetados:**
-- `app/(admin)/layout.tsx` — reescrita
-- Possível criação de `components/admin/AdminNav.tsx`
-
-#### 3.2 — Edição de treinos
-
-**Problema atual:** `lib/actions/admin.ts` tem `createWorkout` e `deleteWorkout`, mas não tem `updateWorkout`. O treinador não consegue corrigir um treino publicado — precisa excluir e recriar.
-
-**O que será feito:**
-- Nova action `updateWorkout(workoutId, formData)` em `lib/actions/admin.ts`.
-- Modal/formulário de edição no painel admin (pré-preenchido com dados existentes).
-- Campos: título, descrição, nível (iniciante/intermediário/avançado), objetivo, data agendada.
-
-**Arquivos afetados:**
-- `lib/actions/admin.ts` — nova action
-- `app/(admin)/admin/treinos/page.tsx` — botão de editar + modal/formulário
-- Possível `components/admin/WorkoutForm.tsx`
-
-#### 3.3 — Edição de comunicados
-
-**Problema atual:** mesmo cenário dos treinos — só create/delete, sem update.
-
-**O que será feito:**
-- Nova action `updateAnnouncement(announcementId, formData)`.
-- Modal/formulário de edição no painel admin.
-- Campos: título, conteúdo.
-
-**Arquivos afetados:**
-- `lib/actions/admin.ts` — nova action
-- `app/(admin)/admin/comunicados/page.tsx` — botão de editar + modal/formulário
-
-#### 3.4 — Gestão de membros aprimorada
-
-**Problema atual:** a tela de membros lista e permite promover/rebaixar. A exclusão já funciona (policy adicionada no Bloco 1). Falta: confirmação visual antes de ações destrutivas, feedback de sucesso/erro, e possivelmente visualização do perfil do membro.
-
-**O que será feito:**
-- Modal de confirmação antes de excluir membro ou alterar papel.
-- Mensagens de feedback (toast ou inline).
-- Link para o perfil público do membro (`/dashboard/membros/[id]`).
-
-**Arquivos afetados:**
-- `app/(admin)/admin/membros/page.tsx`
-- Possível `components/ui/ConfirmDialog.tsx`
-
-#### 3.5 — Moderação do feed (admin)
-
-**Problema atual:** o admin pode excluir posts e comentários via actions, mas não há interface de moderação centralizada.
-
-**O que será feito:**
-- No PostCard: garantir que o admin veja botão de excluir em qualquer post/comentário (já parcialmente feito no Bloco 2 para comentários).
-- Avaliar se é necessária uma tela de moderação separada ou se a moderação inline no feed é suficiente.
-
-**Arquivos afetados:**
-- `components/feed/PostCard.tsx` (ajustes pontuais)
-
-#### Critérios de conclusão do Bloco 3
-- [ ] Build, lint e typecheck: zero erros
-- [ ] Painel admin com design system aplicado (sem CSS inline)
-- [ ] CRUD completo de treinos: criar, editar, excluir
-- [ ] CRUD completo de comunicados: criar, editar, excluir
-- [ ] Gestão de membros com confirmação e feedback
-- [ ] Commit + push para GitHub
-
----
 
 ### Bloco 4 — Qualidade e Deploy (Fases 12–16) ⏳
 
@@ -154,7 +112,7 @@ Este é o bloco final: polimento, qualidade e publicação.
 
 **O que será feito:**
 - Revisar `manifest.json` (atalhos apontando para rotas válidas após a reconstrução).
-- Verificar theme-color alinhado à paleta (#DC2626 ou #F9F7F5).
+- Verificar theme-color alinhado à paleta atual (#171717, #DC2626 ou #F7F4EF).
 - Testar instalabilidade e experiência mobile em 375px.
 - Verificar que a navegação inferior do dashboard (feita no Bloco 2) funciona corretamente em contexto PWA.
 

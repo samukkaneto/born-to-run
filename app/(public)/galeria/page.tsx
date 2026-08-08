@@ -15,19 +15,19 @@ export const metadata: Metadata = {
 
 const photos = [
   {
-    src: '/images/team-group.jpg',
+    src: '/team-group.jpg',
     alt: 'Atletas da equipe Born to Run reunidos',
     caption: 'A equipe reunida — a força do grupo em cada encontro',
     wide: true,
   },
   {
-    src: '/images/robson-running.jpg',
+    src: '/robson-running.jpg',
     alt: 'Robson Alves correndo',
     caption: 'Robson Alves, nosso treinador, dando o exemplo na pista',
     wide: false,
   },
   {
-    src: '/images/robson-portrait.jpg',
+    src: '/robson-portrait.jpg',
     alt: 'Retrato de Robson Alves, treinador da Born to Run',
     caption: 'Robson Alves — Educador Físico e treinador da equipe',
     wide: false,
@@ -38,16 +38,18 @@ export default function GaleriaPage() {
   return (
     <main>
       <Section
-        title="Galeria"
-        subtitle="Momentos que contam a história da nossa equipe."
+        kicker="04 · Galeria"
+        title="Momentos da equipe"
+        subtitle="Treinos, provas e a energia do grupo que conta a nossa história."
         centered
+        className="route-texture"
       >
         <Container>
           <div className="grid gap-6 md:grid-cols-2">
             {photos.map((photo) => (
               <figure
                 key={photo.src}
-                className={`group overflow-hidden rounded-2xl shadow-card-lg ${
+                className={`group overflow-hidden rounded-xl shadow-card-lg ${
                   photo.wide ? 'md:col-span-2' : ''
                 }`}
               >
@@ -64,7 +66,7 @@ export default function GaleriaPage() {
                     sizes={photo.wide ? '100vw' : '(max-width: 768px) 100vw, 50vw'}
                   />
                 </div>
-                <figcaption className="bg-white px-5 py-4 text-sm font-medium text-neutral-700">
+                <figcaption className="bg-white px-5 py-4 font-condensed text-sm font-medium uppercase tracking-[0.08em] text-[#44403C]">
                   {photo.caption}
                 </figcaption>
               </figure>
@@ -73,13 +75,13 @@ export default function GaleriaPage() {
 
           {/* Mais fotos em breve / Instagram */}
           <div className="card mt-12 flex flex-col items-center gap-4 p-10 text-center">
-            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-red-50">
+            <span className="flex h-14 w-14 items-center justify-center rounded-lg bg-[#FEE2E2]">
               <Camera className="h-7 w-7 text-[var(--color-red)]" />
             </span>
-            <h3 className="font-[family-name:var(--font-barlow)] text-2xl font-bold uppercase tracking-wide text-neutral-900">
+            <h3 className="font-display text-3xl uppercase text-[#171717]">
               Mais momentos em breve
             </h3>
-            <p className="max-w-xl text-neutral-600">
+            <p className="max-w-xl text-[#57534E]">
               Novas fotos de treinos e provas serão adicionadas pela equipe.
               Enquanto isso, acompanhe o dia a dia da Born to Run no nosso
               Instagram.

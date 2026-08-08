@@ -8,10 +8,10 @@
 |---|---|---|
 | **Bloco 1** (Fases 1–4) | Arquitetura/limpeza, banco/segurança, design system, páginas públicas | ✅ Concluído |
 | **Bloco 2** (Fases 5–7) | Autenticação completa, área do aluno (dashboard), mini rede social/feed | ✅ Concluído |
-| **Bloco 3** | Treinos, comunicados (admin), painel do treinador reconstruído | ⏳ Pendente |
+| **Bloco 3** | Painel do treinador reconstruído, edição de treinos/comunicados, gestão de membros + redesign visual premium (Fable 5) | ✅ Concluído |
 | **Bloco 4** | PWA, acessibilidade, desempenho, testes, deploy | ⏳ Pendente |
 
-> **Nota importante:** as validações dos Blocos 1 e 2 foram feitas via build/typecheck/lint (zero erros) e renderização das rotas em modo dev. O `.env.local` contém apenas placeholders — o teste ponta a ponta com o Supabase real (login, posts, uploads) acontecerá quando as credenciais reais forem configuradas (previsto para o Bloco 4/deploy).
+> **Nota importante:** as validações dos Blocos 1, 2 e 3 foram feitas via build/typecheck/lint (zero erros) e renderização das rotas em modo dev. O `.env.local` contém apenas placeholders — o teste ponta a ponta com o Supabase real (login, posts, uploads) acontecerá quando as credenciais reais forem configuradas (previsto para o Bloco 4/deploy).
 
 ## Legenda de status
 
@@ -33,7 +33,7 @@
 |---|---|---|
 | `npm install` | 🟢 Concluído | Instala sem erros. |
 | `npm run dev` | 🟢 Concluído | Sobe; rotas públicas e de auth renderizam; rotas protegidas redirecionam corretamente. |
-| `npm run build` | 🟢 Concluído | Build limpo, 23 rotas geradas. |
+| `npm run build` | 🟢 Concluído | Build limpo, 24 rotas geradas. |
 | `npm run lint` | 🟢 Concluído | Zero erros, zero warnings. |
 | `npx tsc --noEmit` | 🟢 Concluído | Zero erros. |
 | Tipos `Database` do Supabase | ⚫ Ausente | Client sem tipagem gerada; queries usam tipos manuais de `types/index.ts`. Melhoria prevista. |
@@ -48,11 +48,11 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| Tokens de cor `--color-btr-*` | 🟢 Concluído | Off-white `#F9F7F5`, vermelho `#DC2626`, verde `#16A34A` no `globals.css` (Tailwind v4). |
-| Tipografia (Inter + Barlow Condensed) | 🟢 Concluído | Unificada; config morta (Outfit) removida no Bloco 1. |
-| Componentes de UI (`Button`, `Card`, `Input`, `Badge`, `Avatar`, `Container`, `Section`) | 🟢 Concluído | Biblioteca própria em `components/ui/`. |
+| Tokens de cor `--color-btr-*` | 🟢 Concluído | Paleta premium (Bloco 3): off-white `#F7F4EF`, carbono `#171717`, vermelho `#DC2626`, verde `#16A34A`, laranja `#F97316` no `globals.css` (Tailwind v4). |
+| Tipografia (Bebas Neue + Oswald + Inter) | 🟢 Concluído | Redesenhada no Bloco 3: Bebas Neue (display), Oswald (rótulos/navegação), Inter (corpo). Barlow Condensed removida. |
+| Componentes de UI (`Button`, `Card`, `Input`, `Badge`, `Avatar`, `Container`, `Section`, `Toaster`, `ConfirmDialog`) | 🟢 Concluído | Biblioteca própria em `components/ui/`; `Section` com kicker numerado e variante escura; toasts e diálogo de confirmação adicionados no Bloco 3. |
 | Animações/utilitários | 🟢 Concluído | Definidos no `globals.css`. |
-| Consistência de fontes | 🟢 Concluído | Barlow Condensed (títulos) + Inter (texto). |
+| Consistência de fontes | 🟢 Concluído | Bebas Neue (títulos) + Oswald (rótulos) + Inter (texto) em todo o app. |
 
 ---
 
@@ -60,14 +60,14 @@
 
 | Funcionalidade | Status | Observações |
 |---|---|---|
-| Home `/` | 🟢 Concluído | Reconstruída com dados oficiais; estatísticas reais (desde 2015, ~200 atletas, +200 corridas). |
-| Sobre `/sobre` | 🟢 Concluído | Conteúdo oficial; design system aplicado. |
-| Equipe `/equipe` | 🟢 Concluído | Bio do Robson Alves (CREF 119911-G/SP, World Athletics nível 1). |
+| Home `/` | 🟢 Concluído | Redesenhada no padrão editorial premium: hero “Corra com propósito. Evolua em equipe.”, faixa de estatísticas em carbono, seções numeradas. Dados oficiais (desde 2015, ~200 atletas, +200 corridas). |
+| Sobre `/sobre` | 🟢 Concluído | Redesenhada: kickers numerados, faixa de stats carbono, bio do Robson Alves (CREF 119911-G/SP, World Athletics nível 1). |
+| Equipe `/equipe` | 🟢 Concluído | Rota legado — redireciona para `/sobre` (conteúdo consolidado). |
 | Galeria `/galeria` | 🟢 Concluído | Apenas fotos reais da equipe; imagens irrelevantes removidas. |
-| Resultados `/resultados` | 🟢 Concluído | Contraste corrigido. |
+| Resultados `/resultados` | 🟢 Concluído | Rota legado — redireciona para `/galeria`. |
 | Contato `/contato` | 🟢 Concluído | Formulário funcional; sem contatos inventados. |
-| Header (navegação) | 🟢 Concluído | Navegação por rotas reais; sem âncoras quebradas. |
-| Footer | 🟢 Concluído | Consistente; Instagram oficial @equipeborntorun. |
+| Header (navegação) | 🟢 Concluído | Header carbono fixo (logo exige fundo escuro); navegação por rotas reais. |
+| Footer | 🟢 Concluído | Rodapé carbono consistente; Instagram oficial @equipeborntorun. |
 
 ---
 
@@ -122,7 +122,7 @@
 |---|---|---|
 | Listar treinos (aluno) | 🟢 Concluído | Por nível e data. |
 | Criar treino (admin) | 🟢 Concluído | `createWorkout` alinhado ao schema. |
-| Editar treino (admin) | ⚫ Ausente | Previsto para o Bloco 3. |
+| Editar treino (admin) | 🟢 Concluído | `updateWorkout` com validação; modal de edição pré-preenchido no painel admin. |
 | Excluir treino (admin) | 🟢 Concluído | `deleteWorkout`. |
 | Privacidade por aluno (`assigned_to`) | ⚫ Ausente | Decisão de produto pendente; RLS atual mostra treinos a todos os membros. |
 
@@ -133,7 +133,7 @@
 | Funcionalidade | Status | Observações |
 |---|---|---|
 | Criar comunicado (admin) | 🟢 Concluído | `createAnnouncement`. |
-| Editar comunicado (admin) | ⚫ Ausente | Previsto para o Bloco 3. |
+| Editar comunicado (admin) | 🟢 Concluído | `updateAnnouncement` com validação; modal de edição no painel admin. |
 | Excluir comunicado (admin) | 🟢 Concluído | `deleteAnnouncement`. |
 | Consumo pelo aluno | 🟢 Concluído | `/dashboard/comunicados` + resumo no início do dashboard. |
 
@@ -144,13 +144,13 @@
 | Funcionalidade | Status | Observações |
 |---|---|---|
 | Autorização admin | 🟢 Concluído | Layout server-side checa `role='admin'`. |
-| Dashboard admin `/admin` | 🔵 Parcial | Funcional, mas com estilo divergente (CSS inline). Reconstrução no Bloco 3. |
-| CRUD de treinos | 🔵 Parcial | Create/delete ok; falta edição (Bloco 3). |
-| CRUD de comunicados | 🔵 Parcial | Create/delete ok; falta edição (Bloco 3). |
-| Listar membros | 🟢 Concluído | `/admin/membros`. |
-| Promover/rebaixar admin | 🟢 Concluído | `toggleAdminRole`. |
-| Remover membro | 🟢 Concluído | Policy DELETE em `profiles` adicionada na migration `0002`. |
-| Layout admin | 🟠 Precisa reconstruir | CSS inline fora do design system — Bloco 3. |
+| Dashboard admin `/admin` | 🟢 Concluído | Reconstruído no design system: cards de contadores por tipo e ações rápidas. |
+| CRUD de treinos | 🟢 Concluído | Criar, editar e excluir; busca, filtro por nível, confirmação e toasts (`WorkoutsManager`). |
+| CRUD de comunicados | 🟢 Concluído | Criar, editar e excluir; busca, confirmação e toasts (`AnnouncementsManager`). |
+| Listar membros | 🟢 Concluído | `/admin/membros` com busca, badges de papel e link “Ver perfil”. |
+| Promover/rebaixar admin | 🟢 Concluído | `toggleAdminRole` com confirmação, toasts e proteção contra auto-alteração. |
+| Remover membro | 🟢 Concluído | Com `ConfirmDialog` + toast; proteção contra auto-remoção. Policy DELETE em `profiles` (migration `0002`). |
+| Layout admin | 🟢 Concluído | Reescrito sem CSS inline: sidebar carbono, selo “Painel do Treinador”, nav mobile, `ToastProvider`, skeleton de loading. |
 
 ---
 
@@ -182,15 +182,15 @@
 
 | Status | Contagem aproximada de itens |
 |---|---|
-| 🟢 Concluído | ~55 |
-| 🔵 Parcial | ~7 |
+| 🟢 Concluído | ~63 |
+| 🔵 Parcial | ~4 |
 | 🟣 Visual sem funcionalidade | 0 |
 | 🟡 Mockado / Estático | 0 |
 | 🔴 Quebrado | 0 |
-| ⚫ Ausente | ~5 |
-| 🟠 Precisa reconstruir | ~1 |
+| ⚫ Ausente | ~3 |
+| 🟠 Precisa reconstruir | 0 |
 
-> **Leitura rápida:** após os Blocos 1 e 2, o **build está limpo** (zero erros de build, lint e typecheck), o **site público**, a **autenticação**, a **área do aluno** e o **feed social** estão **concluídos e alinhados ao schema**. Restam: o **painel admin** (funcional, mas a reconstruir no Bloco 3, com edição de treinos/comunicados) e a fase de **qualidade/deploy** (Bloco 4: boundaries de erro, testes, acessibilidade, desempenho, deploy na Vercel com credenciais reais do Supabase).
+> **Leitura rápida:** após os Blocos 1, 2 e 3, o **build está limpo** (zero erros de build, lint e typecheck, 24 rotas), o **site público**, a **autenticação**, a **área do aluno**, o **feed social** e o **painel do treinador** (CRUD completo, confirmações e toasts) estão **concluídos e alinhados ao schema** — tudo já na **identidade visual premium** (off-white/carbono/vermelho, Bebas Neue + Oswald + Inter). Resta o **Bloco 4** (qualidade/deploy: boundaries de erro, testes, acessibilidade, desempenho, deploy na Vercel com credenciais reais do Supabase — momento do teste ponta a ponta com o backend real).
 
 ---
 

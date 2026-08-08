@@ -20,7 +20,7 @@ const CURRENT_YEAR = new Date().getFullYear()
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1C1917] text-[#D6D3D1]">
+    <footer className="bg-[#171717] text-[#D6D3D1]">
       <div className="container-main py-14 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
           {/* Marca */}
@@ -53,7 +53,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-semibold text-[#A8A29E] hover:text-white transition-colors group"
             >
-              <span className="flex items-center justify-center w-10 h-10 rounded-full bg-[#292524] group-hover:bg-[#DC2626] transition-colors">
+              <span className="flex items-center justify-center w-10 h-10 rounded-full bg-[#232323] group-hover:bg-[#DC2626] transition-colors">
                 <InstagramIcon />
               </span>
               @{site.social.instagramHandle}
@@ -62,7 +62,7 @@ export default function Footer() {
 
           {/* Links rápidos */}
           <div>
-            <h3 className="text-white font-semibold text-sm uppercase tracking-widest mb-5">
+            <h3 className="text-white font-condensed font-semibold text-sm uppercase tracking-[0.18em] mb-5">
               Navegação
             </h3>
             <ul className="flex flex-col gap-2.5">
@@ -78,7 +78,7 @@ export default function Footer() {
               ))}
             </ul>
 
-            <h3 className="text-white font-semibold text-sm uppercase tracking-widest mb-5 mt-8">
+            <h3 className="text-white font-condensed font-semibold text-sm uppercase tracking-[0.18em] mb-5 mt-8">
               Área de Membros
             </h3>
             <ul className="flex flex-col gap-2.5">
@@ -97,7 +97,7 @@ export default function Footer() {
 
           {/* Contato — apenas dados oficiais */}
           <div>
-            <h3 className="text-white font-semibold text-sm uppercase tracking-widest mb-5">
+            <h3 className="text-white font-condensed font-semibold text-sm uppercase tracking-[0.18em] mb-5">
               Onde Estamos
             </h3>
             <ul className="flex flex-col gap-4">
@@ -133,7 +133,7 @@ export default function Footer() {
       </div>
 
       {/* Barra inferior */}
-      <div className="border-t border-[#292524]">
+      <div className="border-t border-[#2E2E2E]">
         <div className="container-main py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-[#78716C] text-center sm:text-left">
             &copy; {CURRENT_YEAR} {site.name}. Todos os direitos reservados.
