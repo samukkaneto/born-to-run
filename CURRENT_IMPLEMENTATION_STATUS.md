@@ -25,7 +25,7 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 | Painel do treinador | Implementado e validado | Dashboard, aprovações, membros, grupos, treinos e comunicados; grupo e treino direcionado passaram em smoke autenticado. |
 | PWA/responsividade | Parcial | Manifesto e navegação adaptada; instalação, offline e push não foram validados. Não é binário nativo. |
 | Supabase remoto | Sincronizado | Cinco migrations aplicadas; estado atual termina em `20260808192626_endurece_mutacoes_e_midias`. |
-| Vercel | Produção publicada e saudável | Deploy `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk` está `READY` no domínio público; variáveis Supabase estão gerenciadas, rotas públicas/guard e logs foram verificados. A integração Git foi reconectada ao repositório GitHub atual; o deployment anterior `dpl_3GyqEDBXYJcqndUWVRZGSzviMDik` permanece como rollback conhecido. |
+| Vercel | Produção publicada e automação restaurada | O domínio público acompanha os deployments Git de `main`; a reconexão ao repositório atual foi comprovada pelo deployment automático do commit `0947508`. Variáveis Supabase, rotas públicas/guard e logs foram verificados. `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk` permanece como baseline manual validado e `dpl_3GyqEDBXYJcqndUWVRZGSzviMDik` como rollback antigo conhecido. |
 | GitHub | Publicado, revisado e mesclado | PR [#1](https://github.com/samukkaneto/born-to-run/pull/1) mesclado em `main` no commit `21d15aa`; CI da branch e do merge concluídos com sucesso. |
 
 ## Regras de produto consolidadas
@@ -85,7 +85,7 @@ O banco preserva 1 perfil administrador ativo e continua sem conteúdo fictício
 | Testes pgTAP versionados | 47 asserções; a suíte combinada passou remotamente dentro de transação revertida antes da quinta migration |
 | E2E público | 12/12 aprovados em Desktop Chrome e Pixel 7; zero violações axe sérias/críticas |
 | E2E autenticado hospedado | Login, feed, publicação, curtida, comentário, painel admin, grupo e treino dirigido validados; dados técnicos removidos |
-| Vercel | Produção `READY` no domínio canônico, 27 rotas, respostas 200/307 corretas e sem erros nos logs consultados |
+| Vercel | Produção `READY` no domínio canônico, 27 rotas, respostas 200/307 corretas, integração Git automática validada e sem erros nos logs consultados |
 | GitHub Actions | Runs `31275354335` e `31275507684` aprovadas integralmente na branch e no merge em `main` |
 
 ## Pendências operacionais pós-publicação
