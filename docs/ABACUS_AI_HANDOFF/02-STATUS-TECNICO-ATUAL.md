@@ -22,6 +22,10 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 - SMTP customizado ativo no Supabase: remetente `Equipe Born to Run <contato@equipeborntorun.com>`, porta `465`, confirmação de e-mail obrigatória e senha mínima de 8 caracteres.
 - Os oito templates versionados foram copiados para o Supabase hospedado; notificações de senha e e-mail alterados foram habilitadas.
 - Teste real de recuperação retornou HTTP `200` depois da ativação do SMTP customizado.
+- PR de infraestrutura: `#10`, mesclada no commit `823af9155b7c1d7e376a452f76aa750a076f2617`; CI do merge `31327042491` concluída com sucesso.
+- Deployment oficial após a PR #10: `dpl_3S2U899w23ki3qyNVzaTiBRy2HFa`, `READY`, com apex, `www` e aliases Vercel apontando para o mesmo artefato.
+- A auditoria pós-deploy encontrou o último texto provisório do contato: o formulário ainda encaminhava apenas ao Instagram. A PR `#11` corrige isso, mostra o e-mail oficial, prepara uma mensagem `mailto:` e atualiza o aviso de privacidade.
+- PR #11 no commit `9f273d96886edae571f2a80b0ffb9e348983f41a`; CI `31327377193` concluída com sucesso e preview `dpl_Bt5zJnftpJFVGGh8CBRkZsTxsURb` em estado `READY`.
 
 ## Estado por área
 
@@ -34,7 +38,7 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 | Grupos e treinos dirigidos | Implementados |
 | CI/CD | GitHub Actions e GitHub→Vercel funcionando |
 | Supabase | Seis migrations aplicadas e 1 admin ativo |
-| SMTP próprio | Ativo com Resend, domínio autenticado e templates hospedados |
+| SMTP próprio | Ativo com Resend, domínio autenticado, templates hospedados e recuperação testada |
 | Senhas vazadas | Bloqueada pelo plano Free; ativar após upgrade Pro |
 | Privacidade de metadados de revisão | Resolvida no Bloco 1 |
 | Existência física de mídia | Resolvida no Bloco 1 |

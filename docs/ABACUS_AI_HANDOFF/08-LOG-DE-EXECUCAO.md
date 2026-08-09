@@ -133,3 +133,14 @@ Cada entrada futura deve registrar:
 - Teste de recuperação executado contra `/auth/v1/recover` com retorno `200` e redirect oficial.
 - Segurança operacional: tokens temporários de Hostinger e Supabase devem ser revogados ao final; chaves Resend redundantes devem ser removidas, preservando somente a credencial SMTP ativa.
 - Pendências externas mantidas por decisão do proprietário: upgrade Supabase Pro/proteção contra senhas vazadas, dados jurídicos formais e piloto com usuários reais.
+
+## 09/08/2026 — Publicação do domínio e correção final do contato
+
+- PR #10 criada a partir do commit `8eee55b409de09502b885ebb4caf9265a0ce3d05`; CI de PR `31326683612` concluída com sucesso.
+- PR #10 mesclada no commit `823af9155b7c1d7e376a452f76aa750a076f2617`; CI do merge `31327042491` concluída com sucesso.
+- Vercel publicou `dpl_3S2U899w23ki3qyNVzaTiBRy2HFa` em produção. Apex e rotas públicas retornaram `200`, `www` retornou `308` para o apex e `/dashboard` anônimo retornou `307` para login.
+- A validação da página `/contato` revelou que o formulário preservava o texto anterior à criação do e-mail e não enviava nada ao canal profissional.
+- Correção implementada: cartão de e-mail oficial, botão `mailto:` com nome/e-mail/mensagem preenchidos, Instagram como alternativa e aviso de privacidade apontando para `contato@equipeborntorun.com`.
+- PR #11 criada no commit `9f273d96886edae571f2a80b0ffb9e348983f41a`; CI `31327377193` passou por audit, lint, typecheck, 48 unitários, build e navegador.
+- Preview da PR #11: `dpl_Bt5zJnftpJFVGGh8CBRkZsTxsURb`, `READY`.
+- Segurança: os dois tokens pessoais temporários do Supabase foram excluídos e a lista ficou vazia. A confirmação de exclusão do token temporário da Hostinger foi enviada; falta apenas conferir a tabela porque o painel travou após a ação.

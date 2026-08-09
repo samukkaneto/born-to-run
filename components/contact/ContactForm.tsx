@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCircle2, Send } from 'lucide-react'
+import { CheckCircle2, Mail, Send } from 'lucide-react'
 import InstagramIcon from '@/components/ui/InstagramIcon'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
@@ -18,9 +18,8 @@ const initialState: FormState = { name: '', email: '', message: '' }
 /**
  * Formulário de contato.
  *
- * Observação: a equipe ainda não forneceu um canal oficial de e-mail/telefone,
- * então o envio gera uma mensagem pronta e direciona o visitante para o
- * Instagram oficial (@equipeborntorun) — nunca exibimos contatos fictícios.
+ * O envio prepara uma mensagem no cliente de e-mail do visitante para o canal
+ * oficial do projeto. O Instagram continua disponível como alternativa.
  */
 export default function ContactForm() {
   const [form, setForm] = useState<FormState>(initialState)
@@ -44,9 +43,12 @@ export default function ContactForm() {
   }
 
   if (submitted) {
-    const dmText = encodeURIComponent(
-      `Olá! Meu nome é ${form.name.trim()}. ${form.message.trim()}`
+    const subject = encodeURIComponent('Contato pelo site Born to Run')
+    const body = encodeURIComponent(
+      `Nome: ${form.name.trim()}\nE-mail para retorno: ${form.email.trim()}\n\nMensagem:\n${form.message.trim()}`
     )
+    const emailHref = `mailto:${site.contact.email}?subject=${subject}&body=${body}`
+
     return (
       <div className="card flex flex-col items-center gap-4 p-10 text-center">
         <span className="flex h-14 w-14 items-center justify-center rounded-full bg-green-50">
@@ -56,15 +58,24 @@ export default function ContactForm() {
           Mensagem pronta, {form.name.trim().split(' ')[0]}!
         </h3>
         <p className="max-w-md text-neutral-600">
-          Para garantir uma resposta rápida, envie sua mensagem diretamente
-          para a equipe pelo Instagram oficial. É por lá que respondemos hoje.
+          Clique abaixo para abrir seu aplicativo de e-mail com a mensagem já
+          preenchida para a equipe.
         </p>
-        <Button href={`${site.social.instagramUrl}`} size="lg">
+        <Button href={emailHref} size="lg">
+          <Mail className="h-5 w-5" />
+          Enviar por e-mail
+        </Button>
+        <Button
+          href={site.social.instagramUrl}
+          variant="outline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <InstagramIcon className="h-5 w-5" />
-          Chamar no Instagram
+          Preferir Instagram
         </Button>
         <p className="max-w-md text-sm text-neutral-500">
-          Sua mensagem: &ldquo;{decodeURIComponent(dmText)}&rdquo;
+          Destinatário: {site.contact.email}
         </p>
         <button
           type="button"
