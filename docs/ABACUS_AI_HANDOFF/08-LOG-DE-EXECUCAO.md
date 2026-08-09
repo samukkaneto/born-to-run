@@ -144,3 +144,12 @@ Cada entrada futura deve registrar:
 - PR #11 criada no commit `9f273d96886edae571f2a80b0ffb9e348983f41a`; CI `31327377193` passou por audit, lint, typecheck, 48 unitários, build e navegador.
 - Preview da PR #11: `dpl_Bt5zJnftpJFVGGh8CBRkZsTxsURb`, `READY`.
 - Segurança: os dois tokens pessoais temporários do Supabase foram excluídos e a lista ficou vazia. A confirmação de exclusão do token temporário da Hostinger foi enviada; falta apenas conferir a tabela porque o painel travou após a ação.
+
+## 09/08/2026 — Fechamento do Bloco 6
+
+- A documentação foi incorporada à PR #11 no commit `63e337dfd97ae7a98525e838d8104a648bfa3932`; CI final da PR `31327510592` concluída com sucesso.
+- PR #11 mesclada no commit `18a7044f7be36364cb97453f7ee5b1f37d1965db`; CI do merge `31327590726` concluída com sucesso.
+- Deployment Vercel de produção `dpl_HXgGgXEqjK12Vnib7ELczsRJx4Md` em estado `READY`, URL imutável `https://born-to-gz29vlt3x-shabuneto.vercel.app`.
+- `https://equipeborntorun.com/contato` retorna `200`, contém `contato@equipeborntorun.com` e o link `mailto:`; a página de privacidade contém o mesmo canal e registra a Resend.
+- `https://www.equipeborntorun.com` redireciona com `308`; `/dashboard` sem sessão redireciona com `307` para login; ambos apresentam HSTS.
+- Estado de produto: pronto para criação das contas reais e execução assistida do piloto fechado. Upgrade Supabase Pro, dados jurídicos formais e aprovação visual Fable 5 permanecem decisões posteriores já registradas.
