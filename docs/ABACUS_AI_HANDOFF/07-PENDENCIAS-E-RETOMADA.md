@@ -17,15 +17,14 @@ Todos os blocos que independiam de credenciais, plano pago, dados formais ou usu
 
 ## Próxima ação
 
-Domínio, SSL, URL oficial de Auth, Resend, SMTP e templates já estão concluídos. O ponto exato de retomada é publicar esta branch, acompanhar CI/deploy e então executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`.
+Domínio, SSL, URL oficial de Auth, Resend, SMTP, templates, contato público e canal piloto de privacidade já estão concluídos. Depois da mesclagem da PR #11, o ponto exato de retomada é executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`.
 
 ## Fila planejada
 
-1. publicar e validar a atualização de domínio/e-mail;
-2. executar o piloto com usuários reais;
-3. depois do piloto, escolher Supabase Pro ou rotina externa de backup criptografado;
-4. completar a identificação formal do controlador quando houver os dados jurídicos;
-5. solicitar à Fable 5 a aprovação/refinação visual final sem alterar os contratos técnicos.
+1. executar o piloto com usuários reais;
+2. depois do piloto, escolher Supabase Pro ou rotina externa de backup criptografado;
+3. completar a identificação formal do controlador quando houver os dados jurídicos;
+4. solicitar à Fable 5 a aprovação/refinação visual final sem alterar os contratos técnicos.
 
 ## Dependências do proprietário
 
@@ -36,3 +35,9 @@ Domínio, SSL, URL oficial de Auth, Resend, SMTP e templates já estão concluí
 - decisão entre Supabase Pro ou rotina externa de backup criptografado.
 
 Essas dependências não impedem o Codex de adiantar código, documentação, testes e auditorias independentes delas.
+
+## Limpeza operacional remanescente
+
+- Os dois Personal Access Tokens temporários criados no Supabase foram revogados e o painel confirmou `No access tokens found`.
+- A exclusão do token temporário `Codex Born to Run DNS` foi confirmada no modal da Hostinger, mas o painel deixou de responder antes da releitura da tabela. Conferir visualmente que a lista ficou vazia é uma verificação de segurança recomendada, sem impacto funcional no aplicativo.
+- A credencial SMTP ativa da Resend é restrita ao domínio `equipeborntorun.com`. Se o painel exibir chaves de teste adicionais, remover as não utilizadas sem excluir a credencial em uso pelo Supabase.

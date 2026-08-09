@@ -42,6 +42,7 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - Bloco 4 concluído: health check, métricas anônimas com sanitização, audit no CI, Dependabot, política de segurança, plano de backup e checklist do piloto/release.
 - Bloco 5 concluído: auditoria final sem P0/P1, PR #2 mesclado, CI do merge verde e produção validada.
 - Bloco 6 concluído: domínio oficial em produção, `www` canônico, e-mail profissional preservado, Resend autenticada, SMTP/templates ativos no Supabase e recuperação testada.
+- Complemento do Bloco 6: o e-mail oficial passou a aparecer na página de contato, o formulário prepara a mensagem para esse endereço e o aviso de privacidade usa o mesmo canal durante o piloto.
 
 ## Estado operacional após o Bloco 4
 
