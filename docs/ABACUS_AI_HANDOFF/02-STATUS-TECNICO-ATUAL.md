@@ -47,6 +47,8 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 - A Vercel recebeu `RESEND_API_KEY` sensível e separada para Production e Preview. A chave possui somente permissão de envio e está restrita a `equipeborntorun.com`.
 - O Hostinger MCP remoto oficial foi adicionado ao Codex em `https://mcp.hostinger.com` e o OAuth foi concluído. Como a configuração foi adicionada durante a sessão, suas ferramentas ficam disponíveis depois de reiniciar o Codex.
 - “Instalar aplicativo” continua significando PWA. Não existe APK neste ciclo; aplicativo Android nativo, assinatura e publicação na Play Store permanecem uma fase futura explícita.
+- Release final: PR `#13` mesclada no commit `7323340080f6bdc35f8b7fd28390d7a6b99f515f`; CI do merge `31332711070` aprovada; produção Vercel `dpl_DU27nprYJu1VN24kgQd6kgDeB6RF` em estado `READY`, sem erro de alias ou de runtime.
+- Validação pública no domínio oficial: home, Sobre, Contato, Instalar e Health `200`; dashboard anônimo `307` para login; payload inválido do contato `400`; HSTS ativo; nenhuma ocorrência pública de “200 atletas”.
 
 ## Estado por área
 

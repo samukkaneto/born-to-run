@@ -69,4 +69,8 @@ Isso não produz um arquivo `.apk`, não cria um binário Android nativo e não 
 - preview Vercel `dpl_HPogUkbXQdytroGL9Kn2v2RZCaib`: `READY`;
 - teste real pela tela `/contato`: interface confirmou a entrega e Resend registrou status `delivered` para `contato@equipeborntorun.com`;
 - Runtime Logs auditados sem `error`, `warning` ou `fatal` no deployment de teste;
-- detalhes cronológicos e o resultado do merge/produção ficam na entrada mais recente de `08-LOG-DE-EXECUCAO.md`.
+- PR #13: mesclada no commit `7323340080f6bdc35f8b7fd28390d7a6b99f515f`;
+- CI do merge `31332711070`: concluída com sucesso;
+- produção Vercel `dpl_DU27nprYJu1VN24kgQd6kgDeB6RF`: `READY`, domínio oficial e aliases associados sem erro;
+- smoke test público: rotas institucionais e health `200`, dashboard anônimo `307`, validação negativa do endpoint `400`, HSTS ativo e nenhum erro de runtime;
+- detalhes cronológicos completos ficam na entrada mais recente de `08-LOG-DE-EXECUCAO.md`.

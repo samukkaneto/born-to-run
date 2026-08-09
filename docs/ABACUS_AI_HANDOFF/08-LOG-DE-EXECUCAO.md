@@ -180,3 +180,15 @@ Cada entrada futura deve registrar:
 - Um envio real foi executado pela tela `/contato`, com uma mensagem técnica identificada. A interface confirmou a entrega e o painel da Resend registrou o e-mail para `contato@equipeborntorun.com` com status `delivered`.
 - Os Runtime Logs desse deployment não apresentaram `error`, `warning` ou `fatal` nos 30 minutos auditados; o agrupamento exibiu somente respostas `200`, `204` e `304`.
 - Próxima ação exata: incorporar este registro documental, aguardar o CI do commit final, mesclar a PR #13 e validar o mesmo fluxo no domínio de produção.
+
+### Fechamento e produção do Bloco 8
+
+- O commit documental `2b015c233b06c987ac98b31fae45109db94bcc73` foi publicado; o workflow `Qualidade` `31332586740` concluiu com sucesso e o preview final `dpl_4T9q4BVJhZUyENzQhTi4TwvMUyPa` ficou `READY`.
+- A PR `#13` saiu de draft somente depois dos gates verdes e foi mesclada por squash no commit `7323340080f6bdc35f8b7fd28390d7a6b99f515f`.
+- O workflow do merge `31332711070` concluiu com sucesso.
+- A Vercel publicou automaticamente o commit correto em produção no deployment `dpl_DU27nprYJu1VN24kgQd6kgDeB6RF`, estado `READY`, sem `aliasError`, atendendo `equipeborntorun.com`, `www.equipeborntorun.com` e os aliases Vercel do projeto.
+- A compilação remota usou Next.js 16.3.0, gerou 32 rotas e terminou sem erro. A fase “Deploying outputs” demorou mais que o padrão, mas concluiu normalmente; o status oficial da Vercel estava operacional e nenhum rollback foi necessário.
+- Smoke test público: `/`, `/sobre`, `/contato`, `/instalar` e `/api/health` retornaram `200`; `/dashboard` anônimo retornou `307` para `/login?next=%2Fdashboard`; payload vazio em `/api/contact` retornou `400`; HSTS estava ativo.
+- As páginas públicas auditadas não contêm “200 atletas”; home e Sobre apresentam mais de 200 participações em corridas e a fundação em 2015.
+- Runtime Logs do deployment de produção: nenhum `error`, `warning` ou `fatal` no período auditado.
+- Estado final do bloco: concluído e publicado. Próxima atividade funcional é o piloto assistido com contas reais; Android nativo/APK permanece uma fase posterior, deliberadamente separada.
