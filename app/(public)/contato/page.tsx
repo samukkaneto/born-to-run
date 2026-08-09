@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { MapPin, Users } from 'lucide-react'
+import { Mail, MapPin, Users } from 'lucide-react'
 import InstagramIcon from '@/components/ui/InstagramIcon'
 import Container from '@/components/ui/Container'
 import Section from '@/components/ui/Section'
@@ -9,7 +9,7 @@ import { site } from '@/lib/site'
 export const metadata: Metadata = {
   title: 'Contato | Born to Run — Treinamento e Saúde',
   description:
-    'Fale com a equipe Born to Run de Descalvado-SP pelo Instagram @equipeborntorun ou envie sua mensagem.',
+    'Fale com a equipe Born to Run de Descalvado-SP pelo e-mail contato@equipeborntorun.com ou Instagram @equipeborntorun.',
 }
 
 export default function ContatoPage() {
@@ -44,6 +44,26 @@ export default function ContatoPage() {
                   </p>
                   <p className="mt-1 text-sm text-neutral-500">
                     Nosso canal oficial — respondemos por lá.
+                  </p>
+                </div>
+              </a>
+
+              <a
+                href={`mailto:${site.contact.email}`}
+                className="card flex items-start gap-4 p-6 transition-shadow hover:shadow-card-lg"
+              >
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#E0F2FE]">
+                  <Mail className="h-6 w-6 text-sky-700" />
+                </span>
+                <div>
+                  <h3 className="font-condensed text-base font-semibold uppercase tracking-[0.08em] text-[#171717]">
+                    E-mail
+                  </h3>
+                  <p className="break-all text-neutral-600">
+                    {site.contact.email}
+                  </p>
+                  <p className="mt-1 text-sm text-neutral-500">
+                    Canal oficial do projeto piloto.
                   </p>
                 </div>
               </a>
