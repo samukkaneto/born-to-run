@@ -19,6 +19,8 @@ Todos os blocos que independiam de credenciais, plano pago, dados formais ou usu
 
 Domínio, SSL, URL oficial de Auth, Resend, SMTP, templates, contato público e canal piloto de privacidade já estão concluídos e publicados. O ponto exato de retomada é executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`.
 
+O administrador foi localizado e está `active` com e-mail confirmado. O proprietário recebeu o identificador exato fora do repositório. Se não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com esse e-mail.
+
 ## Fila planejada
 
 1. executar o piloto com usuários reais;
@@ -39,5 +41,6 @@ Essas dependências não impedem o Codex de adiantar código, documentação, te
 ## Limpeza operacional remanescente
 
 - Os dois Personal Access Tokens temporários criados no Supabase foram revogados e o painel confirmou `No access tokens found`.
-- A exclusão do token temporário `Codex Born to Run DNS` foi confirmada no modal da Hostinger, mas o painel deixou de responder antes da releitura da tabela. Conferir visualmente que a lista ficou vazia é uma verificação de segurança recomendada, sem impacto funcional no aplicativo.
-- A credencial SMTP ativa da Resend é restrita ao domínio `equipeborntorun.com`. Se o painel exibir chaves de teste adicionais, remover as não utilizadas sem excluir a credencial em uso pelo Supabase.
+- A chave redundante `Supabase Auth Born to Run v2` foi removida da Resend em 09/08/2026. A credencial SMTP ativa, restrita ao domínio `equipeborntorun.com`, foi preservada.
+- A exclusão do token temporário `Codex Born to Run DNS` foi confirmada anteriormente no modal da Hostinger. Três novas tentativas de abrir/reler `hpanel.hostinger.com/api` ficaram presas no carregamento e interromperam a conexão do painel. A confirmação visual da tabela continua pendente, sem impacto funcional no aplicativo.
+- Se a Hostinger voltar a carregar normalmente, a única ação remanescente é verificar que não existe uma linha chamada `Codex Born to Run DNS`. Não criar novo token só para realizar essa conferência.

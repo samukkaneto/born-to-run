@@ -153,3 +153,13 @@ Cada entrada futura deve registrar:
 - `https://equipeborntorun.com/contato` retorna `200`, contém `contato@equipeborntorun.com` e o link `mailto:`; a página de privacidade contém o mesmo canal e registra a Resend.
 - `https://www.equipeborntorun.com` redireciona com `308`; `/dashboard` sem sessão redireciona com `307` para login; ambos apresentam HSTS.
 - Estado de produto: pronto para criação das contas reais e execução assistida do piloto fechado. Upgrade Supabase Pro, dados jurídicos formais e aprovação visual Fable 5 permanecem decisões posteriores já registradas.
+
+## 09/08/2026 — Bloco 7, acesso administrativo e limpeza de credenciais
+
+- Consulta somente leitura no Supabase confirmou exatamente um usuário ligado a perfil `admin/active`, com e-mail confirmado. O endereço exato foi informado diretamente ao proprietário e deliberadamente não foi copiado para o repositório.
+- A recuperação de acesso já existe em `https://equipeborntorun.com/recuperar-senha`; não foi necessário nem desejável disparar um e-mail durante a simples identificação da conta.
+- O painel da Resend mostrou duas chaves de envio: a credencial ativa e a chave redundante `Supabase Auth Born to Run v2`.
+- A chave `v2` foi excluída com confirmação nominal. A releitura da tabela confirmou uma única credencial restante e nenhuma chave `v2`.
+- Nenhum segredo, token completo ou senha foi copiado para terminal, relatório ou GitHub.
+- O painel de API da Hostinger foi tentado novamente por página nova e por aba já autenticada. Em todas as tentativas, a página ficou presa no carregamento e a conexão de automação expirou. O registro continua honesto: exclusão enviada anteriormente, confirmação visual da tabela ainda pendente.
+- O projeto, o Supabase, o DNS e o SMTP não foram alterados neste bloco. A próxima ação funcional continua sendo criar contas reais pelo `/cadastro`, confirmar os e-mails e aprová-las no painel do administrador.

@@ -1,6 +1,6 @@
 # Auth, SMTP e templates de e-mail
 
-Atualizado em 08/08/2026 durante o Bloco 2 de prontidão.
+Atualizado em 09/08/2026 após a ativação e a limpeza operacional do SMTP.
 
 ## Estado comprovado
 
@@ -11,6 +11,16 @@ Atualizado em 08/08/2026 durante o Bloco 2 de prontidão.
 - O callback do aplicativo é `/auth/callback` e o cadastro agora informa explicitamente `emailRedirectTo`.
 - A configuração local exige senha com 8 caracteres, letra e número, confirmação de e-mail e callbacks exatos.
 - Oito templates em português foram versionados em `supabase/templates/`.
+
+## Estado aplicado em produção
+
+- Domínio autenticado na Resend: `equipeborntorun.com`.
+- Remetente: `Equipe Born to Run <contato@equipeborntorun.com>`.
+- SMTP customizado ativo no Supabase por `smtp.resend.com:465`.
+- Confirmação de e-mail obrigatória e oito templates hospedados.
+- Site URL: `https://equipeborntorun.com`.
+- Recuperação: `https://equipeborntorun.com/recuperar-senha`.
+- A chave redundante `Supabase Auth Born to Run v2` foi excluída; somente a credencial usada pelo Supabase foi preservada.
 
 ## Recomendação de SMTP
 
@@ -45,8 +55,8 @@ Sem domínio verificado, o Resend oferece apenas remetente de teste e limita des
 5. Copiar assunto e HTML dos arquivos em `supabase/templates/` para os templates correspondentes.
 6. Ativar notificações de senha alterada e e-mail alterado.
 7. Em **Authentication → URL Configuration**, usar:
-   - Site URL: `https://born-to-run-seven.vercel.app`;
-   - redirect de produção: `https://born-to-run-seven.vercel.app/auth/callback`;
+   - Site URL: `https://equipeborntorun.com`;
+   - redirect de produção: `https://equipeborntorun.com/auth/callback`;
    - previews: autorizar somente URLs exatas usadas em testes.
 8. Em **Authentication → Rate Limits**, ajustar o limite de e-mails ao tamanho do piloto sem criar uma janela de abuso.
 9. Desativar tracking de links no provedor SMTP, porque ele pode reescrever links de confirmação.
