@@ -14,11 +14,11 @@ Todos os blocos que independiam de credenciais, plano pago, dados formais ou usu
 - Bloco 3: PWA instalável, offline público seguro, headers, noindex privado, privacidade, termos e aceite versionado entregues.
 - Bloco 4: health check, observabilidade anônima, audit no CI, Dependabot, política de segurança, estratégia de backup e checklist do piloto entregues.
 - Bloco 5: auditoria pesada sem P0/P1, PR #2 mesclado, CI do merge verde e deployment de produção `READY/PROMOTED` validado.
-- Bloco 8 concluído tecnicamente: dado institucional corrigido, formulário transacional Resend implementado e entregue de verdade, Hostinger MCP autorizado e preview validado sem erros.
+- Bloco 8 concluído e publicado: dado institucional corrigido, formulário transacional Resend entregue de verdade, Hostinger MCP autorizado e produção validada sem erros.
 
 ## Próxima ação
 
-Depois do merge e da validação final de produção deste bloco, o ponto exato de retomada é executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`.
+O ponto exato de retomada é executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`. Não há pendência técnica bloqueante deste bloco.
 
 O administrador foi localizado e está `active` com e-mail confirmado. O proprietário recebeu o identificador exato fora do repositório. Se não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com esse e-mail.
 
