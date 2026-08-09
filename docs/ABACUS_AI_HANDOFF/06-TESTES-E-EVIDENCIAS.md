@@ -84,3 +84,16 @@ Nenhum bloco será declarado concluído somente por compilar. Alterações de Au
 - Build remoto: Next.js 16.3.0 compilado, TypeScript concluído e 31 páginas geradas.
 - Runtime: zero clusters de erro em uma hora e zero warning/error/fatal no deployment consultado.
 - Supabase final: seis migrations, 1 `admin/active`, zero órfãos, zero conteúdo/Storage e RLS habilitada nas nove tabelas de negócio.
+
+## Auditoria final e produção
+
+- Diff completo `46001fa...61e3888`: `git diff --check` aprovado; nenhum segredo, `.env` privado ou artefato de build versionado.
+- PR #2: mergeável, sem P0/P1 e checks finais verdes no commit `61e3888`.
+- CI final do PR: run `31294328656`, aprovado.
+- Merge: commit `7f66eb82db99ddbbb2edc33b26c579225509a8e6` em `main`.
+- CI do merge: run `31314115269`, aprovado.
+- Produção: `dpl_4SjYHKJriBnHY82Q8qYpzfjt7aYB`, `READY/PROMOTED`, build Next.js 16.3.0 com TypeScript e 31 rotas.
+- Domínio canônico: home, login, cadastro, privacidade, termos, instalação, manifesto, service worker, Analytics e Speed Insights responderam 200.
+- Guarda: `/dashboard` anônimo respondeu 307 para `/login?next=%2Fdashboard`.
+- Health: 200, `no-store`, revisão `7f66eb8` e headers de segurança esperados.
+- Runtime pós-release: zero clusters de erro e zero warning/error/fatal no deployment consultado.

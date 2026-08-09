@@ -88,3 +88,15 @@ Cada entrada futura deve registrar:
 - Advisors: seis avisos intencionais de RPCs `SECURITY DEFINER`, proteção de senhas vazadas bloqueada pelo Free e índices ainda sem uso na base vazia.
 - Inspeção visual via navegador não conectou neste host; não foi declarada como aprovada. A evidência disponível é build/check hospedado, HTTP autenticado e Playwright.
 - Próximo ponto exato: commit documental, auditoria final, merge e verificação de produção se o veredito for GO.
+
+## 09/08/2026 — Bloco 5 concluído e release validado
+
+- Commit documental `61e3888` publicado; CI do PR `31294328656` e preview `dpl_C1PtqEHA9cYT6qbpNy6pPwRv8qTF` ficaram verdes.
+- Auditoria pesada do delta completo confirmou `git diff --check` limpo, worktree limpo, nenhum segredo/`.env` privado/artefato versionado e nenhum P0/P1.
+- PR #2 marcada pronta e mesclada com proteção pelo SHA auditado.
+- Merge em `main`: `7f66eb82db99ddbbb2edc33b26c579225509a8e6`.
+- GitHub Actions do merge: run `31314115269`, concluída com sucesso.
+- Deployment automático de produção: `dpl_4SjYHKJriBnHY82Q8qYpzfjt7aYB`, `READY/PROMOTED`, build de 31 rotas e aliases corretos.
+- Domínio público validado: páginas, manifesto, service worker e scripts de métricas 200; dashboard anônimo 307 para login; health 200 na revisão `7f66eb8`.
+- Headers de segurança e HSTS confirmados; nenhum cluster de runtime nem warning/error/fatal no deployment após os testes.
+- Veredito final técnico: pronto para piloto fechado. Restam somente as dependências externas enumeradas no arquivo `07`.

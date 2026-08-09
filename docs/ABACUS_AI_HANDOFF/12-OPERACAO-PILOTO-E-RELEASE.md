@@ -1,6 +1,6 @@
 # Operação do piloto e release
 
-Atualizado em 09/08/2026 durante o Bloco 4.
+Atualizado em 09/08/2026 após o release do Bloco 5.
 
 ## Observabilidade entregue
 
@@ -87,6 +87,15 @@ Registrar apenas IDs técnicos ou contas de teste nos relatórios; não copiar e
 8. se houver regressão, reverter para `dpl_A2GZxDdUvqphcLt8MYrCYvdq4Zuz` enquanto a correção é preparada.
 
 Não promover manualmente um preview antigo depois que houver build Git da `main`, porque variáveis públicas são incorporadas no artefato durante o build.
+
+## Registro do release de 09/08/2026
+
+- PR #2 mesclado em `main` no commit `7f66eb82db99ddbbb2edc33b26c579225509a8e6`;
+- CI do merge `31314115269`: aprovado;
+- deployment `dpl_4SjYHKJriBnHY82Q8qYpzfjt7aYB`: `READY/PROMOTED`;
+- domínio https://born-to-run-seven.vercel.app validado nas rotas públicas, Auth, PWA, health e guarda anônima;
+- zero clusters de runtime e zero logs warning/error/fatal encontrados após os testes;
+- rollback anterior conhecido: `dpl_A2GZxDdUvqphcLt8MYrCYvdq4Zuz`.
 
 ## Fontes oficiais
 

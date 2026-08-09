@@ -2,9 +2,9 @@
 
 Atualizar este arquivo após cada bloco.
 
-## Em andamento
+## Estado do ciclo técnico
 
-- Bloco 5: auditoria pesada final e decisão de merge/release. PR, CI e preview já estão verdes.
+Todos os blocos que independiam de credenciais, plano pago, dados formais ou usuários reais foram concluídos. A auditoria final deu **GO**, o PR #2 foi mesclado e a produção foi validada no commit `7f66eb8`.
 
 ## Concluído neste ciclo
 
@@ -13,18 +13,19 @@ Atualizar este arquivo após cada bloco.
 - Bloco 2: callback, regras locais de senha, oito templates e runbook SMTP preparados; ativação remota bloqueada de forma explícita pelo plano Free e pela ausência de domínio/credenciais.
 - Bloco 3: PWA instalável, offline público seguro, headers, noindex privado, privacidade, termos e aceite versionado entregues.
 - Bloco 4: health check, observabilidade anônima, audit no CI, Dependabot, política de segurança, estratégia de backup e checklist do piloto entregues.
+- Bloco 5: auditoria pesada sem P0/P1, PR #2 mesclado, CI do merge verde e deployment de produção `READY/PROMOTED` validado.
 
-## Próxima ação técnica
+## Próxima ação
 
-Concluir a revisão de segurança/coerência, registrar o veredito e, se não houver P0/P1, marcar o PR pronto, mesclar em `main` e auditar o deployment de produção. Testes de SMTP e usuários reais continuam aguardando as dependências do proprietário.
+O próximo passo não é uma correção autônoma de código: é fornecer domínio/remetente/credenciais SMTP, decidir backup/Pro, preencher os dados formais de privacidade e criar as contas reais do piloto. Depois, executar a matriz de `12-OPERACAO-PILOTO-E-RELEASE.md` e registrar qualquer comportamento observado.
 
 ## Fila planejada
 
-1. PR e CI do ciclo;
-2. preview hospedado e métricas;
-3. auditoria final pesada;
-4. merge/release se todos os gates estiverem verdes;
-5. SMTP e piloto real após o proprietário fornecer as dependências.
+1. configurar SMTP e copiar os templates para o Supabase hospedado;
+2. escolher Supabase Pro ou rotina externa de backup criptografado;
+3. completar identificação formal e canal de privacidade;
+4. executar o piloto com usuários reais;
+5. solicitar à Fable 5 a aprovação/refinação visual final sem alterar os contratos técnicos.
 
 ## Dependências do proprietário
 
