@@ -163,3 +163,15 @@ Cada entrada futura deve registrar:
 - Nenhum segredo, token completo ou senha foi copiado para terminal, relatório ou GitHub.
 - O painel de API da Hostinger foi tentado novamente por página nova e por aba já autenticada. Em todas as tentativas, a página ficou presa no carregamento e a conexão de automação expirou. O registro continua honesto: exclusão enviada anteriormente, confirmação visual da tabela ainda pendente.
 - O projeto, o Supabase, o DNS e o SMTP não foram alterados neste bloco. A próxima ação funcional continua sendo criar contas reais pelo `/cadastro`, confirmar os e-mails e aprová-las no painel do administrador.
+
+## 09/08/2026 — Bloco 8, conteúdo correto, contato transacional e Hostinger MCP
+
+- O proprietário esclareceu que “200 atletas” não representa o quadro atual e não deve ser publicado. O dado foi retirado da home, Sobre, telas de autenticação, fonte institucional e documentação; foram preservados “desde 2015” e “mais de 200 participações em corridas”.
+- O formulário anterior apenas montava um link `mailto:` e dependia de um aplicativo de e-mail no dispositivo do visitante.
+- Foi criado `POST /api/contact` com validação compartilhada cliente/servidor, limite de tamanho, honeypot, limite básico por origem, conteúdo HTML escapado, `reply_to` do visitante, resposta sem cache e mensagens de falha sem expor a Resend.
+- Uma chave `Born to Run Contact Form` foi criada na Resend com `Sending access`, restrita ao domínio verificado `equipeborntorun.com`; a credencial SMTP do Supabase foi preservada.
+- A Vercel recebeu `RESEND_API_KEY` como variável sensível em Production e Preview. O valor nunca foi impresso nem versionado.
+- O Aviso de Privacidade passou a registrar nome, e-mail e mensagem do contato, além do papel da Resend na entrega ao canal oficial.
+- A tela de instalação esclarece que a versão atual é PWA e não fornece APK. O Android nativo fica para fase posterior ao piloto.
+- O MCP remoto oficial da Hostinger (`https://mcp.hostinger.com`) foi adicionado à configuração compartilhada do Codex e autenticado via OAuth. Ele será carregado depois de reiniciar o aplicativo Codex.
+- Gates locais antes da publicação: lint limpo, TypeScript aprovado, unitários 52/52, build de 32 rotas e E2E 26/26 em Desktop Chrome e Pixel 7, sem violações axe sérias/críticas. CI, preview, deployment e entrega real serão registrados na continuação desta entrada.

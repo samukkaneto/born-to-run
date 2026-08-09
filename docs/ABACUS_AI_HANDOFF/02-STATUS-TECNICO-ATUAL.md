@@ -39,6 +39,15 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 - A chave de teste `Supabase Auth Born to Run v2` foi excluída da Resend. A única chave preservada é a credencial de envio usada pelo Supabase.
 - A Hostinger recebeu anteriormente a confirmação de exclusão do token temporário `Codex Born to Run DNS`; o painel `/api` continuou congelando em novas tentativas, portanto a releitura visual da tabela permanece sem confirmação. Isso não afeta domínio, site, DNS nem e-mail.
 
+## Conteúdo, formulário e Hostinger MCP — atualização de 09/08/2026
+
+- Toda alegação de “200 atletas” foi removida do site, das fontes atuais e dos documentos históricos consultáveis. Os únicos números institucionais preservados são fundação em 2015 e mais de 200 participações em corridas.
+- O formulário de contato deixou de depender de `mailto:`: `POST /api/contact` valida os campos, aplica honeypot e limite básico, envia pela API da Resend e define o e-mail do visitante como `reply_to`.
+- O destinatário e remetente são `contato@equipeborntorun.com`; o domínio já está verificado na Resend.
+- A Vercel recebeu `RESEND_API_KEY` sensível e separada para Production e Preview. A chave possui somente permissão de envio e está restrita a `equipeborntorun.com`.
+- O Hostinger MCP remoto oficial foi adicionado ao Codex em `https://mcp.hostinger.com` e o OAuth foi concluído. Como a configuração foi adicionada durante a sessão, suas ferramentas ficam disponíveis depois de reiniciar o Codex.
+- “Instalar aplicativo” continua significando PWA. Não existe APK neste ciclo; aplicativo Android nativo, assinatura e publicação na Play Store permanecem uma fase futura explícita.
+
 ## Estado por área
 
 | Área | Estado no baseline |
@@ -51,6 +60,7 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 | CI/CD | GitHub Actions e GitHub→Vercel funcionando |
 | Supabase | Seis migrations aplicadas e 1 admin ativo |
 | SMTP próprio | Ativo com Resend, domínio autenticado, templates hospedados e recuperação testada |
+| Formulário público | Endpoint Resend implementado; validação de entrega real após o deployment desta mudança |
 | Senhas vazadas | Bloqueada pelo plano Free; ativar após upgrade Pro |
 | Privacidade de metadados de revisão | Resolvida no Bloco 1 |
 | Existência física de mídia | Resolvida no Bloco 1 |
@@ -69,4 +79,4 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 
 ## Veredito
 
-O produto está pronto como MVP web publicado. Os Blocos 1–4 elevaram banco, Auth preparado, PWA, transparência LGPD, observabilidade e operação. Permanecem dependências externas de plano/SMTP/dados jurídicos e o piloto com usuários reais, sem alterar a direção visual definida pela Fable 5.
+O produto está pronto como MVP web publicado. Banco, Auth, SMTP, PWA, transparência LGPD, observabilidade e operação estão preparados. Permanecem como decisões posteriores o plano Supabase Pro, os dados jurídicos formais, o piloto com usuários reais, o refinamento Fable 5 e o aplicativo nativo.

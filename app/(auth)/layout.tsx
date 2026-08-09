@@ -64,8 +64,7 @@ export default function AuthLayout({
         {/* Stats rodapé */}
         <div className="relative z-10 flex gap-10">
           {[
-            { value: site.stats.athletes, label: 'Atletas' },
-            { value: site.stats.races, label: 'Corridas' },
+            { value: site.stats.races, label: 'Participações' },
             { value: site.stats.since, label: 'Fundação' },
           ].map(({ value, label }) => (
             <div key={label}>

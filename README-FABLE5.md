@@ -67,7 +67,7 @@ As imagens são seis arquivos PNG separados em `design-refs/`; elas não ficam i
 
 - Born to Run — Treinamento e Saúde.
 - Fundação em 2015, Descalvado — SP.
-- Aproximadamente 200 atletas e mais de 200 participações.
+- Mais de 200 participações em corridas.
 - Instagram: `@equipeborntorun`.
 - Robson Alves — Educador Físico, CREF 119911-G/SP.
 - Especialização em corridas de meio-fundo e fundo; Treinador Nível 1 World Athletics.
@@ -126,4 +126,4 @@ Não esconder estados nem remover controles apenas para simplificar o layout.
 - O feed já possui paginação keyset por cursor. A otimização da renovação/cache de URLs assinadas pode evoluir quando houver volume real.
 - A evolução esportiva no perfil ainda é básica; gráficos e tendências são visão futura e não devem ser apresentados como função existente.
 - Notificações push, funcionamento offline completo e integrações Garmin/Strava não fazem parte da entrega atual.
-- A implementação é um Next.js responsivo com manifesto de PWA; a instalação ainda não foi validada e não existe aplicativo nativo publicado na App Store ou Google Play.
+- A implementação atual é um Next.js responsivo e instalável como PWA, já validado em desktop e mobile. Ela não gera APK e ainda não existe aplicativo nativo publicado na App Store ou Google Play; essa será uma fase posterior.

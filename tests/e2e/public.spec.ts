@@ -65,6 +65,26 @@ test('cadastro exige ciência dos documentos jurídicos publicados', async ({ pa
   await expect(page.getByRole('heading', { name: 'Termos de Uso' })).toBeVisible()
 })
 
+test('formulário de contato envia sem abrir o cliente de e-mail', async ({ page }) => {
+  await page.route('**/api/contact', async (route) => {
+    expect(route.request().postDataJSON()).toMatchObject({
+      name: 'Maria Corredora',
+      email: 'maria@example.com',
+      message: 'Quero conhecer os treinos da equipe.',
+    })
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' })
+  })
+
+  await page.goto('/contato')
+  await page.getByLabel('Nome').fill('Maria Corredora')
+  await page.getByLabel('E-mail').fill('maria@example.com')
+  await page.getByLabel('Mensagem').fill('Quero conhecer os treinos da equipe.')
+  await page.getByRole('button', { name: 'Enviar mensagem' }).click()
+
+  await expect(page.getByRole('heading', { name: 'Mensagem enviada, Maria!' })).toBeVisible()
+  await expect(page.getByRole('status')).toContainText('contato@equipeborntorun.com')
+})
+
 test('health check informa a revisão sem permitir cache', async ({ request }) => {
   const response = await request.get('/api/health')
 

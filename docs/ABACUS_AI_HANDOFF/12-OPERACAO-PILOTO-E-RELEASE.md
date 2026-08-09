@@ -54,6 +54,7 @@ Nenhuma credencial de banco está disponível neste workspace e nenhum dump pess
 ### Antes de convidar atletas
 
 - [x] configurar domínio/remetente e SMTP próprio;
+- [x] implementar o formulário público com entrega Resend para o e-mail oficial;
 - [x] aplicar os oito templates de Auth e conferir URLs de redirecionamento;
 - [ ] se houver upgrade Pro, habilitar proteção contra senhas vazadas;
 - [x] habilitar Web Analytics e Speed Insights no painel Vercel;
@@ -81,6 +82,7 @@ Nenhuma credencial de banco está disponível neste workspace e nenhum dump pess
 - [ ] suspensão e reativação mantendo histórico correto;
 - [ ] instalação PWA em ao menos um Android e um iPhone;
 - [ ] conferência de logs e métricas sem dados pessoais.
+- [ ] envio real pelo formulário e resposta ao remetente usando `reply_to`.
 
 Registrar apenas IDs técnicos ou contas de teste nos relatórios; não copiar e-mails, fotos ou conteúdo dos atletas.
 

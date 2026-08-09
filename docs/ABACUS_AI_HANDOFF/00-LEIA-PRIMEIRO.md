@@ -1,6 +1,6 @@
 # Born to Run — entrega técnica para Abacus AI / Fable 5
 
-Atualizado em 08/08/2026. Esta pasta é o ponto de entrada canônico para uma IA ou pessoa retomar o projeto sem depender do histórico da conversa no Codex.
+Atualizado em 09/08/2026. Esta pasta é o ponto de entrada canônico para uma IA ou pessoa retomar o projeto sem depender do histórico da conversa no Codex.
 
 ## Ordem de leitura
 
@@ -16,6 +16,7 @@ Atualizado em 08/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 10. `10-AUTH-SMTP-E-TEMPLATES.md` — configuração de Auth, SMTP, templates e matriz do piloto.
 11. `11-PWA-LGPD-E-OPERACAO.md` — instalação, offline seguro, privacidade, termos e dependências jurídicas.
 12. `12-OPERACAO-PILOTO-E-RELEASE.md` — observabilidade, saúde, backup, segurança contínua e checklist de liberação.
+13. `13-HOSTINGER-MCP-CONTATO-E-APP-NATIVO.md` — conexão Hostinger, formulário Resend e distinção entre PWA e futuro APK nativo.
 
 ## Fontes complementares no repositório
 
@@ -36,4 +37,4 @@ Documentos de auditoria datados de julho de 2026 são históricos. Não devem su
 
 ## Estado deste pacote
 
-O pacote acompanha a branch `codex/production-readiness`. Consulte `08-LOG-DE-EXECUCAO.md` para a cronologia e `07-PENDENCIAS-E-RETOMADA.md` para o ponto exato de retomada.
+O pacote acompanha a evolução da `main` e das PRs ativas. Consulte `08-LOG-DE-EXECUCAO.md` para a cronologia e `07-PENDENCIAS-E-RETOMADA.md` para o ponto exato de retomada.

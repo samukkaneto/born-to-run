@@ -62,8 +62,8 @@ export default function SobrePage() {
             </p>
             <p>
               O que começou como um pequeno grupo de corredores cresceu e hoje
-              reúne cerca de <strong>200 atletas</strong>, entre iniciantes
-              dando os primeiros passos e corredores experientes em busca de
+              reúne pessoas com diferentes histórias e objetivos, de iniciantes
+              dando os primeiros passos a corredores experientes em busca de
               novos recordes pessoais.
             </p>
             <p>
@@ -100,9 +100,8 @@ export default function SobrePage() {
       {/* ══ FAIXA DE NÚMEROS (carbono) ══ */}
       <section className="bg-[#171717]" aria-label="Números da equipe">
         <Container className="py-10 md:py-12">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-4">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
             {[
-              { value: site.stats.athletes, label: site.stats.athletesLabel, color: '#16A34A' },
               { value: site.stats.races, label: site.stats.racesLabel, color: '#DC2626' },
               { value: `Desde ${site.stats.since}`, label: site.stats.sinceLabel, color: '#F97316' },
             ].map(({ value, label, color }, i) => (
@@ -216,8 +215,8 @@ export default function SobrePage() {
             Venha correr <span className="accent">com a gente</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-[#A8A29E]">
-            Faça parte de uma equipe que já transformou a rotina de cerca de
-            200 atletas em {site.location}.
+            Faça parte de uma equipe que transforma vidas através da corrida e
+            da caminhada em {site.location}.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link href="/cadastro" className="btn-primary px-8 py-3.5 text-base">

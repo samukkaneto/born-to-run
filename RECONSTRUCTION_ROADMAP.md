@@ -14,7 +14,7 @@
 |---|---|
 | **Nome** | Born to Run — Treinamento e Saúde |
 | **Fundação** | 2015, Descalvado-SP |
-| **Público** | ~200 atletas corredores |
+| **Público** | Equipe de corrida e caminhada; quantidade atual não divulgada |
 | **Treinador** | Robson Alves — Educador Físico, CREF 119911-G/SP, especialização meio fundo/fundo, Treinador nível 1 World Athletics |
 | **Instagram** | @equipeborntorun |
 | **Stack** | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, Supabase (Auth + Postgres + Storage) |
@@ -209,7 +209,7 @@ Este é o bloco final: polimento, qualidade e publicação.
 | # | Decisão | Bloco | Justificativa |
 |---|---|---|---|
 | 1 | Papéis: `member` e `admin` (sem `treinador`) | 1 | Schema real só tem esses dois; simplifica RLS e evita refatoração de CHECK constraints. |
-| 2 | Treinos visíveis a todos os membros autenticados | 1 | Coluna `assigned_to` não existe; equipe treina junta (~200 atletas). Decisão de produto — pode ser revisada com o cliente. |
+| 2 | Treinos visíveis a todos os membros autenticados | 1 | Decisão histórica posteriormente substituída pela audiência para equipe, grupos e atletas. |
 | 3 | Tailwind v4 puro (CSS, sem `tailwind.config.ts`) | 1 | Config v3 era código morto no v4; tokens definidos diretamente no CSS. |
 | 4 | Fontes: Inter (corpo) + Barlow Condensed (títulos) | 1 | Referências a Outfit removidas; identidade visual consolidada. |
 | 5 | Contato via Instagram (sem inventar telefone/email) | 1 | Regra do projeto: nunca fabricar dados de contato. |
@@ -239,7 +239,7 @@ Estes dados são **oficiais e confirmados**. Nunca devem ser alterados, inventad
 - **Nome:** Born to Run — Treinamento e Saúde
 - **Fundação:** 2015
 - **Local:** Descalvado-SP
-- **Equipe:** ~200 atletas
+- **Equipe:** quantidade atual de atletas não divulgada
 - **Corridas:** +200 participações
 - **Instagram:** @equipeborntorun
 - **Treinador:** Robson Alves — Educador Físico, CREF 119911-G/SP, especialização meio fundo/fundo, Treinador nível 1 World Athletics

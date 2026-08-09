@@ -3,7 +3,6 @@ import Link from 'next/link'
 import {
   ArrowRight,
   ArrowUpRight,
-  Users,
   Trophy,
   Flag,
   HeartPulse,
@@ -18,12 +17,6 @@ export const metadata = {
 }
 
 const stats = [
-  {
-    icon: Users,
-    value: site.stats.athletes,
-    label: site.stats.athletesLabel,
-    color: '#16A34A',
-  },
   {
     icon: Trophy,
     value: site.stats.races,
@@ -121,10 +114,10 @@ export default function HomePage() {
                 {/* Selo carbono sobreposto */}
                 <div className="absolute -bottom-5 left-4 sm:left-6 panel-carbon rounded-lg px-5 py-3 shadow-card-lg">
                   <p className="font-display text-2xl leading-none text-white">
-                    {site.stats.athletes}
+                    {site.stats.races}
                   </p>
                   <p className="font-condensed text-[11px] uppercase tracking-[0.15em] text-[#A8A29E] mt-1">
-                    atletas na equipe
+                    participações em corridas
                   </p>
                 </div>
               </div>
@@ -136,7 +129,7 @@ export default function HomePage() {
       {/* ══ FAIXA DE NÚMEROS (carbono) ══ */}
       <section className="bg-[#171717]" aria-label="Números da equipe">
         <div className="container-main py-10 md:py-12">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-4">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
             {stats.map(({ icon: Icon, value, label, color }, i) => (
               <div
                 key={label}
@@ -193,10 +186,9 @@ export default function HomePage() {
               <p className="text-[#44403C] leading-relaxed mt-6 mb-4">
                 Fundada em {site.foundedYear} em {site.location}, a Born to Run
                 é mais que uma assessoria esportiva: é uma equipe que treina,
-                compete e comemora junto. Ao longo de quase uma década reunimos
-                cerca de <strong>{site.stats.athletes} atletas</strong> e
-                somamos <strong>{site.stats.races} participações em corridas</strong>{' '}
-                por todo o estado.
+                compete e comemora junto. Ao longo dessa trajetória, somamos{' '}
+                <strong>{site.stats.races} participações em corridas</strong>{' '}
+                dentro e fora da região.
               </p>
               <p className="text-[#44403C] leading-relaxed mb-8">
                 O comando técnico é do educador físico{' '}

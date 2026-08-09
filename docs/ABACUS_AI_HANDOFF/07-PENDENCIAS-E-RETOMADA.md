@@ -14,10 +14,11 @@ Todos os blocos que independiam de credenciais, plano pago, dados formais ou usu
 - Bloco 3: PWA instalável, offline público seguro, headers, noindex privado, privacidade, termos e aceite versionado entregues.
 - Bloco 4: health check, observabilidade anônima, audit no CI, Dependabot, política de segurança, estratégia de backup e checklist do piloto entregues.
 - Bloco 5: auditoria pesada sem P0/P1, PR #2 mesclado, CI do merge verde e deployment de produção `READY/PROMOTED` validado.
+- Bloco 8 em finalização: dado institucional corrigido, formulário transacional Resend implementado e Hostinger MCP autorizado.
 
 ## Próxima ação
 
-Domínio, SSL, URL oficial de Auth, Resend, SMTP, templates, contato público e canal piloto de privacidade já estão concluídos e publicados. O ponto exato de retomada é executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`.
+Depois da publicação e do teste de entrega real do formulário, o ponto exato de retomada é executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`.
 
 O administrador foi localizado e está `active` com e-mail confirmado. O proprietário recebeu o identificador exato fora do repositório. Se não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com esse e-mail.
 
@@ -27,6 +28,7 @@ O administrador foi localizado e está `active` com e-mail confirmado. O proprie
 2. depois do piloto, escolher Supabase Pro ou rotina externa de backup criptografado;
 3. completar a identificação formal do controlador quando houver os dados jurídicos;
 4. solicitar à Fable 5 a aprovação/refinação visual final sem alterar os contratos técnicos.
+5. planejar o aplicativo Android nativo e APK como fase separada somente após estabilizar o piloto web/PWA.
 
 ## Dependências do proprietário
 

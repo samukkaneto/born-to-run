@@ -17,8 +17,6 @@ export const site = {
   location: 'Descalvado - SP',
 
   stats: {
-    athletes: '~200',
-    athletesLabel: 'atletas na equipe',
     races: '+200',
     racesLabel: 'participações em corridas',
     since: '2015',
@@ -42,9 +40,8 @@ export const site = {
   },
 
   /**
-   * Contatos ainda NÃO fornecidos oficialmente pelo cliente.
-   * Preencher via variáveis de ambiente quando disponíveis —
-   * nunca publicar valores fictícios.
+   * Contato oficial confirmado para o projeto piloto.
+   * Telefone e WhatsApp permanecem opcionais e nunca recebem valores fictícios.
    */
   contact: {
     phone: process.env.NEXT_PUBLIC_CONTACT_PHONE ?? null,
