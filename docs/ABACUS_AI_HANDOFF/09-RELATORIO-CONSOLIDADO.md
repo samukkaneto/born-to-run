@@ -41,6 +41,7 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - Bloco 3 concluído: instalação PWA, offline sem cache privado, headers, noindex, privacidade, termos e aceite versionado.
 - Bloco 4 concluído: health check, métricas anônimas com sanitização, audit no CI, Dependabot, política de segurança, plano de backup e checklist do piloto/release.
 - Bloco 5 concluído: auditoria final sem P0/P1, PR #2 mesclado, CI do merge verde e produção validada.
+- Bloco 6 concluído: domínio oficial em produção, `www` canônico, e-mail profissional preservado, Resend autenticada, SMTP/templates ativos no Supabase e recuperação testada.
 
 ## Estado operacional após o Bloco 4
 
@@ -50,7 +51,7 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - preview Vercel anterior `READY`, sem erros de runtime encontrados;
 - banco ainda sem conteúdo real de atletas;
 - Supabase Free exige upgrade Pro ou exportações criptografadas antes de depender de recuperação;
-- SMTP, senhas vazadas, identificação formal do controlador e piloto real seguem como dependências explícitas do proprietário.
+- SMTP está concluído; senhas vazadas (Pro), identificação formal do controlador e piloto real seguem como dependências explícitas do proprietário.
 
 ## Release final do ciclo
 

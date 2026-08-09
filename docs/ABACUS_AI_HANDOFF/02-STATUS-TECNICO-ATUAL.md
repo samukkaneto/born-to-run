@@ -11,6 +11,18 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 - Deployment do baseline: `dpl_A2GZxDdUvqphcLt8MYrCYvdq4Zuz`, `READY` e `PROMOTED`
 - Supabase: `nmcaejrmmfffzeclmuob`, `ACTIVE_HEALTHY`
 
+## Domínio e e-mail — atualização de 09/08/2026
+
+- Domínio oficial adquirido: `equipeborntorun.com`.
+- Caixa piloto ativa: `contato@equipeborntorun.com` (Hostinger Business Email).
+- DNS aplicado na Hostinger sem alterar os registros do Business Email: A `@` para `216.198.79.1` e `64.29.17.1`; CNAME `www` para `ec527bb85ae46632.vercel-dns-017.com`.
+- `https://equipeborntorun.com` serve o aplicativo com certificado Vercel válido; `https://www.equipeborntorun.com` redireciona com `308` para o apex.
+- URL oficial e os três callbacks de transição foram salvos no Supabase hospedado.
+- Domínio de envio configurado na Resend com DKIM e SPF/MX públicos.
+- SMTP customizado ativo no Supabase: remetente `Equipe Born to Run <contato@equipeborntorun.com>`, porta `465`, confirmação de e-mail obrigatória e senha mínima de 8 caracteres.
+- Os oito templates versionados foram copiados para o Supabase hospedado; notificações de senha e e-mail alterados foram habilitadas.
+- Teste real de recuperação retornou HTTP `200` depois da ativação do SMTP customizado.
+
 ## Estado por área
 
 | Área | Estado no baseline |
@@ -22,7 +34,7 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 | Grupos e treinos dirigidos | Implementados |
 | CI/CD | GitHub Actions e GitHub→Vercel funcionando |
 | Supabase | Seis migrations aplicadas e 1 admin ativo |
-| SMTP próprio | Código, templates e runbook prontos; ativação remota depende de domínio/provedor/credenciais |
+| SMTP próprio | Ativo com Resend, domínio autenticado e templates hospedados |
 | Senhas vazadas | Bloqueada pelo plano Free; ativar após upgrade Pro |
 | Privacidade de metadados de revisão | Resolvida no Bloco 1 |
 | Existência física de mídia | Resolvida no Bloco 1 |
