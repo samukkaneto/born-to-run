@@ -49,6 +49,7 @@ export const site = {
   contact: {
     phone: process.env.NEXT_PUBLIC_CONTACT_PHONE ?? null,
     whatsapp: process.env.NEXT_PUBLIC_CONTACT_WHATSAPP ?? null,
-    email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? null,
+    email:
+      process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "contato@equipeborntorun.com",
   },
 } as const

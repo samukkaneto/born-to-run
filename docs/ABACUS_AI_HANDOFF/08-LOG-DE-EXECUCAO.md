@@ -106,3 +106,30 @@ Cada entrada futura deve registrar:
 - A primeira execução da PR documental expôs aviso de depreciação do Node 20 interno de `actions/checkout@v4` e `actions/setup-node@v4`.
 - O Dependabot abriu atualizações isoladas para v7 e ambas passaram no pipeline completo.
 - As duas actions foram incorporadas juntas à PR final; upgrades major de TypeScript/ESLint não foram misturados porque seus checks falharam.
+
+## 09/08/2026 — Bloco 6, domínio e e-mail iniciados
+
+- Caixa piloto `contato@equipeborntorun.com` criada e DNS de e-mail confirmado publicamente: MX `mx1.hostinger.com`/`mx2.hostinger.com` e SPF Hostinger presentes.
+- Domínio oficial `equipeborntorun.com` e variante `www` anexados ao projeto Vercel correto `prj_yvAfSxZgL4nNZuwq1R0WK9JOT5Hx`.
+- A Vercel confirmou propriedade no escopo `shabuneto` e informou configuração externa pendente.
+- DNS solicitado: A `@` → `216.198.79.1` e `64.29.17.1`; CNAME `www` → `ec527bb85ae46632.vercel-dns-017.com`.
+- Decisão de segurança operacional: manter nameservers na Hostinger e não tocar em MX/TXT, evitando interromper o e-mail profissional.
+- O contato público do app passou a ter fallback versionado para `contato@equipeborntorun.com`.
+- A configuração versionada do Supabase passou a aceitar callbacks de `equipeborntorun.com` e `www.equipeborntorun.com`, mantendo o callback legado da Vercel durante a transição.
+- Resend localizada no onboarding; a etapa de API foi deliberadamente adiada. A sequência adotada é domínio/SSL do app → URLs Auth → domínio Resend → integração Supabase, que cria a chave de envio.
+- Bloqueio momentâneo: a conexão do Chrome conseguiu abrir a zona DNS da Hostinger, mas as interações profundas expiraram. Nenhuma alteração parcial de DNS foi enviada.
+- Próxima ação exata: concluir os três registros web na Hostinger e revalidar Vercel antes de mudar a URL oficial de Auth.
+
+## 09/08/2026 — Bloco 6, domínio e e-mail concluídos
+
+- A zona DNS foi alterada pela API oficial da Hostinger com validação prévia. Foram substituídos somente A `@` e CNAME `www`; MX e SPF do Business Email foram preservados.
+- Registros Resend adicionados: DKIM em `resend._domainkey`, MX em `send` com prioridade 10 e SPF em `send`. A resolução pública via `1.1.1.1` confirmou todos os valores.
+- A Vercel declarou apex e `www` como `configured_correctly` e `verified`; certificado dedicado emitido para ambos os nomes.
+- `https://equipeborntorun.com` retorna `200`; `www` retorna `308` para o apex; `/dashboard` anônimo retorna `307` para login e `/api/health` retorna `200`.
+- Vercel Production recebeu `NEXT_PUBLIC_SITE_URL=https://equipeborntorun.com` e `NEXT_PUBLIC_CONTACT_EMAIL=contato@equipeborntorun.com`. Esses valores exigem novo build, a ser criado pela publicação desta branch.
+- Supabase hospedado recebeu Site URL oficial e callbacks do apex, `www` e domínio Vercel legado.
+- Resend recebeu chave de envio com acesso restrito ao domínio. O Supabase recebeu SMTP `smtp.resend.com:465`, remetente oficial, senha mínima de 8 caracteres, confirmação de e-mail obrigatória e oito templates em português.
+- Notificações de alteração de senha e de e-mail foram habilitadas.
+- Teste de recuperação executado contra `/auth/v1/recover` com retorno `200` e redirect oficial.
+- Segurança operacional: tokens temporários de Hostinger e Supabase devem ser revogados ao final; chaves Resend redundantes devem ser removidas, preservando somente a credencial SMTP ativa.
+- Pendências externas mantidas por decisão do proprietário: upgrade Supabase Pro/proteção contra senhas vazadas, dados jurídicos formais e piloto com usuários reais.

@@ -17,23 +17,22 @@ Todos os blocos que independiam de credenciais, plano pago, dados formais ou usu
 
 ## Próxima ação
 
-O próximo passo não é uma correção autônoma de código: é fornecer domínio/remetente/credenciais SMTP, decidir backup/Pro, preencher os dados formais de privacidade e criar as contas reais do piloto. Depois, executar a matriz de `12-OPERACAO-PILOTO-E-RELEASE.md` e registrar qualquer comportamento observado.
+Domínio, SSL, URL oficial de Auth, Resend, SMTP e templates já estão concluídos. O ponto exato de retomada é publicar esta branch, acompanhar CI/deploy e então executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`.
 
 ## Fila planejada
 
-1. configurar SMTP e copiar os templates para o Supabase hospedado;
-2. escolher Supabase Pro ou rotina externa de backup criptografado;
-3. completar identificação formal e canal de privacidade;
-4. executar o piloto com usuários reais;
+1. publicar e validar a atualização de domínio/e-mail;
+2. executar o piloto com usuários reais;
+3. depois do piloto, escolher Supabase Pro ou rotina externa de backup criptografado;
+4. completar a identificação formal do controlador quando houver os dados jurídicos;
 5. solicitar à Fable 5 a aprovação/refinação visual final sem alterar os contratos técnicos.
 
 ## Dependências do proprietário
 
-- Provedor SMTP, domínio/remetente e credenciais SMTP;
 - criação das contas reais para o piloto;
 - decisão posterior sobre lojas Android/iOS;
 - aprovação visual final da Fable 5.
-- identificação formal e e-mail de privacidade;
+- identificação formal do controlador; o canal piloto é `contato@equipeborntorun.com`;
 - decisão entre Supabase Pro ou rotina externa de backup criptografado.
 
 Essas dependências não impedem o Codex de adiantar código, documentação, testes e auditorias independentes delas.
