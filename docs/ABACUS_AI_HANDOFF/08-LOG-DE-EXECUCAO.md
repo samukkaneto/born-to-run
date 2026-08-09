@@ -51,6 +51,21 @@
 - Teste offline comprovou que dashboard privado nunca é servido do cache em desktop ou Pixel 7.
 - Próximo ponto exato: observabilidade, backup, dependências e preparação final do piloto/release.
 
+## 09/08/2026 — Bloco 4 concluído
+
+- `@vercel/analytics` e `@vercel/speed-insights` adicionados para visitação agregada e Core Web Vitals.
+- Queries, fragmentos e UUIDs são removidos antes do envio; scripts carregam apenas em deployments Vercel reais.
+- Aviso de Privacidade e Termos atualizados; nenhum dado social, e-mail ou métrica esportiva é enviado.
+- `/api/health` criado com resposta mínima, revisão e `no-store`.
+- `npm audit` continuou com zero vulnerabilidades; CI passou a bloquear vulnerabilidades altas/críticas.
+- Dependabot semanal para npm/Actions e `SECURITY.md` com relato privado adicionados.
+- `12-OPERACAO-PILOTO-E-RELEASE.md` criado com recuperação, piloto e release.
+- Plano Free não tem backup automático restaurável; como ainda não há dados reais de negócio/Storage, nenhum dump pessoal foi criado. Antes do piloto, escolher Pro ou exportação criptografada fora do GitHub.
+- Primeira matriz E2E: 22/24; as duas falhas identificaram scripts Vercel 404 no `next start` local. A condição foi corrigida no servidor.
+- Gate final local: lint, TypeScript, 48/48 unitários, build de 31 rotas e E2E 24/24 em Desktop Chrome/Pixel 7.
+- Preview anterior `c007fb9`: `READY`, sem clusters de runtime em sete dias nem warning/error/fatal em 24 horas.
+- Próximo ponto exato: commit/push do Bloco 4, PR, CI/preview hospedado e auditoria final pesada.
+
 ## Convenção
 
 Cada entrada futura deve registrar:

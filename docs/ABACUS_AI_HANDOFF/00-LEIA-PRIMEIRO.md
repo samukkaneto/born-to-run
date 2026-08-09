@@ -15,6 +15,7 @@ Atualizado em 08/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 9. `09-RELATORIO-CONSOLIDADO.md` — resumo único para anexar quando só for possível enviar um arquivo.
 10. `10-AUTH-SMTP-E-TEMPLATES.md` — configuração de Auth, SMTP, templates e matriz do piloto.
 11. `11-PWA-LGPD-E-OPERACAO.md` — instalação, offline seguro, privacidade, termos e dependências jurídicas.
+12. `12-OPERACAO-PILOTO-E-RELEASE.md` — observabilidade, saúde, backup, segurança contínua e checklist de liberação.
 
 ## Fontes complementares no repositório
 
@@ -35,4 +36,4 @@ Documentos de auditoria datados de julho de 2026 são históricos. Não devem su
 
 ## Estado deste pacote
 
-O pacote foi criado no início do ciclo `codex/production-readiness`, antes das novas alterações de segurança, SMTP, piloto e PWA. Consulte `08-LOG-DE-EXECUCAO.md` para saber até qual bloco o Codex avançou.
+O pacote acompanha a branch `codex/production-readiness`. Consulte `08-LOG-DE-EXECUCAO.md` para a cronologia e `07-PENDENCIAS-E-RETOMADA.md` para o ponto exato de retomada.

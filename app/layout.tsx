@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Bebas_Neue, Oswald } from 'next/font/google'
 import PwaProvider from '@/components/pwa/PwaProvider'
+import VercelObservability from '@/components/observability/VercelObservability'
 import './globals.css'
 
 const inter = Inter({
@@ -78,6 +79,7 @@ export default function RootLayout({
     >
       <body className="font-sans antialiased text-[#171717]">
         <PwaProvider>{children}</PwaProvider>
+        <VercelObservability enabled={process.env.VERCEL === '1'} />
       </body>
     </html>
   )

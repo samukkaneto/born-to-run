@@ -39,7 +39,18 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - Bloco 1 concluído: sexta migration aplicada; metadados administrativos de perfis estão ocultos dos membros e referências de mídia são verificadas contra objetos reais do Storage.
 - Bloco 2 preparado: callback e templates concluídos; ativação remota de senhas vazadas/SMTP depende de plano Pro, domínio e credenciais.
 - Bloco 3 concluído: instalação PWA, offline sem cache privado, headers, noindex, privacidade, termos e aceite versionado.
-- Bloco 4 em andamento: observabilidade, backup, dependências e preparação final do piloto/release.
+- Bloco 4 concluído: health check, métricas anônimas com sanitização, audit no CI, Dependabot, política de segurança, plano de backup e checklist do piloto/release.
+- Bloco 5 em andamento: PR, CI/preview hospedado e auditoria final pesada.
+
+## Estado operacional após o Bloco 4
+
+- zero vulnerabilidades no `npm audit`;
+- lint, TypeScript, 48/48 unitários e build de 31 rotas aprovados;
+- E2E 24/24 em desktop e Pixel 7, sem violações axe sérias/críticas;
+- preview Vercel anterior `READY`, sem erros de runtime encontrados;
+- banco ainda sem conteúdo real de atletas;
+- Supabase Free exige upgrade Pro ou exportações criptografadas antes de depender de recuperação;
+- SMTP, senhas vazadas, identificação formal do controlador e piloto real seguem como dependências explícitas do proprietário.
 
 ## Fable 5
 

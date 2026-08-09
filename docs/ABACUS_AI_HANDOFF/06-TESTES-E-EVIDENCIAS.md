@@ -61,3 +61,15 @@ Nenhum bloco será declarado concluído somente por compilar. Alterações de Au
 - PWA/offline desktop e Pixel 7: 2/2.
 - Axe em privacidade/termos desktop/mobile: 4/4, sem violações sérias/críticas.
 - Cobertura funcional consolidada: 22/22.
+
+## Evidências do Bloco 4
+
+- `npm audit`: zero vulnerabilidades em 416 pacotes auditados pelo comando de instalação e zero vulnerabilidades no relatório completo.
+- `npm run check`: ESLint, TypeScript, Vitest 48/48 e build Next.js 16.3.0 aprovados.
+- Build: 31 rotas, incluindo `/api/health` dinâmico.
+- E2E sobre `next start`: 24/24 em Desktop Chrome e Pixel 7.
+- Health: resposta 200, JSON mínimo e `Cache-Control: no-store` nos dois projetos.
+- Axe: nenhuma violação séria/crítica nas páginas cobertas.
+- Vercel antes do novo commit: preview `dpl_HLmyjaZ9NQQjjwxw52kjh8tCEQeo` `READY`, zero clusters de runtime em sete dias e zero warning/error/fatal em 24 horas.
+- Uma primeira execução E2E detectou 404 dos scripts de métricas fora da Vercel; a condição foi corrigida no servidor e a repetição completa passou 24/24.
+- ESLint passou a ignorar corretamente os artefatos locais `playwright-report`, `test-results` e `coverage`.

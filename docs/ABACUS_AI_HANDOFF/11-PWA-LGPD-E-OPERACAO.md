@@ -33,7 +33,8 @@ A câmera não foi bloqueada porque o fluxo de publicação pode usar o seletor 
 - footer liga para privacidade, termos e instalação;
 - cadastro exige ciência dos dois documentos no cliente e no Server Action;
 - versão e instante de aceite são registrados em `auth.users.user_metadata` no cadastro;
-- o site não carrega analytics, publicidade ou cookies não essenciais, então não foi criado um banner de consentimento sem finalidade real.
+- Web Analytics e Speed Insights da Vercel foram preparados no Bloco 4 para métricas anônimas, sem cookies de publicidade; queries, fragmentos e UUIDs são removidos antes do envio;
+- não há publicidade nem rastreamento individual, então não foi criado um banner de consentimento sem finalidade real.
 
 ## Dependências jurídicas do proprietário
 

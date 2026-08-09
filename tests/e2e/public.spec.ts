@@ -64,3 +64,14 @@ test('cadastro exige ciência dos documentos jurídicos publicados', async ({ pa
   await page.goto('/termos')
   await expect(page.getByRole('heading', { name: 'Termos de Uso' })).toBeVisible()
 })
+
+test('health check informa a revisão sem permitir cache', async ({ request }) => {
+  const response = await request.get('/api/health')
+
+  expect(response.ok()).toBe(true)
+  expect(response.headers()['cache-control']).toContain('no-store')
+  await expect(response.json()).resolves.toMatchObject({
+    status: 'ok',
+    service: 'born-to-run',
+  })
+})

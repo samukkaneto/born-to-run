@@ -24,6 +24,8 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 | Comunicados | Implementado | CRUD do treinador e leitura pelos membros ativos. |
 | Painel do treinador | Implementado e validado | Dashboard, aprovações, membros, grupos, treinos e comunicados; grupo e treino direcionado passaram em smoke autenticado. |
 | PWA/responsividade | Instalável, push pendente | Manifesto, ícones, instalação guiada, service worker e fallback offline público validados; dados privados nunca entram no cache. Não é binário nativo. |
+| Observabilidade | Implementada para o piloto | `/api/health`, Runtime Logs, Web Analytics e Speed Insights; URLs são sanitizadas antes das métricas. O painel Vercel ainda deve confirmar a ativação dos dois produtos. |
+| Continuidade | Procedimento definido | Audit no CI, Dependabot, relato privado e runbook de release; Supabase Free exige exportação criptografada ou Pro antes de depender de backup automático. |
 | Supabase remoto | Sincronizado | Seis migrations aplicadas; estado atual termina em `20260809021316_protege_metadados_e_referencias_de_midia`. |
 | Vercel | Produção publicada e automação restaurada | O domínio público acompanha os deployments Git de `main`; a reconexão ao repositório atual foi comprovada pelo deployment automático do commit `0947508`. Variáveis Supabase, rotas públicas/guard e logs foram verificados. `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk` permanece como baseline manual validado e `dpl_3GyqEDBXYJcqndUWVRZGSzviMDik` como rollback antigo conhecido. |
 | GitHub | Publicado, revisado e mesclado | PR [#1](https://github.com/samukkaneto/born-to-run/pull/1) mesclado em `main` no commit `21d15aa`; CI da branch e do merge concluídos com sucesso. |
@@ -88,7 +90,7 @@ O banco preserva 1 perfil administrador ativo e continua sem conteúdo fictício
 | Boundaries de erro/loading/not-found | Implementados |
 | Acessibilidade básica | Skip links, foco visível, modais com foco, redução de movimento e controles ampliados |
 | Testes pgTAP versionados | 56 asserções; a suíte combinada passou remotamente dentro de transação revertida antes da sexta migration |
-| E2E público | Cobertura ampliada para 22 casos em Desktop Chrome e Pixel 7; todos aprovados após repetição isolada de um timeout ambiental; zero violações axe sérias/críticas |
+| E2E público | Cobertura ampliada para 24 casos em Desktop Chrome e Pixel 7; todos aprovados sobre o build de produção; zero violações axe sérias/críticas |
 | E2E autenticado hospedado | Login, feed, publicação, curtida, comentário, painel admin, grupo e treino dirigido validados; dados técnicos removidos |
 | Vercel | Produção `READY` no domínio canônico, 27 rotas, respostas 200/307 corretas, integração Git automática validada e sem erros nos logs consultados |
 | GitHub Actions | Runs `31275354335` e `31275507684` aprovadas integralmente na branch e no merge em `main` |
@@ -101,6 +103,7 @@ O MVP web está publicado. Os itens abaixo são melhorias operacionais ou fases 
 2. habilitar no Supabase Auth a proteção contra senhas vazadas;
 3. executar o piloto fechado com usuários reais e validar os fluxos de aprovação, publicação e treino;
 4. tratar push e empacotamento nativo como fase própria, caso o objetivo passe de PWA instalável para lojas de aplicativos.
+5. confirmar Web Analytics/Speed Insights no painel e definir backup Pro ou exportação criptografada antes do piloto gerar dados relevantes.
 
 ## Orientação para Abacus AI / Fable 5
 
@@ -119,3 +122,4 @@ Detalhes de plano, SMTP, templates e matriz do piloto: `docs/ABACUS_AI_HANDOFF/1
 
 O pacote detalhado e ordenado para retomada pela Abacus AI está em `docs/ABACUS_AI_HANDOFF/00-LEIA-PRIMEIRO.md`.
 O estado PWA/LGPD e as dependências jurídicas estão em `docs/ABACUS_AI_HANDOFF/11-PWA-LGPD-E-OPERACAO.md`.
+O checklist de observabilidade, backup, piloto e release está em `docs/ABACUS_AI_HANDOFF/12-OPERACAO-PILOTO-E-RELEASE.md`.
