@@ -24,6 +24,19 @@
 - Gates locais: ESLint aprovado, TypeScript aprovado, Vitest 48/48 e build Next.js aprovado com 27 rotas.
 - Próximo ponto exato: Bloco 2, Auth + proteção de senha + SMTP/templates.
 
+## 08/08/2026 — Bloco 2 preparado
+
+- API do Supabase confirmou organização `born-to-run` no plano `Free`.
+- Proteção contra senhas vazadas não foi ativada porque o recurso exige Pro; nenhuma promessa falsa foi registrada.
+- O cadastro passou a enviar `emailRedirectTo` explícito para `/auth/callback?next=/acesso-pendente`.
+- Configuração local alinhada: confirmação de e-mail, senha mínima de 8 caracteres com letra e número e callbacks exatos.
+- Oito templates premium em português foram criados em `supabase/templates/` para confirmação, recuperação, convite, magic link, mudança de e-mail, reautenticação e avisos de segurança.
+- Runbook `10-AUTH-SMTP-E-TEMPLATES.md` criado com recomendação Resend SMTP, campos, URLs, segurança e matriz do piloto.
+- Templates 8/8 e config validados; Docker não está instalado, então o ambiente Supabase local não foi iniciado.
+- ESLint, TypeScript e Vitest 48/48 passaram.
+- Dependências externas restantes: upgrade Pro; domínio verificável; conta/chave SMTP; remetente aprovado.
+- Próximo ponto exato: PWA/mobile, LGPD e operação independente do piloto real.
+
 ## Convenção
 
 Cada entrada futura deve registrar:

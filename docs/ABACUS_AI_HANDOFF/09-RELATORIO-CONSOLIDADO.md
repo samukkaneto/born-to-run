@@ -37,7 +37,8 @@ O Codex iniciou a branch `codex/production-readiness` para:
 
 - Bloco 0 concluído: relatórios canônicos consolidados nesta pasta.
 - Bloco 1 concluído: sexta migration aplicada; metadados administrativos de perfis estão ocultos dos membros e referências de mídia são verificadas contra objetos reais do Storage.
-- Bloco 2 em andamento: proteção contra senhas vazadas, SMTP e templates de Auth.
+- Bloco 2 preparado: callback e templates concluídos; ativação remota de senhas vazadas/SMTP depende de plano Pro, domínio e credenciais.
+- Bloco 3 em andamento: PWA/mobile, privacidade/LGPD e operação.
 
 ## Fable 5
 

@@ -141,6 +141,12 @@ foi criado. Antes de abrir cadastros para a equipe:
 Esse limite é operacional e não deve ser contornado desativando confirmação de
 e-mail em produção.
 
+O plano da organização foi confirmado como `Free` em 08/08/2026. Oito templates
+versionados ficam em `supabase/templates/`; a runbook completa para Resend,
+URLs, assuntos, segurança e piloto está em
+`docs/ABACUS_AI_HANDOFF/10-AUTH-SMTP-E-TEMPLATES.md`. A proteção contra senhas
+vazadas exige upgrade Pro. Nenhuma credencial SMTP foi colocada no Git.
+
 - [Configurar SMTP próprio no Supabase Auth](https://supabase.com/docs/guides/auth/auth-smtp)
 
 O callback do aplicativo é `/auth/callback`. Para produção, autorize

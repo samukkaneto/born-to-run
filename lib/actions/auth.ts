@@ -80,11 +80,13 @@ export async function signup(
     return { error: 'A senha deve ter ao menos 8 caracteres, uma letra e um número.' }
   }
 
+  const origin = await getSiteOrigin()
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: { full_name: fullName },
+      emailRedirectTo: `${origin}/auth/callback?next=/acesso-pendente`,
     },
   })
 

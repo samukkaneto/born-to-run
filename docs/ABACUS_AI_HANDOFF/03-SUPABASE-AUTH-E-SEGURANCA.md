@@ -43,6 +43,8 @@ Nunca editar ou reaplicar essas migrations. Toda alteração entra em uma migrat
 1. A proteção de senhas vazadas está desativada. A documentação oficial informa disponibilidade no plano Pro ou superior.
 2. SMTP próprio ainda não está configurado; o serviço padrão é apenas demonstrativo, limitado e envia somente a endereços autorizados da equipe do projeto.
 
+O Bloco 2 confirmou que a organização está no plano `Free`. O código passou a informar callback explícito no cadastro; a configuração local foi alinhada para confirmação de e-mail e senha de 8 caracteres com letra e número; oito templates e a runbook `10-AUTH-SMTP-E-TEMPLATES.md` foram preparados. A ativação remota depende de upgrade Pro para senhas vazadas e de domínio/provedor/credenciais para SMTP.
+
 ## Advisors no baseline
 
 - Seis warnings intencionais de RPCs `SECURITY DEFINER`: cinco administrativos com checagem de administrador e `get_my_access_profile()` limitado a `auth.uid()`.

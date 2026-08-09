@@ -22,8 +22,8 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 | Grupos e treinos dirigidos | Implementados |
 | CI/CD | GitHub Actions e GitHub→Vercel funcionando |
 | Supabase | Seis migrations aplicadas e 1 admin ativo |
-| SMTP próprio | Pendente de provedor/credenciais |
-| Senhas vazadas | Recurso desativado; exige plano Pro ou superior |
+| SMTP próprio | Código, templates e runbook prontos; ativação remota depende de domínio/provedor/credenciais |
+| Senhas vazadas | Bloqueada pelo plano Free; ativar após upgrade Pro |
 | Privacidade de metadados de revisão | Resolvida no Bloco 1 |
 | Existência física de mídia | Resolvida no Bloco 1 |
 | PWA instalável/offline/push | Parcial |

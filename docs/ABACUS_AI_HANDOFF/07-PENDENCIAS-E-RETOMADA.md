@@ -4,16 +4,17 @@ Atualizar este arquivo após cada bloco.
 
 ## Em andamento
 
-- Bloco 2: configurações de Auth, proteção contra senhas vazadas e preparação de SMTP/templates.
+- Bloco 3: PWA/mobile, privacidade/LGPD e operação que independem dos usuários reais.
 
 ## Concluído neste ciclo
 
 - Bloco 0: pacote canônico de relatórios criado e publicado na branch.
 - Bloco 1: vazamento de metadados de perfil e integridade de referências de mídia resolvidos no código e no Supabase remoto.
+- Bloco 2: callback, regras locais de senha, oito templates e runbook SMTP preparados; ativação remota bloqueada de forma explícita pelo plano Free e pela ausência de domínio/credenciais.
 
 ## Próxima ação técnica
 
-Confirmar o plano da organização Supabase e a configuração atual do Auth. Habilitar proteção contra senhas vazadas se o plano permitir; preparar SMTP e templates sem registrar credenciais no Git. Se credenciais/domínio ainda não existirem, deixar runbook exato e gate de validação prontos.
+Auditar manifesto, ícones, service worker/offline, política de privacidade, termos, consentimentos e runbooks de operação. Implementar somente o que é compatível com o MVP web/PWA e não inventar dados jurídicos ou empresariais.
 
 ## Fila planejada
 

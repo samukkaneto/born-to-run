@@ -13,6 +13,7 @@ Atualizado em 08/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 7. `07-PENDENCIAS-E-RETOMADA.md` — próxima ação exata e dependências externas.
 8. `08-LOG-DE-EXECUCAO.md` — cronologia dos blocos executados.
 9. `09-RELATORIO-CONSOLIDADO.md` — resumo único para anexar quando só for possível enviar um arquivo.
+10. `10-AUTH-SMTP-E-TEMPLATES.md` — configuração de Auth, SMTP, templates e matriz do piloto.
 
 ## Fontes complementares no repositório
 

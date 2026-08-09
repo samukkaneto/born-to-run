@@ -42,3 +42,11 @@ Nenhum bloco será declarado concluído somente por compilar. Alterações de Au
 - Migration aplicada: `20260809021316_protege_metadados_e_referencias_de_midia`.
 - Catálogo remoto: privilégios por coluna, RPC, helper, triggers e policies confirmados.
 - Banco após aplicação: 1 perfil administrador, zero objetos técnicos no Storage.
+
+## Evidências do Bloco 2
+
+- Plano Supabase consultado pela API: `Free`.
+- Oito templates validados, incluindo tokens de confirmação, recuperação, mudança de e-mail e reautenticação.
+- `supabase/config.toml` foi carregado com sucesso pelo CLI; o comando parou somente ao procurar Docker, ausente no host.
+- Callback explícito de confirmação adicionado ao cadastro.
+- ESLint, TypeScript e Vitest 48/48 aprovados após as alterações.

@@ -14,7 +14,7 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 |---|---|---|
 | Site institucional | Implementado e validado | Home, Sobre, Galeria, Contato, header/footer e páginas responsivas; desktop e Pixel 7 passaram no E2E. |
 | Identidade visual Fable 5 | Implementada, ainda refinável | A direção atual foi preservada; a Fable pode redesenhar componentes sem alterar contratos funcionais. |
-| Autenticação | Implementada e validada | Login real e erros de credencial foram validados no preview; cadastro/recuperação ainda dependem de SMTP próprio para validar a entrega de e-mail. |
+| Autenticação | Implementada e validada | Login real e erros de credencial foram validados; cadastro tem callback explícito e templates prontos, mas a entrega real ainda depende de SMTP próprio. |
 | Comunidade fechada | Implementada e validada no banco | Cadastro entra como `pending`; somente `active` acessa conteúdo interno. |
 | Aprovação de membros | Implementada e validada | Admin aprova, rejeita, suspende ou reativa; autorização foi testada no banco e o painel passou em smoke autenticado anterior. |
 | Feed social | MVP implementado e validado | Posts, fotos privadas, métricas, curtidas, comentários e paginação keyset por cursor; escrita real passou no preview final. |
@@ -114,5 +114,7 @@ Leia primeiro `README-FABLE5.md`. O redesign pode ter liberdade visual ampla, ma
 - tratar Garmin ou Strava como integração já solicitada.
 
 Este documento deve ser atualizado sempre que uma etapa técnica, deploy ou decisão de produto mudar de estado.
+
+Detalhes de plano, SMTP, templates e matriz do piloto: `docs/ABACUS_AI_HANDOFF/10-AUTH-SMTP-E-TEMPLATES.md`.
 
 O pacote detalhado e ordenado para retomada pela Abacus AI está em `docs/ABACUS_AI_HANDOFF/00-LEIA-PRIMEIRO.md`.
