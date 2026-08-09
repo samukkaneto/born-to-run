@@ -1,6 +1,6 @@
 # Born to Run — relatório consolidado para Abacus AI
 
-Atualizado em 08/08/2026 no início do ciclo de prontidão para piloto.
+Atualizado em 09/08/2026 após a conclusão do ciclo de prontidão para piloto.
 
 ## Resumo
 
@@ -20,7 +20,7 @@ O MVP web está publicado em https://born-to-run-seven.vercel.app. O código est
 - RLS, RPCs, Storage privado e migrations versionadas;
 - CI, unitários, E2E, pgTAP e build de produção.
 
-## Ciclo em execução
+## Ciclo executado
 
 O Codex iniciou a branch `codex/production-readiness` para:
 
@@ -28,7 +28,7 @@ O Codex iniciou a branch `codex/production-readiness` para:
 2. resolver os P2 de perfis e mídia;
 3. elevar configurações de Auth;
 4. preparar SMTP;
-5. testar o piloto real;
+5. preparar a matriz do piloto real;
 6. completar a prontidão PWA/mobile;
 7. revisar privacidade e operação;
 8. executar auditoria final pesada e publicar.
@@ -40,7 +40,7 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - Bloco 2 preparado: callback e templates concluídos; ativação remota de senhas vazadas/SMTP depende de plano Pro, domínio e credenciais.
 - Bloco 3 concluído: instalação PWA, offline sem cache privado, headers, noindex, privacidade, termos e aceite versionado.
 - Bloco 4 concluído: health check, métricas anônimas com sanitização, audit no CI, Dependabot, política de segurança, plano de backup e checklist do piloto/release.
-- Bloco 5 em andamento: PR #2, CI e preview estão verdes; falta somente a auditoria final e o release.
+- Bloco 5 concluído: auditoria final sem P0/P1, PR #2 mesclado, CI do merge verde e produção validada.
 
 ## Estado operacional após o Bloco 4
 
@@ -52,14 +52,14 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - Supabase Free exige upgrade Pro ou exportações criptografadas antes de depender de recuperação;
 - SMTP, senhas vazadas, identificação formal do controlador e piloto real seguem como dependências explícitas do proprietário.
 
-## Checkpoint hospedado
+## Release final do ciclo
 
-- PR draft: https://github.com/samukkaneto/born-to-run/pull/2;
-- CI `31293700511`: aprovado;
-- preview `dpl_CjisHx5g4zL8Q2gDqABQkuDNwtfK`: `READY`;
-- rotas públicas/health/métricas: 200; dashboard anônimo: 307;
+- PR #2: https://github.com/samukkaneto/born-to-run/pull/2, mesclado;
+- CI final do PR `31294328656` e CI do merge `31314115269`: aprovados;
+- produção `dpl_4SjYHKJriBnHY82Q8qYpzfjt7aYB`: `READY/PROMOTED`, revisão `7f66eb8`;
+- rotas públicas/health/PWA/métricas: 200; dashboard anônimo: 307;
 - Web Analytics habilitado e Speed Insights configurado;
-- Vercel e Supabase sem erros críticos conhecidos no checkpoint.
+- Vercel sem erros de runtime no pós-release e Supabase sem erros críticos conhecidos.
 
 ## Fable 5
 

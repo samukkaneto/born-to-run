@@ -1,12 +1,12 @@
 # Born to Run — status real de implementação
 
-Atualizado em **08/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de publicação ou decisão do proprietário.
+Atualizado em **09/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
 
 ## Resumo executivo
 
 O projeto deixou de ser apenas um protótipo visual. O código atual já contém o site institucional, a área privada do atleta, o feed social e o painel do treinador conectados ao Supabase real. A base foi reformulada como **comunidade esportiva fechada**: novos cadastros aguardam aprovação, conteúdo interno exige associação ativa e treinos podem ser destinados à equipe inteira, a grupos ou a atletas escolhidos.
 
-O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 48 testes unitários e 12 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. O código foi publicado no GitHub, o PR [#1](https://github.com/samukkaneto/born-to-run/pull/1) foi mesclado em `main`, os dois workflows de qualidade ficaram verdes e a versão validada está em produção em **https://born-to-run-seven.vercel.app**.
+O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 48 testes unitários e 24 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. Os PRs [#1](https://github.com/samukkaneto/born-to-run/pull/1) e [#2](https://github.com/samukkaneto/born-to-run/pull/2) foram mesclados em `main`, os workflows de qualidade ficaram verdes e a revisão `7f66eb8` está em produção em **https://born-to-run-seven.vercel.app**.
 
 ## Estado por área
 
@@ -27,8 +27,8 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 | Observabilidade | Implementada para o piloto | `/api/health`, Runtime Logs, Web Analytics habilitado e Speed Insights configurado; URLs são sanitizadas antes das métricas. |
 | Continuidade | Procedimento definido | Audit no CI, Dependabot, relato privado e runbook de release; Supabase Free exige exportação criptografada ou Pro antes de depender de backup automático. |
 | Supabase remoto | Sincronizado | Seis migrations aplicadas; estado atual termina em `20260809021316_protege_metadados_e_referencias_de_midia`. |
-| Vercel | Produção publicada e automação restaurada | O domínio público acompanha os deployments Git de `main`; a reconexão ao repositório atual foi comprovada pelo deployment automático do commit `0947508`. Variáveis Supabase, rotas públicas/guard e logs foram verificados. `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk` permanece como baseline manual validado e `dpl_3GyqEDBXYJcqndUWVRZGSzviMDik` como rollback antigo conhecido. |
-| GitHub | Publicado, revisado e mesclado | PR [#1](https://github.com/samukkaneto/born-to-run/pull/1) mesclado em `main` no commit `21d15aa`; CI da branch e do merge concluídos com sucesso. |
+| Vercel | Produção publicada e validada | Deployment Git `dpl_4SjYHKJriBnHY82Q8qYpzfjt7aYB`, revisão `7f66eb8`, `READY/PROMOTED`; 31 rotas, aliases corretos, respostas 200/307 e logs sem erro. O deployment `dpl_A2GZxDdUvqphcLt8MYrCYvdq4Zuz` permanece como rollback anterior conhecido. |
+| GitHub | Publicado, revisado e mesclado | PR [#2](https://github.com/samukkaneto/born-to-run/pull/2) mesclado em `main` no commit `7f66eb8`; CI do PR `31294328656` e CI do merge `31314115269` concluídos com sucesso. |
 
 ## Regras de produto consolidadas
 
@@ -92,12 +92,12 @@ O banco preserva 1 perfil administrador ativo e continua sem conteúdo fictício
 | Testes pgTAP versionados | 56 asserções; a suíte combinada passou remotamente dentro de transação revertida antes da sexta migration |
 | E2E público | Cobertura ampliada para 24 casos em Desktop Chrome e Pixel 7; todos aprovados sobre o build de produção; zero violações axe sérias/críticas |
 | E2E autenticado hospedado | Login, feed, publicação, curtida, comentário, painel admin, grupo e treino dirigido validados; dados técnicos removidos |
-| Vercel | Produção `READY` no domínio canônico, 27 rotas, respostas 200/307 corretas, integração Git automática validada e sem erros nos logs consultados |
-| GitHub Actions | Runs `31275354335` e `31275507684` aprovadas integralmente na branch e no merge em `main` |
+| Vercel | Produção `READY/PROMOTED` no domínio canônico, 31 rotas, respostas 200/307 corretas, integração Git automática validada e sem erros nos logs consultados |
+| GitHub Actions | Runs `31294328656` (PR) e `31314115269` (merge) aprovadas integralmente |
 
-## Pendências operacionais pós-publicação
+## Dependências externas pós-publicação
 
-O MVP web está publicado. Os itens abaixo são melhorias operacionais ou fases posteriores e não anulam a entrega atual:
+O MVP web está publicado e o trabalho técnico independente dessas entradas foi concluído. Os itens abaixo exigem conta, decisão ou teste do proprietário e não anulam a entrega atual:
 
 1. configurar SMTP próprio e validar cadastro, confirmação e recuperação com caixa de e-mail real;
 2. habilitar no Supabase Auth a proteção contra senhas vazadas;

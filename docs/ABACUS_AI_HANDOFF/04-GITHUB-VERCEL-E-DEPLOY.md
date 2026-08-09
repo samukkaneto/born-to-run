@@ -6,7 +6,7 @@
 - Branch padrão: `main`
 - Baseline: `46001fa5a1ebc16fb28cdb742d21e66f77ccc8a6`
 - PR de reconstrução: `#1`, mesclado.
-- PR do ciclo de prontidão: `#2`, aberto como draft para a auditoria final.
+- PR do ciclo de prontidão: `#2`, auditado, marcado pronto e mesclado em `main` no commit `7f66eb82db99ddbbb2edc33b26c579225509a8e6`.
 - Workflow: `.github/workflows/ci.yml`.
 - Dependabot: npm e GitHub Actions, semanal.
 - Relato privado de segurança: `SECURITY.md` e GitHub Security Advisory.
@@ -19,10 +19,11 @@
 - Domínio: https://born-to-run-seven.vercel.app
 - Branch de produção: `main`
 - Integração Git ligada ao repo ID atual `1304308095`.
-- Preview final do ciclo: `dpl_CjisHx5g4zL8Q2gDqABQkuDNwtfK`, `READY`, commit `4dae905`.
-- Auditoria em 09/08/2026: zero clusters de erro em sete dias e zero warning/error/fatal nas últimas 24 horas consultadas.
+- Preview final auditado: `dpl_C1PtqEHA9cYT6qbpNy6pPwRv8qTF`, `READY`, commit `61e3888`.
+- Produção do ciclo: `dpl_4SjYHKJriBnHY82Q8qYpzfjt7aYB`, `READY/PROMOTED`, commit verificado `7f66eb8` da branch `main`.
+- Auditoria pós-release em 09/08/2026: zero clusters de erro e zero warning/error/fatal no deployment consultado.
 - Web Analytics: habilitado remotamente e com ID configurado.
-- Speed Insights: configurado no projeto; ainda sem dados porque a versão instrumentada não chegou à produção.
+- Speed Insights: configurado; a instrumentação já chegou à produção e começará a formar histórico com visitas reais.
 - Plano Vercel: Hobby; previews protegidos e domínio customizado público.
 
 Variáveis públicas cadastradas, sem registrar valores nesta documentação:
@@ -35,7 +36,7 @@ Não adicionar `service_role` ou qualquer segredo em variável `NEXT_PUBLIC_*`.
 
 ## Baselines de rollback
 
-- `dpl_A2GZxDdUvqphcLt8MYrCYvdq4Zuz`: baseline Git automático no início deste ciclo.
+- `dpl_A2GZxDdUvqphcLt8MYrCYvdq4Zuz`: baseline Git automático anterior ao ciclo, ainda `READY` e candidato conhecido de rollback.
 - `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk`: baseline manual anterior, validado e `READY` no último check.
 - `dpl_3GyqEDBXYJcqndUWVRZGSzviMDik`: versão histórica anterior à reconstrução.
 
