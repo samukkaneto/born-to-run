@@ -45,7 +45,7 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - Complemento do Bloco 6: o e-mail oficial passou a aparecer na página de contato, o formulário prepara a mensagem para esse endereço e o aviso de privacidade usa o mesmo canal durante o piloto.
 - Release final do Bloco 6: PR #11 mesclada, CI de PR e merge verdes, deployment `dpl_HXgGgXEqjK12Vnib7ELczsRJx4Md` `READY` e domínio público validado.
 - Bloco 7 concluído: conta administradora localizada e ativa, recuperação disponível no próprio aplicativo e chave redundante da Resend excluída sem tocar na credencial SMTP em uso. A única conferência operacional ainda sem evidência visual é a tabela de tokens da Hostinger, cujo painel continuou congelando.
-- Bloco 8 em finalização: retirou a alegação incorreta de 200 atletas, implementou envio transacional do formulário para `contato@equipeborntorun.com`, configurou uma chave Resend exclusiva na Vercel e autorizou o Hostinger MCP oficial.
+- Bloco 8 concluído tecnicamente: retirou a alegação incorreta de 200 atletas, implementou envio transacional do formulário para `contato@equipeborntorun.com`, configurou uma chave Resend exclusiva na Vercel, comprovou uma entrega real e autorizou o Hostinger MCP oficial.
 
 ## Estado operacional após o Bloco 4
 
@@ -57,6 +57,8 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - Supabase Free exige upgrade Pro ou exportações criptografadas antes de depender de recuperação;
 - SMTP está concluído; senhas vazadas (Pro), identificação formal do controlador e piloto real seguem como dependências explícitas do proprietário.
 - a instalação atual é PWA e não gera APK; Android nativo é uma fase futura separada.
+- gates atualizados do Bloco 8: 52/52 unitários, 26/26 E2E desktop/mobile, build de 32 rotas, CI `31332097287` verde e preview `dpl_HPogUkbXQdytroGL9Kn2v2RZCaib` `READY`;
+- o formulário real foi enviado pelo preview e a Resend confirmou `delivered`; não houve erro, warning ou fatal nos Runtime Logs auditados.
 
 ## Release final do ciclo
 

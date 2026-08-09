@@ -174,4 +174,9 @@ Cada entrada futura deve registrar:
 - O Aviso de Privacidade passou a registrar nome, e-mail e mensagem do contato, além do papel da Resend na entrega ao canal oficial.
 - A tela de instalação esclarece que a versão atual é PWA e não fornece APK. O Android nativo fica para fase posterior ao piloto.
 - O MCP remoto oficial da Hostinger (`https://mcp.hostinger.com`) foi adicionado à configuração compartilhada do Codex e autenticado via OAuth. Ele será carregado depois de reiniciar o aplicativo Codex.
-- Gates locais antes da publicação: lint limpo, TypeScript aprovado, unitários 52/52, build de 32 rotas e E2E 26/26 em Desktop Chrome e Pixel 7, sem violações axe sérias/críticas. CI, preview, deployment e entrega real serão registrados na continuação desta entrada.
+- Gates locais antes da publicação: lint limpo, TypeScript aprovado, unitários 52/52, build de 32 rotas e E2E 26/26 em Desktop Chrome e Pixel 7, sem violações axe sérias/críticas.
+- O commit funcional `0c43ec135b042e6f7a6c00b6d76b9e89eca9c691` foi publicado na PR draft `#13`; o workflow `Qualidade` `31332097287` concluiu com sucesso.
+- O preview Vercel `dpl_HPogUkbXQdytroGL9Kn2v2RZCaib`, em `https://born-to-dpvozi1qi-shabuneto.vercel.app`, ficou `READY` e recebeu a variável sensível de Preview.
+- Um envio real foi executado pela tela `/contato`, com uma mensagem técnica identificada. A interface confirmou a entrega e o painel da Resend registrou o e-mail para `contato@equipeborntorun.com` com status `delivered`.
+- Os Runtime Logs desse deployment não apresentaram `error`, `warning` ou `fatal` nos 30 minutos auditados; o agrupamento exibiu somente respostas `200`, `204` e `304`.
+- Próxima ação exata: incorporar este registro documental, aguardar o CI do commit final, mesclar a PR #13 e validar o mesmo fluxo no domínio de produção.

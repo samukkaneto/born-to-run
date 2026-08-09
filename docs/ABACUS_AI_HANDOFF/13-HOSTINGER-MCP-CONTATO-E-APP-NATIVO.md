@@ -65,4 +65,8 @@ Isso não produz um arquivo `.apk`, não cria um binário Android nativo e não 
 - domínio Resend `equipeborntorun.com`: verificado;
 - variável Vercel `RESEND_API_KEY`: presente em Preview e Production, valor criptografado;
 - gates locais do bloco: lint, TypeScript, 52/52 unitários, build de 32 rotas e 26/26 E2E desktop/mobile aprovados;
-- build, E2E, CI, deployment e teste de entrega real devem ser consultados na entrada mais recente de `08-LOG-DE-EXECUCAO.md`.
+- CI `31332097287`: concluída com sucesso no commit funcional do bloco;
+- preview Vercel `dpl_HPogUkbXQdytroGL9Kn2v2RZCaib`: `READY`;
+- teste real pela tela `/contato`: interface confirmou a entrega e Resend registrou status `delivered` para `contato@equipeborntorun.com`;
+- Runtime Logs auditados sem `error`, `warning` ou `fatal` no deployment de teste;
+- detalhes cronológicos e o resultado do merge/produção ficam na entrada mais recente de `08-LOG-DE-EXECUCAO.md`.

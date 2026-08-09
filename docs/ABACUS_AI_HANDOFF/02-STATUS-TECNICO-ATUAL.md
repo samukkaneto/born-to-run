@@ -60,7 +60,7 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 | CI/CD | GitHub Actions e GitHub→Vercel funcionando |
 | Supabase | Seis migrations aplicadas e 1 admin ativo |
 | SMTP próprio | Ativo com Resend, domínio autenticado, templates hospedados e recuperação testada |
-| Formulário público | Endpoint Resend implementado; validação de entrega real após o deployment desta mudança |
+| Formulário público | Endpoint Resend implementado e entrega real confirmada no preview (`delivered`) |
 | Senhas vazadas | Bloqueada pelo plano Free; ativar após upgrade Pro |
 | Privacidade de metadados de revisão | Resolvida no Bloco 1 |
 | Existência física de mídia | Resolvida no Bloco 1 |
