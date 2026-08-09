@@ -44,6 +44,8 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - Bloco 6 concluído: domínio oficial em produção, `www` canônico, e-mail profissional preservado, Resend autenticada, SMTP/templates ativos no Supabase e recuperação testada.
 - Complemento do Bloco 6: o e-mail oficial passou a aparecer na página de contato, o formulário prepara a mensagem para esse endereço e o aviso de privacidade usa o mesmo canal durante o piloto.
 - Release final do Bloco 6: PR #11 mesclada, CI de PR e merge verdes, deployment `dpl_HXgGgXEqjK12Vnib7ELczsRJx4Md` `READY` e domínio público validado.
+- Bloco 7 concluído: conta administradora localizada e ativa, recuperação disponível no próprio aplicativo e chave redundante da Resend excluída sem tocar na credencial SMTP em uso. A única conferência operacional ainda sem evidência visual é a tabela de tokens da Hostinger, cujo painel continuou congelando.
+- Bloco 8 concluído tecnicamente: retirou a alegação incorreta de 200 atletas, implementou envio transacional do formulário para `contato@equipeborntorun.com`, configurou uma chave Resend exclusiva na Vercel, comprovou uma entrega real e autorizou o Hostinger MCP oficial.
 
 ## Estado operacional após o Bloco 4
 
@@ -54,6 +56,9 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - banco ainda sem conteúdo real de atletas;
 - Supabase Free exige upgrade Pro ou exportações criptografadas antes de depender de recuperação;
 - SMTP está concluído; senhas vazadas (Pro), identificação formal do controlador e piloto real seguem como dependências explícitas do proprietário.
+- a instalação atual é PWA e não gera APK; Android nativo é uma fase futura separada.
+- gates atualizados do Bloco 8: 52/52 unitários, 26/26 E2E desktop/mobile, build de 32 rotas, CI `31332097287` verde e preview `dpl_HPogUkbXQdytroGL9Kn2v2RZCaib` `READY`;
+- o formulário real foi enviado pelo preview e a Resend confirmou `delivered`; não houve erro, warning ou fatal nos Runtime Logs auditados.
 
 ## Release final do ciclo
 
@@ -71,3 +76,7 @@ A Fable 5 mantém liberdade visual. Ela deve ler `README-FABLE5.md`, este pacote
 ## Retomada
 
 Se o ciclo for interrompido, leia `07-PENDENCIAS-E-RETOMADA.md` e a entrada mais recente de `08-LOG-DE-EXECUCAO.md`.
+
+Para o proprietário: as contas do piloto são criadas em `https://equipeborntorun.com/cadastro`, confirmadas pelo e-mail recebido e aprovadas pelo administrador dentro do aplicativo. Se o administrador não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com o e-mail informado diretamente a ele.
+
+Para a Abacus/Fable: não reintroduzir qualquer quantidade atual de atletas. Usar somente fundação em 2015 e mais de 200 participações em corridas até nova confirmação expressa do proprietário.

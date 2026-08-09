@@ -165,7 +165,7 @@ Cada fase traz: **Objetivo · Arquivos afetados · Alterações · Dependências
 **Alterações:**
 1. Corrigir navegação (âncoras → rotas) em todas as páginas.
 2. **Galeria:** remover imagens irrelevantes/quebradas; usar só fotos reais da equipe; deixar placeholders claros onde faltarem fotos reais.
-3. Substituir estatísticas fictícias pelos **dados oficiais** (~200 atletas, +200 participações, desde 2015).
+3. Substituir estatísticas fictícias pelos **dados oficiais** (+200 participações em corridas, desde 2015; sem divulgar quantidade atual de atletas).
 4. Corrigir H1 da home (espaço entre palavras para leitores de tela).
 5. Unificar CTAs ("Comece Agora" com destino único).
 6. Contato: marcar telefone/e-mail como pendência do cliente; conectar o formulário a um backend real ou desabilitar com aviso honesto.

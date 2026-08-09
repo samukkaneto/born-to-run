@@ -53,13 +53,22 @@ Nenhuma credencial de banco está disponível neste workspace e nenhum dump pess
 
 ### Antes de convidar atletas
 
-- [ ] configurar domínio/remetente e SMTP próprio;
-- [ ] aplicar os oito templates de Auth e conferir URLs de redirecionamento;
+- [x] configurar domínio/remetente e SMTP próprio;
+- [x] implementar o formulário público com entrega Resend para o e-mail oficial;
+- [x] aplicar os oito templates de Auth e conferir URLs de redirecionamento;
 - [ ] se houver upgrade Pro, habilitar proteção contra senhas vazadas;
 - [x] habilitar Web Analytics e Speed Insights no painel Vercel;
 - [ ] definir identificação formal e e-mail de privacidade do controlador;
 - [ ] decidir Pro ou rotina de backup criptografado;
 - [ ] revisar visual e textos finais com Fable 5/proprietário.
+
+### Como criar e aprovar as contas reais
+
+1. Cada pessoa abre `https://equipeborntorun.com/cadastro` e cria a própria conta.
+2. A pessoa confirma o endereço pelo e-mail automático recebido da Born to Run.
+3. Até a aprovação, ela permanece em acesso pendente e não entra no conteúdo privado.
+4. O proprietário entra com a conta administradora e aprova o novo membro no painel do treinador.
+5. Se o administrador esquecer a senha, usa `https://equipeborntorun.com/recuperar-senha`. O e-mail exato da conta foi entregue diretamente ao proprietário e não é versionado neste documento.
 
 ### Matriz mínima com pessoas reais
 
@@ -73,6 +82,7 @@ Nenhuma credencial de banco está disponível neste workspace e nenhum dump pess
 - [ ] suspensão e reativação mantendo histórico correto;
 - [ ] instalação PWA em ao menos um Android e um iPhone;
 - [ ] conferência de logs e métricas sem dados pessoais.
+- [ ] envio real pelo formulário e resposta ao remetente usando `reply_to`.
 
 Registrar apenas IDs técnicos ou contas de teste nos relatórios; não copiar e-mails, fotos ou conteúdo dos atletas.
 

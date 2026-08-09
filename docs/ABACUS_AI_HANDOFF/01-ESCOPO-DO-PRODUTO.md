@@ -36,7 +36,7 @@ Papéis atuais: `member` e `admin`. O treinador usa o papel administrativo; não
 ## Conteúdo oficial
 
 - Fundação em 2015, Descalvado — SP.
-- Aproximadamente 200 atletas e mais de 200 participações.
+- Mais de 200 participações em corridas. Não divulgar quantidade atual de atletas sem uma confirmação nova do proprietário.
 - Instagram `@equipeborntorun`.
 - Robson Alves — Educador Físico, CREF 119911-G/SP.
 - Especialização em corridas de meio-fundo e fundo; Treinador Nível 1 World Athletics.

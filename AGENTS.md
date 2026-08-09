@@ -27,7 +27,7 @@ Garmin Connect, Strava e Sports Tracker são referências de experiência. Não 
 ## Dados oficiais
 
 - Fundação em 2015, Descalvado — SP.
-- Aproximadamente 200 atletas e mais de 200 participações.
+- Mais de 200 participações em corridas.
 - Instagram `@equipeborntorun`.
 - Robson Alves — Educador Físico, CREF 119911-G/SP.
 - Especialização em corridas de meio-fundo e fundo; Treinador Nível 1 World Athletics.

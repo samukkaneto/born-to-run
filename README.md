@@ -93,4 +93,4 @@ design-refs        seis pranchas visuais para Fable 5
 - Treinos podem atender à equipe inteira, grupos ou atletas.
 - Garmin/Strava são referências de experiência, não integrações desta versão.
 
-Conteúdo oficial: equipe fundada em 2015, aproximadamente 200 atletas, mais de 200 participações, Instagram `@equipeborntorun` e Robson Alves (CREF 119911-G/SP, Treinador Nível 1 World Athletics). Não invente contatos, endereço, resultados ou pessoas.
+Conteúdo oficial: equipe fundada em 2015, mais de 200 participações em corridas, Instagram `@equipeborntorun`, contato `contato@equipeborntorun.com` e Robson Alves (CREF 119911-G/SP, Treinador Nível 1 World Athletics). Não invente número atual de atletas, endereço, resultados ou pessoas.

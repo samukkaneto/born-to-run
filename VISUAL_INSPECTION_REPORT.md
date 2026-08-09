@@ -27,7 +27,7 @@ O projeto apresenta uma base visual sólida com design profissional na maioria d
 #### Desktop (1440px)
 - **Header:** Logo Born to Run visível e correto. Navegação horizontal com links: Sobre, Modalidades, Como Funciona, Depoimentos, Contato, Entrar, Comece Agora, WhatsApp.
 - **Hero Section:** Imagem de fundo com equipe real da Born to Run. Título "Sua transformação começa com o primeiro passo" com destaque em vermelho. CTAs "Ver Modalidades" e "Fale Conosco" presentes.
-- **Seção de Estatísticas:** ~200 Atletas, +200 Corridas, 10+ Anos, 100% Foco em saúde — grid 4 colunas.
+- **Seção de Estatísticas (snapshot histórico):** +200 participações e fundação em 2015; a contagem de atletas foi retirada por não representar o quadro atual.
 - **Seção Sobre:** Texto descritivo com imagem da equipe.
 - **Modalidades:** Cards com ícones para diferentes modalidades de treino.
 - **Como Funciona:** Timeline/steps com ícones.
@@ -198,7 +198,7 @@ O projeto apresenta uma base visual sólida com design profissional na maioria d
 **Status:** ⚠️ Renderiza com problemas menores
 
 - **Hero:** Texto + imagem de corrida real.
-- **Estatísticas:** ~200 Atletas, +200 Corridas, 10+ Anos, 100% Foco em saúde.
+- **Estatísticas (snapshot histórico):** +200 participações e fundação em 2015; sem contagem atual de atletas.
 - **Jornada do atleta:** Steps com ícones (Avaliação inicial, etc.).
 
 #### 🐛 Problemas:

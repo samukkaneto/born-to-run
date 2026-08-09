@@ -12,7 +12,7 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 
 | Área | Estado | Evidência / observação |
 |---|---|---|
-| Site institucional | Implementado e validado | Home, Sobre, Galeria, Contato, header/footer e páginas responsivas; desktop e Pixel 7 passaram no E2E. |
+| Site institucional | Implementado e validado | Home, Sobre, Galeria, Contato com entrega real via Resend, header/footer e páginas responsivas; desktop e Pixel 7 passam no E2E. |
 | Identidade visual Fable 5 | Implementada, ainda refinável | A direção atual foi preservada; a Fable pode redesenhar componentes sem alterar contratos funcionais. |
 | Autenticação | Implementada e validada | Login real e erros de credencial foram validados; cadastro tem callback explícito e templates prontos, mas a entrega real ainda depende de SMTP próprio. |
 | Comunidade fechada | Implementada e validada no banco | Cadastro entra como `pending`; somente `active` acessa conteúdo interno. |
@@ -23,7 +23,7 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 | Grupos | Implementado e validado | Criar, editar, arquivar/reativar e gerenciar integrantes, preservando destinatários históricos. |
 | Comunicados | Implementado | CRUD do treinador e leitura pelos membros ativos. |
 | Painel do treinador | Implementado e validado | Dashboard, aprovações, membros, grupos, treinos e comunicados; grupo e treino direcionado passaram em smoke autenticado. |
-| PWA/responsividade | Instalável, push pendente | Manifesto, ícones, instalação guiada, service worker e fallback offline público validados; dados privados nunca entram no cache. Não é binário nativo. |
+| PWA/responsividade | Instalável, push e nativo pendentes | Manifesto, ícones, instalação guiada, service worker e fallback offline público validados; dados privados nunca entram no cache. Não gera APK e não é binário nativo. |
 | Observabilidade | Implementada para o piloto | `/api/health`, Runtime Logs, Web Analytics habilitado e Speed Insights configurado; URLs são sanitizadas antes das métricas. |
 | Continuidade | Procedimento definido | Audit no CI, Dependabot, relato privado e runbook de release; Supabase Free exige exportação criptografada ou Pro antes de depender de backup automático. |
 | Supabase remoto | Sincronizado | Seis migrations aplicadas; estado atual termina em `20260809021316_protege_metadados_e_referencias_de_midia`. |
