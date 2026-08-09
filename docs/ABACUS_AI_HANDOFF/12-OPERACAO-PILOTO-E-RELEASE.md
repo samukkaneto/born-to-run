@@ -20,6 +20,7 @@ Web Analytics foi habilitado remotamente em 09/08/2026 e Speed Insights já esta
 - o CI executa `npm audit --audit-level=high` antes dos gates de código;
 - Dependabot foi configurado semanalmente para npm e GitHub Actions;
 - `SECURITY.md` orienta relato privado por GitHub Security Advisory e proíbe exposição em issues;
+- o workflow usa `actions/checkout@v7` e `actions/setup-node@v7`, evitando o runtime Node 20 depreciado das versões v4;
 - nenhum segredo, token ou dump de dados deve ser anexado a PR, issue, artefato público ou relatório da Abacus.
 
 Atualizações automáticas não devem ser mescladas sem CI verde e revisão do changelog quando forem major versions.

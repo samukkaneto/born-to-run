@@ -100,3 +100,9 @@ Cada entrada futura deve registrar:
 - Domínio público validado: páginas, manifesto, service worker e scripts de métricas 200; dashboard anônimo 307 para login; health 200 na revisão `7f66eb8`.
 - Headers de segurança e HSTS confirmados; nenhum cluster de runtime nem warning/error/fatal no deployment após os testes.
 - Veredito final técnico: pronto para piloto fechado. Restam somente as dependências externas enumeradas no arquivo `07`.
+
+## 09/08/2026 — manutenção final do CI
+
+- A primeira execução da PR documental expôs aviso de depreciação do Node 20 interno de `actions/checkout@v4` e `actions/setup-node@v4`.
+- O Dependabot abriu atualizações isoladas para v7 e ambas passaram no pipeline completo.
+- As duas actions foram incorporadas juntas à PR final; upgrades major de TypeScript/ESLint não foram misturados porque seus checks falharam.
