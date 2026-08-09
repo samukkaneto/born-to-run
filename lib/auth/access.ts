@@ -21,9 +21,7 @@ export async function getAccessContext() {
   }
 
   const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('user_id, full_name, avatar_url, role, membership_status, status_note')
-    .eq('user_id', user.id)
+    .rpc('get_my_access_profile')
     .maybeSingle()
 
   if (profileError) throw profileError

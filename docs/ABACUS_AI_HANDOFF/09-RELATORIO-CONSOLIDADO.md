@@ -33,6 +33,12 @@ O Codex iniciou a branch `codex/production-readiness` para:
 7. revisar privacidade e operação;
 8. executar auditoria final pesada e publicar.
 
+## Progresso do ciclo
+
+- Bloco 0 concluído: relatórios canônicos consolidados nesta pasta.
+- Bloco 1 concluído: sexta migration aplicada; metadados administrativos de perfis estão ocultos dos membros e referências de mídia são verificadas contra objetos reais do Storage.
+- Bloco 2 em andamento: proteção contra senhas vazadas, SMTP e templates de Auth.
+
 ## Fable 5
 
 A Fable 5 mantém liberdade visual. Ela deve ler `README-FABLE5.md`, este pacote e as seis imagens em `design-refs/`, preservando os contratos funcionais e de segurança.

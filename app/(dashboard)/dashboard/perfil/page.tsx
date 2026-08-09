@@ -1,10 +1,11 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createMediaUrl } from '@/lib/supabase/media'
+import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
 import PerfilForm from '@/components/feed/PerfilForm'
 import { formatDate } from '@/lib/utils'
 import { User, MapPin, Target, Rss } from 'lucide-react'
-import type { Profile } from '@/types'
+import type { MemberProfile } from '@/types'
 
 export default async function PerfilPage() {
   const supabase = await createClient()
@@ -13,14 +14,14 @@ export default async function PerfilPage() {
 
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('*')
+    .select(MEMBER_PROFILE_COLUMNS)
     .eq('user_id', user.id)
-    .maybeSingle() as { data: Profile | null; error: { message: string } | null }
+    .maybeSingle() as { data: MemberProfile | null; error: { message: string } | null }
 
   if (profileError) throw new Error('Não foi possível carregar o perfil.')
   if (!profile) throw new Error('O perfil autenticado não foi encontrado.')
 
-  const profileForView: Profile = {
+  const profileForView: MemberProfile = {
     ...profile,
     avatar_url: await createMediaUrl(supabase, 'avatars', profile.avatar_url),
   }

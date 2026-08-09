@@ -5,9 +5,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Camera, Loader2, Save } from 'lucide-react'
 import { updateProfile } from '@/lib/actions/profile'
-import type { Profile } from '@/types'
+import type { MemberProfile } from '@/types'
 
-export default function PerfilForm({ profile }: { profile: Profile }) {
+export default function PerfilForm({ profile }: { profile: MemberProfile }) {
   const router = useRouter()
   const fileRef = useRef<HTMLInputElement>(null)
   const [fullName, setFullName] = useState(profile.full_name || '')

@@ -16,7 +16,7 @@ import { formatDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/Toaster'
 import AdminModal from '@/components/admin/AdminModal'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
-import type { Profile, TrainingGroup, WorkoutWithAssignments } from '@/types'
+import type { MemberProfile, TrainingGroup, WorkoutWithAssignments } from '@/types'
 
 const LEVEL_LABELS: Record<string, string> = {
   iniciante: 'Iniciante',
@@ -28,7 +28,7 @@ const LEVEL_BADGES: Record<string, string> = {
   intermediario: 'badge-orange',
   avancado: 'badge-red',
 }
-const MEMBER_STATUS_LABELS: Record<Profile['membership_status'], string> = {
+const MEMBER_STATUS_LABELS: Record<MemberProfile['membership_status'], string> = {
   pending: 'Pendente',
   active: 'Ativo',
   suspended: 'Suspenso',
@@ -51,7 +51,7 @@ export default function WorkoutsManager({
   groups,
 }: {
   workouts: WorkoutWithAssignments[]
-  members: Profile[]
+  members: MemberProfile[]
   groups: TrainingGroup[]
 }) {
   const { toast } = useToast()

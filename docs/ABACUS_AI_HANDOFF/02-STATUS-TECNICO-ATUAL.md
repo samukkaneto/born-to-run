@@ -21,11 +21,11 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 | Painel do treinador | Implementado |
 | Grupos e treinos dirigidos | Implementados |
 | CI/CD | GitHub Actions e GitHub→Vercel funcionando |
-| Supabase | Cinco migrations aplicadas e 1 admin ativo |
+| Supabase | Seis migrations aplicadas e 1 admin ativo |
 | SMTP próprio | Pendente de provedor/credenciais |
 | Senhas vazadas | Recurso desativado; exige plano Pro ou superior |
-| Privacidade de metadados de revisão | P2 pendente |
-| Existência física de mídia | P2 pendente |
+| Privacidade de metadados de revisão | Resolvida no Bloco 1 |
+| Existência física de mídia | Resolvida no Bloco 1 |
 | PWA instalável/offline/push | Parcial |
 | Aplicativo nativo em lojas | Não iniciado |
 
@@ -38,4 +38,4 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 
 ## Veredito
 
-O produto está pronto como MVP web publicado. O ciclo atual busca elevar segurança operacional, e-mail, piloto e prontidão PWA sem alterar a direção visual definida pela Fable 5.
+O produto está pronto como MVP web publicado. O Bloco 1 elevou a segurança do banco: membros não leem mais metadados administrativos de outros perfis e referências novas de avatar/foto precisam existir no Storage. O ciclo continua com Auth, e-mail, piloto e prontidão PWA sem alterar a direção visual definida pela Fable 5.

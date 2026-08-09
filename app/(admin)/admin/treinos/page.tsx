@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
+import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
 import WorkoutsManager from '@/components/admin/WorkoutsManager'
-import type { Profile, TrainingGroup, WorkoutWithAssignments } from '@/types'
+import type { MemberProfile, TrainingGroup, WorkoutWithAssignments } from '@/types'
 
 export default async function AdminTreinosPage() {
   const supabase = await createClient()
@@ -11,7 +12,7 @@ export default async function AdminTreinosPage() {
       .order('created_at', { ascending: false }),
     supabase
       .from('profiles')
-      .select('*')
+      .select(MEMBER_PROFILE_COLUMNS)
       .order('full_name'),
     supabase
       .from('training_groups')
@@ -24,7 +25,7 @@ export default async function AdminTreinosPage() {
   }
 
   const workouts = (workoutsResult.data ?? []) as unknown as WorkoutWithAssignments[]
-  const members = (membersResult.data ?? []) as Profile[]
+  const members = (membersResult.data ?? []) as MemberProfile[]
   const groups = (groupsResult.data ?? []) as TrainingGroup[]
 
   return (

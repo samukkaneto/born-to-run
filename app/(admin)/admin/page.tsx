@@ -6,13 +6,13 @@ export default async function AdminPage() {
   const supabase = await createClient()
 
   const countResults = await Promise.all([
-    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    supabase.from('profiles').select('id', { count: 'exact', head: true }),
     supabase.from('workouts').select('*', { count: 'exact', head: true }),
     supabase.from('announcements').select('*', { count: 'exact', head: true }),
     supabase.from('posts').select('*', { count: 'exact', head: true }),
     supabase
       .from('profiles')
-      .select('*', { count: 'exact', head: true })
+      .select('id', { count: 'exact', head: true })
       .eq('membership_status', 'pending'),
   ])
   if (countResults.some((result) => result.error)) {

@@ -4,22 +4,25 @@ Atualizar este arquivo após cada bloco.
 
 ## Em andamento
 
-- Bloco 0: consolidar o pacote de relatórios para a Abacus AI.
+- Bloco 2: configurações de Auth, proteção contra senhas vazadas e preparação de SMTP/templates.
+
+## Concluído neste ciclo
+
+- Bloco 0: pacote canônico de relatórios criado e publicado na branch.
+- Bloco 1: vazamento de metadados de perfil e integridade de referências de mídia resolvidos no código e no Supabase remoto.
 
 ## Próxima ação técnica
 
-Auditar todas as leituras de `profiles`, desenhar uma interface pública mínima de perfil e resolver o vazamento P2 de `status_note`, `reviewed_at` e `reviewed_by` sem quebrar os guards de acesso ou o painel administrativo.
+Confirmar o plano da organização Supabase e a configuração atual do Auth. Habilitar proteção contra senhas vazadas se o plano permitir; preparar SMTP e templates sem registrar credenciais no Git. Se credenciais/domínio ainda não existirem, deixar runbook exato e gate de validação prontos.
 
 ## Fila planejada
 
-1. privacidade de metadados de perfis;
-2. integridade/existência de mídia;
-3. proteção contra senhas vazadas;
-4. SMTP e templates;
-5. piloto com usuários reais;
-6. PWA/mobile;
-7. privacidade/LGPD e operação;
-8. auditoria final e release.
+1. proteção contra senhas vazadas;
+2. SMTP e templates;
+3. piloto com usuários reais;
+4. PWA/mobile;
+5. privacidade/LGPD e operação;
+6. auditoria final e release.
 
 ## Dependências do proprietário
 

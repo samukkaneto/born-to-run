@@ -13,6 +13,7 @@
 3. `20260808162941_corrige_validacao_destinatarios`
 4. `20260808174648_protege_chaves_feed`
 5. `20260808192626_endurece_mutacoes_e_midias`
+6. `20260809021316_protege_metadados_e_referencias_de_midia`
 
 Nunca editar ou reaplicar essas migrations. Toda alteração entra em uma migration nova.
 
@@ -28,16 +29,23 @@ Nunca editar ou reaplicar essas migrations. Toda alteração entra em uma migrat
 - feed sem atualização direta e com chaves controladas pelo banco;
 - mutações de grupos e treinos restritas aos fluxos administrativos.
 
-## Pontos pendentes no início do ciclo
+## Bloco 1 concluído em 08/08/2026
 
-1. Membros ativos ainda podem consultar pela Data API `status_note`, `reviewed_at` e `reviewed_by` de outros perfis ativos. A UI não exibe isso, mas segurança não deve depender da UI.
-2. O banco valida formato e proprietário do path de mídia, mas não comprova que o objeto existe no bucket.
-3. A proteção de senhas vazadas está desativada. A documentação oficial informa disponibilidade no plano Pro ou superior.
-4. SMTP próprio ainda não está configurado; o serviço padrão é apenas demonstrativo, limitado e envia somente a endereços autorizados da equipe do projeto.
+1. O privilégio de tabela em `profiles` foi removido e substituído por leitura somente das colunas comunitárias seguras.
+2. `status_note`, `reviewed_at` e `reviewed_by` não são mais legíveis pela Data API autenticada.
+3. O RPC mínimo `get_my_access_profile()` entrega ao usuário apenas o próprio estado e motivo de bloqueio.
+4. Novas referências de `avatar_url` e `photo_url` exigem path do proprietário e objeto existente no bucket correto.
+5. Objetos ainda referenciados não podem ser apagados pela Storage API.
+6. A migration oficial passou antes em preflight remoto de 56/56 asserções com rollback comprovado.
+
+## Pendências de configuração
+
+1. A proteção de senhas vazadas está desativada. A documentação oficial informa disponibilidade no plano Pro ou superior.
+2. SMTP próprio ainda não está configurado; o serviço padrão é apenas demonstrativo, limitado e envia somente a endereços autorizados da equipe do projeto.
 
 ## Advisors no baseline
 
-- Cinco warnings intencionais de RPCs administrativos `SECURITY DEFINER`, todos com checagem de administrador.
+- Seis warnings intencionais de RPCs `SECURITY DEFINER`: cinco administrativos com checagem de administrador e `get_my_access_profile()` limitado a `auth.uid()`.
 - Um warning de proteção contra senhas vazadas desativada.
 - Índices sem uso, esperado para base sem conteúdo/tráfego.
 

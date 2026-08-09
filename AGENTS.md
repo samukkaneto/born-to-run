@@ -43,7 +43,7 @@ Não inventar telefone, WhatsApp, endereço, e-mail, CNPJ, depoimentos, atletas,
 - `avatars` e `post-images` são privados; o código guarda paths e usa URLs assinadas.
 - Treinos suportam audiência de equipe, grupos e atletas.
 - `proxy.ts` é a convenção ativa do Next 16; não recriar `middleware.ts`.
-- As migrations até `20260808192626_endurece_mutacoes_e_midias.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
+- As migrations até `20260809021316_protege_metadados_e_referencias_de_midia.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
 - Nunca expor `service_role`, segredos ou arquivos `.env*`.
 
 ## Arquivos sensíveis

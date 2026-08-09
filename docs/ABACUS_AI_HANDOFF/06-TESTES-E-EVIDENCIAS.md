@@ -8,7 +8,7 @@
 - Build Next.js 16.3.0: aprovado, 27 rotas.
 - E2E público: 12/12 em Desktop Chrome e Pixel 7.
 - axe: nenhuma violação séria/crítica no baseline.
-- pgTAP: 47 asserções no preflight anterior.
+- pgTAP: 56/56 asserções no preflight remoto do Bloco 1, com rollback integral confirmado.
 - `npm audit`: zero vulnerabilidades conhecidas no baseline.
 
 ## CIs verdes do ciclo anterior
@@ -31,3 +31,14 @@
 ## Critério para o ciclo atual
 
 Nenhum bloco será declarado concluído somente por compilar. Alterações de Auth/RLS/Storage exigem testes de autorização e Advisors; alterações de UI exigem desktop/mobile e console limpo; publicação exige CI, domínio e logs.
+
+## Evidências do Bloco 1
+
+- `next typegen`: aprovado.
+- ESLint: aprovado.
+- TypeScript: aprovado.
+- Vitest: 48/48.
+- Build Next.js 16.3.0: aprovado, 27 rotas.
+- Migration aplicada: `20260809021316_protege_metadados_e_referencias_de_midia`.
+- Catálogo remoto: privilégios por coluna, RPC, helper, triggers e policies confirmados.
+- Banco após aplicação: 1 perfil administrador, zero objetos técnicos no Storage.

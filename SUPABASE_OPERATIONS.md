@@ -1,7 +1,7 @@
 # Operação do Supabase — Born to Run
 
 Projeto de produção: `nmcaejrmmfffzeclmuob`
-Estado consolidado: `20260808192626_endurece_mutacoes_e_midias`
+Estado consolidado: `20260809021316_protege_metadados_e_referencias_de_midia`
 
 Migrations registradas em produção em 8 de agosto de 2026:
 
@@ -10,8 +10,9 @@ Migrations registradas em produção em 8 de agosto de 2026:
 3. `20260808162941_corrige_validacao_destinatarios`
 4. `20260808174648_protege_chaves_feed`
 5. `20260808192626_endurece_mutacoes_e_midias`
+6. `20260809021316_protege_metadados_e_referencias_de_midia`
 
-O arquivo `supabase/schema.sql` representa o resultado consolidado das cinco.
+O arquivo `supabase/schema.sql` representa o resultado consolidado das seis.
 No último diagnóstico remoto havia 1 usuário Auth, 1 perfil `admin/active`,
 nenhum órfão e nenhuma linha de conteúdo ou atribuição.
 
@@ -105,10 +106,11 @@ periodicamente em produção.
 
 Avisos aceitos e documentados:
 
-- somente os cinco RPCs `admin_set_membership_status`, `admin_set_member_role`,
+- os cinco RPCs `admin_set_membership_status`, `admin_set_member_role`,
   `admin_save_training_group`, `admin_archive_training_group` e
   `admin_save_workout` como `SECURITY DEFINER`; eles devem continuar com
   `search_path = ''`, validação de admin e execução revogada de `public`/`anon`;
+- `get_my_access_profile()` como `SECURITY DEFINER`, com retorno mínimo e filtro obrigatório por `auth.uid()`;
 - `unused_index` enquanto ainda não houver tráfego representativo.
 
 Qualquer novo aviso de segurança, nova função `SECURITY DEFINER` ou constraint
@@ -120,8 +122,8 @@ remova índices com base apenas em estatísticas de uma base vazia.
 - [Proteção de senha](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection)
 - [Índices não usados](https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index)
 
-Após `20260808192626_endurece_mutacoes_e_midias`, o Security Advisor foi executado em
-08/08/2026. Restaram apenas os cinco avisos intencionais acima e a proteção
+Após `20260809021316_protege_metadados_e_referencias_de_midia`, o Security Advisor foi executado em
+08/08/2026. Restaram apenas os seis avisos intencionais acima e a proteção
 contra senhas vazadas ainda desativada. O Performance Advisor retornou somente
 índices ainda não utilizados, resultado esperado para a base sem tráfego.
 
@@ -149,7 +151,7 @@ teste de e-mail, autorize também a URL exata daquele deployment. O código usa
 ## Drift, backup e recuperação
 
 Antes de todo deploy, confirme que o histórico remoto contém exatamente as
-cinco migrations registradas neste documento e que não existe migration local
+seis migrations registradas neste documento e que não existe migration local
 pendente. Mudanças em migrations já aplicadas são proibidas: qualquer correção
 entra em uma nova migration timestampada.
 
@@ -180,9 +182,9 @@ Em 08/08/2026, os casos críticos foram executados também no projeto remoto
 dentro de transações revertidas. A proteção final do feed passou em 12/12
 asserções: inserts funcionais de posts, comentários e curtidas continuaram
 permitidos, enquanto `id`, `created_at` e `UPDATE` forjados foram bloqueados.
-A suíte versionada contém 47 asserções no total. Antes da aplicação de
-`20260808192626_endurece_mutacoes_e_midias`, as duas suítes foram combinadas em
-um preflight remoto de 47/47 asserções dentro de uma única transação. O
+A suíte versionada contém 56 asserções no total. Antes da aplicação de
+`20260809021316_protege_metadados_e_referencias_de_midia`, as duas suítes foram combinadas em
+um preflight remoto de 56/56 asserções dentro de uma única transação. O
 `ROLLBACK` foi confirmado para histórico, funções, triggers, grants e fixtures;
 somente depois a migration foi aplicada oficialmente.
 
