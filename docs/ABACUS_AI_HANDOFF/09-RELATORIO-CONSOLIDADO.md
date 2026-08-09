@@ -43,6 +43,7 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - Bloco 5 concluído: auditoria final sem P0/P1, PR #2 mesclado, CI do merge verde e produção validada.
 - Bloco 6 concluído: domínio oficial em produção, `www` canônico, e-mail profissional preservado, Resend autenticada, SMTP/templates ativos no Supabase e recuperação testada.
 - Complemento do Bloco 6: o e-mail oficial passou a aparecer na página de contato, o formulário prepara a mensagem para esse endereço e o aviso de privacidade usa o mesmo canal durante o piloto.
+- Release final do Bloco 6: PR #11 mesclada, CI de PR e merge verdes, deployment `dpl_HXgGgXEqjK12Vnib7ELczsRJx4Md` `READY` e domínio público validado.
 
 ## Estado operacional após o Bloco 4
 

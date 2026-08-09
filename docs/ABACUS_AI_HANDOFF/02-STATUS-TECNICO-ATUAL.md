@@ -24,8 +24,10 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 - Teste real de recuperação retornou HTTP `200` depois da ativação do SMTP customizado.
 - PR de infraestrutura: `#10`, mesclada no commit `823af9155b7c1d7e376a452f76aa750a076f2617`; CI do merge `31327042491` concluída com sucesso.
 - Deployment oficial após a PR #10: `dpl_3S2U899w23ki3qyNVzaTiBRy2HFa`, `READY`, com apex, `www` e aliases Vercel apontando para o mesmo artefato.
-- A auditoria pós-deploy encontrou o último texto provisório do contato: o formulário ainda encaminhava apenas ao Instagram. A PR `#11` corrige isso, mostra o e-mail oficial, prepara uma mensagem `mailto:` e atualiza o aviso de privacidade.
-- PR #11 no commit `9f273d96886edae571f2a80b0ffb9e348983f41a`; CI `31327377193` concluída com sucesso e preview `dpl_Bt5zJnftpJFVGGh8CBRkZsTxsURb` em estado `READY`.
+- A auditoria pós-deploy encontrou o último texto provisório do contato: o formulário ainda encaminhava apenas ao Instagram. A PR `#11` corrigiu isso, mostrou o e-mail oficial, preparou uma mensagem `mailto:` e atualizou o aviso de privacidade.
+- PR #11 mesclada no commit `18a7044f7be36364cb97453f7ee5b1f37d1965db`. CI final da PR `31327510592` e CI do merge `31327590726` concluídas com sucesso.
+- Deployment final do ciclo: `dpl_HXgGgXEqjK12Vnib7ELczsRJx4Md`, `READY`, com todos os aliases oficiais apontando para ele.
+- Validação pública final: `/contato` retorna `200`, contém o e-mail oficial e `mailto:`; `/privacidade` contém o canal e a Resend; `www` retorna `308`; `/dashboard` anônimo retorna `307`; HSTS ativo.
 
 ## Estado por área
 

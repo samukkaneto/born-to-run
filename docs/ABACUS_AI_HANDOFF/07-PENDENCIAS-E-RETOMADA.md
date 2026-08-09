@@ -17,7 +17,7 @@ Todos os blocos que independiam de credenciais, plano pago, dados formais ou usu
 
 ## Próxima ação
 
-Domínio, SSL, URL oficial de Auth, Resend, SMTP, templates, contato público e canal piloto de privacidade já estão concluídos. Depois da mesclagem da PR #11, o ponto exato de retomada é executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`.
+Domínio, SSL, URL oficial de Auth, Resend, SMTP, templates, contato público e canal piloto de privacidade já estão concluídos e publicados. O ponto exato de retomada é executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`.
 
 ## Fila planejada
 
