@@ -10,10 +10,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Born to Run — instruções para agentes
 
-Leia este arquivo antes de alterar o projeto. As duas fontes atuais são:
+Leia este arquivo antes de alterar o projeto. As fontes atuais são:
 
-1. `README-FABLE5.md` — produto, direção visual e briefing para Abacus/Fable.
-2. `CURRENT_IMPLEMENTATION_STATUS.md` — estado técnico, evidências e pendências.
+1. `docs/ABACUS_AI_HANDOFF/00-LEIA-PRIMEIRO.md` — pacote canônico de entrega e retomada por IA.
+2. `README-FABLE5.md` — produto, direção visual e briefing para Abacus/Fable.
+3. `CURRENT_IMPLEMENTATION_STATUS.md` — estado técnico, evidências e pendências.
 
 Os documentos de auditoria/reconstrução datados de julho de 2026 são registros históricos. Eles não descrevem o código atual.
 

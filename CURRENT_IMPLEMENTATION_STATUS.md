@@ -109,3 +109,5 @@ Leia primeiro `README-FABLE5.md`. O redesign pode ter liberdade visual ampla, ma
 - tratar Garmin ou Strava como integração já solicitada.
 
 Este documento deve ser atualizado sempre que uma etapa técnica, deploy ou decisão de produto mudar de estado.
+
+O pacote detalhado e ordenado para retomada pela Abacus AI está em `docs/ABACUS_AI_HANDOFF/00-LEIA-PRIMEIRO.md`.
