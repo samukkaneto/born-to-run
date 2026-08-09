@@ -9,6 +9,7 @@ const quickLinks = [
   { label: 'Sobre', href: '/sobre' },
   { label: 'Galeria', href: '/galeria' },
   { label: 'Contato', href: '/contato' },
+  { label: 'Instalar aplicativo', href: '/instalar' },
 ]
 
 const memberLinks = [
@@ -138,9 +139,11 @@ export default function Footer() {
           <p className="text-xs text-[#A8A29E] text-center sm:text-left">
             &copy; {CURRENT_YEAR} {site.name}. Todos os direitos reservados.
           </p>
-          <p className="text-xs text-[#A8A29E]">
-            {site.location} · desde {site.foundedYear}
-          </p>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-[#A8A29E] sm:justify-end">
+            <Link href="/privacidade" className="hover:text-white">Privacidade</Link>
+            <Link href="/termos" className="hover:text-white">Termos</Link>
+            <span>{site.location} · desde {site.foundedYear}</span>
+          </div>
         </div>
       </div>
     </footer>

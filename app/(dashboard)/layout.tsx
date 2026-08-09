@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { logout } from '@/lib/actions/auth'
 import { getAccessContext } from '@/lib/auth/access'
@@ -8,6 +9,10 @@ import {
   DashboardSidebarNav,
   DashboardBottomNav,
 } from '@/components/dashboard/DashboardNav'
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false, nocache: true },
+}
 
 export default async function DashboardLayout({
   children,

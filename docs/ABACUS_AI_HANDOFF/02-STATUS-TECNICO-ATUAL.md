@@ -26,7 +26,7 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 | Senhas vazadas | Bloqueada pelo plano Free; ativar após upgrade Pro |
 | Privacidade de metadados de revisão | Resolvida no Bloco 1 |
 | Existência física de mídia | Resolvida no Bloco 1 |
-| PWA instalável/offline/push | Parcial |
+| PWA instalável/offline/push | Instalação e offline público entregues; push não implementado |
 | Aplicativo nativo em lojas | Não iniciado |
 
 ## Banco no baseline
@@ -38,4 +38,4 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 
 ## Veredito
 
-O produto está pronto como MVP web publicado. O Bloco 1 elevou a segurança do banco: membros não leem mais metadados administrativos de outros perfis e referências novas de avatar/foto precisam existir no Storage. O ciclo continua com Auth, e-mail, piloto e prontidão PWA sem alterar a direção visual definida pela Fable 5.
+O produto está pronto como MVP web publicado. Os Blocos 1–3 elevaram banco, Auth preparado, PWA instalável e transparência LGPD. Permanecem dependências externas de plano/SMTP/dados jurídicos e o piloto com usuários reais, sem alterar a direção visual definida pela Fable 5.

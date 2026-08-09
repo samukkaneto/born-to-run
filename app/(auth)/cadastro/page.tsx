@@ -68,6 +68,26 @@ export default function CadastroPage() {
           placeholder="8+ caracteres, com letra e número"
         />
 
+        <label className="flex items-start gap-3 text-sm leading-relaxed text-neutral-600">
+          <input
+            type="checkbox"
+            name="accept_legal"
+            required
+            className="mt-1 h-4 w-4 shrink-0 accent-[var(--color-red)]"
+          />
+          <span>
+            Li e aceito os{' '}
+            <Link href="/termos" target="_blank" className="font-semibold text-[var(--color-red)] hover:underline">
+              Termos de Uso
+            </Link>{' '}
+            e declaro ciência do{' '}
+            <Link href="/privacidade" target="_blank" className="font-semibold text-[var(--color-red)] hover:underline">
+              Aviso de Privacidade
+            </Link>
+            .
+          </span>
+        </label>
+
         <button
           type="submit"
           disabled={isPending}

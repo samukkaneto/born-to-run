@@ -37,6 +37,20 @@
 - Dependências externas restantes: upgrade Pro; domínio verificável; conta/chave SMTP; remetente aprovado.
 - Próximo ponto exato: PWA/mobile, LGPD e operação independente do piloto real.
 
+## 09/08/2026 — Bloco 3 concluído
+
+- Manifesto completado e service worker público criado com registro somente em produção.
+- Cache limitado a páginas/arquivos públicos; área privada recebe `/offline` sem dados quando não há rede.
+- Página `/instalar` criada para Android, desktop e instruções iOS; `/offline` criada.
+- Metadados Apple, headers de segurança e `noindex/nocache` das rotas privadas adicionados.
+- `/privacidade` e `/termos` publicados com conteúdo aderente ao produto real e avisos de revisão jurídica.
+- Cadastro passou a exigir ciência no cliente e servidor e registra versão/instante em metadata do Auth.
+- Nenhum banner de cookies foi adicionado porque não há analytics, publicidade ou cookies não essenciais.
+- Build aprovado com 31 rotas; lint e TypeScript aprovados.
+- E2E consolidado 22/22 após repetir isoladamente um timeout ambiental de fechamento do Chromium.
+- Teste offline comprovou que dashboard privado nunca é servido do cache em desktop ou Pixel 7.
+- Próximo ponto exato: observabilidade, backup, dependências e preparação final do piloto/release.
+
 ## Convenção
 
 Cada entrada futura deve registrar:

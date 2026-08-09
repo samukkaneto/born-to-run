@@ -50,3 +50,14 @@ Nenhum bloco será declarado concluído somente por compilar. Alterações de Au
 - `supabase/config.toml` foi carregado com sucesso pelo CLI; o comando parou somente ao procurar Docker, ausente no host.
 - Callback explícito de confirmação adicionado ao cadastro.
 - ESLint, TypeScript e Vitest 48/48 aprovados após as alterações.
+
+## Evidências do Bloco 3
+
+- `node --check public/sw.js`: aprovado.
+- Manifesto: JSON válido e headers verificados.
+- Build: aprovado, 31 rotas.
+- E2E paralelo: 21/22; único timeout ambiental no fechamento do Chromium da home desktop.
+- Repetição isolada do caso: aprovada.
+- PWA/offline desktop e Pixel 7: 2/2.
+- Axe em privacidade/termos desktop/mobile: 4/4, sem violações sérias/críticas.
+- Cobertura funcional consolidada: 22/22.

@@ -14,6 +14,7 @@ Atualizado em 08/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 8. `08-LOG-DE-EXECUCAO.md` — cronologia dos blocos executados.
 9. `09-RELATORIO-CONSOLIDADO.md` — resumo único para anexar quando só for possível enviar um arquivo.
 10. `10-AUTH-SMTP-E-TEMPLATES.md` — configuração de Auth, SMTP, templates e matriz do piloto.
+11. `11-PWA-LGPD-E-OPERACAO.md` — instalação, offline seguro, privacidade, termos e dependências jurídicas.
 
 ## Fontes complementares no repositório
 

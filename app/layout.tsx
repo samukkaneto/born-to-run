@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Bebas_Neue, Oswald } from 'next/font/google'
+import PwaProvider from '@/components/pwa/PwaProvider'
 import './globals.css'
 
 const inter = Inter({
@@ -47,9 +48,14 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/logo.png',
-    apple: '/logo.png',
+    apple: '/icons/icon-192.png',
   },
   manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    title: 'Born to Run',
+    statusBarStyle: 'black-translucent',
+  },
 }
 
 export const viewport: Viewport = {
@@ -57,6 +63,7 @@ export const viewport: Viewport = {
   themeColor: '#DC2626',
   width: 'device-width',
   initialScale: 1,
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({
@@ -70,7 +77,7 @@ export default function RootLayout({
       className={`light bg-[#F7F4EF] ${inter.variable} ${bebasNeue.variable} ${oswald.variable}`}
     >
       <body className="font-sans antialiased text-[#171717]">
-        {children}
+        <PwaProvider>{children}</PwaProvider>
       </body>
     </html>
   )

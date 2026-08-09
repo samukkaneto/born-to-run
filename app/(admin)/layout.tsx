@@ -1,11 +1,16 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { logout } from '@/lib/actions/auth'
 import { getAccessContext } from '@/lib/auth/access'
 import { LogOut, ShieldCheck } from 'lucide-react'
 import AdminNav, { AdminNavMobile } from '@/components/admin/AdminNav'
 import ToastProvider from '@/components/ui/Toaster'
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false, nocache: true },
+}
 
 export default async function AdminLayout({
   children,
