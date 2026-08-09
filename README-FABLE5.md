@@ -1,6 +1,6 @@
 # Born to Run — briefing oficial para Abacus AI / Fable 5
 
-Este é o documento principal de contexto visual e de produto. Ele deve ser lido junto das seis pranchas presentes em `design-refs/` e do status técnico em `CURRENT_IMPLEMENTATION_STATUS.md`.
+Este é o documento principal de contexto visual e de produto. Ele deve ser lido junto das seis pranchas presentes em `design-refs/`, do status técnico em `CURRENT_IMPLEMENTATION_STATUS.md` e do índice de entrega `docs/ABACUS_AI_HANDOFF/00-LEIA-PRIMEIRO.md`.
 
 ## 1. O produto que deve ser construído
 

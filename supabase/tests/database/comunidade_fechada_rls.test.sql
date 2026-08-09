@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path = public, extensions, pg_catalog;
 
-select plan(40);
+select plan(49);
 
 -- Identidades determinísticas; toda a suíte é revertida no final.
 insert into auth.users (id, email, raw_user_meta_data)
@@ -264,6 +264,10 @@ select lives_ok(
   'administrador aprova o atleta sem atribuição'
 );
 
+-- Internal review metadata is inspected as the database auditor, not through
+-- the authenticated client role.
+reset role;
+
 select results_eq(
   $$
     select membership_status, reviewed_by, reviewed_at is not null
@@ -281,6 +285,7 @@ select results_eq(
 );
 
 -- Membro aprovado: acesso normal, sem autopromoção.
+set local role authenticated;
 set local "request.jwt.claim.sub" = '10000000-0000-4000-8000-000000000002';
 set local "request.jwt.claims" =
   '{"sub":"10000000-0000-4000-8000-000000000002","role":"authenticated"}';
@@ -289,6 +294,56 @@ select is(
   app_private.is_active_member(),
   true,
   'atleta aprovado passa a ser membro ativo'
+);
+
+select results_eq(
+  $$
+    select
+      has_column_privilege('authenticated', 'public.profiles', 'full_name', 'SELECT'),
+      has_column_privilege('authenticated', 'public.profiles', 'membership_status', 'SELECT'),
+      has_column_privilege('authenticated', 'public.profiles', 'status_note', 'SELECT'),
+      has_column_privilege('authenticated', 'public.profiles', 'reviewed_at', 'SELECT'),
+      has_column_privilege('authenticated', 'public.profiles', 'reviewed_by', 'SELECT')
+  $$,
+  $$ values (true, true, false, false, false) $$,
+  'profiles expõe somente colunas comunitárias seguras'
+);
+
+select throws_ok(
+  $$
+    select status_note
+    from public.profiles
+    where user_id = '10000000-0000-4000-8000-000000000003'
+  $$,
+  '42501',
+  null,
+  'membro não lê a observação administrativa de outro perfil'
+);
+
+select throws_ok(
+  $$
+    select reviewed_at, reviewed_by
+    from public.profiles
+    where user_id = '10000000-0000-4000-8000-000000000003'
+  $$,
+  '42501',
+  null,
+  'membro não lê os metadados de revisão de outro perfil'
+);
+
+select results_eq(
+  $$
+    select user_id, membership_status, status_note
+    from public.get_my_access_profile()
+  $$,
+  $$
+    values (
+      '10000000-0000-4000-8000-000000000002'::uuid,
+      'active'::text,
+      'Aprovado pela suíte pgTAP'::text
+    )
+  $$,
+  'RPC de acesso devolve a observação somente do próprio usuário'
 );
 
 select results_eq(
@@ -380,11 +435,35 @@ select lives_ok(
 
 select lives_ok(
   $$
+    insert into storage.objects (id, bucket_id, name, owner_id)
+    values (
+      '50000000-0000-4000-8000-000000000004',
+      'avatars',
+      '10000000-0000-4000-8000-000000000002/91000000-0000-4000-8000-000000000001.jpg',
+      '10000000-0000-4000-8000-000000000002'
+    )
+  $$,
+  'membro envia o objeto de avatar antes de referenciá-lo no perfil'
+);
+
+select lives_ok(
+  $$
     update public.profiles
     set avatar_url = '10000000-0000-4000-8000-000000000002/91000000-0000-4000-8000-000000000001.jpg'
     where user_id = '10000000-0000-4000-8000-000000000002'
   $$,
   'membro associa ao perfil um avatar da própria pasta'
+);
+
+select throws_ok(
+  $$
+    update public.profiles
+    set avatar_url = '10000000-0000-4000-8000-000000000002/91000000-0000-4000-8000-000000000099.jpg'
+    where user_id = '10000000-0000-4000-8000-000000000002'
+  $$,
+  '23503',
+  null,
+  'membro não associa ao perfil um avatar inexistente'
 );
 
 select throws_ok(
@@ -411,6 +490,19 @@ select throws_ok(
 
 select lives_ok(
   $$
+    insert into storage.objects (id, bucket_id, name, owner_id)
+    values (
+      '50000000-0000-4000-8000-000000000005',
+      'post-images',
+      '10000000-0000-4000-8000-000000000002/92000000-0000-4000-8000-000000000001.webp',
+      '10000000-0000-4000-8000-000000000002'
+    )
+  $$,
+  'membro envia a foto antes de referenciá-la na publicação'
+);
+
+select lives_ok(
+  $$
     insert into public.posts (user_id, caption, photo_url)
     values (
       '10000000-0000-4000-8000-000000000002',
@@ -419,6 +511,20 @@ select lives_ok(
     )
   $$,
   'membro publica uma foto da própria pasta'
+);
+
+select throws_ok(
+  $$
+    insert into public.posts (user_id, caption, photo_url)
+    values (
+      '10000000-0000-4000-8000-000000000002',
+      'Foto ausente no Storage',
+      '10000000-0000-4000-8000-000000000002/92000000-0000-4000-8000-000000000099.webp'
+    )
+  $$,
+  '23503',
+  null,
+  'membro não publica apontando para uma foto inexistente'
 );
 
 select throws_ok(
@@ -598,6 +704,26 @@ select results_eq(
 );
 
 reset role;
+
+select ok(
+  exists (
+    select 1
+    from pg_policies
+    where schemaname = 'storage'
+      and tablename = 'objects'
+      and policyname = 'btr_avatars_delete_own'
+      and coalesce(qual, '') like '%avatar_url%'
+  )
+  and exists (
+    select 1
+    from pg_policies
+    where schemaname = 'storage'
+      and tablename = 'objects'
+      and policyname = 'btr_post_images_delete_owner_or_admin'
+      and coalesce(qual, '') like '%photo_url%'
+  ),
+  'policies impedem excluir objetos ainda referenciados'
+);
 
 select results_eq(
   $$

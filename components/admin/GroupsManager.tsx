@@ -6,9 +6,9 @@ import { archiveTrainingGroup, saveTrainingGroup } from '@/lib/actions/admin'
 import AdminModal from '@/components/admin/AdminModal'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import { useToast } from '@/components/ui/Toaster'
-import type { Profile, TrainingGroupWithMembers } from '@/types'
+import type { MemberProfile, TrainingGroupWithMembers } from '@/types'
 
-const MEMBER_STATUS_LABELS: Record<Profile['membership_status'], string> = {
+const MEMBER_STATUS_LABELS: Record<MemberProfile['membership_status'], string> = {
   pending: 'Pendente',
   active: 'Ativo',
   suspended: 'Suspenso',
@@ -20,7 +20,7 @@ export default function GroupsManager({
   members,
 }: {
   groups: TrainingGroupWithMembers[]
-  members: Profile[]
+  members: MemberProfile[]
 }) {
   const { toast } = useToast()
   const [search, setSearch] = useState('')

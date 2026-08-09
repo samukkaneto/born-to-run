@@ -416,6 +416,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_my_access_profile: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          avatar_url: string | null
+          full_name: string
+          membership_status: string
+          role: string
+          status_note: string | null
+          user_id: string
+        }[]
+      }
       admin_archive_training_group: {
         Args: { target_group_id: string }
         Returns: boolean

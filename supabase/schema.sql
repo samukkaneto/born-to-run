@@ -2,7 +2,7 @@
 -- BORN TO RUN — comunidade fechada, segurança e treinos dirigidos
 --
 -- Snapshot consolidado pelas migrations 20260808151232, 20260808162054,
--- 20260808162941, 20260808174648 e 20260808192626.
+-- 20260808162941, 20260808174648, 20260808192626 e 20260809021316.
 -- O script é deliberadamente idempotente: funciona tanto sobre o banco
 -- remoto legado quanto em uma instalação nova.
 -- ============================================================
@@ -395,6 +395,12 @@ create index if not exists idx_profiles_user_id on public.profiles(user_id);
 create index if not exists idx_profiles_membership_status
   on public.profiles(membership_status, created_at);
 create index if not exists idx_profiles_reviewed_by on public.profiles(reviewed_by);
+create index if not exists idx_profiles_avatar_url
+  on public.profiles(avatar_url)
+  where avatar_url is not null;
+create index if not exists idx_posts_photo_url
+  on public.posts(photo_url)
+  where photo_url is not null;
 create index if not exists idx_posts_user_created
   on public.posts(user_id, created_at desc);
 create index if not exists idx_posts_feed_cursor
@@ -599,15 +605,38 @@ as $$
     and target_path ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(jpg|png|webp)$';
 $$;
 
+create or replace function app_private.media_object_exists(
+  target_bucket text,
+  target_path text,
+  target_user_id uuid
+)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1
+    from storage.objects media
+    where media.bucket_id = target_bucket
+      and media.name = target_path
+      and media.owner_id = target_user_id::text
+  );
+$$;
+
 create or replace function app_private.enforce_profile_avatar_path()
 returns trigger
 language plpgsql
 security definer
 set search_path = ''
 as $$
+declare
+  trusted_backend boolean :=
+    session_user in ('postgres', 'supabase_admin')
+    or coalesce((select auth.jwt() ->> 'role'), '') = 'service_role';
 begin
-  if new.avatar_url is null
-    or coalesce((select auth.jwt() ->> 'role'), '') = 'service_role' then
+  if new.avatar_url is null then
     return new;
   end if;
 
@@ -617,11 +646,21 @@ begin
     end if;
   end if;
 
-  if (select auth.uid()) is null
-    or new.user_id <> (select auth.uid())
-    or not app_private.is_owned_media_path(new.avatar_url, new.user_id) then
+  if not app_private.is_owned_media_path(new.avatar_url, new.user_id)
+    or (
+      not trusted_backend
+      and (
+        (select auth.uid()) is null
+        or new.user_id <> (select auth.uid())
+      )
+    ) then
     raise exception 'O avatar deve pertencer a pasta de midia do proprio usuario.'
       using errcode = '42501';
+  end if;
+
+  if not app_private.media_object_exists('avatars', new.avatar_url, new.user_id) then
+    raise exception 'O arquivo de avatar informado nao existe no Storage.'
+      using errcode = '23503';
   end if;
 
   return new;
@@ -634,9 +673,12 @@ language plpgsql
 security definer
 set search_path = ''
 as $$
+declare
+  trusted_backend boolean :=
+    session_user in ('postgres', 'supabase_admin')
+    or coalesce((select auth.jwt() ->> 'role'), '') = 'service_role';
 begin
-  if new.photo_url is null
-    or coalesce((select auth.jwt() ->> 'role'), '') = 'service_role' then
+  if new.photo_url is null then
     return new;
   end if;
 
@@ -646,11 +688,21 @@ begin
     end if;
   end if;
 
-  if (select auth.uid()) is null
-    or new.user_id <> (select auth.uid())
-    or not app_private.is_owned_media_path(new.photo_url, new.user_id) then
+  if not app_private.is_owned_media_path(new.photo_url, new.user_id)
+    or (
+      not trusted_backend
+      and (
+        (select auth.uid()) is null
+        or new.user_id <> (select auth.uid())
+      )
+    ) then
     raise exception 'A foto deve pertencer a pasta de midia do autor da publicacao.'
       using errcode = '42501';
+  end if;
+
+  if not app_private.media_object_exists('post-images', new.photo_url, new.user_id) then
+    raise exception 'O arquivo da publicacao nao existe no Storage.'
+      using errcode = '23503';
   end if;
 
   return new;
@@ -703,8 +755,34 @@ create trigger trg_on_auth_user_created
   for each row execute function app_private.handle_new_user();
 
 -- ============================================================
--- 5. RPCs administrativas atômicas
+-- 5. RPC de acesso próprio e RPCs administrativas atômicas
 -- ============================================================
+
+create or replace function public.get_my_access_profile()
+returns table (
+  user_id uuid,
+  full_name text,
+  avatar_url text,
+  role text,
+  membership_status text,
+  status_note text
+)
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select
+    p.user_id,
+    p.full_name,
+    p.avatar_url,
+    p.role,
+    p.membership_status,
+    p.status_note
+  from public.profiles p
+  where p.user_id = (select auth.uid())
+  limit 1;
+$$;
 
 create or replace function public.admin_set_membership_status(
   target_user_id uuid,
@@ -1254,6 +1332,11 @@ create policy btr_avatars_delete_own on storage.objects
     and owner_id = (select auth.uid())::text
     and (storage.foldername(name))[1] = (select auth.uid())::text
     and (select app_private.is_active_member())
+    and not exists (
+      select 1
+      from public.profiles profile
+      where profile.avatar_url = storage.objects.name
+    )
   );
 
 create policy btr_post_images_insert_own on storage.objects
@@ -1290,6 +1373,11 @@ create policy btr_post_images_delete_owner_or_admin on storage.objects
       )
       or (select app_private.is_admin())
     )
+    and not exists (
+      select 1
+      from public.posts post
+      where post.photo_url = storage.objects.name
+    )
   );
 
 -- ============================================================
@@ -1308,7 +1396,19 @@ revoke all on table
   public.workout_assignments
 from anon, authenticated;
 
-grant select on table public.profiles to authenticated;
+grant select (
+  id,
+  user_id,
+  full_name,
+  avatar_url,
+  bio,
+  cidade,
+  objetivo,
+  role,
+  membership_status,
+  created_at,
+  updated_at
+) on table public.profiles to authenticated;
 grant update (full_name, avatar_url, bio, cidade, objetivo)
   on public.profiles to authenticated;
 grant select, delete on table public.posts to authenticated;
@@ -1355,6 +1455,8 @@ grant execute on function app_private.can_view_workout(uuid) to authenticated;
 
 revoke all on function public.admin_set_membership_status(uuid, text, text)
   from public, anon;
+revoke all on function public.get_my_access_profile()
+  from public, anon;
 revoke all on function public.admin_set_member_role(uuid, text)
   from public, anon;
 revoke all on function public.admin_save_training_group(uuid, text, text, uuid[])
@@ -1366,6 +1468,8 @@ revoke all on function public.admin_save_workout(
 ) from public, anon;
 
 grant execute on function public.admin_set_membership_status(uuid, text, text)
+  to authenticated;
+grant execute on function public.get_my_access_profile()
   to authenticated;
 grant execute on function public.admin_set_member_role(uuid, text)
   to authenticated;

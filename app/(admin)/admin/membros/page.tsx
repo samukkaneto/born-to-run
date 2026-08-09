@@ -3,9 +3,10 @@ import { redirect } from 'next/navigation'
 import { Clock3, Layers3, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { createMediaUrl } from '@/lib/supabase/media'
+import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
 import MembersTable from '@/components/admin/MembersTable'
 import GroupsManager from '@/components/admin/GroupsManager'
-import type { Profile, TrainingGroupWithMembers } from '@/types'
+import type { MemberProfile, TrainingGroupWithMembers } from '@/types'
 
 export default async function AdminMembrosPage({
   searchParams,
@@ -20,7 +21,7 @@ export default async function AdminMembrosPage({
 
   const [{ data: memberData, error: membersError }, { data: groupData, error: groupsError }] =
     await Promise.all([
-      supabase.from('profiles').select('*').order('created_at', { ascending: true }),
+      supabase.from('profiles').select(MEMBER_PROFILE_COLUMNS).order('created_at', { ascending: true }),
       supabase
         .from('training_groups')
         .select('*, training_group_members ( user_id )')
@@ -29,7 +30,7 @@ export default async function AdminMembrosPage({
   if (membersError || groupsError) throw new Error('Não foi possível carregar a gestão da equipe.')
 
   const members = await Promise.all(
-    ((memberData ?? []) as Profile[]).map(async (member) => ({
+    ((memberData ?? []) as MemberProfile[]).map(async (member) => ({
       ...member,
       avatar_url: await createMediaUrl(supabase, 'avatars', member.avatar_url),
     })),

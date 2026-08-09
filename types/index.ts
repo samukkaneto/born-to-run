@@ -6,6 +6,20 @@ export type Profile = Omit<Tables<'profiles'>, 'role' | 'membership_status'> & {
   role: UserRole
   membership_status: MembershipStatus
 }
+export type MemberProfile = Pick<
+  Profile,
+  | 'id'
+  | 'user_id'
+  | 'full_name'
+  | 'avatar_url'
+  | 'bio'
+  | 'cidade'
+  | 'objetivo'
+  | 'role'
+  | 'membership_status'
+  | 'created_at'
+  | 'updated_at'
+>
 export type PublicProfile = Pick<
   Profile,
   'id' | 'user_id' | 'full_name' | 'avatar_url' | 'role'

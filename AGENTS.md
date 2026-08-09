@@ -10,10 +10,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Born to Run — instruções para agentes
 
-Leia este arquivo antes de alterar o projeto. As duas fontes atuais são:
+Leia este arquivo antes de alterar o projeto. As fontes atuais são:
 
-1. `README-FABLE5.md` — produto, direção visual e briefing para Abacus/Fable.
-2. `CURRENT_IMPLEMENTATION_STATUS.md` — estado técnico, evidências e pendências.
+1. `docs/ABACUS_AI_HANDOFF/00-LEIA-PRIMEIRO.md` — pacote canônico de entrega e retomada por IA.
+2. `README-FABLE5.md` — produto, direção visual e briefing para Abacus/Fable.
+3. `CURRENT_IMPLEMENTATION_STATUS.md` — estado técnico, evidências e pendências.
 
 Os documentos de auditoria/reconstrução datados de julho de 2026 são registros históricos. Eles não descrevem o código atual.
 
@@ -42,7 +43,7 @@ Não inventar telefone, WhatsApp, endereço, e-mail, CNPJ, depoimentos, atletas,
 - `avatars` e `post-images` são privados; o código guarda paths e usa URLs assinadas.
 - Treinos suportam audiência de equipe, grupos e atletas.
 - `proxy.ts` é a convenção ativa do Next 16; não recriar `middleware.ts`.
-- As migrations até `20260808192626_endurece_mutacoes_e_midias.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
+- As migrations até `20260809021316_protege_metadados_e_referencias_de_midia.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
 - Nunca expor `service_role`, segredos ou arquivos `.env*`.
 
 ## Arquivos sensíveis

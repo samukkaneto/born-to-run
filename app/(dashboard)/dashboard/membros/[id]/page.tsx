@@ -3,10 +3,11 @@ import Image from 'next/image'
 import { redirect, notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createMediaUrl } from '@/lib/supabase/media'
+import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
 import { isUuid } from '@/lib/validation'
 import { formatDate, getInitials } from '@/lib/utils'
 import { ArrowLeft, MapPin, Target, Rss, ShieldCheck } from 'lucide-react'
-import type { Profile } from '@/types'
+import type { MemberProfile } from '@/types'
 
 /**
  * Perfil público de um membro da equipe, acessado a partir do feed.
@@ -28,9 +29,9 @@ export default async function MembroPage({
 
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('*')
+    .select(MEMBER_PROFILE_COLUMNS)
     .eq('user_id', id)
-    .maybeSingle() as { data: Profile | null; error: { message: string } | null }
+    .maybeSingle() as { data: MemberProfile | null; error: { message: string } | null }
 
   if (profileError) throw new Error('Não foi possível carregar o perfil do atleta.')
   if (!profile) notFound()

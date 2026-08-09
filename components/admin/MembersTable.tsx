@@ -18,12 +18,12 @@ import { toggleMemberRole, updateMembershipStatus } from '@/lib/actions/admin'
 import { formatDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/Toaster'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
-import type { MembershipStatus, Profile } from '@/types'
+import type { MemberProfile, MembershipStatus } from '@/types'
 
 type StatusFilter = MembershipStatus | 'all'
 type PendingAction =
-  | { kind: 'status'; member: Profile; nextStatus: MembershipStatus }
-  | { kind: 'role'; member: Profile }
+  | { kind: 'status'; member: MemberProfile; nextStatus: MembershipStatus }
+  | { kind: 'role'; member: MemberProfile }
   | null
 
 const STATUS_LABELS: Record<MembershipStatus, string> = {
@@ -83,7 +83,7 @@ export default function MembersTable({
   members,
   currentUserId,
 }: {
-  members: Profile[]
+  members: MemberProfile[]
   currentUserId: string
 }) {
   const { toast } = useToast()

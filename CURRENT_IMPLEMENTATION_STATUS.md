@@ -14,7 +14,7 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 |---|---|---|
 | Site institucional | Implementado e validado | Home, Sobre, Galeria, Contato, header/footer e páginas responsivas; desktop e Pixel 7 passaram no E2E. |
 | Identidade visual Fable 5 | Implementada, ainda refinável | A direção atual foi preservada; a Fable pode redesenhar componentes sem alterar contratos funcionais. |
-| Autenticação | Implementada e validada | Login real e erros de credencial foram validados no preview; cadastro/recuperação ainda dependem de SMTP próprio para validar a entrega de e-mail. |
+| Autenticação | Implementada e validada | Login real e erros de credencial foram validados; cadastro tem callback explícito e templates prontos, mas a entrega real ainda depende de SMTP próprio. |
 | Comunidade fechada | Implementada e validada no banco | Cadastro entra como `pending`; somente `active` acessa conteúdo interno. |
 | Aprovação de membros | Implementada e validada | Admin aprova, rejeita, suspende ou reativa; autorização foi testada no banco e o painel passou em smoke autenticado anterior. |
 | Feed social | MVP implementado e validado | Posts, fotos privadas, métricas, curtidas, comentários e paginação keyset por cursor; escrita real passou no preview final. |
@@ -23,8 +23,10 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 | Grupos | Implementado e validado | Criar, editar, arquivar/reativar e gerenciar integrantes, preservando destinatários históricos. |
 | Comunicados | Implementado | CRUD do treinador e leitura pelos membros ativos. |
 | Painel do treinador | Implementado e validado | Dashboard, aprovações, membros, grupos, treinos e comunicados; grupo e treino direcionado passaram em smoke autenticado. |
-| PWA/responsividade | Parcial | Manifesto e navegação adaptada; instalação, offline e push não foram validados. Não é binário nativo. |
-| Supabase remoto | Sincronizado | Cinco migrations aplicadas; estado atual termina em `20260808192626_endurece_mutacoes_e_midias`. |
+| PWA/responsividade | Instalável, push pendente | Manifesto, ícones, instalação guiada, service worker e fallback offline público validados; dados privados nunca entram no cache. Não é binário nativo. |
+| Observabilidade | Implementada para o piloto | `/api/health`, Runtime Logs, Web Analytics habilitado e Speed Insights configurado; URLs são sanitizadas antes das métricas. |
+| Continuidade | Procedimento definido | Audit no CI, Dependabot, relato privado e runbook de release; Supabase Free exige exportação criptografada ou Pro antes de depender de backup automático. |
+| Supabase remoto | Sincronizado | Seis migrations aplicadas; estado atual termina em `20260809021316_protege_metadados_e_referencias_de_midia`. |
 | Vercel | Produção publicada e automação restaurada | O domínio público acompanha os deployments Git de `main`; a reconexão ao repositório atual foi comprovada pelo deployment automático do commit `0947508`. Variáveis Supabase, rotas públicas/guard e logs foram verificados. `dpl_BEEAsWK34yBunpBXvGUgznbQzDKk` permanece como baseline manual validado e `dpl_3GyqEDBXYJcqndUWVRZGSzviMDik` como rollback antigo conhecido. |
 | GitHub | Publicado, revisado e mesclado | PR [#1](https://github.com/samukkaneto/born-to-run/pull/1) mesclado em `main` no commit `21d15aa`; CI da branch e do merge concluídos com sucesso. |
 
@@ -52,6 +54,9 @@ A migration canônica e o snapshot `supabase/schema.sql` incluem:
 - chaves `id`/`created_at` do feed geradas obrigatoriamente pelo banco e posts imutáveis pela Data API.
 - mutações de grupos, atribuições e criação/edição de treinos restritas aos RPCs atômicos, sem atalho administrativo pela Data API;
 - validação no banco para que `avatar_url` e `photo_url` usem somente o formato `UUID_DO_USUÁRIO/UUID_DO_ARQUIVO.(jpg|png|webp)` do próprio autor.
+- leitura de `profiles` limitada a colunas comunitárias; `status_note` e metadados de revisão não são expostos a membros;
+- RPC mínimo para o próprio estado de acesso e verificação de existência física das mídias referenciadas;
+- exclusão pela Storage API bloqueada enquanto o objeto ainda estiver referenciado pelo perfil ou post.
 
 ### Testes reais já executados no Supabase
 
@@ -67,6 +72,8 @@ Os testes abaixo foram executados dentro de transações e revertidos, sem deixa
 8. 12/12 testes adicionais confirmaram inserts normais do feed e bloquearam IDs, datas e updates forjados.
 9. a quinta migration passou em um preflight remoto transacional de 47/47 asserções, com rollback comprovado antes da aplicação definitiva;
 10. após a aplicação, funções, triggers e grants esperados foram confirmados e o banco permaneceu com 1 admin ativo, zero órfãos e zero conteúdo técnico.
+11. a sexta migration passou em preflight remoto de 56/56 asserções e ocultou metadados de revisão de todos os clientes autenticados;
+12. referências de avatar/foto inexistentes foram rejeitadas e policies passaram a impedir exclusão de objetos ainda usados.
 
 O banco preserva 1 perfil administrador ativo e continua sem conteúdo fictício em posts, comentários, curtidas, treinos, comunicados ou grupos.
 
@@ -76,14 +83,14 @@ O banco preserva 1 perfil administrador ativo e continua sem conteúdo fictício
 |---|---|
 | ESLint | Aprovado, sem erros |
 | TypeScript (`tsc --noEmit`) | Aprovado |
-| Build Next.js 16.3.0 | Aprovado, 27 rotas |
+| Build Next.js 16.3.0 | Aprovado, 31 rotas |
 | Testes unitários | 48/48 aprovados, incluindo paginação e cursores adulterados |
 | `npm audit` | 0 vulnerabilidades conhecidas |
 | Tipos do Supabase | Gerados a partir do banco remoto |
 | Boundaries de erro/loading/not-found | Implementados |
 | Acessibilidade básica | Skip links, foco visível, modais com foco, redução de movimento e controles ampliados |
-| Testes pgTAP versionados | 47 asserções; a suíte combinada passou remotamente dentro de transação revertida antes da quinta migration |
-| E2E público | 12/12 aprovados em Desktop Chrome e Pixel 7; zero violações axe sérias/críticas |
+| Testes pgTAP versionados | 56 asserções; a suíte combinada passou remotamente dentro de transação revertida antes da sexta migration |
+| E2E público | Cobertura ampliada para 24 casos em Desktop Chrome e Pixel 7; todos aprovados sobre o build de produção; zero violações axe sérias/críticas |
 | E2E autenticado hospedado | Login, feed, publicação, curtida, comentário, painel admin, grupo e treino dirigido validados; dados técnicos removidos |
 | Vercel | Produção `READY` no domínio canônico, 27 rotas, respostas 200/307 corretas, integração Git automática validada e sem erros nos logs consultados |
 | GitHub Actions | Runs `31275354335` e `31275507684` aprovadas integralmente na branch e no merge em `main` |
@@ -94,8 +101,9 @@ O MVP web está publicado. Os itens abaixo são melhorias operacionais ou fases 
 
 1. configurar SMTP próprio e validar cadastro, confirmação e recuperação com caixa de e-mail real;
 2. habilitar no Supabase Auth a proteção contra senhas vazadas;
-3. em uma evolução coordenada de banco e código, mascarar `status_note`, `reviewed_at` e `reviewed_by` de outros perfis ativos e validar também a existência física do objeto de mídia, não somente o formato/proprietário do caminho;
-4. tratar instalação/offline/push e empacotamento nativo como fase própria, caso o objetivo passe de PWA para lojas de aplicativos.
+3. executar o piloto fechado com usuários reais e validar os fluxos de aprovação, publicação e treino;
+4. tratar push e empacotamento nativo como fase própria, caso o objetivo passe de PWA instalável para lojas de aplicativos.
+5. definir backup Pro ou exportação criptografada antes do piloto gerar dados relevantes.
 
 ## Orientação para Abacus AI / Fable 5
 
@@ -109,3 +117,9 @@ Leia primeiro `README-FABLE5.md`. O redesign pode ter liberdade visual ampla, ma
 - tratar Garmin ou Strava como integração já solicitada.
 
 Este documento deve ser atualizado sempre que uma etapa técnica, deploy ou decisão de produto mudar de estado.
+
+Detalhes de plano, SMTP, templates e matriz do piloto: `docs/ABACUS_AI_HANDOFF/10-AUTH-SMTP-E-TEMPLATES.md`.
+
+O pacote detalhado e ordenado para retomada pela Abacus AI está em `docs/ABACUS_AI_HANDOFF/00-LEIA-PRIMEIRO.md`.
+O estado PWA/LGPD e as dependências jurídicas estão em `docs/ABACUS_AI_HANDOFF/11-PWA-LGPD-E-OPERACAO.md`.
+O checklist de observabilidade, backup, piloto e release está em `docs/ABACUS_AI_HANDOFF/12-OPERACAO-PILOTO-E-RELEASE.md`.

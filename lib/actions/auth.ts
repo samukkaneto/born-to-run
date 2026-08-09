@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { destinationForStatus } from '@/lib/auth/access'
+import { LEGAL_VERSION } from '@/lib/legal'
 import { cleanText, validateEmail } from '@/lib/validation'
 
 export type AuthActionState = {
@@ -69,6 +70,7 @@ export async function signup(
   const fullName = cleanText(formData.get('full_name'), 120)
   const email = validateEmail(formData.get('email'))
   const password = String(formData.get('password') ?? '')
+  const acceptedLegalTerms = formData.get('accept_legal') === 'on'
 
   if (fullName.length < 2) {
     return { error: 'Informe seu nome completo.' }
@@ -79,12 +81,22 @@ export async function signup(
   if (password.length < 8 || !/[A-Za-zÀ-ÿ]/.test(password) || !/\d/.test(password)) {
     return { error: 'A senha deve ter ao menos 8 caracteres, uma letra e um número.' }
   }
+  if (!acceptedLegalTerms) {
+    return { error: 'Leia e aceite os Termos de Uso e o Aviso de Privacidade.' }
+  }
 
+  const origin = await getSiteOrigin()
+  const acceptedAt = new Date().toISOString()
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { full_name: fullName },
+      data: {
+        full_name: fullName,
+        legal_version: LEGAL_VERSION,
+        legal_accepted_at: acceptedAt,
+      },
+      emailRedirectTo: `${origin}/auth/callback?next=/acesso-pendente`,
     },
   })
 
