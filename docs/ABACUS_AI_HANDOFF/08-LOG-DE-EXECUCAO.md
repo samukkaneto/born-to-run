@@ -75,3 +75,16 @@ Cada entrada futura deve registrar:
 - testes executados e resultados;
 - dados técnicos criados/removidos;
 - riscos, bloqueios e próxima ação exata.
+
+## 09/08/2026 — Bloco 5, checkpoint hospedado
+
+- Commit `4dae905` publicado e PR draft `#2` criado.
+- GitHub Actions run `31293700511`: audit, lint, tipos, 48 unitários, build e 24 E2E aprovados em 1m38s.
+- Vercel criou `dpl_CjisHx5g4zL8Q2gDqABQkuDNwtfK`, `READY`, com build de 31 rotas e sem erros de runtime.
+- A API revelou Web Analytics configurado porém desativado; o comando oficial `vercel project web-analytics` foi executado e a confirmação passou para `true`.
+- Speed Insights já possuía configuração e foi preservado.
+- `vercel curl` validou respostas 200 de páginas públicas, health, manifesto e scripts das duas métricas; dashboard anônimo respondeu 307.
+- Supabase rechecado: `ACTIVE_HEALTHY`, seis migrations, RLS nas nove tabelas, 1 admin ativo, zero órfãos e zero dados/arquivos de negócio.
+- Advisors: seis avisos intencionais de RPCs `SECURITY DEFINER`, proteção de senhas vazadas bloqueada pelo Free e índices ainda sem uso na base vazia.
+- Inspeção visual via navegador não conectou neste host; não foi declarada como aprovada. A evidência disponível é build/check hospedado, HTTP autenticado e Playwright.
+- Próximo ponto exato: commit documental, auditoria final, merge e verificação de produção se o veredito for GO.

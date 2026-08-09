@@ -4,7 +4,7 @@ Atualizar este arquivo após cada bloco.
 
 ## Em andamento
 
-- Bloco 5: PR, CI hospedado, preview final e auditoria pesada antes de decidir o merge/release.
+- Bloco 5: auditoria pesada final e decisão de merge/release. PR, CI e preview já estão verdes.
 
 ## Concluído neste ciclo
 
@@ -16,7 +16,7 @@ Atualizar este arquivo após cada bloco.
 
 ## Próxima ação técnica
 
-Criar PR da branch, aguardar CI e preview Git, validar o deployment hospedado e executar a auditoria final pesada. Testes de SMTP e usuários reais continuam aguardando as dependências do proprietário.
+Concluir a revisão de segurança/coerência, registrar o veredito e, se não houver P0/P1, marcar o PR pronto, mesclar em `main` e auditar o deployment de produção. Testes de SMTP e usuários reais continuam aguardando as dependências do proprietário.
 
 ## Fila planejada
 

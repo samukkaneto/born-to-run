@@ -28,7 +28,7 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 | Existência física de mídia | Resolvida no Bloco 1 |
 | PWA instalável/offline/push | Instalação e offline público entregues; push não implementado |
 | Aplicativo nativo em lojas | Não iniciado |
-| Observabilidade | Health check, Runtime Logs, Web Analytics e Speed Insights preparados; ativação das métricas depende do painel Vercel |
+| Observabilidade | Health check, Runtime Logs, Web Analytics e Speed Insights ativos no projeto Vercel |
 | Segurança contínua | Audit no CI, Dependabot semanal e canal privado documentados |
 | Backup | Base real ainda vazia; plano Free exige dump externo ou upgrade Pro antes de depender de recuperação |
 

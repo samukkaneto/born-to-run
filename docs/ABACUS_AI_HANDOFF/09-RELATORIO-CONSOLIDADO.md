@@ -40,7 +40,7 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - Bloco 2 preparado: callback e templates concluídos; ativação remota de senhas vazadas/SMTP depende de plano Pro, domínio e credenciais.
 - Bloco 3 concluído: instalação PWA, offline sem cache privado, headers, noindex, privacidade, termos e aceite versionado.
 - Bloco 4 concluído: health check, métricas anônimas com sanitização, audit no CI, Dependabot, política de segurança, plano de backup e checklist do piloto/release.
-- Bloco 5 em andamento: PR, CI/preview hospedado e auditoria final pesada.
+- Bloco 5 em andamento: PR #2, CI e preview estão verdes; falta somente a auditoria final e o release.
 
 ## Estado operacional após o Bloco 4
 
@@ -51,6 +51,15 @@ O Codex iniciou a branch `codex/production-readiness` para:
 - banco ainda sem conteúdo real de atletas;
 - Supabase Free exige upgrade Pro ou exportações criptografadas antes de depender de recuperação;
 - SMTP, senhas vazadas, identificação formal do controlador e piloto real seguem como dependências explícitas do proprietário.
+
+## Checkpoint hospedado
+
+- PR draft: https://github.com/samukkaneto/born-to-run/pull/2;
+- CI `31293700511`: aprovado;
+- preview `dpl_CjisHx5g4zL8Q2gDqABQkuDNwtfK`: `READY`;
+- rotas públicas/health/métricas: 200; dashboard anônimo: 307;
+- Web Analytics habilitado e Speed Insights configurado;
+- Vercel e Supabase sem erros críticos conhecidos no checkpoint.
 
 ## Fable 5
 

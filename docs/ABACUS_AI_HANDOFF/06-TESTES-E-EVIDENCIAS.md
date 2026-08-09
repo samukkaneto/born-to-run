@@ -73,3 +73,14 @@ Nenhum bloco será declarado concluído somente por compilar. Alterações de Au
 - Vercel antes do novo commit: preview `dpl_HLmyjaZ9NQQjjwxw52kjh8tCEQeo` `READY`, zero clusters de runtime em sete dias e zero warning/error/fatal em 24 horas.
 - Uma primeira execução E2E detectou 404 dos scripts de métricas fora da Vercel; a condição foi corrigida no servidor e a repetição completa passou 24/24.
 - ESLint passou a ignorar corretamente os artefatos locais `playwright-report`, `test-results` e `coverage`.
+
+## Evidências hospedadas do PR #2
+
+- PR: https://github.com/samukkaneto/born-to-run/pull/2.
+- GitHub Actions: run `31293700511`, `quality` aprovado em 1m38s.
+- Vercel check: aprovado.
+- Preview: `dpl_CjisHx5g4zL8Q2gDqABQkuDNwtfK`, commit `4dae905`, 31 rotas e build `READY`.
+- `vercel curl` com bypass oficial: `/`, `/login`, `/cadastro`, `/privacidade`, `/manifest.json`, Analytics e Speed Insights responderam 200; `/dashboard` anônimo respondeu 307; `/api/health` respondeu 200 com revisão `4dae905`.
+- Build remoto: Next.js 16.3.0 compilado, TypeScript concluído e 31 páginas geradas.
+- Runtime: zero clusters de erro em uma hora e zero warning/error/fatal no deployment consultado.
+- Supabase final: seis migrations, 1 `admin/active`, zero órfãos, zero conteúdo/Storage e RLS habilitada nas nove tabelas de negócio.

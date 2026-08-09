@@ -12,7 +12,7 @@ Atualizado em 09/08/2026 durante o Bloco 4.
 - nenhum evento customizado envia e-mail, nome, conteúdo social ou dados de treino;
 - o Aviso de Privacidade foi atualizado para refletir esses processamentos.
 
-Os dois produtos de métricas precisam estar habilitados no painel da Vercel para começar a registrar dados. O código versionado já está preparado; se o painel ainda mostrar **Enable**, o proprietário deve ativá-los e fazer novo deploy.
+Web Analytics foi habilitado remotamente em 09/08/2026 e Speed Insights já estava configurado. O primeiro deployment de produção após o merge começará a fornecer os dados; o painel ainda pode permanecer vazio até receber visitas reais.
 
 ## Segurança contínua
 
@@ -55,7 +55,7 @@ Nenhuma credencial de banco está disponível neste workspace e nenhum dump pess
 - [ ] configurar domínio/remetente e SMTP próprio;
 - [ ] aplicar os oito templates de Auth e conferir URLs de redirecionamento;
 - [ ] se houver upgrade Pro, habilitar proteção contra senhas vazadas;
-- [ ] habilitar Web Analytics e Speed Insights no painel Vercel;
+- [x] habilitar Web Analytics e Speed Insights no painel Vercel;
 - [ ] definir identificação formal e e-mail de privacidade do controlador;
 - [ ] decidir Pro ou rotina de backup criptografado;
 - [ ] revisar visual e textos finais com Fable 5/proprietário.

@@ -6,6 +6,7 @@
 - Branch padrão: `main`
 - Baseline: `46001fa5a1ebc16fb28cdb742d21e66f77ccc8a6`
 - PR de reconstrução: `#1`, mesclado.
+- PR do ciclo de prontidão: `#2`, aberto como draft para a auditoria final.
 - Workflow: `.github/workflows/ci.yml`.
 - Dependabot: npm e GitHub Actions, semanal.
 - Relato privado de segurança: `SECURITY.md` e GitHub Security Advisory.
@@ -18,8 +19,11 @@
 - Domínio: https://born-to-run-seven.vercel.app
 - Branch de produção: `main`
 - Integração Git ligada ao repo ID atual `1304308095`.
-- Preview PWA/LGPD: `dpl_HLmyjaZ9NQQjjwxw52kjh8tCEQeo`, `READY`, commit `c007fb9`.
+- Preview final do ciclo: `dpl_CjisHx5g4zL8Q2gDqABQkuDNwtfK`, `READY`, commit `4dae905`.
 - Auditoria em 09/08/2026: zero clusters de erro em sete dias e zero warning/error/fatal nas últimas 24 horas consultadas.
+- Web Analytics: habilitado remotamente e com ID configurado.
+- Speed Insights: configurado no projeto; ainda sem dados porque a versão instrumentada não chegou à produção.
+- Plano Vercel: Hobby; previews protegidos e domínio customizado público.
 
 Variáveis públicas cadastradas, sem registrar valores nesta documentação:
 
@@ -46,4 +50,4 @@ Não adicionar `service_role` ou qualquer segredo em variável `NEXT_PUBLIC_*`.
 7. mesclar em `main` somente com gates verdes;
 8. conferir aliases, respostas HTTP e logs de produção.
 
-O endpoint `/api/health` e as métricas Vercel passam a integrar o gate do Bloco 4. Web Analytics e Speed Insights exigem habilitação no painel do projeto além dos componentes já versionados.
+O endpoint `/api/health` e as métricas Vercel passam a integrar o gate do Bloco 4. Ambos os produtos de métricas estão habilitados/configurados no projeto.
