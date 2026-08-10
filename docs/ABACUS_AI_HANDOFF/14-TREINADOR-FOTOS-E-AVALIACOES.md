@@ -1,6 +1,6 @@
 # Bloco 9 — treinador exclusivo, fotos reais e avaliações privadas
 
-Atualizado em 09/08/2026. Este documento registra o bloco iniciado pelo pedido do proprietário para separar administrador e treinador, atualizar a imagem institucional e criar a primeira versão das avaliações de bioimpedância.
+Atualizado em 10/08/2026. Este documento registra o bloco iniciado pelo pedido do proprietário para separar administrador e treinador, atualizar a imagem institucional e criar a primeira versão das avaliações de bioimpedância.
 
 ## Decisões de produto confirmadas
 
@@ -87,7 +87,12 @@ Esta é deliberadamente a primeira versão. Gráficos, comparação por período
 
 ## Estado de publicação
 
-O Supabase já contém as três migrations e a pré-autorização. Código, imagens, interface, testes e relatórios ainda precisam passar por commit, PR, CI, preview Vercel, verificação visual e merge. Atualizar esta seção com os identificadores reais antes de declarar o bloco publicado.
+O Supabase contém as três migrations e a pré-autorização. O código foi publicado no commit `c1f111a027d1a5c87e109de3089eb7e14cd8a49d`, branch `codex/coach-assessments-team-media`, e abriu a PR draft [#15](https://github.com/samukkaneto/born-to-run/pull/15).
+
+- GitHub Actions: run [`31351998723`](https://github.com/samukkaneto/born-to-run/actions/runs/31351998723), concluída com sucesso; lint, audit, TypeScript, unitários, build e testes de navegador passaram no CI.
+- Preview Vercel: `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA`, estado `READY`, endereço protegido `https://born-to-qlnisgqpt-shabuneto.vercel.app`.
+- Verificação do artefato: `vercel curl` retornou a home 200 e confirmou no HTML renderizado `team-race-palace.jpg`, a seção exclusiva de Robson e o conteúdo da área da equipe.
+- Pendente neste checkpoint: incorporar este relatório, repetir o CI documental, retirar a PR de draft, mesclar e validar o deployment de produção no domínio oficial.
 
 ## Contrato para Abacus AI / Fable 5
 

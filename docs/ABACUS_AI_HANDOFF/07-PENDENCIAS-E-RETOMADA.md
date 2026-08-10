@@ -18,7 +18,7 @@ Todos os blocos que independiam de credenciais, plano pago, dados formais ou usu
 
 ## Próxima ação
 
-O ponto exato de retomada é concluir a publicação do Bloco 9: commit, PR, CI, preview visual, merge e produção. Depois disso, Robson deve criar a conta real pelo cadastro oficial usando exatamente `ralves4101@gmail.com` e confirmar o e-mail. A pré-autorização já está aguardando no Supabase.
+O ponto exato de retomada é concluir a publicação do Bloco 9. Commit `c1f111a`, PR #15, CI `31351998723` e preview `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA` já estão verdes. Restam incorporar o registro documental, repetir o CI, mesclar e validar produção. Depois disso, Robson deve criar a conta real pelo cadastro oficial usando exatamente `ralves4101@gmail.com` e confirmar o e-mail. A pré-autorização já está aguardando no Supabase.
 
 O administrador foi localizado e está `active` com e-mail confirmado. O proprietário recebeu o identificador exato fora do repositório. Se não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com esse e-mail.
 

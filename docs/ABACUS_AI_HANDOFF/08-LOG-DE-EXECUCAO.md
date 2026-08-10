@@ -209,3 +209,12 @@ Cada entrada futura deve registrar:
 - pgTAP remoto: comunidade 49/49, ciclo de destinatários 7/7 e treinador/avaliações/convite 16/16, total 72/72.
 - Gates locais: TypeScript, ESLint, Vitest 53/53 e build de 34 rotas aprovados. E2E teve 24 casos comuns aprovados em dev; os dois timeouts de service worker foram repetidos no build de produção e passaram 2/2, consolidando a matriz 26/26.
 - Ponto de retomada: finalizar relatórios, commit/PR, CI, preview visual, merge e produção. Depois Robson faz o cadastro real e confirma o e-mail.
+
+### Checkpoint de publicação do Bloco 9 — 10/08/2026
+
+- Commit funcional `c1f111a027d1a5c87e109de3089eb7e14cd8a49d` enviado para `codex/coach-assessments-team-media`.
+- PR draft [#15](https://github.com/samukkaneto/born-to-run/pull/15) criada com escopo, banco, validações e procedimento da conta do treinador.
+- Workflow `Qualidade` `31351998723` terminou com sucesso; todas as etapas, incluindo audit, lint, TypeScript, 53 unitários, build e navegador, ficaram verdes.
+- Preview Vercel `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA` ficou `READY` no commit correto, em `https://born-to-qlnisgqpt-shabuneto.vercel.app`.
+- O bypass oficial `vercel curl` confirmou home 200, foto nova `team-race-palace.jpg`, seção exclusiva de Robson e conteúdo novo no artefato remoto.
+- Próxima ação: publicar este checkpoint, aguardar o CI documental, retirar a PR do modo draft, mesclar e auditar produção.
