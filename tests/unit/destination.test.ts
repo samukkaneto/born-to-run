@@ -11,6 +11,7 @@ describe('destino por situação de acesso', () => {
     ['suspended', 'member', '/acesso-bloqueado'],
     ['rejected', 'member', '/acesso-bloqueado'],
     ['active', 'member', '/dashboard'],
+    ['active', 'coach', '/admin'],
     ['active', 'admin', '/admin'],
   ] as const)('direciona %s/%s para %s', (status, role, expected) => {
     expect(destinationForStatus(status, role)).toBe(expected)

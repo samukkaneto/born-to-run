@@ -17,6 +17,7 @@ Atualizado em 09/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 11. `11-PWA-LGPD-E-OPERACAO.md` — instalação, offline seguro, privacidade, termos e dependências jurídicas.
 12. `12-OPERACAO-PILOTO-E-RELEASE.md` — observabilidade, saúde, backup, segurança contínua e checklist de liberação.
 13. `13-HOSTINGER-MCP-CONTATO-E-APP-NATIVO.md` — conexão Hostinger, formulário Resend e distinção entre PWA e futuro APK nativo.
+14. `14-TREINADOR-FOTOS-E-AVALIACOES.md` — papel exclusivo de treinador, acervo de fotos, treinos privados e bioimpedância.
 
 ## Fontes complementares no repositório
 
@@ -32,7 +33,7 @@ Documentos de auditoria datados de julho de 2026 são históricos. Não devem su
 
 - Nenhum arquivo desta pasta contém senhas, tokens, chaves privadas ou valores de variáveis de ambiente.
 - A cada bloco técnico concluído, atualizar pelo menos `02`, `07`, `08` e `09`.
-- A Fable 5 tem liberdade visual ampla, mas não pode enfraquecer autorização, Storage privado ou audiência de treinos.
+- A Fable 5 tem liberdade visual ampla, mas não pode enfraquecer autorização, Storage privado, avaliações de saúde nem a privacidade dos treinos.
 - Garmin, Strava e Sports Tracker são referências de experiência, não integrações obrigatórias desta fase.
 
 ## Estado deste pacote

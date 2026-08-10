@@ -20,7 +20,7 @@ Os documentos de auditoria/reconstrução datados de julho de 2026 são registro
 
 ## Produto
 
-Born to Run é o site institucional e o aplicativo privado da equipe Born to Run — Treinamento e Saúde. A área interna é uma comunidade esportiva fechada com feed, fotos, métricas, curtidas, comentários, comunicados e treinos prescritos pelo treinador para equipe, grupos ou atletas.
+Born to Run é o site institucional e o aplicativo privado da equipe Born to Run — Treinamento e Saúde. A área interna é uma comunidade esportiva fechada com feed, fotos, métricas, curtidas, comentários, comunicados, treinos privados e avaliações de bioimpedância.
 
 Garmin Connect, Strava e Sports Tracker são referências de experiência. Não implementar integrações nesta fase sem uma decisão nova e explícita.
 
@@ -37,13 +37,14 @@ Não inventar telefone, WhatsApp, endereço, e-mail, CNPJ, depoimentos, atletas,
 ## Contratos técnicos que não podem ser enfraquecidos
 
 - Novos cadastros ficam `pending`; conteúdo privado exige `membership_status = active`.
-- Papéis são `member` e `admin`; nenhum cliente pode atualizar `role` ou status diretamente.
+- Papéis são `member`, `coach` e `admin`; somente o administrador define o único treinador e nenhum cliente atualiza `role` ou status diretamente.
 - Operações administrativas usam RPCs e checagem server-side.
 - RLS permanece habilitado em todas as tabelas de negócio.
 - `avatars` e `post-images` são privados; o código guarda paths e usa URLs assinadas.
-- Treinos suportam audiência de equipe, grupos e atletas.
+- Somente o treinador publica treinos; todo treino exige grupo ou atleta destinatário e não é visível ao administrador.
+- Avaliações físicas são privadas entre treinador e atleta avaliado.
 - `proxy.ts` é a convenção ativa do Next 16; não recriar `middleware.ts`.
-- As migrations até `20260809021316_protege_metadados_e_referencias_de_midia.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
+- As migrations até `20260810030102_indexa_convite_treinador.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
 - Nunca expor `service_role`, segredos ou arquivos `.env*`.
 
 ## Arquivos sensíveis

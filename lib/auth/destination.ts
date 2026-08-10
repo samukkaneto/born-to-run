@@ -4,7 +4,9 @@ export function destinationForStatus(
 ): string {
   if (status === 'pending') return '/acesso-pendente'
   if (status === 'suspended' || status === 'rejected') return '/acesso-bloqueado'
-  if (status === 'active') return role === 'admin' ? '/admin' : '/dashboard'
+  if (status === 'active') {
+    return role === 'admin' || role === 'coach' ? '/admin' : '/dashboard'
+  }
   return '/acesso-pendente'
 }
 

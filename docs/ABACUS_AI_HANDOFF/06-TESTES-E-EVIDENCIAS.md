@@ -32,6 +32,22 @@
 
 Nenhum bloco será declarado concluído somente por compilar. Alterações de Auth/RLS/Storage exigem testes de autorização e Advisors; alterações de UI exigem desktop/mobile e console limpo; publicação exige CI, domínio e logs.
 
+## Evidências do Bloco 9 — checkpoint local
+
+- Supabase: três migrations aplicadas e catálogo de 9 migrations sincronizado.
+- pgTAP remoto transacional: 72/72 — 49 comunidade, 7 ciclo histórico e 16 treinador/avaliações/convite.
+- Convite de Robson: simulação transacional confirmou `coach/active` e consumo único; rollback deixou zero usuário artificial.
+- ESLint: aprovado.
+- TypeScript: aprovado.
+- Vitest: 53/53.
+- Build Next.js 16.3.0: aprovado, 34 rotas.
+- Navegador: 24/24 casos comuns em dev e 2/2 PWA no build de produção; matriz funcional equivalente a 26/26.
+- Axe: nenhuma violação séria/crítica nas páginas públicas cobertas.
+- GitHub Actions da PR #15: run `31351998723`, concluída integralmente com sucesso.
+- Preview Vercel da PR #15: `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA`, `READY`, commit `c1f111a`.
+- `vercel curl`: home 200; foto `team-race-palace.jpg`, seção de Robson e conteúdo atualizado confirmados no artefato remoto.
+- Merge e auditoria de produção: pendentes neste checkpoint; ver arquivo `14`.
+
 ## Evidências do Bloco 1
 
 - `next typegen`: aprovado.

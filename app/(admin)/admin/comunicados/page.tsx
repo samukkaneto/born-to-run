@@ -1,9 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import { getAccessContext } from '@/lib/auth/access'
 import AnnouncementsManager from '@/components/admin/AnnouncementsManager'
 import type { Announcement } from '@/types'
 
 export default async function AdminComunicadosPage() {
-  const supabase = await createClient()
+  const [{ profile }, supabase] = await Promise.all([getAccessContext(), createClient()])
+  if (profile?.role !== 'admin') redirect('/admin')
   const { data: announcements, error } = (await supabase
     .from('announcements')
     .select('*')

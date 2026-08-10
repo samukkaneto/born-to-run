@@ -50,6 +50,17 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 - Release final: PR `#13` mesclada no commit `7323340080f6bdc35f8b7fd28390d7a6b99f515f`; CI do merge `31332711070` aprovada; produção Vercel `dpl_DU27nprYJu1VN24kgQd6kgDeB6RF` em estado `READY`, sem erro de alias ou de runtime.
 - Validação pública no domínio oficial: home, Sobre, Contato, Instalar e Health `200`; dashboard anônimo `307` para login; payload inválido do contato `400`; HSTS ativo; nenhuma ocorrência pública de “200 atletas”.
 
+## Treinador, fotos e avaliações — atualização de 09/08/2026
+
+- O papel `coach` foi separado do administrador. `samuelspeedy@gmail.com` permanece administrador; `ralves4101@gmail.com` está pré-autorizado como único treinador e ainda aguarda cadastro/confirmacão reais.
+- Administrador e treinador aprovam contas; somente o administrador define o papel técnico; somente o treinador gerencia grupos, publica treinos privados e registra avaliações.
+- Todo treino exige atleta ou grupo destinatário. O administrador e atletas não destinados não conseguem consultar o conteúdo.
+- A tabela `body_assessments` e as telas `/admin/avaliacoes` e `/dashboard/avaliacoes` entregam o MVP privado da bioimpedância.
+- Nove fotos reais foram arquivadas em `public/team-archive/`; `team-race-palace.jpg` substitui a imagem antiga de destaque. A home ganhou bloco dedicado exclusivamente a Robson Alves.
+- Supabase está em nove migrations, terminando em `20260810030102_indexa_convite_treinador`; suíte remota transacional 72/72.
+- Gates locais: ESLint, TypeScript, 53/53 unitários, build de 34 rotas e matriz equivalente a 26/26 E2E desktop/mobile.
+- Código e interface ainda aguardam PR, CI, preview e merge; o banco já recebeu as três migrations deste bloco e o convite técnico.
+
 ## Estado por área
 
 | Área | Estado no baseline |
@@ -57,10 +68,11 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 | Institucional | Implementado e publicado |
 | Comunidade fechada | Implementada e protegida por RLS |
 | Feed social | MVP funcional com Storage privado e paginação |
-| Painel do treinador | Implementado |
-| Grupos e treinos dirigidos | Implementados |
+| Administração e treinador | Papéis e painéis separados; publicação deste bloco pendente |
+| Grupos e treinos dirigidos | Privados e exclusivos do treinador no banco; UI pendente de publicação |
+| Avaliações de bioimpedância | MVP privado implementado; publicação pendente |
 | CI/CD | GitHub Actions e GitHub→Vercel funcionando |
-| Supabase | Seis migrations aplicadas e 1 admin ativo |
+| Supabase | Nove migrations, 1 admin ativo e convite de treinador aguardando cadastro |
 | SMTP próprio | Ativo com Resend, domínio autenticado, templates hospedados e recuperação testada |
 | Formulário público | Endpoint Resend implementado e entrega real confirmada no preview (`delivered`) |
 | Senhas vazadas | Bloqueada pelo plano Free; ativar após upgrade Pro |
@@ -77,7 +89,8 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 - 1 usuário Auth;
 - 1 perfil `admin/active`;
 - zero órfãos;
-- zero posts, comentários, curtidas, comunicados, grupos, integrantes, treinos e atribuições técnicas.
+- zero posts, comentários, curtidas, comunicados, grupos, integrantes, treinos, atribuições e avaliações reais;
+- 1 pré-autorização privada aguardando o cadastro do treinador.
 
 ## Veredito
 

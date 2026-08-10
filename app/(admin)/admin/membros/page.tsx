@@ -4,6 +4,7 @@ import { Clock3, Layers3, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { createMediaUrl } from '@/lib/supabase/media'
 import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
+import { getAccessContext } from '@/lib/auth/access'
 import MembersTable from '@/components/admin/MembersTable'
 import GroupsManager from '@/components/admin/GroupsManager'
 import type { MemberProfile, TrainingGroupWithMembers } from '@/types'
@@ -13,21 +14,27 @@ export default async function AdminMembrosPage({
 }: {
   searchParams: Promise<{ view?: string }>
 }) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const [{ user, profile }, supabase] = await Promise.all([
+    getAccessContext(),
+    createClient(),
+  ])
   if (!user) redirect('/login')
+  const isCoach = profile?.role === 'coach'
+  const isAdmin = profile?.role === 'admin'
 
-  const [{ data: memberData, error: membersError }, { data: groupData, error: groupsError }] =
-    await Promise.all([
-      supabase.from('profiles').select(MEMBER_PROFILE_COLUMNS).order('created_at', { ascending: true }),
-      supabase
+  const { data: memberData, error: membersError } = await supabase
+    .from('profiles')
+    .select(MEMBER_PROFILE_COLUMNS)
+    .order('created_at', { ascending: true })
+  if (membersError) throw new Error('Não foi possível carregar a gestão da equipe.')
+
+  const groupResult = isCoach
+    ? await supabase
         .from('training_groups')
         .select('*, training_group_members ( user_id )')
-        .order('created_at', { ascending: false }),
-    ])
-  if (membersError || groupsError) throw new Error('Não foi possível carregar a gestão da equipe.')
+        .order('created_at', { ascending: false })
+    : { data: [], error: null }
+  if (groupResult.error) throw new Error('Não foi possível carregar os grupos de treino.')
 
   const members = await Promise.all(
     ((memberData ?? []) as MemberProfile[]).map(async (member) => ({
@@ -35,8 +42,9 @@ export default async function AdminMembrosPage({
       avatar_url: await createMediaUrl(supabase, 'avatars', member.avatar_url),
     })),
   )
-  const groups = (groupData ?? []) as unknown as TrainingGroupWithMembers[]
+  const groups = (groupResult.data ?? []) as unknown as TrainingGroupWithMembers[]
   const { view } = await searchParams
+  if (view === 'grupos' && !isCoach) redirect('/admin/membros')
   const showingGroups = view === 'grupos'
   const activeMembers = members.filter((member) => member.membership_status === 'active')
   const pendingCount = members.filter((member) => member.membership_status === 'pending').length
@@ -68,23 +76,25 @@ export default async function AdminMembrosPage({
         >
           <Users size={16} aria-hidden="true" /> Membros
         </Link>
-        <Link
-          href="/admin/membros?view=grupos"
-          aria-current={showingGroups ? 'page' : undefined}
-          className={`inline-flex min-h-11 items-center gap-2 border-b-2 px-4 py-3 font-condensed text-sm font-semibold uppercase tracking-[0.08em] ${
-            showingGroups
-              ? 'border-[#DC2626] text-[#171717]'
-              : 'border-transparent text-[#57534E] hover:text-[#171717]'
-          }`}
-        >
-          <Layers3 size={16} aria-hidden="true" /> Grupos
-        </Link>
+        {isCoach && (
+          <Link
+            href="/admin/membros?view=grupos"
+            aria-current={showingGroups ? 'page' : undefined}
+            className={`inline-flex min-h-11 items-center gap-2 border-b-2 px-4 py-3 font-condensed text-sm font-semibold uppercase tracking-[0.08em] ${
+              showingGroups
+                ? 'border-[#DC2626] text-[#171717]'
+                : 'border-transparent text-[#57534E] hover:text-[#171717]'
+            }`}
+          >
+            <Layers3 size={16} aria-hidden="true" /> Grupos
+          </Link>
+        )}
       </nav>
 
       {showingGroups ? (
         <GroupsManager groups={groups} members={members} />
       ) : (
-        <MembersTable members={members} currentUserId={user.id} />
+        <MembersTable members={members} currentUserId={user.id} canManageRoles={isAdmin} />
       )}
     </div>
   )

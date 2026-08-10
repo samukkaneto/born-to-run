@@ -10,13 +10,16 @@ import {
   User,
   Plus,
   ShieldCheck,
+  ClipboardList,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import type { UserRole } from '@/types'
 
 const navItems = [
   { href: '/dashboard',             icon: Home,      label: 'Início',         short: 'Início'  },
   { href: '/dashboard/feed',        icon: Rss,       label: 'Feed da equipe',  short: 'Feed'    },
   { href: '/dashboard/treinos',     icon: Dumbbell,  label: 'Treinos',         short: 'Treinos' },
+  { href: '/dashboard/avaliacoes',  icon: ClipboardList, label: 'Minhas avaliações', short: 'Avaliações' },
   { href: '/dashboard/comunicados', icon: Megaphone, label: 'Comunicados',     short: 'Avisos'  },
   { href: '/dashboard/perfil',      icon: User,      label: 'Meu perfil',      short: 'Perfil'  },
 ]
@@ -27,7 +30,11 @@ function isActive(pathname: string, href: string): boolean {
 }
 
 /** Menu lateral (desktop) — painel carbono, item ativo vermelho sólido. */
-export function DashboardSidebarNav({ isAdmin = false }: { isAdmin?: boolean }) {
+export function DashboardSidebarNav({
+  managementRole,
+}: {
+  managementRole?: Extract<UserRole, 'admin' | 'coach'> | null
+}) {
   const pathname = usePathname()
   return (
     <nav className="flex flex-col gap-1" aria-label="Navegação do painel">
@@ -57,7 +64,7 @@ export function DashboardSidebarNav({ isAdmin = false }: { isAdmin?: boolean }) 
         )
       })}
 
-      {isAdmin && (
+      {managementRole && (
         <>
           <div className="my-3 border-t border-[#2E2E2E]" aria-hidden="true" />
           <Link
@@ -73,7 +80,7 @@ export function DashboardSidebarNav({ isAdmin = false }: { isAdmin?: boolean }) 
               className="h-5 w-5 flex-shrink-0 text-[#16A34A]"
               aria-hidden="true"
             />
-            Painel do treinador
+            {managementRole === 'coach' ? 'Painel do treinador' : 'Administração'}
           </Link>
         </>
       )}
@@ -84,8 +91,8 @@ export function DashboardSidebarNav({ isAdmin = false }: { isAdmin?: boolean }) 
 /** Navegação inferior (mobile) — botão central vermelho "+" (novo post). */
 export function DashboardBottomNav() {
   const pathname = usePathname()
-  const left = navItems.slice(0, 2)
-  const right = navItems.slice(3, 5)
+  const left = [navItems[0], navItems[2]]
+  const right = [navItems[3], navItems[5]]
 
   const renderItem = ({ href, icon: Icon, short }: (typeof navItems)[number]) => {
     const active = isActive(pathname, href)

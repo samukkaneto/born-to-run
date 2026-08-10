@@ -14,6 +14,9 @@
 4. `20260808174648_protege_chaves_feed`
 5. `20260808192626_endurece_mutacoes_e_midias`
 6. `20260809021316_protege_metadados_e_referencias_de_midia`
+7. `20260810021549_treinador_e_avaliacoes_privadas`
+8. `20260810025223_preautoriza_treinador`
+9. `20260810030102_indexa_convite_treinador`
 
 Nunca editar ou reaplicar essas migrations. Toda alteração entra em uma migration nova.
 
@@ -28,6 +31,10 @@ Nunca editar ou reaplicar essas migrations. Toda alteração entra em uma migrat
 - URLs assinadas;
 - feed sem atualização direta e com chaves controladas pelo banco;
 - mutações de grupos e treinos restritas aos fluxos administrativos.
+- papel `coach` separado do administrador e limitado a uma conta;
+- treinos sempre dirigidos e invisíveis ao administrador ou a atletas não designados;
+- avaliações de bioimpedância privadas por RLS e mutadas somente por RPC do treinador;
+- pré-autorização privada de e-mail técnico sem senha criada por terceiros.
 
 ## Bloco 1 concluído em 08/08/2026
 
@@ -38,16 +45,16 @@ Nunca editar ou reaplicar essas migrations. Toda alteração entra em uma migrat
 5. Objetos ainda referenciados não podem ser apagados pela Storage API.
 6. A migration oficial passou antes em preflight remoto de 56/56 asserções com rollback comprovado.
 
-## Pendências de configuração
+## Configuração atual
 
 1. A proteção de senhas vazadas está desativada. A documentação oficial informa disponibilidade no plano Pro ou superior.
-2. SMTP próprio ainda não está configurado; o serviço padrão é apenas demonstrativo, limitado e envia somente a endereços autorizados da equipe do projeto.
+2. SMTP próprio está ativo com Resend e `contato@equipeborntorun.com`; confirmação de e-mail continua obrigatória.
 
-O Bloco 2 confirmou que a organização está no plano `Free`. O código passou a informar callback explícito no cadastro; a configuração local foi alinhada para confirmação de e-mail e senha de 8 caracteres com letra e número; oito templates e a runbook `10-AUTH-SMTP-E-TEMPLATES.md` foram preparados. A ativação remota depende de upgrade Pro para senhas vazadas e de domínio/provedor/credenciais para SMTP.
+O projeto permanece no plano `Free`. Senhas vazadas dependem do upgrade Pro escolhido pelo proprietário; SMTP, domínio, callbacks e templates já estão ativos.
 
 ## Advisors no baseline
 
-- Seis warnings intencionais de RPCs `SECURITY DEFINER`: cinco administrativos com checagem de administrador e `get_my_access_profile()` limitado a `auth.uid()`.
+- Warnings intencionais de RPCs `SECURITY DEFINER`, todos com checagem interna de administrador, treinador ou `auth.uid()` conforme o contrato.
 - Um warning de proteção contra senhas vazadas desativada.
 - Índices sem uso, esperado para base sem conteúdo/tráfego.
 

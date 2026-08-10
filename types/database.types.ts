@@ -49,6 +49,72 @@ export type Database = {
           },
         ]
       }
+      body_assessments: {
+        Row: {
+          assessed_at: string
+          assessed_by: string
+          athlete_user_id: string
+          bmi: number | null
+          body_fat_pct: number | null
+          body_water_pct: number | null
+          created_at: string
+          id: string
+          metabolic_age: number | null
+          muscle_mass_kg: number | null
+          notes: string | null
+          updated_at: string
+          visceral_fat_level: number | null
+          weight_kg: number | null
+        }
+        Insert: {
+          assessed_at?: string
+          assessed_by: string
+          athlete_user_id: string
+          bmi?: number | null
+          body_fat_pct?: number | null
+          body_water_pct?: number | null
+          created_at?: string
+          id?: string
+          metabolic_age?: number | null
+          muscle_mass_kg?: number | null
+          notes?: string | null
+          updated_at?: string
+          visceral_fat_level?: number | null
+          weight_kg?: number | null
+        }
+        Update: {
+          assessed_at?: string
+          assessed_by?: string
+          athlete_user_id?: string
+          bmi?: number | null
+          body_fat_pct?: number | null
+          body_water_pct?: number | null
+          created_at?: string
+          id?: string
+          metabolic_age?: number | null
+          muscle_mass_kg?: number | null
+          notes?: string | null
+          updated_at?: string
+          visceral_fat_level?: number | null
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "body_assessments_assessor_profile_fkey"
+            columns: ["assessed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "body_assessments_athlete_profile_fkey"
+            columns: ["athlete_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           content: string
@@ -416,17 +482,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_my_access_profile: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          avatar_url: string | null
-          full_name: string
-          membership_status: string
-          role: string
-          status_note: string | null
-          user_id: string
-        }[]
-      }
       admin_archive_training_group: {
         Args: { target_group_id: string }
         Returns: boolean
@@ -465,6 +520,37 @@ export type Database = {
           target_user_id: string
         }
         Returns: boolean
+      }
+      coach_delete_body_assessment: {
+        Args: { target_assessment_id: string }
+        Returns: boolean
+      }
+      coach_save_body_assessment: {
+        Args: {
+          target_assessed_at: string
+          target_assessment_id: string
+          target_athlete_user_id: string
+          target_bmi: number
+          target_body_fat_pct: number
+          target_body_water_pct: number
+          target_metabolic_age: number
+          target_muscle_mass_kg: number
+          target_notes: string
+          target_visceral_fat_level: number
+          target_weight_kg: number
+        }
+        Returns: string
+      }
+      get_my_access_profile: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          full_name: string
+          membership_status: string
+          role: string
+          status_note: string
+          user_id: string
+        }[]
       }
     }
     Enums: {

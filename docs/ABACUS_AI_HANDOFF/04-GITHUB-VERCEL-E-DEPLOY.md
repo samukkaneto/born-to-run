@@ -10,6 +10,7 @@
 - Workflow: `.github/workflows/ci.yml`.
 - Dependabot: npm e GitHub Actions, semanal.
 - Relato privado de segurança: `SECURITY.md` e GitHub Security Advisory.
+- Bloco 9: PR [#15](https://github.com/samukkaneto/born-to-run/pull/15), commit funcional `c1f111a`, CI inicial `31351998723` verde.
 
 ## Vercel
 
@@ -25,6 +26,7 @@
 - Web Analytics: habilitado remotamente e com ID configurado.
 - Speed Insights: configurado; a instrumentação já chegou à produção e começará a formar histórico com visitas reais.
 - Plano Vercel: Hobby; previews protegidos e domínio customizado público.
+- Preview do Bloco 9: `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA`, `READY`, commit `c1f111a`, URL protegida `https://born-to-qlnisgqpt-shabuneto.vercel.app`.
 
 Variáveis públicas cadastradas, sem registrar valores nesta documentação:
 

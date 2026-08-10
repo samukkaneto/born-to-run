@@ -36,7 +36,6 @@ const MEMBER_STATUS_LABELS: Record<MemberProfile['membership_status'], string> =
 }
 
 function recipientLabel(workout: WorkoutWithAssignments) {
-  if (workout.audience === 'team') return 'Toda a equipe'
   const memberCount = workout.workout_assignments?.filter((item) => item.athlete_user_id).length ?? 0
   const groupCount = workout.workout_assignments?.filter((item) => item.group_id).length ?? 0
   const parts = []
@@ -60,7 +59,6 @@ export default function WorkoutsManager({
   const [memberSearch, setMemberSearch] = useState('')
   const [modal, setModal] = useState<'create' | WorkoutWithAssignments | null>(null)
   const [toDelete, setToDelete] = useState<WorkoutWithAssignments | null>(null)
-  const [audience, setAudience] = useState<'team' | 'targeted'>('team')
   const [selectedMembers, setSelectedMembers] = useState<string[]>([])
   const [selectedGroups, setSelectedGroups] = useState<string[]>([])
   const [working, setWorking] = useState(false)
@@ -115,12 +113,10 @@ export default function WorkoutsManager({
     setMemberSearch('')
     setModal(value)
     if (value === 'create') {
-      setAudience('team')
       setSelectedMembers([])
       setSelectedGroups([])
       return
     }
-    setAudience(value.audience)
     setSelectedMembers(
       value.workout_assignments
         ?.flatMap((assignment) => assignment.athlete_user_id ? [assignment.athlete_user_id] : []) ?? [],
@@ -224,8 +220,8 @@ export default function WorkoutsManager({
         onClose={() => !working && setModal(null)}
       >
         <form key={editing?.id ?? 'create'} onSubmit={handleSave} className="space-y-4">
-          {audience === 'targeted' && selectedMembers.map((id) => <input key={`member-${id}`} type="hidden" name="member_ids" value={id} />)}
-          {audience === 'targeted' && selectedGroups.map((id) => <input key={`group-${id}`} type="hidden" name="group_ids" value={id} />)}
+          {selectedMembers.map((id) => <input key={`member-${id}`} type="hidden" name="member_ids" value={id} />)}
+          {selectedGroups.map((id) => <input key={`group-${id}`} type="hidden" name="group_ids" value={id} />)}
           <div><label htmlFor="workout-title" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Título</label><input id="workout-title" name="title" defaultValue={editing?.title ?? ''} maxLength={160} required className="input-base" placeholder="Ex: Treino de velocidade 5 km" /></div>
           <div><label htmlFor="workout-description" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Descrição</label><textarea id="workout-description" name="description" defaultValue={editing?.description ?? ''} maxLength={5000} rows={5} required className="input-base resize-none" placeholder="Descreva aquecimento, séries, pausas e desaquecimento…" /></div>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -236,11 +232,10 @@ export default function WorkoutsManager({
 
           <fieldset className="space-y-3 rounded-xl border border-[#E5E1D8] p-4">
             <legend className="px-1 font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Destinatários</legend>
-            <label className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 ${audience === 'team' ? 'border-[#DC2626] bg-[#FFF7F7]' : 'border-[#E5E1D8]'}`}><input type="radio" name="audience" value="team" checked={audience === 'team'} onChange={() => setAudience('team')} className="mt-1 accent-[#DC2626]" /><span><strong className="block text-sm text-[#171717]">Toda a equipe</strong><span className="text-xs text-[#57534E]">Todos os atletas ativos verão o treino.</span></span></label>
-            <label className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 ${audience === 'targeted' ? 'border-[#DC2626] bg-[#FFF7F7]' : 'border-[#E5E1D8]'}`}><input type="radio" name="audience" value="targeted" checked={audience === 'targeted'} onChange={() => setAudience('targeted')} className="mt-1 accent-[#DC2626]" /><span><strong className="block text-sm text-[#171717]">Atletas e grupos específicos</strong><span className="text-xs text-[#57534E]">Combine uma ou mais turmas com seleções individuais.</span></span></label>
-
-            {audience === 'targeted' && (
-              <div className="grid gap-4 pt-2 sm:grid-cols-2">
+            <p className="rounded-lg border border-[#FECACA] bg-[#FFF7F7] px-3 py-2 text-xs leading-relaxed text-[#991B1B]">
+              Privado: somente o treinador e os atletas ou grupos escolhidos poderão ver este treino.
+            </p>
+            <div className="grid gap-4 pt-2 sm:grid-cols-2">
                 <div>
                   <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]"><Layers3 size={13} /> Grupos</p>
                   <div className="max-h-44 space-y-1 overflow-y-auto rounded-lg border border-[#E5E1D8] p-2">
@@ -254,8 +249,7 @@ export default function WorkoutsManager({
                     {visibleMembers.length > 0 ? visibleMembers.map((member) => <label key={member.user_id} className="flex min-h-11 cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[#FAFAF9]"><input type="checkbox" checked={selectedMembers.includes(member.user_id)} onChange={(event) => toggleSelection(setSelectedMembers, member.user_id, event.target.checked)} className="accent-[#DC2626]" /><span className="min-w-0 flex-1 truncate">{member.full_name}</span>{member.membership_status !== 'active' && <span className="badge badge-gray shrink-0">{MEMBER_STATUS_LABELS[member.membership_status]}</span>}</label>) : <p className="p-3 text-center text-xs text-[#57534E]">Nenhum atleta encontrado.</p>}
                   </div>
                 </div>
-              </div>
-            )}
+            </div>
           </fieldset>
 
           {error && <p role="alert" className="rounded-lg border border-[#FECACA] bg-[#FEE2E2] px-3 py-2 text-sm text-[#B91C1C]">{error}</p>}

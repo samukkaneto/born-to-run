@@ -26,11 +26,20 @@ values
     '00000000-0000-0000-0000-000000000104',
     'pending-lifecycle@example.test',
     '{"full_name":"Atleta Pendente"}'::jsonb
+  ),
+  (
+    '00000000-0000-0000-0000-000000000105',
+    'coach-lifecycle@example.test',
+    '{"full_name":"Treinador Lifecycle"}'::jsonb
   );
 
 update public.profiles
 set role = 'admin', membership_status = 'active'
 where user_id = '00000000-0000-0000-0000-000000000101';
+
+update public.profiles
+set role = 'coach', membership_status = 'active'
+where user_id = '00000000-0000-0000-0000-000000000105';
 
 update public.profiles
 set membership_status = 'active'
@@ -122,11 +131,17 @@ select set_config(
 select throws_ok(
   $$select public.admin_set_member_role(
     '00000000-0000-0000-0000-000000000103',
-    'admin'
+    'member'
   )$$,
   '22023',
   'Somente um membro ativo pode ter sua função alterada.',
   'RPC impede promover ou rebaixar um perfil inativo'
+);
+
+select set_config(
+  'request.jwt.claim.sub',
+  '00000000-0000-0000-0000-000000000105',
+  true
 );
 
 select lives_ok(
@@ -180,7 +195,7 @@ select throws_ok(
     array['00000000-0000-0000-0000-000000000201'::uuid]
   )$$,
   '22023',
-  'A atribuição contém uma nova inclusão inexistente ou sem acesso ativo.',
+  'A atribuição contém uma inclusão inexistente, inativa ou que não é atleta.',
   'treino rejeita a inclusão de um novo perfil inativo'
 );
 

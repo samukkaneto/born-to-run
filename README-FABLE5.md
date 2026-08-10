@@ -8,7 +8,7 @@ Born to Run é o aplicativo privado da equipe de corrida **Born to Run — Trein
 
 1. **Comunidade esportiva fechada:** somente pessoas aprovadas pela equipe entram na área interna.
 2. **Rede social de treinos:** atletas publicam treinos e fotos, acompanham o feed, curtem, comentam e veem a evolução dos colegas.
-3. **Canal treinador–atleta:** o treinador publica comunicados e prescreve treinos para toda a equipe, grupos específicos ou atletas específicos.
+3. **Canal treinador–atleta:** o treinador prescreve treinos privados para grupos ou atletas específicos e registra avaliações físicas; o administrador publica comunicados.
 
 Garmin Connect, Strava e Sports Tracker são **referências de experiência e organização**, especialmente para feed, atividade esportiva e interação social. Eles **não são integrações obrigatórias nesta fase**. Não implementar importação de treinos ou APIs dessas plataformas agora.
 
@@ -34,11 +34,12 @@ Não alterar, remover ou simular funcionalidades para acomodar o layout. O desig
 - cadastro com aprovação pendente;
 - conta ativa, suspensa e rejeitada;
 - feed com foto opcional, métricas, curtidas e comentários;
-- treinos destinados à equipe, a grupos ou a atletas;
+- treinos privados destinados a grupos ou atletas;
 - grupos administrados pelo treinador;
 - comunicados;
-- perfil e evolução esportiva;
-- painel do treinador com aprovação e gestão de membros.
+- perfil, evolução esportiva e avaliações de bioimpedância;
+- painel do treinador com aprovação, treinos e avaliações;
+- painel administrativo separado para papéis, acessos e comunicados.
 
 Preservar os contratos e regras de segurança do Supabase. Mudanças visuais não devem reintroduzir atualizações diretas de papel/status, buckets públicos ou acesso interno para qualquer usuário apenas autenticado.
 
@@ -80,7 +81,7 @@ As pranchas são mockups gerados por IA. Textos de cards, datas, métricas, avis
 
 ## 8. Prompt-base visual
 
-`Crie uma interface premium para uma equipe brasileira real de corrida, combinando revista esportiva editorial e aplicativo de performance. A área interna é uma comunidade esportiva fechada com feed social, fotos, métricas, curtidas, comentários e treinos prescritos pelo treinador para equipe, grupos ou atletas. Use fotografia autêntica, grid assimétrico, títulos condensados, off-white, carbono e vermelho Born to Run. Produza layouts desktop e mobile implementáveis em Next.js/Tailwind, com navegação acessível e estados completos. Evite SaaS genérico, glassmorphism, neon, dados inventados e contatos não confirmados.`
+`Crie uma interface premium para uma equipe brasileira real de corrida, combinando revista esportiva editorial e aplicativo de performance. A área interna é uma comunidade fechada com feed social, fotos, métricas, curtidas, comentários, treinos privados prescritos pelo treinador para grupos ou atletas e avaliações de bioimpedância privadas entre treinador e atleta. Use fotografia autêntica, grid assimétrico, títulos condensados, off-white, carbono e vermelho Born to Run. Produza layouts desktop e mobile implementáveis em Next.js/Tailwind, com navegação acessível e estados completos. Evite SaaS genérico, glassmorphism, neon e dados inventados.`
 
 Geração das pranchas realizada pelo Codex com o logotipo e fotografias reais do repositório como referências visuais.
 
@@ -107,9 +108,11 @@ O visual final deve representar em desktop e mobile:
 5. membro ativo;
 6. feed vazio, carregando, com erro e com publicações;
 7. publicação com foto, métricas, curtidas e comentários;
-8. treino destinado à equipe, grupos e atletas;
+8. treino privado destinado a grupos ou atletas;
 9. grupo ativo e arquivado;
-10. painel com pendências de aprovação.
+10. painel com pendências de aprovação;
+11. avaliação mais recente e histórico físico privado;
+12. separação visual entre administrador e treinador.
 
 Não esconder estados nem remover controles apenas para simplificar o layout.
 
@@ -117,13 +120,14 @@ Não esconder estados nem remover controles apenas para simplificar o layout.
 
 - Institucional: `/`, `/sobre`, `/historia`, `/resultados`, `/equipe`, `/galeria` e `/contato`.
 - Autenticação e acesso: `/login`, `/cadastro`, `/recuperar-senha`, `/recuperar-senha/nova`, `/acesso`, `/acesso-pendente` e `/acesso-bloqueado`.
-- Atleta: `/dashboard`, `/dashboard/feed`, `/dashboard/treinos`, `/dashboard/comunicados`, `/dashboard/perfil` e `/dashboard/membros/[id]`.
-- Treinador: `/admin`, `/admin/membros`, `/admin/treinos` e `/admin/comunicados`, incluindo gestão de grupos dentro do painel.
+- Atleta: `/dashboard`, `/dashboard/feed`, `/dashboard/treinos`, `/dashboard/avaliacoes`, `/dashboard/comunicados`, `/dashboard/perfil` e `/dashboard/membros/[id]`.
+- Treinador: `/admin`, `/admin/membros`, `/admin/treinos` e `/admin/avaliacoes`, incluindo grupos.
+- Administrador: `/admin`, `/admin/membros` e `/admin/comunicados`.
 - Sistema: loading, vazio, erro, acesso negado e página não encontrada.
 
 ## 11. Limitações atuais que o visual não deve mascarar
 
 - O feed já possui paginação keyset por cursor. A otimização da renovação/cache de URLs assinadas pode evoluir quando houver volume real.
-- A evolução esportiva no perfil ainda é básica; gráficos e tendências são visão futura e não devem ser apresentados como função existente.
+- A avaliação física já possui indicadores e histórico; gráficos e tendências são visão futura e não devem ser apresentados como existentes.
 - Notificações push, funcionamento offline completo e integrações Garmin/Strava não fazem parte da entrega atual.
 - A implementação atual é um Next.js responsivo e instalável como PWA, já validado em desktop e mobile. Ela não gera APK e ainda não existe aplicativo nativo publicado na App Store ou Google Play; essa será uma fase posterior.

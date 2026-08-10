@@ -18,7 +18,7 @@ Todos os blocos que independiam de credenciais, plano pago, dados formais ou usu
 
 ## Próxima ação
 
-O ponto exato de retomada é executar a matriz do piloto com contas reais em `12-OPERACAO-PILOTO-E-RELEASE.md`. Não há pendência técnica bloqueante deste bloco.
+O ponto exato de retomada é concluir a publicação do Bloco 9. Commit `c1f111a`, PR #15, CI `31351998723` e preview `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA` já estão verdes. Restam incorporar o registro documental, repetir o CI, mesclar e validar produção. Depois disso, Robson deve criar a conta real pelo cadastro oficial usando exatamente `ralves4101@gmail.com` e confirmar o e-mail. A pré-autorização já está aguardando no Supabase.
 
 O administrador foi localizado e está `active` com e-mail confirmado. O proprietário recebeu o identificador exato fora do repositório. Se não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com esse e-mail.
 
@@ -29,10 +29,12 @@ O administrador foi localizado e está `active` com e-mail confirmado. O proprie
 3. completar a identificação formal do controlador quando houver os dados jurídicos;
 4. solicitar à Fable 5 a aprovação/refinação visual final sem alterar os contratos técnicos.
 5. planejar o aplicativo Android nativo e APK como fase separada somente após estabilizar o piloto web/PWA.
+6. após o piloto, evoluir as avaliações com gráficos e comparação por período se o proprietário aprovar.
 
 ## Dependências do proprietário
 
 - criação das contas reais para o piloto;
+- cadastro e confirmação do e-mail real do treinador; nenhuma senha deve ser criada por terceiros;
 - decisão posterior sobre lojas Android/iOS;
 - aprovação visual final da Fable 5.
 - identificação formal do controlador; o canal piloto é `contato@equipeborntorun.com`;

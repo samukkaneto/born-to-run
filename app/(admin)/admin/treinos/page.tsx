@@ -1,10 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
+import { getAccessContext } from '@/lib/auth/access'
 import WorkoutsManager from '@/components/admin/WorkoutsManager'
 import type { MemberProfile, TrainingGroup, WorkoutWithAssignments } from '@/types'
 
 export default async function AdminTreinosPage() {
-  const supabase = await createClient()
+  const [{ profile }, supabase] = await Promise.all([getAccessContext(), createClient()])
+  if (profile?.role !== 'coach') redirect('/admin')
   const [workoutsResult, membersResult, groupsResult] = await Promise.all([
     supabase
       .from('workouts')
@@ -36,8 +39,8 @@ export default async function AdminTreinosPage() {
           Gerenciar <span className="text-[#DC2626]">treinos</span>
         </h1>
         <p className="mt-3 text-sm text-[#57534E]">
-          {workouts.length} treino(s) cadastrado(s). Envie cada plano para toda a equipe,
-          grupos específicos ou atletas selecionados.
+          {workouts.length} treino(s) cadastrado(s). Cada plano é privado e aparece
+          somente para o treinador e os atletas ou grupos selecionados.
         </p>
       </div>
 

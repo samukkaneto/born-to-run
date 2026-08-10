@@ -10,9 +10,10 @@ Born to Run é o site institucional e o aplicativo privado da equipe Born to Run
 - Candidato: cria conta e permanece `pending` até revisão.
 - Membro ativo: acessa feed, treinos, comunicados, perfis e comunidade.
 - Membro suspenso ou rejeitado: não acessa conteúdo interno.
-- Administrador/treinador: aprova membros, administra grupos, comunicados e treinos.
+- Administrador: aprova membros, define o único treinador e administra comunicados.
+- Treinador: aprova membros e administra grupos, treinos privados e avaliações físicas.
 
-Papéis atuais: `member` e `admin`. O treinador usa o papel administrativo; não existe papel separado `coach` no schema atual.
+Papéis atuais: `member`, `coach` e `admin`. Samuel é administrador e Robson Alves é o único treinador pré-autorizado.
 
 ## Funcionalidades entregues
 
@@ -23,15 +24,17 @@ Papéis atuais: `member` e `admin`. O treinador usa o papel administrativo; não
 - perfil do atleta e avatar;
 - comunicados;
 - grupos de treinamento;
-- treinos para equipe inteira, grupos ou atletas específicos;
-- painel do treinador para membros, grupos, treinos e comunicados.
+- treinos privados para grupos ou atletas específicos;
+- painel administrativo para acessos e comunicados;
+- painel exclusivo do treinador para grupos, treinos e avaliações de bioimpedância;
+- histórico físico privado visível somente para treinador e atleta avaliado.
 
 ## Limites atuais
 
-- A evolução esportiva do perfil ainda é básica; gráficos e tendências são fase futura.
+- A evolução esportiva e de bioimpedância já possui histórico básico; gráficos e tendências são fase futura.
 - Garmin, Strava e Sports Tracker são referências, sem importação/API nesta entrega.
 - O produto atual é Next.js responsivo com manifesto PWA. Não existe binário publicado nas lojas.
-- Offline completo, push e instalação ainda pertencem ao ciclo de prontidão de produto.
+- A PWA e o offline público estão entregues; push e aplicativo nativo permanecem fases futuras.
 
 ## Conteúdo oficial
 

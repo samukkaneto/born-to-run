@@ -8,15 +8,31 @@ import {
   Megaphone,
   Users,
   ArrowLeft,
+  ClipboardList,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import type { UserRole } from '@/types'
 
-const navItems = [
-  { href: '/admin',             icon: LayoutDashboard, label: 'Visão geral' },
-  { href: '/admin/treinos',     icon: Dumbbell,        label: 'Treinos'     },
-  { href: '/admin/comunicados', icon: Megaphone,       label: 'Comunicados' },
-  { href: '/admin/membros',     icon: Users,           label: 'Membros'     },
+const commonItems = [
+  { href: '/admin', icon: LayoutDashboard, label: 'Visão geral' },
+  { href: '/admin/membros', icon: Users, label: 'Membros' },
 ]
+
+function itemsForRole(role: UserRole) {
+  if (role === 'coach') {
+    return [
+      commonItems[0],
+      { href: '/admin/treinos', icon: Dumbbell, label: 'Treinos' },
+      { href: '/admin/avaliacoes', icon: ClipboardList, label: 'Avaliações' },
+      commonItems[1],
+    ]
+  }
+  return [
+    commonItems[0],
+    { href: '/admin/comunicados', icon: Megaphone, label: 'Comunicados' },
+    commonItems[1],
+  ]
+}
 
 function isActive(pathname: string, href: string): boolean {
   if (href === '/admin') return pathname === '/admin'
@@ -24,8 +40,9 @@ function isActive(pathname: string, href: string): boolean {
 }
 
 /** Navegação do painel do treinador (sidebar carbono, ativo vermelho). */
-export default function AdminNav() {
+export default function AdminNav({ role }: { role: UserRole }) {
   const pathname = usePathname()
+  const navItems = itemsForRole(role)
   return (
     <nav className="flex flex-col gap-1" aria-label="Navegação do painel do treinador">
       {navItems.map(({ href, icon: Icon, label }) => {
@@ -71,8 +88,9 @@ export default function AdminNav() {
 }
 
 /** Variante mobile: faixa horizontal rolável abaixo do topo carbono. */
-export function AdminNavMobile() {
+export function AdminNavMobile({ role }: { role: UserRole }) {
   const pathname = usePathname()
+  const navItems = itemsForRole(role)
   return (
     <nav
       className="flex gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none]"

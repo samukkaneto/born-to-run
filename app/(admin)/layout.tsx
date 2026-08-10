@@ -21,9 +21,10 @@ export default async function AdminLayout({
   if (!user) redirect('/login')
   if (!profile || profile.membership_status === 'pending') redirect('/acesso-pendente')
   if (profile.membership_status !== 'active') redirect('/acesso-bloqueado')
-  if (profile?.role !== 'admin') redirect('/dashboard')
+  if (!profile || !['admin', 'coach'].includes(profile.role)) redirect('/dashboard')
 
-  const firstName = (profile?.full_name || 'Treinador').split(' ')[0]
+  const firstName = (profile.full_name || 'Gestor').split(' ')[0]
+  const roleLabel = profile.role === 'coach' ? 'Treinador' : 'Administrador'
 
   return (
     <ToastProvider>
@@ -34,7 +35,7 @@ export default async function AdminLayout({
         {/* ── Sidebar carbono fixa (desktop) ── */}
         <aside className="panel-carbon fixed inset-y-0 left-0 z-40 hidden w-64 flex-col md:flex">
           <div className="border-b border-[#2E2E2E] px-5 py-5">
-            <Link href="/admin" className="inline-flex" aria-label="Painel do treinador">
+            <Link href="/admin" className="inline-flex" aria-label="Painel de gestão">
               <div className="relative h-[46px] w-[150px]">
                 <Image
                   src="/logo.png"
@@ -47,12 +48,12 @@ export default async function AdminLayout({
             </Link>
             <p className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-[#DC2626] px-2.5 py-1 font-condensed text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
               <ShieldCheck size={12} aria-hidden="true" />
-              Painel do treinador
+              {roleLabel}
             </p>
           </div>
 
           <div className="flex-1 overflow-y-auto px-3 py-5">
-            <AdminNav />
+            <AdminNav role={profile.role} />
           </div>
 
           <div className="border-t border-[#2E2E2E] p-3">
@@ -84,7 +85,7 @@ export default async function AdminLayout({
                   />
                 </div>
                 <span className="rounded-md bg-[#DC2626] px-2 py-0.5 font-condensed text-[10px] font-semibold uppercase tracking-[0.12em] text-white">
-                  Treinador
+                  {roleLabel}
                 </span>
               </Link>
               <form action={logout}>
@@ -98,7 +99,7 @@ export default async function AdminLayout({
               </form>
             </div>
             <div className="border-t border-[#2E2E2E]">
-              <AdminNavMobile />
+              <AdminNavMobile role={profile.role} />
             </div>
           </header>
 
@@ -109,7 +110,7 @@ export default async function AdminLayout({
                 Olá, <span className="text-[#171717]">{firstName}</span> — gestão da equipe
               </p>
               <span className="font-condensed text-xs uppercase tracking-[0.18em] text-[#A8A29E]">
-                Born to Run · painel do treinador
+                Born to Run · painel de {roleLabel.toLowerCase()}
               </span>
             </div>
           </div>
