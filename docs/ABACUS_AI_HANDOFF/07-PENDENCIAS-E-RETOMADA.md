@@ -4,7 +4,7 @@ Atualizar este arquivo após cada bloco.
 
 ## Estado do ciclo técnico
 
-Todos os blocos que independiam de credenciais, plano pago, dados formais ou usuários reais foram concluídos. A auditoria final deu **GO**, o PR #2 foi mesclado e a produção foi validada no commit `7f66eb8`.
+Todos os blocos que independiam de credenciais, plano pago, dados formais ou usuários reais foram concluídos. O Bloco 9 foi mesclado pela PR #15 e a produção foi validada no commit `0c17f86`.
 
 ## Concluído neste ciclo
 
@@ -18,7 +18,7 @@ Todos os blocos que independiam de credenciais, plano pago, dados formais ou usu
 
 ## Próxima ação
 
-O ponto exato de retomada é concluir a publicação do Bloco 9. Commit `c1f111a`, PR #15, CI `31351998723` e preview `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA` já estão verdes. Restam incorporar o registro documental, repetir o CI, mesclar e validar produção. Depois disso, Robson deve criar a conta real pelo cadastro oficial usando exatamente `ralves4101@gmail.com` e confirmar o e-mail. A pré-autorização já está aguardando no Supabase.
+O Bloco 9 está publicado: PR #15 mesclada, CI do merge `31352438060` verde e produção `dpl_5Ef5i65VmCNTAQ1zGM2ZqRcqXJhe` validada. A próxima ação é Robson criar a conta real pelo cadastro oficial usando exatamente `ralves4101@gmail.com` e confirmar o e-mail. A pré-autorização já está aguardando no Supabase; depois, o piloto testa aprovações, treinos privados e avaliações com pessoas reais.
 
 O administrador foi localizado e está `active` com e-mail confirmado. O proprietário recebeu o identificador exato fora do repositório. Se não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com esse e-mail.
 
