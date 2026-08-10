@@ -11,6 +11,7 @@
 - Dependabot: npm e GitHub Actions, semanal.
 - Relato privado de segurança: `SECURITY.md` e GitHub Security Advisory.
 - Bloco 9: PR [#15](https://github.com/samukkaneto/born-to-run/pull/15), commit funcional `c1f111a`, CI inicial `31351998723` verde.
+- Fechamento do Bloco 9: PR #15 mesclada em `main` no commit `0c17f86995a4e88e1a8d04a0d68b3242b5d3acc7`; CI final da PR `31352323034` e CI do merge `31352438060` verdes.
 
 ## Vercel
 
@@ -27,6 +28,9 @@
 - Speed Insights: configurado; a instrumentação já chegou à produção e começará a formar histórico com visitas reais.
 - Plano Vercel: Hobby; previews protegidos e domínio customizado público.
 - Preview do Bloco 9: `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA`, `READY`, commit `c1f111a`, URL protegida `https://born-to-qlnisgqpt-shabuneto.vercel.app`.
+- Preview final documental: `dpl_A5j5aEmoEebST2DeYkmQiAUXPwfw`, `READY`, commit `5229bbb`.
+- Produção atual: `dpl_5Ef5i65VmCNTAQ1zGM2ZqRcqXJhe`, `READY`, target `production`, commit `0c17f86`, domínio `https://equipeborntorun.com`.
+- Smoke/visual pós-release: home, Sobre, cadastro, login e health 200; rotas privadas 307; desktop/mobile sem overlay; logs sem warning/error/fatal.
 
 Variáveis públicas cadastradas, sem registrar valores nesta documentação:
 

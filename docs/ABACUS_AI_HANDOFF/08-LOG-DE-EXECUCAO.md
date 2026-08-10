@@ -218,3 +218,14 @@ Cada entrada futura deve registrar:
 - Preview Vercel `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA` ficou `READY` no commit correto, em `https://born-to-qlnisgqpt-shabuneto.vercel.app`.
 - O bypass oficial `vercel curl` confirmou home 200, foto nova `team-race-palace.jpg`, seção exclusiva de Robson e conteúdo novo no artefato remoto.
 - Próxima ação: publicar este checkpoint, aguardar o CI documental, retirar a PR do modo draft, mesclar e auditar produção.
+
+### Fechamento e produção do Bloco 9 — 10/08/2026
+
+- O checkpoint documental entrou no commit `5229bbb`; CI `31352323034` e preview final `dpl_A5j5aEmoEebST2DeYkmQiAUXPwfw` passaram.
+- A PR #15 foi retirada de draft e mesclada por squash em `main` no commit `0c17f86995a4e88e1a8d04a0d68b3242b5d3acc7`.
+- O workflow do merge `31352438060` terminou com sucesso em todas as etapas.
+- A Vercel publicou automaticamente `dpl_5Ef5i65VmCNTAQ1zGM2ZqRcqXJhe`, `READY`, target `production`, sem `aliasError`.
+- `https://equipeborntorun.com/api/health` respondeu 200 com revisão `0c17f86`; home, Sobre, cadastro e login responderam 200; dashboard e novas avaliações privadas responderam 307 para login sem sessão.
+- A home foi inspecionada visualmente em desktop e mobile: foto nova, destaque de Robson, conteúdo completo e nenhum overlay de erro.
+- Runtime Logs pós-release: nenhuma entrada warning/error/fatal no deployment consultado.
+- Estado final: Bloco 9 concluído e publicado; ação seguinte é o cadastro real do treinador e o piloto assistido.

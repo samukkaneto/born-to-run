@@ -47,6 +47,11 @@ Nenhum bloco será declarado concluído somente por compilar. Alterações de Au
 - Preview Vercel da PR #15: `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA`, `READY`, commit `c1f111a`.
 - `vercel curl`: home 200; foto `team-race-palace.jpg`, seção de Robson e conteúdo atualizado confirmados no artefato remoto.
 - Merge e auditoria de produção: pendentes neste checkpoint; ver arquivo `14`.
+- CI final da PR #15: `31352323034`, aprovado integralmente.
+- Merge: `0c17f86995a4e88e1a8d04a0d68b3242b5d3acc7`; CI de `main` `31352438060`, aprovado integralmente.
+- Produção: `dpl_5Ef5i65VmCNTAQ1zGM2ZqRcqXJhe`, `READY`, health `0c17f86`, sem erro de alias.
+- Inspeção desktop/mobile da home: foto e seção de Robson corretas, conteúdo não vazio e zero overlay de framework.
+- Runtime Logs: zero warning/error/fatal no intervalo pós-publicação consultado.
 
 ## Evidências do Bloco 1
 

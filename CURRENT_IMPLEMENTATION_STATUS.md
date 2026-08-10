@@ -1,12 +1,12 @@
 # Born to Run — status real de implementação
 
-Atualizado em **09/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
+Atualizado em **10/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
 
 ## Resumo executivo
 
 O projeto deixou de ser apenas um protótipo visual. O código atual contém site institucional, área privada do atleta, feed social, administração e painel exclusivo do treinador conectados ao Supabase real. A comunidade é fechada: cadastros comuns aguardam aprovação e todo treino exige atleta ou grupo destinatário. Avaliações de bioimpedância têm histórico privado entre treinador e atleta.
 
-O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 48 testes unitários e 24 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. Os PRs [#1](https://github.com/samukkaneto/born-to-run/pull/1) e [#2](https://github.com/samukkaneto/born-to-run/pull/2) foram mesclados em `main`, os workflows de qualidade ficaram verdes e a revisão `7f66eb8` está em produção em **https://born-to-run-seven.vercel.app**.
+O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 53 testes unitários, 72 asserções pgTAP e a matriz de 26 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. O Bloco 9 foi mesclado pela PR [#15](https://github.com/samukkaneto/born-to-run/pull/15), o CI do merge ficou verde e a revisão `0c17f86` está em produção em **https://equipeborntorun.com**.
 
 ## Estado por área
 
@@ -14,7 +14,7 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 |---|---|---|
 | Site institucional | Implementado e validado | Home, Sobre, Galeria, Contato com entrega real via Resend, header/footer e páginas responsivas; desktop e Pixel 7 passam no E2E. |
 | Identidade visual Fable 5 | Implementada, ainda refinável | A direção atual foi preservada; a Fable pode redesenhar componentes sem alterar contratos funcionais. |
-| Autenticação | Implementada e validada | Login real e erros de credencial foram validados; cadastro tem callback explícito e templates prontos, mas a entrega real ainda depende de SMTP próprio. |
+| Autenticação | Implementada e validada | Login, cadastro, confirmação e recuperação têm callback explícito, templates próprios e SMTP ativo no domínio oficial. |
 | Comunidade fechada | Implementada e validada no banco | Cadastro entra como `pending`; somente `active` acessa conteúdo interno. |
 | Aprovação de membros | Implementada e validada | Administrador e treinador aprovam, rejeitam, suspendem ou reativam; somente o administrador define o treinador. |
 | Feed social | MVP implementado e validado | Posts, fotos privadas, métricas, curtidas, comentários e paginação keyset por cursor; escrita real passou no preview final. |
@@ -29,8 +29,8 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 | Observabilidade | Implementada para o piloto | `/api/health`, Runtime Logs, Web Analytics habilitado e Speed Insights configurado; URLs são sanitizadas antes das métricas. |
 | Continuidade | Procedimento definido | Audit no CI, Dependabot, relato privado e runbook de release; Supabase Free exige exportação criptografada ou Pro antes de depender de backup automático. |
 | Supabase remoto | Sincronizado | Nove migrations aplicadas; estado atual termina em `20260810030102_indexa_convite_treinador`. |
-| Vercel | Produção publicada e validada | Deployment Git `dpl_4SjYHKJriBnHY82Q8qYpzfjt7aYB`, revisão `7f66eb8`, `READY/PROMOTED`; 31 rotas, aliases corretos, respostas 200/307 e logs sem erro. O deployment `dpl_A2GZxDdUvqphcLt8MYrCYvdq4Zuz` permanece como rollback anterior conhecido. |
-| GitHub | Publicado, revisado e mesclado | PR [#2](https://github.com/samukkaneto/born-to-run/pull/2) mesclado em `main` no commit `7f66eb8`; CI do PR `31294328656` e CI do merge `31314115269` concluídos com sucesso. |
+| Vercel | Produção publicada e validada | Deployment Git `dpl_5Ef5i65VmCNTAQ1zGM2ZqRcqXJhe`, revisão `0c17f86`, `READY`, target `production`; 34 rotas, aliases corretos, respostas 200/307 e logs sem warning/error/fatal. `dpl_DU27nprYJu1VN24kgQd6kgDeB6RF` é o rollback de produção anterior conhecido. |
+| GitHub | Publicado, revisado e mesclado | PR [#15](https://github.com/samukkaneto/born-to-run/pull/15) mesclada em `main` no commit `0c17f86995a4e88e1a8d04a0d68b3242b5d3acc7`; CI final do PR `31352323034` e CI do merge `31352438060` concluídos com sucesso. |
 
 ## Regras de produto consolidadas
 
@@ -96,8 +96,8 @@ O banco preserva 1 perfil administrador ativo, convite de treinador aguardando c
 | Testes pgTAP versionados | 72/72 asserções remotas transacionais após treinador, avaliações e convite |
 | E2E público | 26 fluxos equivalentes aprovados em Desktop Chrome e Pixel 7; zero violações axe sérias/críticas |
 | E2E autenticado hospedado | Login, feed, publicação, curtida, comentário, painel admin, grupo e treino dirigido validados; dados técnicos removidos |
-| Vercel | Produção `READY/PROMOTED` no domínio canônico, 31 rotas, respostas 200/307 corretas, integração Git automática validada e sem erros nos logs consultados |
-| GitHub Actions | Runs `31294328656` (PR) e `31314115269` (merge) aprovadas integralmente |
+| Vercel | Produção `READY` no domínio canônico, revisão `0c17f86`, 34 rotas, respostas 200/307 corretas, integração Git automática validada e sem warning/error/fatal nos logs consultados |
+| GitHub Actions | Runs `31352323034` (PR final) e `31352438060` (merge) aprovadas integralmente |
 
 ## Dependências externas pós-publicação
 

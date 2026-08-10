@@ -92,7 +92,15 @@ O Supabase contém as três migrations e a pré-autorização. O código foi pub
 - GitHub Actions: run [`31351998723`](https://github.com/samukkaneto/born-to-run/actions/runs/31351998723), concluída com sucesso; lint, audit, TypeScript, unitários, build e testes de navegador passaram no CI.
 - Preview Vercel: `dpl_8PYatkCt2jUCQMKK1VjmwSVJkTTA`, estado `READY`, endereço protegido `https://born-to-qlnisgqpt-shabuneto.vercel.app`.
 - Verificação do artefato: `vercel curl` retornou a home 200 e confirmou no HTML renderizado `team-race-palace.jpg`, a seção exclusiva de Robson e o conteúdo da área da equipe.
-- Pendente neste checkpoint: incorporar este relatório, repetir o CI documental, retirar a PR de draft, mesclar e validar o deployment de produção no domínio oficial.
+- Checkpoint documental: commit `5229bbb`, CI final da PR `31352323034` verde e preview final `dpl_A5j5aEmoEebST2DeYkmQiAUXPwfw` `READY`.
+- Merge: PR #15 mesclada por squash em `main`, commit `0c17f86995a4e88e1a8d04a0d68b3242b5d3acc7`.
+- CI do merge: run [`31352438060`](https://github.com/samukkaneto/born-to-run/actions/runs/31352438060), aprovado integralmente.
+- Produção: `dpl_5Ef5i65VmCNTAQ1zGM2ZqRcqXJhe`, `READY`, target `production`, sem `aliasError`, revisão de health `0c17f86`.
+- Domínio oficial: `/`, `/sobre`, `/cadastro`, `/login` e `/api/health` responderam 200; áreas privadas responderam 307 para login.
+- Inspeção visual: desktop e mobile renderizaram todo o layout, a foto nova e a seção de Robson, sem overlay de erro.
+- Runtime Logs: nenhuma ocorrência `warning`, `error` ou `fatal` no deployment consultado.
+
+O Bloco 9 está concluído e publicado. A próxima ação funcional pertence ao piloto: Robson cria a conta real pelo cadastro oficial e confirma o e-mail.
 
 ## Contrato para Abacus AI / Fable 5
 
