@@ -1,6 +1,6 @@
 import type { Tables } from '@/types/database.types'
 
-export type UserRole = 'member' | 'admin'
+export type UserRole = 'member' | 'coach' | 'admin'
 export type MembershipStatus = 'pending' | 'active' | 'suspended' | 'rejected'
 export type Profile = Omit<Tables<'profiles'>, 'role' | 'membership_status'> & {
   role: UserRole
@@ -42,6 +42,7 @@ export type Announcement = Tables<'announcements'> & { profiles?: Profile }
 export type TrainingGroup = Tables<'training_groups'>
 export type TrainingGroupMember = Tables<'training_group_members'>
 export type WorkoutAssignment = Tables<'workout_assignments'>
+export type BodyAssessment = Tables<'body_assessments'>
 
 export type WorkoutWithAssignments = Workout & {
   workout_assignments?: Pick<

@@ -8,6 +8,8 @@ import {
   HeartPulse,
   Footprints,
   Target,
+  Award,
+  BadgeCheck,
 } from 'lucide-react'
 import InstagramIcon from '@/components/ui/InstagramIcon'
 import { site } from '@/lib/site'
@@ -101,13 +103,13 @@ export default function HomePage() {
                   className="absolute -top-3 -left-3 w-full h-full border-2 border-[#DC2626] rounded-xl"
                   aria-hidden="true"
                 />
-                <div className="relative aspect-[4/5] rounded-xl overflow-hidden shadow-card-lg">
+                <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-card-lg">
                   <Image
-                    src="/team-group.jpg"
-                    alt="Equipe Born to Run reunida antes do treino"
+                    src="/team-archive/team-race-palace.jpg"
+                    alt="Equipe Born to Run reunida após uma corrida"
                     fill
-                    priority
-                    style={{ objectFit: 'cover', objectPosition: 'center' }}
+                    preload
+                    style={{ objectFit: 'cover', objectPosition: 'center 42%' }}
                     sizes="(max-width: 1024px) 100vw, 40vw"
                   />
                 </div>
@@ -157,7 +159,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ 01 · QUEM SOMOS ══ */}
+      {/* ══ 01 · COMANDO TÉCNICO ══ */}
       <section className="py-16 md:py-24 bg-[#F7F4EF]">
         <div className="container-main">
           <div className="grid md:grid-cols-12 gap-10 lg:gap-14 items-center">
@@ -179,25 +181,26 @@ export default function HomePage() {
               </div>
             </div>
             <div className="md:col-span-7 order-1 md:order-2">
-              <p className="section-kicker mb-5">01 · Quem somos</p>
+              <p className="section-kicker mb-5">01 · Comando técnico</p>
               <h2 className="section-title">
-                Nascemos <span className="accent">para correr</span>
+                Robson Alves, <span className="accent">treinador da equipe</span>
               </h2>
               <p className="text-[#44403C] leading-relaxed mt-6 mb-4">
-                Fundada em {site.foundedYear} em {site.location}, a Born to Run
-                é mais que uma assessoria esportiva: é uma equipe que treina,
-                compete e comemora junto. Ao longo dessa trajetória, somamos{' '}
-                <strong>{site.stats.races} participações em corridas</strong>{' '}
-                dentro e fora da região.
+                Educador físico e responsável pelo comando técnico da Born to
+                Run, <strong>{site.coach.name}</strong> acompanha a evolução de
+                cada atleta com planejamento individual, segurança e constância.
               </p>
               <p className="text-[#44403C] leading-relaxed mb-8">
-                O comando técnico é do educador físico{' '}
-                <strong>{site.coach.name}</strong> ({site.coach.cref}),
-                especialista em corridas de meio fundo e fundo e treinador
-                nível 1 pela World Athletics.
+                Sua formação combina experiência prática em corrida de rua,
+                especialização em provas de meio fundo e fundo e certificação
+                internacional como Treinador Nível 1 pela World Athletics.
               </p>
+              <div className="mb-8 flex flex-wrap gap-2" aria-label="Credenciais do treinador">
+                <span className="badge badge-solid-red"><BadgeCheck size={13} aria-hidden="true" /> {site.coach.cref}</span>
+                <span className="badge badge-gray"><Award size={13} aria-hidden="true" /> World Athletics Nível 1</span>
+              </div>
               <Link href="/sobre" className="btn-dark">
-                Nossa história completa
+                Conheça o treinador
                 <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>

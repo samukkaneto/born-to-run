@@ -86,10 +86,10 @@ export default function SobrePage() {
             />
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl shadow-card-lg">
               <Image
-                src="/team-group.jpg"
-                alt="Atletas da equipe Born to Run reunidos"
+                src="/team-archive/team-race-palace.jpg"
+                alt="Equipe Born to Run reunida após uma corrida"
                 fill
-                className="object-cover"
+                className="object-cover object-[center_42%]"
                 sizes="(max-width: 1024px) 100vw, 42vw"
               />
             </div>

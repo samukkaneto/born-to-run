@@ -31,7 +31,9 @@ export default async function DashboardLayout({
     redirect('/acesso-bloqueado')
   }
 
-  const isAdmin = profile?.role === 'admin'
+  const managementRole = profile?.role === 'admin' || profile?.role === 'coach'
+    ? profile.role
+    : null
   const firstName =
     (profile?.full_name || user.user_metadata?.full_name || 'Atleta').split(' ')[0]
 
@@ -60,7 +62,7 @@ export default async function DashboardLayout({
           <p className="mb-3 px-3.5 font-condensed text-[11px] font-semibold uppercase tracking-[0.2em] text-[#57534E]">
             Área do atleta
           </p>
-          <DashboardSidebarNav isAdmin={isAdmin} />
+          <DashboardSidebarNav managementRole={managementRole} />
         </div>
 
         <div className="border-t border-[#2E2E2E] p-3">

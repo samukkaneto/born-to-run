@@ -85,12 +85,12 @@ insert into public.workouts (
 values
   (
     '20000000-0000-4000-8000-000000000001',
-    'Treino da equipe',
-    'Visível para todos os membros ativos.',
+    'Treino individual',
+    'Visível apenas para o atleta designado.',
     'iniciante',
-    'Testar o público geral',
+    'Testar a privacidade individual',
     current_date,
-    'team',
+    'targeted',
     '10000000-0000-4000-8000-000000000001'
   ),
   (
@@ -108,6 +108,13 @@ insert into public.workout_assignments (
   id, workout_id, athlete_user_id, group_id, assigned_by
 )
 values
+  (
+    '40000000-0000-4000-8000-000000000003',
+    '20000000-0000-4000-8000-000000000001',
+    '10000000-0000-4000-8000-000000000002',
+    null,
+    '10000000-0000-4000-8000-000000000001'
+  ),
   (
     '40000000-0000-4000-8000-000000000001',
     '20000000-0000-4000-8000-000000000002',
@@ -159,7 +166,7 @@ select results_eq(
     where id = '20000000-0000-4000-8000-000000000001'
   $$,
   array[0::bigint],
-  'perfil pendente não vê treino da equipe'
+  'perfil pendente não vê nem o treino destinado a ele'
 );
 
 -- Aprovação somente por um administrador autenticado.
@@ -196,7 +203,7 @@ select throws_ok(
       title, description, level, objective, audience, created_by
     ) values (
       'Treino direto indevido', 'Não deve ser criado.', 'iniciante',
-      'Validar privilégio mínimo', 'team',
+      'Validar privilégio mínimo', 'targeted',
       '10000000-0000-4000-8000-000000000001'
     )
   $$,
@@ -353,7 +360,7 @@ select results_eq(
     where id = '20000000-0000-4000-8000-000000000001'
   $$,
   array[1::bigint],
-  'membro ativo vê o treino da equipe'
+  'membro ativo vê o treino destinado diretamente a ele'
 );
 
 select throws_ok(

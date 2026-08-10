@@ -44,7 +44,7 @@ function actionCopy(action: PendingAction) {
   if (!action) return { title: '', description: '', label: '' }
   const name = action.member.full_name || 'Este membro'
   if (action.kind === 'role') {
-    const promoting = action.member.role !== 'admin'
+    const promoting = action.member.role !== 'coach'
     return {
       title: promoting ? 'Conceder acesso de treinador' : 'Remover acesso de treinador',
       description: promoting
@@ -82,9 +82,11 @@ function actionCopy(action: PendingAction) {
 export default function MembersTable({
   members,
   currentUserId,
+  canManageRoles,
 }: {
   members: MemberProfile[]
   currentUserId: string
+  canManageRoles: boolean
 }) {
   const { toast } = useToast()
   const [search, setSearch] = useState('')
@@ -205,7 +207,9 @@ export default function MembersTable({
                     <td className="px-5 py-3">
                       <div className="flex flex-col items-start gap-1.5">
                         <span className={`badge ${STATUS_BADGES[member.membership_status]}`}>{STATUS_LABELS[member.membership_status]}</span>
-                        <span className={`badge ${member.role === 'admin' ? 'badge-solid-red' : 'badge-gray'}`}>{member.role === 'admin' ? 'Treinador' : 'Atleta'}</span>
+                        <span className={`badge ${member.role === 'coach' ? 'badge-solid-red' : 'badge-gray'}`}>
+                          {member.role === 'admin' ? 'Administrador' : member.role === 'coach' ? 'Treinador' : 'Atleta'}
+                        </span>
                       </div>
                     </td>
                     <td className="px-5 py-3">
@@ -234,15 +238,15 @@ export default function MembersTable({
                         {!isSelf && member.membership_status === 'rejected' && (
                           <button type="button" onClick={() => setPending({ kind: 'status', member, nextStatus: 'pending' })} className="min-h-11 rounded-lg p-2.5 text-[#57534E] transition-colors hover:bg-[#F5F5F4]" aria-label={`Reconsiderar ${member.full_name}`} title="Reconsiderar cadastro"><RotateCcw size={17} /></button>
                         )}
-                        {!isSelf && isActive && (
+                        {canManageRoles && !isSelf && isActive && member.role !== 'admin' && (
                           <button
                             type="button"
                             onClick={() => setPending({ kind: 'role', member })}
                             className="min-h-11 rounded-lg p-2.5 text-[#78716C] transition-colors hover:bg-[#F5F5F4] hover:text-[#171717]"
-                            aria-label={member.role === 'admin' ? `Remover função de treinador de ${member.full_name}` : `Tornar ${member.full_name} treinador`}
-                            title={member.role === 'admin' ? 'Remover função de treinador' : 'Tornar treinador'}
+                            aria-label={member.role === 'coach' ? `Remover função de treinador de ${member.full_name}` : `Tornar ${member.full_name} treinador`}
+                            title={member.role === 'coach' ? 'Remover função de treinador' : 'Tornar treinador'}
                           >
-                            {member.role === 'admin' ? <Shield size={17} /> : <ShieldCheck size={17} />}
+                            {member.role === 'coach' ? <Shield size={17} /> : <ShieldCheck size={17} />}
                           </button>
                         )}
                       </div>

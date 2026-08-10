@@ -3,14 +3,14 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { cleanText, isUuid, uniqueUuids } from '@/lib/validation'
-import type { MembershipStatus } from '@/types'
+import type { MembershipStatus, UserRole } from '@/types'
 
 export type AdminActionResult = { success?: boolean; error?: string; id?: string }
 
 const VALID_LEVELS = ['iniciante', 'intermediario', 'avancado'] as const
 const VALID_STATUSES: MembershipStatus[] = ['pending', 'active', 'suspended', 'rejected']
 
-async function requireAdmin() {
+async function requireRole(allowedRoles: UserRole[], message: string) {
   const supabase = await createClient()
   const {
     data: { user },
@@ -23,11 +23,23 @@ async function requireAdmin() {
     .eq('user_id', user.id)
     .maybeSingle()
 
-  if (error || profile?.role !== 'admin' || profile.membership_status !== 'active') {
-    return { supabase, user: null, error: 'Acesso restrito ao treinador.' }
+  if (
+    error
+    || !profile
+    || !allowedRoles.includes(profile.role as UserRole)
+    || profile.membership_status !== 'active'
+  ) {
+    return { supabase, user: null, error: message }
   }
   return { supabase, user, error: null }
 }
+
+const requireAdmin = () => requireRole(['admin'], 'Acesso restrito ao administrador.')
+const requireCoach = () => requireRole(['coach'], 'Acesso restrito ao treinador.')
+const requireAccessManager = () => requireRole(
+  ['admin', 'coach'],
+  'Acesso restrito ao administrador ou treinador.',
+)
 
 function safeDate(value: FormDataEntryValue | null): string | null | 'invalid' {
   const raw = String(value ?? '').trim()
@@ -46,7 +58,6 @@ function parseWorkoutForm(formData: FormData) {
   const objective = cleanText(formData.get('objective'), 500)
   const level = String(formData.get('level') ?? '')
   const scheduledDate = safeDate(formData.get('scheduled_date'))
-  const audience = String(formData.get('audience') ?? 'team')
   const memberIds = uniqueUuids(formData.getAll('member_ids'))
   const groupIds = uniqueUuids(formData.getAll('group_ids'))
 
@@ -57,9 +68,8 @@ function parseWorkoutForm(formData: FormData) {
     return { error: 'Selecione um nível válido.' }
   }
   if (scheduledDate === 'invalid') return { error: 'Informe uma data válida.' }
-  if (!['team', 'targeted'].includes(audience)) return { error: 'Selecione um público válido.' }
   if (!memberIds || !groupIds) return { error: 'A lista de destinatários é inválida.' }
-  if (audience === 'targeted' && memberIds.length === 0 && groupIds.length === 0) {
+  if (memberIds.length === 0 && groupIds.length === 0) {
     return { error: 'Escolha ao menos um atleta ou grupo para este treino.' }
   }
 
@@ -70,9 +80,9 @@ function parseWorkoutForm(formData: FormData) {
       objective,
       level: level as (typeof VALID_LEVELS)[number],
       scheduledDate,
-      audience: audience as 'team' | 'targeted',
-      memberIds: audience === 'team' ? [] : memberIds,
-      groupIds: audience === 'team' ? [] : groupIds,
+      audience: 'targeted' as const,
+      memberIds,
+      groupIds,
     },
   }
 }
@@ -101,7 +111,7 @@ export async function updateWorkout(id: string, formData: FormData): Promise<Adm
 }
 
 async function saveWorkout(id: string | null, formData: FormData): Promise<AdminActionResult> {
-  const { supabase, user, error: authError } = await requireAdmin()
+  const { supabase, user, error: authError } = await requireCoach()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
   const parsed = parseWorkoutForm(formData)
@@ -128,7 +138,7 @@ async function saveWorkout(id: string | null, formData: FormData): Promise<Admin
 
 export async function deleteWorkout(id: string): Promise<AdminActionResult> {
   if (!isUuid(id)) return { error: 'Treino inválido.' }
-  const { supabase, user, error: authError } = await requireAdmin()
+  const { supabase, user, error: authError } = await requireCoach()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
   const { data, error } = await supabase
@@ -215,7 +225,7 @@ export async function updateMembershipStatus(
   if (!isUuid(userId) || !VALID_STATUSES.includes(nextStatus)) {
     return { error: 'Membro ou status inválido.' }
   }
-  const { supabase, user, error: authError } = await requireAdmin()
+  const { supabase, user, error: authError } = await requireAccessManager()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
   if (userId === user.id) return { error: 'Você não pode alterar o próprio acesso.' }
 
@@ -259,7 +269,7 @@ export async function toggleMemberRole(userId: string): Promise<AdminActionResul
     return { error: 'Ative o acesso do membro antes de alterar sua função.' }
   }
 
-  const targetRole = target.role === 'admin' ? 'member' : 'admin'
+  const targetRole = target.role === 'coach' ? 'member' : 'coach'
   const { data, error } = await supabase.rpc('admin_set_member_role', {
     target_user_id: userId,
     target_role: targetRole,
@@ -276,7 +286,7 @@ export async function saveTrainingGroup(
   formData: FormData,
 ): Promise<AdminActionResult> {
   if (groupId && !isUuid(groupId)) return { error: 'Grupo inválido.' }
-  const { supabase, user, error: authError } = await requireAdmin()
+  const { supabase, user, error: authError } = await requireCoach()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
   const name = cleanText(formData.get('name'), 100)
@@ -300,7 +310,7 @@ export async function saveTrainingGroup(
 
 export async function archiveTrainingGroup(groupId: string): Promise<AdminActionResult> {
   if (!isUuid(groupId)) return { error: 'Grupo inválido.' }
-  const { supabase, user, error: authError } = await requireAdmin()
+  const { supabase, user, error: authError } = await requireCoach()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
   const { data, error } = await supabase.rpc('admin_archive_training_group', {
@@ -310,5 +320,88 @@ export async function archiveTrainingGroup(groupId: string): Promise<AdminAction
 
   revalidatePath('/admin/membros')
   revalidatePath('/admin/treinos')
+  return { success: true }
+}
+
+function optionalDecimal(value: FormDataEntryValue | null): number | null | 'invalid' {
+  const raw = String(value ?? '').trim().replace(',', '.')
+  if (!raw) return null
+  const parsed = Number(raw)
+  return Number.isFinite(parsed) ? parsed : 'invalid'
+}
+
+function optionalInteger(value: FormDataEntryValue | null): number | null | 'invalid' {
+  const parsed = optionalDecimal(value)
+  if (parsed === null || parsed === 'invalid') return parsed
+  return Number.isInteger(parsed) ? parsed : 'invalid'
+}
+
+export async function saveBodyAssessment(
+  assessmentId: string | null,
+  formData: FormData,
+): Promise<AdminActionResult> {
+  if (assessmentId && !isUuid(assessmentId)) return { error: 'Avaliação inválida.' }
+  const { supabase, user, error: authError } = await requireCoach()
+  if (authError || !user) return { error: authError ?? 'Não autenticado.' }
+
+  const athleteUserId = String(formData.get('athlete_user_id') ?? '')
+  const assessedAt = safeDate(formData.get('assessed_at'))
+  const weightKg = optionalDecimal(formData.get('weight_kg'))
+  const bodyFatPct = optionalDecimal(formData.get('body_fat_pct'))
+  const muscleMassKg = optionalDecimal(formData.get('muscle_mass_kg'))
+  const visceralFatLevel = optionalDecimal(formData.get('visceral_fat_level'))
+  const bodyWaterPct = optionalDecimal(formData.get('body_water_pct'))
+  const bmi = optionalDecimal(formData.get('bmi'))
+  const metabolicAge = optionalInteger(formData.get('metabolic_age'))
+  const notes = cleanText(formData.get('notes'), 2000)
+
+  if (!isUuid(athleteUserId)) return { error: 'Selecione um atleta válido.' }
+  if (!assessedAt || assessedAt === 'invalid') return { error: 'Informe uma data válida.' }
+  const measurements = [
+    weightKg,
+    bodyFatPct,
+    muscleMassKg,
+    visceralFatLevel,
+    bodyWaterPct,
+    bmi,
+    metabolicAge,
+  ]
+  if (measurements.includes('invalid')) return { error: 'Revise os valores numéricos informados.' }
+  if (measurements.every((value) => value === null) && !notes) {
+    return { error: 'Informe ao menos uma medida ou observação.' }
+  }
+
+  const { data, error } = await supabase.rpc('coach_save_body_assessment', {
+    target_assessment_id: assessmentId as string,
+    target_athlete_user_id: athleteUserId,
+    target_assessed_at: assessedAt,
+    target_weight_kg: weightKg as number,
+    target_body_fat_pct: bodyFatPct as number,
+    target_muscle_mass_kg: muscleMassKg as number,
+    target_visceral_fat_level: visceralFatLevel as number,
+    target_body_water_pct: bodyWaterPct as number,
+    target_bmi: bmi as number,
+    target_metabolic_age: metabolicAge as number,
+    target_notes: notes,
+  })
+
+  if (error || !data) return { error: 'Não foi possível salvar a avaliação. Revise as medidas.' }
+  revalidatePath('/admin/avaliacoes')
+  revalidatePath('/dashboard/avaliacoes')
+  return { success: true, id: data }
+}
+
+export async function deleteBodyAssessment(id: string): Promise<AdminActionResult> {
+  if (!isUuid(id)) return { error: 'Avaliação inválida.' }
+  const { supabase, user, error: authError } = await requireCoach()
+  if (authError || !user) return { error: authError ?? 'Não autenticado.' }
+
+  const { data, error } = await supabase.rpc('coach_delete_body_assessment', {
+    target_assessment_id: id,
+  })
+  if (error || !data) return { error: 'Não foi possível remover a avaliação.' }
+
+  revalidatePath('/admin/avaliacoes')
+  revalidatePath('/dashboard/avaliacoes')
   return { success: true }
 }

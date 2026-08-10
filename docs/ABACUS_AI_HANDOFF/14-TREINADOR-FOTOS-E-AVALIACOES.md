@@ -1,0 +1,103 @@
+# Bloco 9 — treinador exclusivo, fotos reais e avaliações privadas
+
+Atualizado em 09/08/2026. Este documento registra o bloco iniciado pelo pedido do proprietário para separar administrador e treinador, atualizar a imagem institucional e criar a primeira versão das avaliações de bioimpedância.
+
+## Decisões de produto confirmadas
+
+- `samuelspeedy@gmail.com` continua sendo a única conta administradora.
+- `ralves4101@gmail.com`, de Robson Alves, é o único e-mail pré-autorizado para o papel `coach`.
+- Administrador e treinador podem aprovar, suspender ou reativar cadastros.
+- Somente o treinador cria, edita ou exclui treinos e grupos técnicos.
+- Um treino nunca é público para toda a equipe: exige ao menos um atleta ou grupo destinatário.
+- O administrador não consegue ler os treinos privados nem as avaliações físicas.
+- Uma avaliação de bioimpedância é visível somente para Robson e para o atleta avaliado.
+- Feed, fotos, curtidas e comentários continuam sendo a comunidade social fechada; Garmin e Strava continuam apenas como referências, sem integração nesta fase.
+
+## Fotos institucionais
+
+Nove fotos reais recebidas foram preservadas em `public/team-archive/`, sem inventar datas, provas, resultados ou nomes de pessoas. A pasta contém um `README.md` com a finalidade de cada arquivo.
+
+A foto escolhida para o destaque da home e da página Sobre é `team-race-palace.jpg`: imagem horizontal, recente e com boa leitura da equipe. As outras oito permanecem prontas para seleção manual futura na galeria.
+
+A home ganhou um bloco específico de comando técnico usando `robson-running.jpg`. O texto junto dessa imagem fala exclusivamente de Robson Alves, sua função, CREF e certificação World Athletics. A página Sobre mantém o retrato `robson-portrait.jpg` em um segundo bloco dedicado ao treinador.
+
+## Banco e autorização
+
+Migrations aplicadas:
+
+1. `20260810021549_treinador_e_avaliacoes_privadas`;
+2. `20260810025223_preautoriza_treinador`.
+3. `20260810030102_indexa_convite_treinador`.
+
+A primeira migration:
+
+- adiciona `coach` ao contrato de papéis e garante no máximo um treinador;
+- separa `is_admin()`, `is_coach()` e `is_access_manager()`;
+- limita aprovação de membros a administrador ou treinador;
+- restringe alteração de papéis ao administrador;
+- torna todo treino `targeted` e retira leitura administrativa ampla;
+- torna grupos e mutações técnicas exclusivos do treinador;
+- cria `body_assessments`, índices, validações, RLS e RPCs de gravação/remoção;
+- concede leitura da avaliação somente ao atleta proprietário ou treinador.
+
+A segunda migration cria `app_private.staff_invitations` e adapta o trigger de novo usuário. Nenhuma senha é criada pelo administrador ou pelo Codex. O endereço pré-autorizado cadastra-se normalmente, confirma o próprio e-mail e recebe o papel técnico de forma atômica. Um teste transacional confirmou papel `coach`, status `active` e consumo único do convite; o teste foi revertido e não deixou usuário artificial.
+
+A terceira adiciona o índice da chave estrangeira do convite solicitado pelo Advisor de performance.
+
+## Como Robson ativa a conta
+
+1. Abrir `https://equipeborntorun.com/cadastro` depois que este bloco estiver publicado.
+2. Informar nome, exatamente `ralves4101@gmail.com` e uma senha escolhida por ele.
+3. Aceitar os documentos e concluir o cadastro.
+4. Abrir o e-mail de confirmação enviado pelo Supabase/Resend.
+5. Depois da confirmação, entrar normalmente. O painel será o de Treinador; não é necessária aprovação manual.
+
+O e-mail ainda não possui usuário Auth no momento deste relatório. A pré-autorização está ativa e aguardando o cadastro real. Não cadastrar variações do endereço.
+
+## Avaliações de bioimpedância — MVP
+
+O treinador recebeu `/admin/avaliacoes`, com criação, edição e exclusão. A ficha atual aceita:
+
+- data;
+- peso;
+- percentual de gordura;
+- massa muscular;
+- gordura visceral;
+- água corporal;
+- IMC;
+- idade metabólica;
+- observações técnicas.
+
+O atleta recebeu `/dashboard/avaliacoes`, com avaliação mais recente, indicadores e histórico. Não há autodiagnóstico, recomendação médica ou edição pelo atleta. A política de privacidade foi atualizada e a versão jurídica passou para `2026-08-09`.
+
+Esta é deliberadamente a primeira versão. Gráficos, comparação por período, anexos do equipamento, metas e exportação podem ser adicionados depois do piloto, sem alterar o contrato de privacidade.
+
+## Evidências até o checkpoint local
+
+- migration principal: preflight remoto com rollback aprovado e aplicação real concluída;
+- migration de convite: preflight remoto com rollback aprovado e aplicação real concluída;
+- pgTAP remoto: 49/49 comunidade fechada, 7/7 ciclo de destinatários e 16/16 treinador/avaliações; total 72/72;
+- fixtures remotos: zero usuários de teste após rollback;
+- TypeScript: aprovado;
+- ESLint: aprovado;
+- Vitest: 53/53;
+- build Next.js 16.3.0: aprovado, 34 rotas;
+- E2E público: 24 casos comuns no modo local + 2 casos PWA no build de produção, equivalentes aos 26/26 da matriz;
+- axe: nenhuma violação séria/crítica nas páginas cobertas.
+
+## Estado de publicação
+
+O Supabase já contém as três migrations e a pré-autorização. Código, imagens, interface, testes e relatórios ainda precisam passar por commit, PR, CI, preview Vercel, verificação visual e merge. Atualizar esta seção com os identificadores reais antes de declarar o bloco publicado.
+
+## Contrato para Abacus AI / Fable 5
+
+A Fable 5 pode refinar livremente o visual, mas deve preservar:
+
+- papéis distintos `admin`, `coach` e `member`;
+- único treinador;
+- aprovação por administrador ou treinador;
+- publicação técnica somente pelo treinador;
+- treino sempre privado por destinatário;
+- avaliação privada entre treinador e atleta;
+- pasta `public/team-archive/` como acervo, sem publicar todas as fotos automaticamente;
+- nenhum número inventado de atletas, resultados, troféus ou patrocinadores.

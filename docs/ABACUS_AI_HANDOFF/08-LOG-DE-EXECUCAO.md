@@ -192,3 +192,20 @@ Cada entrada futura deve registrar:
 - As páginas públicas auditadas não contêm “200 atletas”; home e Sobre apresentam mais de 200 participações em corridas e a fundação em 2015.
 - Runtime Logs do deployment de produção: nenhum `error`, `warning` ou `fatal` no período auditado.
 - Estado final do bloco: concluído e publicado. Próxima atividade funcional é o piloto assistido com contas reais; Android nativo/APK permanece uma fase posterior, deliberadamente separada.
+
+## 09/08/2026 — Bloco 9, treinador exclusivo, fotos e bioimpedância
+
+- Nove fotografias reais recebidas foram preservadas em `public/team-archive/`; a foto horizontal `team-race-palace.jpg` foi selecionada para substituir o destaque antigo da home e da página Sobre.
+- A home passou a destacar Robson Alves em seção própria, com `robson-running.jpg`, CREF e World Athletics; o texto junto da foto fala somente sobre ele.
+- Foi criado o papel `coach`, separado de `admin`, com índice que impede mais de um treinador.
+- Administrador e treinador podem revisar acessos. Somente administrador muda papéis; somente treinador gerencia grupos, treinos e avaliações.
+- A audiência aberta `team` foi removida: treino exige atleta ou grupo e permanece invisível para administrador e não destinatários.
+- Foi criada `body_assessments` com validações, RLS, RPCs, painel técnico e histórico privado do atleta.
+- A política de privacidade passou a registrar dados sensíveis de bioimpedância e versão jurídica `2026-08-09`.
+- Migration `20260810021549_treinador_e_avaliacoes_privadas` passou em preflight com rollback e foi aplicada.
+- Migration `20260810025223_preautoriza_treinador` criou convites privados de equipe e adaptou o trigger Auth; passou em preflight e foi aplicada.
+- O Advisor apontou a chave estrangeira do convite sem índice; `20260810030102_indexa_convite_treinador` foi aplicada e removeu o alerta estrutural sem mudar comportamento.
+- `ralves4101@gmail.com` foi pré-autorizado como `coach`. O teste transacional criou e reverteu um usuário simulado, confirmando papel ativo e consumo do convite; a conta real continua inexistente e a pré-autorização permanece aguardando.
+- pgTAP remoto: comunidade 49/49, ciclo de destinatários 7/7 e treinador/avaliações/convite 16/16, total 72/72.
+- Gates locais: TypeScript, ESLint, Vitest 53/53 e build de 34 rotas aprovados. E2E teve 24 casos comuns aprovados em dev; os dois timeouts de service worker foram repetidos no build de produção e passaram 2/2, consolidando a matriz 26/26.
+- Ponto de retomada: finalizar relatórios, commit/PR, CI, preview visual, merge e produção. Depois Robson faz o cadastro real e confirma o e-mail.

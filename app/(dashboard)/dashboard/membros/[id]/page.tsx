@@ -80,9 +80,10 @@ export default async function MembroPage({
               <h1 className="font-display text-xl font-black text-stone-900 truncate">
                 {profile.full_name || 'Atleta'}
               </h1>
-              {profile.role === 'admin' && (
+              {(profile.role === 'admin' || profile.role === 'coach') && (
                 <span className="badge badge-red inline-flex items-center gap-1">
-                  <ShieldCheck size={11} /> Treinador
+                  <ShieldCheck size={11} />
+                  {profile.role === 'coach' ? 'Treinador' : 'Administrador'}
                 </span>
               )}
             </div>
