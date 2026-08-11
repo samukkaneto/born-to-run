@@ -9,12 +9,14 @@ import {
   Users,
   ArrowLeft,
   ClipboardList,
+  Images,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { UserRole } from '@/types'
 
 const commonItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'Visão geral' },
+  { href: '/admin/galeria', icon: Images, label: 'Galeria do site' },
   { href: '/admin/membros', icon: Users, label: 'Membros' },
 ]
 
@@ -25,12 +27,15 @@ function itemsForRole(role: UserRole) {
       { href: '/admin/treinos', icon: Dumbbell, label: 'Treinos' },
       { href: '/admin/avaliacoes', icon: ClipboardList, label: 'Avaliações' },
       commonItems[1],
+      commonItems[2],
     ]
   }
   return [
     commonItems[0],
     { href: '/admin/comunicados', icon: Megaphone, label: 'Comunicados' },
+    { href: '/admin/avaliacoes', icon: ClipboardList, label: 'Avaliações' },
     commonItems[1],
+    commonItems[2],
   ]
 }
 

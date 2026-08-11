@@ -11,6 +11,7 @@ import {
   Plus,
   ShieldCheck,
   ClipboardList,
+  Trophy,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { UserRole } from '@/types'
@@ -20,6 +21,7 @@ const navItems = [
   { href: '/dashboard/feed',        icon: Rss,       label: 'Feed da equipe',  short: 'Feed'    },
   { href: '/dashboard/treinos',     icon: Dumbbell,  label: 'Treinos',         short: 'Treinos' },
   { href: '/dashboard/avaliacoes',  icon: ClipboardList, label: 'Minhas avaliações', short: 'Avaliações' },
+  { href: '/dashboard/conquistas',  icon: Trophy, label: 'Missões e conquistas', short: 'Conquistas' },
   { href: '/dashboard/comunicados', icon: Megaphone, label: 'Comunicados',     short: 'Avisos'  },
   { href: '/dashboard/perfil',      icon: User,      label: 'Meu perfil',      short: 'Perfil'  },
 ]
@@ -92,7 +94,7 @@ export function DashboardSidebarNav({
 export function DashboardBottomNav() {
   const pathname = usePathname()
   const left = [navItems[0], navItems[2]]
-  const right = [navItems[3], navItems[5]]
+  const right = [navItems[4], navItems[6]]
 
   const renderItem = ({ href, icon: Icon, short }: (typeof navItems)[number]) => {
     const active = isActive(pathname, href)

@@ -1,5 +1,7 @@
 # Status técnico atual
 
+> Atualização Bloco 10 — 10/08/2026: galeria institucional, Tanita ampliada, missões/níveis/conquistas, loja conceitual e novo ícone PWA estão implementados; cinco migrations já foram aplicadas no Supabase. Build e E2E locais passaram; frontend aguarda publicação. Detalhes em `16-GALERIA-TANITA-MISSOES-E-LOJA.md`.
+
 Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 
 ## Produção

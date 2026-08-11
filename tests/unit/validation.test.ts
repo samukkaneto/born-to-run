@@ -8,6 +8,7 @@ import {
   uniqueUuids,
   validateEmail,
   validateImageFile,
+  validateAssessmentSourceFile,
 } from '@/lib/validation'
 
 const UUID_A = '11111111-1111-4111-8111-111111111111'
@@ -83,5 +84,14 @@ describe('validação real de imagem', () => {
     await expect(validateImageFile(gif, 1024)).resolves.toHaveProperty('error')
     await expect(validateImageFile(empty, 1024)).resolves.toHaveProperty('error')
     await expect(validateImageFile(large, 3)).resolves.toHaveProperty('error')
+  })
+})
+
+describe('arquivo-fonte da avaliação Tanita', () => {
+  it('aceita PDF real e rejeita extensão/MIME forjados', async () => {
+    const pdf = new File([new TextEncoder().encode('%PDF-1.7')], 'tanita.pdf', { type: 'application/pdf' })
+    const forged = new File([new TextEncoder().encode('arquivo falso')], 'tanita.pdf', { type: 'application/pdf' })
+    await expect(validateAssessmentSourceFile(pdf)).resolves.toEqual({ extension: 'pdf', mimeType: 'application/pdf' })
+    await expect(validateAssessmentSourceFile(forged)).resolves.toHaveProperty('error')
   })
 })

@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'btr-public-v1'
+const CACHE_VERSION = 'btr-public-v2'
 const PRECACHE = [
   '/offline',
   '/manifest.json',
@@ -12,6 +12,7 @@ const PUBLIC_PAGES = new Set([
   '/historia',
   '/equipe',
   '/galeria',
+  '/loja',
   '/resultados',
   '/contato',
   '/instalar',

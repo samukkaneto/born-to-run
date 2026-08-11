@@ -1,6 +1,6 @@
 # Born to Run — entrega técnica para Abacus AI / Fable 5
 
-Atualizado em 09/08/2026. Esta pasta é o ponto de entrada canônico para uma IA ou pessoa retomar o projeto sem depender do histórico da conversa no Codex.
+Atualizado em 10/08/2026. Esta pasta é o ponto de entrada canônico para uma IA ou pessoa retomar o projeto sem depender do histórico da conversa no Codex.
 
 ## Ordem de leitura
 
@@ -18,6 +18,9 @@ Atualizado em 09/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 12. `12-OPERACAO-PILOTO-E-RELEASE.md` — observabilidade, saúde, backup, segurança contínua e checklist de liberação.
 13. `13-HOSTINGER-MCP-CONTATO-E-APP-NATIVO.md` — conexão Hostinger, formulário Resend e distinção entre PWA e futuro APK nativo.
 14. `14-TREINADOR-FOTOS-E-AVALIACOES.md` — papel exclusivo de treinador, acervo de fotos, treinos privados e bioimpedância.
+15. `15-CONTEXTO-COMPLETO-PARA-IA-SEM-HISTORICO.md` — documento obrigatório para uma instância isolada do Fable 5 que nunca viu o projeto.
+16. `16-GALERIA-TANITA-MISSOES-E-LOJA.md` — implementação do ciclo atual, decisões de produto, banco e ponto de publicação.
+17. `17-ROADMAP-PRODUTO-E-APP-NATIVO.md` — fases futuras: OCR Tanita, aplicativo nativo, loja real e integrações esportivas.
 
 ## Fontes complementares no repositório
 
@@ -33,7 +36,8 @@ Documentos de auditoria datados de julho de 2026 são históricos. Não devem su
 
 - Nenhum arquivo desta pasta contém senhas, tokens, chaves privadas ou valores de variáveis de ambiente.
 - A cada bloco técnico concluído, atualizar pelo menos `02`, `07`, `08` e `09`.
-- A Fable 5 tem liberdade visual ampla, mas não pode enfraquecer autorização, Storage privado, avaliações de saúde nem a privacidade dos treinos.
+- Abacus AI é a plataforma; Fable 5 é o modelo visual usado dentro dela. Não tratar os dois nomes como produtos equivalentes.
+- A Fable 5 tem carta branca e a obrigação de elevar radicalmente o visual, mas não pode enfraquecer autorização, Storage privado, avaliações de saúde nem a privacidade dos treinos.
 - Garmin, Strava e Sports Tracker são referências de experiência, não integrações obrigatórias desta fase.
 
 ## Estado deste pacote

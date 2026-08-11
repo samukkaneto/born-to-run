@@ -85,6 +85,17 @@ test('formulário de contato envia sem abrir o cliente de e-mail', async ({ page
   await expect(page.getByRole('status')).toContainText('contato@equipeborntorun.com')
 })
 
+test('galeria e loja conceitual deixam o estado de publicação claro', async ({ page }) => {
+  await page.goto('/galeria')
+  await expect(page.getByRole('heading', { name: /Momentos da equipe/i })).toBeVisible()
+  await expect(page.getByText(/selecionada pelo administrador e pelo treinador/i)).toBeVisible()
+
+  await page.goto('/loja')
+  await expect(page.getByRole('heading', { name: /Vista a jornada/i })).toBeVisible()
+  await expect(page.getByText(/Vendas ainda não estão ativas/i)).toBeVisible()
+  await expect(page.getByText(/Não constituem oferta comercial/i)).toBeVisible()
+})
+
 test('health check informa a revisão sem permitir cache', async ({ request }) => {
   const response = await request.get('/api/health')
 

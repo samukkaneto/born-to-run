@@ -1,5 +1,7 @@
 # Supabase, Auth e segurança
 
+> Atualização 10/08/2026: o remoto contém também `gallery_items`, `mission_catalog`, `race_results`, data real de entrada na equipe, campos Tanita adicionais, bucket público `gallery` e bucket privado `assessment-files`. A migration mais recente é `20260811013659_registra_data_real_na_equipe`. Consulte `16-GALERIA-TANITA-MISSOES-E-LOJA.md`.
+
 ## Projeto
 
 - Project ref: `nmcaejrmmfffzeclmuob`

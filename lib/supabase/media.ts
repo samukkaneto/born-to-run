@@ -3,7 +3,7 @@ import 'server-only'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database.types'
 
-type Bucket = 'avatars' | 'post-images'
+type Bucket = 'avatars' | 'post-images' | 'gallery' | 'assessment-files'
 
 export async function createMediaUrl(
   supabase: SupabaseClient<Database>,

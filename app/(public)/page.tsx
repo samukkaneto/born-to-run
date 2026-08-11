@@ -113,15 +113,6 @@ export default function HomePage() {
                     sizes="(max-width: 1024px) 100vw, 40vw"
                   />
                 </div>
-                {/* Selo carbono sobreposto */}
-                <div className="absolute -bottom-5 left-4 sm:left-6 panel-carbon rounded-lg px-5 py-3 shadow-card-lg">
-                  <p className="font-display text-2xl leading-none text-white">
-                    {site.stats.races}
-                  </p>
-                  <p className="font-condensed text-[11px] uppercase tracking-[0.15em] text-[#A8A29E] mt-1">
-                    participações em corridas
-                  </p>
-                </div>
               </div>
             </div>
           </div>

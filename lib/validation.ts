@@ -96,3 +96,24 @@ export async function validateImageFile(
   const extension = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg'
   return { extension }
 }
+
+export async function validateAssessmentSourceFile(
+  file: File,
+  maxBytes = 15 * 1024 * 1024,
+): Promise<{ extension: 'pdf' | 'jpg' | 'png'; mimeType: string } | { error: string }> {
+  if (file.size <= 0 || file.size > maxBytes) {
+    return { error: `O arquivo deve ter no máximo ${Math.floor(maxBytes / 1024 / 1024)} MB.` }
+  }
+  if (!['application/pdf', 'image/jpeg', 'image/png'].includes(file.type)) {
+    return { error: 'Formato inválido. Envie o PDF da Tanita ou uma imagem JPG/PNG.' }
+  }
+  const bytes = new Uint8Array(await file.slice(0, 12).arrayBuffer())
+  const valid = file.type === 'application/pdf'
+    ? String.fromCharCode(...bytes.slice(0, 5)) === '%PDF-'
+    : matchesFileSignature(bytes, file.type)
+  if (!valid) return { error: 'O conteúdo do arquivo não corresponde ao formato informado.' }
+  return {
+    extension: file.type === 'application/pdf' ? 'pdf' : file.type === 'image/png' ? 'png' : 'jpg',
+    mimeType: file.type,
+  }
+}
