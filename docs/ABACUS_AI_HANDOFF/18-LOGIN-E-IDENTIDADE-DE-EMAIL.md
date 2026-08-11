@@ -83,13 +83,14 @@ O domínio usa Hostinger para a caixa e Resend para transacionais. Trocar `p=non
 
 ## Checkpoint de publicação
 
-- Branch: `codex/login-email-identity`.
-- Commit funcional: `ec35108`.
-- Pull request: `#21`, aberta como draft.
-- GitHub Actions: run `31461532992`, aprovado em todas as etapas.
-- Vercel Preview: deployment `dpl_H9fR4oKqDuwqF51unFTCs3jBt7kq`, `READY`.
-- Verificação remota: login `200`, ativo de marca `200`, HSTS/noindex presentes e nenhum runtime error encontrado no período consultado.
-- Estado deste documento: aguarda commit documental, CI final, merge e validação da produção automática.
+- Branch funcional: `codex/login-email-identity`.
+- Commits do PR: `ec35108` e checkpoint `b17157a`.
+- Pull request: `#21`, mesclada.
+- Commit de produção: `c1dc4450514520a6e0847b94a677722913b3cec0`.
+- GitHub Actions: PR `31461939571` e merge `31462110659`, ambos aprovados em todas as etapas.
+- Vercel Production: deployment `dpl_FaJKjbYHCFYGygVWTFzo1HMu4wii`, `READY`, com domínio oficial.
+- Verificação remota: login `200`, avatar `200`, health na revisão correta, HSTS presente, inspeção mobile sem overlay ou violação axe e nenhum runtime error encontrado no período consultado.
+- Estado do código: concluído e publicado. Operações externas pendentes estão listadas na seção Supabase/Conta Google e em `07-PENDENCIAS-E-RETOMADA.md`.
 
 ## Liberdade futura da Fable 5
 
