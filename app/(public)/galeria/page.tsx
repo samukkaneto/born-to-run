@@ -40,9 +40,11 @@ export default async function GaleriaPage() {
     .order('sort_order')
     .order('created_at', { ascending: false })
 
-  if (error) throw new Error('Não foi possível carregar a galeria.')
-
-  const managedPhotos = (data ?? []).map((item) => ({
+  // A galeria institucional não deve derrubar o site público durante uma
+  // indisponibilidade do Supabase. Nesse caso, o acervo local autorizado
+  // permanece como fallback; gravações administrativas continuam falhando
+  // explicitamente em suas próprias actions.
+  const managedPhotos = (error ? [] : (data ?? [])).map((item) => ({
     id: item.id,
     src: supabase.storage.from('gallery').getPublicUrl(item.storage_path).data.publicUrl,
     alt: item.alt_text,
