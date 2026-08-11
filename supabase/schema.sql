@@ -2236,4 +2236,650 @@ create index if not exists idx_staff_invitations_accepted_user
   on app_private.staff_invitations(accepted_user_id)
   where accepted_user_id is not null;
 
+
+-- ============================================================================
+-- Migration 20260811010426_galeria_institucional_e_consentimento.sql
+-- ============================================================================
+-- Galeria institucional pública, separada das fotos pessoais do feed.
+-- Somente administrador e treinador podem publicar material de divulgação.
+
+create table public.gallery_items (
+  id uuid primary key default gen_random_uuid(),
+  storage_path text not null unique,
+  title text,
+  caption text,
+  alt_text text not null,
+  taken_at date,
+  layout text not null default 'standard',
+  sort_order integer not null default 0,
+  is_published boolean not null default false,
+  consent_confirmed boolean not null default false,
+  created_by uuid not null references public.profiles(user_id) on delete restrict,
+  updated_by uuid not null references public.profiles(user_id) on delete restrict,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint gallery_items_storage_path_check check (
+    storage_path ~ '^[0-9a-f-]{36}/[0-9a-f-]{36}\.(jpg|jpeg|png|webp)$'
+  ),
+  constraint gallery_items_title_check check (
+    title is null or char_length(title) between 2 and 120
+  ),
+  constraint gallery_items_caption_check check (
+    caption is null or char_length(caption) <= 500
+  ),
+  constraint gallery_items_alt_text_check check (
+    char_length(alt_text) between 5 and 250
+  ),
+  constraint gallery_items_layout_check check (layout in ('standard', 'wide')),
+  constraint gallery_items_sort_order_check check (sort_order between 0 and 10000),
+  constraint gallery_items_publish_requires_consent_check check (
+    not is_published or consent_confirmed
+  )
+);
+
+create index gallery_items_public_order_idx
+  on public.gallery_items (sort_order, created_at desc)
+  where is_published;
+create index gallery_items_created_by_idx on public.gallery_items (created_by);
+create index gallery_items_updated_by_idx on public.gallery_items (updated_by);
+
+alter table public.gallery_items enable row level security;
+
+create policy gallery_items_select_public
+  on public.gallery_items
+  for select
+  to anon, authenticated
+  using (is_published);
+
+create policy gallery_items_select_staff
+  on public.gallery_items
+  for select
+  to authenticated
+  using ((select app_private.is_access_manager()));
+
+create trigger gallery_items_updated_at
+before update on public.gallery_items
+for each row execute function app_private.handle_updated_at();
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'gallery',
+  'gallery',
+  true,
+  12582912,
+  array['image/jpeg', 'image/png', 'image/webp']
+)
+on conflict (id) do update set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+create policy btr_gallery_select_staff on storage.objects
+  for select to authenticated
+  using (
+    bucket_id = 'gallery'
+    and (select app_private.is_access_manager())
+  );
+
+create policy btr_gallery_insert_staff on storage.objects
+  for insert to authenticated
+  with check (
+    bucket_id = 'gallery'
+    and (select app_private.is_access_manager())
+    and (storage.foldername(name))[1] = (select auth.uid())::text
+    and name ~ ('^' || (select auth.uid())::text || '/[0-9a-f-]{36}\.(jpg|jpeg|png|webp)$')
+  );
+
+create policy btr_gallery_delete_staff on storage.objects
+  for delete to authenticated
+  using (
+    bucket_id = 'gallery'
+    and (select app_private.is_access_manager())
+  );
+
+create or replace function public.staff_save_gallery_item(
+  target_item_id uuid,
+  target_storage_path text,
+  target_title text,
+  target_caption text,
+  target_alt_text text,
+  target_taken_at date,
+  target_layout text,
+  target_sort_order integer,
+  target_is_published boolean,
+  target_consent_confirmed boolean
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  caller_id uuid := (select auth.uid());
+  current_path text;
+  saved_id uuid;
+begin
+  if caller_id is null or not app_private.is_access_manager() then
+    raise exception 'not_authorized';
+  end if;
+
+  target_title := nullif(btrim(coalesce(target_title, '')), '');
+  target_caption := nullif(btrim(coalesce(target_caption, '')), '');
+  target_alt_text := btrim(coalesce(target_alt_text, ''));
+  target_layout := coalesce(nullif(btrim(target_layout), ''), 'standard');
+  target_sort_order := coalesce(target_sort_order, 0);
+  target_is_published := coalesce(target_is_published, false);
+  target_consent_confirmed := coalesce(target_consent_confirmed, false);
+
+  if target_item_id is not null then
+    select item.storage_path into current_path
+    from public.gallery_items item
+    where item.id = target_item_id;
+    if current_path is null then raise exception 'gallery_item_not_found'; end if;
+  end if;
+
+  if target_storage_path is null
+    or (
+      target_storage_path is distinct from current_path
+      and target_storage_path !~ ('^' || caller_id::text || '/[0-9a-f-]{36}\.(jpg|jpeg|png|webp)$')
+    )
+    or not exists (
+      select 1 from storage.objects media
+      where media.bucket_id = 'gallery' and media.name = target_storage_path
+    ) then
+    raise exception 'invalid_gallery_media';
+  end if;
+
+  if target_title is not null and char_length(target_title) not between 2 and 120 then
+    raise exception 'invalid_title';
+  end if;
+  if target_caption is not null and char_length(target_caption) > 500 then
+    raise exception 'invalid_caption';
+  end if;
+  if char_length(target_alt_text) not between 5 and 250 then
+    raise exception 'invalid_alt_text';
+  end if;
+  if target_layout not in ('standard', 'wide') or target_sort_order not between 0 and 10000 then
+    raise exception 'invalid_layout';
+  end if;
+  if target_is_published and not target_consent_confirmed then
+    raise exception 'consent_required';
+  end if;
+
+  if target_item_id is null then
+    insert into public.gallery_items (
+      storage_path, title, caption, alt_text, taken_at, layout, sort_order,
+      is_published, consent_confirmed, created_by, updated_by
+    ) values (
+      target_storage_path, target_title, target_caption, target_alt_text,
+      target_taken_at, target_layout, target_sort_order, target_is_published,
+      target_consent_confirmed, caller_id, caller_id
+    ) returning id into saved_id;
+  else
+    update public.gallery_items
+    set storage_path = target_storage_path,
+        title = target_title,
+        caption = target_caption,
+        alt_text = target_alt_text,
+        taken_at = target_taken_at,
+        layout = target_layout,
+        sort_order = target_sort_order,
+        is_published = target_is_published,
+        consent_confirmed = target_consent_confirmed,
+        updated_by = caller_id
+    where id = target_item_id
+    returning id into saved_id;
+
+  end if;
+
+  return saved_id;
+end;
+$$;
+
+create or replace function public.staff_delete_gallery_item(target_item_id uuid)
+returns text
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  deleted_path text;
+begin
+  if (select auth.uid()) is null or not app_private.is_access_manager() then
+    raise exception 'not_authorized';
+  end if;
+
+  delete from public.gallery_items
+  where id = target_item_id
+  returning storage_path into deleted_path;
+
+  if deleted_path is null then raise exception 'gallery_item_not_found'; end if;
+  return deleted_path;
+end;
+$$;
+
+revoke all on table public.gallery_items from anon, authenticated;
+grant select on table public.gallery_items to anon, authenticated;
+grant select, insert, update, delete on table public.gallery_items to service_role;
+
+revoke all on function public.staff_save_gallery_item(
+  uuid, text, text, text, text, date, text, integer, boolean, boolean
+) from public, anon;
+revoke all on function public.staff_delete_gallery_item(uuid) from public, anon;
+grant execute on function public.staff_save_gallery_item(
+  uuid, text, text, text, text, date, text, integer, boolean, boolean
+) to authenticated;
+grant execute on function public.staff_delete_gallery_item(uuid) to authenticated;
+
+-- ============================================================================
+-- Migration 20260811010445_avaliacoes_tanita_equipe_tecnica.sql
+-- ============================================================================
+-- Evolução das avaliações Tanita: acesso da equipe técnica (admin + treinador),
+-- arquivo-fonte privado e medidas adicionais para relatório em português.
+
+alter table public.body_assessments
+  add column if not exists bone_mass_kg numeric(5,2),
+  add column if not exists basal_metabolic_rate integer,
+  add column if not exists physique_rating smallint,
+  add column if not exists source_path text,
+  add column if not exists source_mime_type text;
+
+alter table public.body_assessments
+  add constraint body_assessments_bone_mass_check
+    check (bone_mass_kg is null or bone_mass_kg between 0.5 and 15),
+  add constraint body_assessments_bmr_check
+    check (basal_metabolic_rate is null or basal_metabolic_rate between 500 and 10000),
+  add constraint body_assessments_physique_rating_check
+    check (physique_rating is null or physique_rating between 1 and 9),
+  add constraint body_assessments_source_pair_check
+    check ((source_path is null) = (source_mime_type is null)),
+  add constraint body_assessments_source_path_check
+    check (source_path is null or source_path ~ '^[0-9a-f-]{36}/[0-9a-f-]{36}\.(pdf|jpg|png)$'),
+  add constraint body_assessments_source_mime_check
+    check (source_mime_type is null or source_mime_type in ('application/pdf', 'image/jpeg', 'image/png'));
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'assessment-files',
+  'assessment-files',
+  false,
+  15728640,
+  array['application/pdf', 'image/jpeg', 'image/png']
+)
+on conflict (id) do update set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+create policy btr_assessment_files_select_private on storage.objects
+  for select to authenticated
+  using (
+    bucket_id = 'assessment-files'
+    and (
+      (select app_private.is_access_manager())
+      or (storage.foldername(name))[1] = (select auth.uid())::text
+    )
+  );
+
+create policy btr_assessment_files_insert_staff on storage.objects
+  for insert to authenticated
+  with check (
+    bucket_id = 'assessment-files'
+    and (select app_private.is_access_manager())
+    and name ~ '^[0-9a-f-]{36}/[0-9a-f-]{36}\.(pdf|jpg|png)$'
+    and exists (
+      select 1 from public.profiles athlete
+      where athlete.user_id::text = (storage.foldername(name))[1]
+        and athlete.role = 'member'
+        and athlete.membership_status = 'active'
+    )
+  );
+
+create policy btr_assessment_files_delete_staff on storage.objects
+  for delete to authenticated
+  using (bucket_id = 'assessment-files' and (select app_private.is_access_manager()));
+
+create or replace function public.staff_save_body_assessment(
+  target_assessment_id uuid,
+  target_athlete_user_id uuid,
+  target_assessed_at date,
+  target_weight_kg numeric,
+  target_body_fat_pct numeric,
+  target_muscle_mass_kg numeric,
+  target_visceral_fat_level numeric,
+  target_body_water_pct numeric,
+  target_bmi numeric,
+  target_metabolic_age smallint,
+  target_bone_mass_kg numeric,
+  target_basal_metabolic_rate integer,
+  target_physique_rating smallint,
+  target_source_path text,
+  target_source_mime_type text,
+  target_notes text
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  saved_id uuid;
+begin
+  if not app_private.is_access_manager() then
+    raise exception 'Acesso restrito à equipe técnica.' using errcode = '42501';
+  end if;
+  if target_assessed_at is null or target_assessed_at > current_date then
+    raise exception 'A data da avaliação não pode estar no futuro.' using errcode = '22023';
+  end if;
+  if not exists (
+    select 1 from public.profiles p
+    where p.user_id = target_athlete_user_id
+      and p.role = 'member'
+      and p.membership_status = 'active'
+  ) then
+    raise exception 'Selecione um atleta com acesso ativo.' using errcode = '22023';
+  end if;
+  if num_nonnulls(
+    target_weight_kg, target_body_fat_pct, target_muscle_mass_kg,
+    target_visceral_fat_level, target_body_water_pct, target_bmi,
+    target_metabolic_age, target_bone_mass_kg, target_basal_metabolic_rate,
+    target_physique_rating, nullif(btrim(target_notes), '')
+  ) = 0 then
+    raise exception 'Informe ao menos uma medida ou observação.' using errcode = '22023';
+  end if;
+  if (target_source_path is null) <> (target_source_mime_type is null) then
+    raise exception 'Arquivo de origem inválido.' using errcode = '22023';
+  end if;
+  if target_source_path is not null and (
+    target_source_path !~ ('^' || target_athlete_user_id::text || '/[0-9a-f-]{36}\.(pdf|jpg|png)$')
+    or target_source_mime_type not in ('application/pdf', 'image/jpeg', 'image/png')
+    or not exists (
+      select 1 from storage.objects media
+      where media.bucket_id = 'assessment-files' and media.name = target_source_path
+    )
+  ) then
+    raise exception 'Arquivo de origem inválido.' using errcode = '22023';
+  end if;
+
+  if target_assessment_id is null then
+    insert into public.body_assessments (
+      athlete_user_id, assessed_by, assessed_at, weight_kg, body_fat_pct,
+      muscle_mass_kg, visceral_fat_level, body_water_pct, bmi, metabolic_age,
+      bone_mass_kg, basal_metabolic_rate, physique_rating, source_path,
+      source_mime_type, notes
+    ) values (
+      target_athlete_user_id, (select auth.uid()), target_assessed_at,
+      target_weight_kg, target_body_fat_pct, target_muscle_mass_kg,
+      target_visceral_fat_level, target_body_water_pct, target_bmi,
+      target_metabolic_age, target_bone_mass_kg, target_basal_metabolic_rate,
+      target_physique_rating, target_source_path, target_source_mime_type,
+      nullif(btrim(target_notes), '')
+    ) returning id into saved_id;
+  else
+    update public.body_assessments
+    set assessed_at = target_assessed_at,
+        weight_kg = target_weight_kg,
+        body_fat_pct = target_body_fat_pct,
+        muscle_mass_kg = target_muscle_mass_kg,
+        visceral_fat_level = target_visceral_fat_level,
+        body_water_pct = target_body_water_pct,
+        bmi = target_bmi,
+        metabolic_age = target_metabolic_age,
+        bone_mass_kg = target_bone_mass_kg,
+        basal_metabolic_rate = target_basal_metabolic_rate,
+        physique_rating = target_physique_rating,
+        source_path = target_source_path,
+        source_mime_type = target_source_mime_type,
+        notes = nullif(btrim(target_notes), '')
+    where id = target_assessment_id
+      and athlete_user_id = target_athlete_user_id
+    returning id into saved_id;
+    if saved_id is null then
+      raise exception 'Avaliação não encontrada para este atleta.' using errcode = 'P0002';
+    end if;
+  end if;
+
+  return saved_id;
+end;
+$$;
+
+create or replace function public.staff_delete_body_assessment(target_assessment_id uuid)
+returns text
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  deleted_path text;
+begin
+  if not app_private.is_access_manager() then
+    raise exception 'Acesso restrito à equipe técnica.' using errcode = '42501';
+  end if;
+  delete from public.body_assessments
+  where id = target_assessment_id
+  returning source_path into deleted_path;
+  if not found then
+    raise exception 'Avaliação não encontrada.' using errcode = 'P0002';
+  end if;
+  return coalesce(deleted_path, '');
+end;
+$$;
+
+drop policy if exists body_assessments_select_private on public.body_assessments;
+create policy body_assessments_select_private on public.body_assessments
+  for select to authenticated
+  using (
+    (select app_private.is_active_member())
+    and (
+      athlete_user_id = (select auth.uid())
+      or (select app_private.is_access_manager())
+    )
+  );
+
+revoke all on function public.staff_save_body_assessment(
+  uuid, uuid, date, numeric, numeric, numeric, numeric, numeric, numeric,
+  smallint, numeric, integer, smallint, text, text, text
+) from public, anon;
+revoke all on function public.staff_delete_body_assessment(uuid) from public, anon;
+grant execute on function public.staff_save_body_assessment(
+  uuid, uuid, date, numeric, numeric, numeric, numeric, numeric, numeric,
+  smallint, numeric, integer, smallint, text, text, text
+) to authenticated;
+grant execute on function public.staff_delete_body_assessment(uuid) to authenticated;
+
+-- ============================================================================
+-- Migration 20260811010500_missoes_niveis_e_resultados.sql
+-- ============================================================================
+-- Missões inclusivas, níveis de jornada e resultados/conquistas reais.
+-- Nível de jornada mede participação e constância; desempenho competitivo
+-- permanece separado para não desmotivar atletas por idade ou ritmo.
+
+create table public.mission_catalog (
+  code text primary key,
+  title text not null,
+  description text not null,
+  category text not null,
+  distance_km numeric(7,3),
+  max_pace_seconds integer,
+  points integer not null,
+  tier text not null,
+  icon_key text not null,
+  sort_order integer not null,
+  is_active boolean not null default true,
+  constraint mission_catalog_code_check check (code ~ '^[a-z0-9_]{3,60}$'),
+  constraint mission_catalog_category_check check (category in ('distance', 'pace', 'consistency', 'team')),
+  constraint mission_catalog_distance_check check (distance_km is null or distance_km between 0.1 and 500),
+  constraint mission_catalog_pace_check check (max_pace_seconds is null or max_pace_seconds between 120 and 1200),
+  constraint mission_catalog_points_check check (points between 1 and 10000),
+  constraint mission_catalog_tier_check check (tier in ('bronze', 'silver', 'gold', 'platinum', 'diamond', 'elite')),
+  constraint mission_catalog_sort_check check (sort_order between 0 and 10000)
+);
+
+insert into public.mission_catalog
+  (code, title, description, category, distance_km, max_pace_seconds, points, tier, icon_key, sort_order)
+values
+  ('primeiro_1k', 'Primeiro quilômetro', 'Complete 1 km em treino ou corrida.', 'distance', 1, null, 100, 'bronze', 'footprints', 10),
+  ('primeiros_3k', 'Primeiros 3 km', 'Complete 3 km em uma atividade.', 'distance', 3, null, 160, 'bronze', 'route', 20),
+  ('primeiros_5k', 'Primeiros 5 km', 'Complete 5 km em treino ou corrida.', 'distance', 5, null, 250, 'silver', 'medal', 30),
+  ('primeiros_10k', 'Primeiros 10 km', 'Complete 10 km em uma atividade.', 'distance', 10, null, 450, 'silver', 'mountain', 40),
+  ('primeiros_15k', 'Primeiros 15 km', 'Complete 15 km em uma atividade.', 'distance', 15, null, 650, 'gold', 'flame', 50),
+  ('primeira_meia', 'Primeira meia maratona', 'Complete ao menos 21,1 km.', 'distance', 21.1, null, 1000, 'gold', 'trophy', 60),
+  ('primeiros_30k', 'Além dos 30 km', 'Complete ao menos 30 km em uma atividade.', 'distance', 30, null, 1500, 'platinum', 'crown', 70),
+  ('primeira_maratona', 'Primeira maratona', 'Complete ao menos 42,195 km.', 'distance', 42.195, null, 2400, 'diamond', 'gem', 80),
+  ('cinco_sub_6', '5 km abaixo de 6:00/km', 'Complete 5 km com ritmo médio inferior a 6:00 por km.', 'pace', 5, 360, 500, 'silver', 'timer', 90),
+  ('cinco_sub_5', '5 km abaixo de 5:00/km', 'Complete 5 km com ritmo médio inferior a 5:00 por km.', 'pace', 5, 300, 900, 'gold', 'zap', 100),
+  ('cinco_sub_4', '5 km abaixo de 4:00/km', 'Complete 5 km com ritmo médio inferior a 4:00 por km.', 'pace', 5, 240, 1800, 'platinum', 'rocket', 110),
+  ('cinco_sub_330', '5 km abaixo de 3:30/km', 'Marca de desempenho excepcional nos 5 km.', 'pace', 5, 210, 4000, 'elite', 'star', 120)
+on conflict (code) do update set
+  title = excluded.title,
+  description = excluded.description,
+  category = excluded.category,
+  distance_km = excluded.distance_km,
+  max_pace_seconds = excluded.max_pace_seconds,
+  points = excluded.points,
+  tier = excluded.tier,
+  icon_key = excluded.icon_key,
+  sort_order = excluded.sort_order,
+  is_active = excluded.is_active;
+
+create table public.race_results (
+  id uuid primary key default gen_random_uuid(),
+  athlete_user_id uuid not null references public.profiles(user_id) on delete cascade,
+  event_name text not null,
+  event_date date not null,
+  distance_km numeric(7,3) not null,
+  duration_seconds integer,
+  achievement_kind text not null default 'participation',
+  placement integer,
+  category_label text,
+  is_featured boolean not null default false,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint race_results_event_name_check check (char_length(event_name) between 2 and 160),
+  constraint race_results_event_date_check check (event_date <= current_date),
+  constraint race_results_distance_check check (distance_km between 0.1 and 500),
+  constraint race_results_duration_check check (duration_seconds is null or duration_seconds between 30 and 1728000),
+  constraint race_results_kind_check check (achievement_kind in ('participation', 'overall', 'category')),
+  constraint race_results_placement_check check (
+    (achievement_kind = 'participation' and placement is null and category_label is null)
+    or (achievement_kind = 'overall' and placement between 1 and 999 and category_label is null)
+    or (achievement_kind = 'category' and placement between 1 and 999 and char_length(category_label) between 2 and 100)
+  ),
+  constraint race_results_notes_check check (notes is null or char_length(notes) <= 1000)
+);
+
+create index race_results_athlete_date_idx on public.race_results (athlete_user_id, event_date desc, created_at desc);
+create index race_results_featured_idx on public.race_results (athlete_user_id, event_date desc) where is_featured;
+
+create trigger race_results_updated_at
+before update on public.race_results
+for each row execute function app_private.handle_updated_at();
+
+alter table public.mission_catalog enable row level security;
+alter table public.race_results enable row level security;
+
+create policy mission_catalog_select_active on public.mission_catalog
+  for select to authenticated
+  using ((select app_private.is_active_member()));
+
+create policy race_results_select_community on public.race_results
+  for select to authenticated
+  using ((select app_private.is_active_member()));
+
+create policy race_results_insert_own on public.race_results
+  for insert to authenticated
+  with check (
+    athlete_user_id = (select auth.uid())
+    and (select app_private.is_active_member())
+  );
+
+create policy race_results_update_own on public.race_results
+  for update to authenticated
+  using (athlete_user_id = (select auth.uid()) and (select app_private.is_active_member()))
+  with check (athlete_user_id = (select auth.uid()) and (select app_private.is_active_member()));
+
+create policy race_results_delete_own on public.race_results
+  for delete to authenticated
+  using (athlete_user_id = (select auth.uid()) and (select app_private.is_active_member()));
+
+revoke all on table public.mission_catalog from anon, authenticated;
+grant select on table public.mission_catalog to authenticated;
+grant select, insert, update, delete on table public.mission_catalog to service_role;
+
+revoke all on table public.race_results from anon, authenticated;
+grant select on table public.race_results to authenticated;
+grant insert (athlete_user_id, event_name, event_date, distance_km, duration_seconds,
+  achievement_kind, placement, category_label, is_featured, notes)
+  on table public.race_results to authenticated;
+grant update (event_name, event_date, distance_km, duration_seconds,
+  achievement_kind, placement, category_label, is_featured, notes)
+  on table public.race_results to authenticated;
+grant delete on table public.race_results to authenticated;
+grant select, insert, update, delete on table public.race_results to service_role;
+
+-- ============================================================================
+-- Migration 20260811010742_consolida_policies_e_remove_rpcs_legados.sql
+-- ============================================================================
+-- Remove redundância de SELECT e desativa RPCs de avaliação substituídos.
+
+drop policy if exists gallery_items_select_public on public.gallery_items;
+drop policy if exists gallery_items_select_staff on public.gallery_items;
+
+create policy gallery_items_select_public on public.gallery_items
+  for select to anon
+  using (is_published);
+
+create policy gallery_items_select_authenticated on public.gallery_items
+  for select to authenticated
+  using (is_published or (select app_private.is_access_manager()));
+
+revoke execute on function public.coach_save_body_assessment(
+  uuid, uuid, date, numeric, numeric, numeric, numeric, numeric, numeric, smallint, text
+) from authenticated;
+revoke execute on function public.coach_delete_body_assessment(uuid) from authenticated;
+
+
+-- ============================================================================
+-- Migration 20260811013659_registra_data_real_na_equipe.sql
+-- ============================================================================
+-- Data real de entrada na equipe para XP de permanência, controlada pela gestão.
+
+alter table public.profiles
+  add column if not exists team_joined_at date not null default current_date;
+
+alter table public.profiles
+  add constraint profiles_team_joined_at_check
+    check (team_joined_at between date '2015-01-01' and current_date);
+
+create or replace function public.staff_set_team_joined_at(
+  target_user_id uuid,
+  target_team_joined_at date
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if not app_private.is_access_manager() then
+    raise exception 'Acesso restrito à equipe técnica.' using errcode = '42501';
+  end if;
+  if target_team_joined_at is null
+    or target_team_joined_at < date '2015-01-01'
+    or target_team_joined_at > current_date then
+    raise exception 'Data de entrada inválida.' using errcode = '22023';
+  end if;
+  update public.profiles
+  set team_joined_at = target_team_joined_at
+  where user_id = target_user_id;
+  if not found then raise exception 'Perfil não encontrado.' using errcode = 'P0002'; end if;
+  return true;
+end;
+$$;
+
+revoke update (team_joined_at) on public.profiles from authenticated;
+revoke all on function public.staff_set_team_joined_at(uuid, date) from public, anon;
+grant execute on function public.staff_set_team_joined_at(uuid, date) to authenticated;
+
 commit;

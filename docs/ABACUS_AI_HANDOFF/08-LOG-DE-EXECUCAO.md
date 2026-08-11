@@ -229,3 +229,23 @@ Cada entrada futura deve registrar:
 - A home foi inspecionada visualmente em desktop e mobile: foto nova, destaque de Robson, conteúdo completo e nenhum overlay de erro.
 - Runtime Logs pós-release: nenhuma entrada warning/error/fatal no deployment consultado.
 - Estado final: Bloco 9 concluído e publicado; ação seguinte é o cadastro real do treinador e o piloto assistido.
+# 10/08/2026 — Bloco 10, autonomia, evolução e novas áreas
+
+- Requisito consolidado: Abacus AI é a plataforma; Fable 5 é o modelo visual e pode ser executado isoladamente sem histórico.
+- Criado briefing completo para uma IA fria, com produto, papéis, segurança, escopo, estado e roadmap.
+- Corrigida a home: removido o indicador duplicado de participações; mantido o troféu institucional.
+- Logo do rodapé ampliado e PWA recebeu ícone oficial premium sobre fundo preto, substituindo “BR”.
+- Implementada galeria institucional gerenciável somente por administrador/treinador, com consentimento e legendas opcionais.
+- Implementada fundação Tanita: equipe técnica, arquivo privado, campos adicionais e apresentação em português; OCR aguarda amostra real.
+- Implementadas 12 missões, dez níveis de jornada, cascata de distâncias, resultados e conquistas gerais/por categoria.
+- Criada loja conceitual com três campanhas visuais e catálogo sem venda ativa.
+- Aplicadas migrations remotas `20260811010426`, `20260811010445`, `20260811010500`, `20260811010742` e `20260811013659`.
+- A permanência passou a usar a data real de entrada na equipe, editável somente por administrador/treinador; não depende mais da data de criação da conta.
+- Supabase verificado: buckets público/privado corretos, 12 missões e grants por coluna para resultados.
+- Gates locais: TypeScript aprovado, ESLint direcionado aprovado, Vitest 57/57, build de 37 rotas e E2E equivalente a 28/28 em Desktop Chrome/Pixel 7 sem violações axe sérias/críticas.
+- Commit funcional `dc85da6` e correção de resiliência `131b879` enviados à branch `codex/content-studio-gamification`; PR #17 aberta.
+- O primeiro CI `31450271727` bloqueou a entrega porque o Supabase fictício do ambiente de teste fazia `/galeria` lançar erro. A produção permaneceu intacta.
+- A galeria pública passou a mostrar o acervo local autorizado quando a leitura remota estiver indisponível; gravações administrativas continuam falhando explicitamente.
+- Reprodução com as mesmas variáveis do CI passou 2/2 em Desktop Chrome/Pixel 7.
+- CI completo `31451093854` passou audit, lint, tipos, 57 unitários, build e 28 testes E2E.
+- Preview Vercel `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` ficou `READY` no commit `131b879`; merge e auditoria de produção ainda pendentes neste checkpoint.

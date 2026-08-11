@@ -9,6 +9,7 @@ import {
   Plus,
   Rss,
   Users,
+  Images,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { getAccessContext } from '@/lib/auth/access'
@@ -25,12 +26,13 @@ export default async function AdminPage() {
       .from('profiles')
       .select('id', { count: 'exact', head: true })
       .eq('membership_status', 'pending'),
+    supabase.from('gallery_items').select('id', { count: 'exact', head: true }),
   ])
   if (commonResults.some((result) => result.error)) {
     throw new Error('Não foi possível carregar os indicadores do painel.')
   }
 
-  const [membersResult, postsResult, pendingResult] = commonResults
+  const [membersResult, postsResult, pendingResult, galleryResult] = commonResults
   const cards = [
     {
       icon: Users,
@@ -41,6 +43,15 @@ export default async function AdminPage() {
       bg: '#FEE2E2',
     },
   ]
+
+  cards.push({
+    icon: Images,
+    label: 'Fotos do site',
+    value: galleryResult.count ?? 0,
+    href: '/admin/galeria',
+    color: '#2563EB',
+    bg: '#DBEAFE',
+  })
 
   if (isCoach) {
     const [workoutsResult, assessmentsResult] = await Promise.all([
@@ -55,18 +66,15 @@ export default async function AdminPage() {
       { icon: ClipboardList, label: 'Avaliações', value: assessmentsResult.count ?? 0, href: '/admin/avaliacoes', color: '#7C3AED', bg: '#EDE9FE' },
     )
   } else {
-    const announcementsResult = await supabase
-      .from('announcements')
-      .select('id', { count: 'exact', head: true })
-    if (announcementsResult.error) throw new Error('Não foi possível carregar os comunicados.')
-    cards.push({
-      icon: Megaphone,
-      label: 'Comunicados',
-      value: announcementsResult.count ?? 0,
-      href: '/admin/comunicados',
-      color: '#F97316',
-      bg: '#FFEDD5',
-    })
+    const [announcementsResult, assessmentsResult] = await Promise.all([
+      supabase.from('announcements').select('id', { count: 'exact', head: true }),
+      supabase.from('body_assessments').select('id', { count: 'exact', head: true }),
+    ])
+    if (announcementsResult.error || assessmentsResult.error) throw new Error('Não foi possível carregar os indicadores administrativos.')
+    cards.push(
+      { icon: Megaphone, label: 'Comunicados', value: announcementsResult.count ?? 0, href: '/admin/comunicados', color: '#F97316', bg: '#FFEDD5' },
+      { icon: ClipboardList, label: 'Avaliações', value: assessmentsResult.count ?? 0, href: '/admin/avaliacoes', color: '#7C3AED', bg: '#EDE9FE' },
+    )
   }
 
   cards.push({
@@ -135,8 +143,12 @@ export default async function AdminPage() {
               <Link href="/admin/avaliacoes" className="btn-secondary text-sm"><Plus size={15} aria-hidden="true" /> Nova avaliação</Link>
             </>
           ) : (
-            <Link href="/admin/comunicados" className="btn-primary text-sm"><Plus size={15} aria-hidden="true" /> Novo comunicado</Link>
+            <>
+              <Link href="/admin/comunicados" className="btn-primary text-sm"><Plus size={15} aria-hidden="true" /> Novo comunicado</Link>
+              <Link href="/admin/avaliacoes" className="btn-secondary text-sm"><Plus size={15} aria-hidden="true" /> Nova avaliação</Link>
+            </>
           )}
+          <Link href="/admin/galeria" className="btn-secondary text-sm"><Plus size={15} aria-hidden="true" /> Nova foto</Link>
           <Link href="/admin/membros" className="btn-outline text-sm">Ver membros</Link>
         </div>
       </div>

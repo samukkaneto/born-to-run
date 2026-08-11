@@ -17,6 +17,7 @@ export type MemberProfile = Pick<
   | 'objetivo'
   | 'role'
   | 'membership_status'
+  | 'team_joined_at'
   | 'created_at'
   | 'updated_at'
 >
@@ -43,6 +44,9 @@ export type TrainingGroup = Tables<'training_groups'>
 export type TrainingGroupMember = Tables<'training_group_members'>
 export type WorkoutAssignment = Tables<'workout_assignments'>
 export type BodyAssessment = Tables<'body_assessments'>
+export type GalleryItem = Tables<'gallery_items'>
+export type Mission = Tables<'mission_catalog'>
+export type RaceResult = Tables<'race_results'>
 
 export type WorkoutWithAssignments = Workout & {
   workout_assignments?: Pick<

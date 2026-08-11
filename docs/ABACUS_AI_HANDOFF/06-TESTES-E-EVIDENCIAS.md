@@ -1,5 +1,7 @@
 # Testes e evidências
 
+> Bloco 10: TypeScript aprovado, ESLint direcionado aprovado, Vitest 57/57, build Next.js 16.3 com 37 rotas e E2E público 28/28 em Desktop Chrome/Pixel 7 sem violações axe sérias/críticas. O CI final do PR é `31451093854` e o preview Vercel é `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU`, ambos aprovados/`READY` no commit `131b879`.
+
 ## Baseline automatizado
 
 - ESLint: aprovado.

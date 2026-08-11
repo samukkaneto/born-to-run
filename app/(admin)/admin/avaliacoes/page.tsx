@@ -3,12 +3,13 @@ import { ClipboardList } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { getAccessContext } from '@/lib/auth/access'
 import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
+import { createMediaUrl } from '@/lib/supabase/media'
 import AssessmentManager from '@/components/admin/AssessmentManager'
 import type { BodyAssessment, MemberProfile } from '@/types'
 
 export default async function AdminAvaliacoesPage() {
   const [{ profile }, supabase] = await Promise.all([getAccessContext(), createClient()])
-  if (profile?.role !== 'coach') redirect('/admin')
+  if (!profile || !['admin', 'coach'].includes(profile.role)) redirect('/admin')
 
   const [assessmentsResult, athletesResult] = await Promise.all([
     supabase.from('body_assessments').select('*').order('assessed_at', { ascending: false }),
@@ -23,6 +24,11 @@ export default async function AdminAvaliacoesPage() {
     throw new Error('Não foi possível carregar as avaliações e atletas.')
   }
 
+  const assessments = await Promise.all((assessmentsResult.data ?? []).map(async (assessment) => ({
+    ...assessment,
+    source_url: await createMediaUrl(supabase, 'assessment-files', assessment.source_path),
+  })))
+
   return (
     <div className="animate-fade-in space-y-8">
       <div>
@@ -36,7 +42,7 @@ export default async function AdminAvaliacoesPage() {
         </p>
       </div>
       <AssessmentManager
-        assessments={(assessmentsResult.data ?? []) as BodyAssessment[]}
+        assessments={assessments as (BodyAssessment & { source_url: string | null })[]}
         athletes={(athletesResult.data ?? []) as MemberProfile[]}
       />
     </div>

@@ -1,17 +1,24 @@
 # Fable 5 — direção visual e limites técnicos
 
-## Liberdade visual
+## Relação Abacus AI × Fable 5
 
-A Fable 5 pode redesenhar grid, tipografia, densidade, navegação, componentes, motion e responsividade. As seis pranchas em `design-refs/` são referência de qualidade, não especificação pixel a pixel.
+Abacus AI é a plataforma onde o proprietário executará o trabalho. Fable 5 é o modelo escolhido dentro da plataforma, possivelmente em um supercomputador isolado e sem histórico. Por isso, esse modelo deve receber também o arquivo `15-CONTEXTO-COMPLETO-PARA-IA-SEM-HISTORICO.md`.
+
+## Liberdade visual — carta branca real
+
+A Fable 5 pode e deve redesenhar grid, tipografia, densidade, navegação, componentes, ícones, motion e responsividade. O proprietário considera a especialidade visual do modelo superior e exige uma evolução perceptível, forte e premium. As seis pranchas em `design-refs/` são referência de qualidade, não especificação pixel a pixel.
 
 Direção desejada:
 
 - editorial esportivo premium;
 - fotografia autêntica da equipe;
 - mobile-first;
-- off-white, carbono e vermelho Born to Run como identidade reconhecível;
+- preto/carbono dominante, branco/off-white e cores do logotipo como identidade reconhecível;
 - controles acessíveis e foco visível;
 - sem visual genérico de SaaS, neon ou glassmorphism excessivo.
+- aparência de aplicativo esportivo profissional, comparável em maturidade a produtos nativos conhecidos, sem copiar telas.
+- logotipo valorizado e grande quando a composição comportar; não reduzi-lo a elemento decorativo tímido.
+- ícones de níveis, missões e conquistas com personalidade própria, leitura em tamanho pequeno e evolução visual entre níveis.
 
 ## Contratos que o design não pode remover
 
@@ -24,6 +31,14 @@ Direção desejada:
 - loading, vazio, erro e sucesso;
 - Storage privado e URLs assinadas;
 - controles administrativos por Server Actions/RPCs.
+- separação entre galeria institucional pública e fotos pessoais do feed;
+- avaliações Tanita e arquivos-fonte privados;
+- semântica distinta entre missão, nível de jornada, resultado e conquista real;
+- loja marcada como prévia, sem simular checkout ativo.
+
+## Liberdade que não é autorização para quebrar o produto
+
+O redesign pode substituir integralmente a aparência, mas deve preservar formulários, nomes de campos, estados, rotas ou adaptar o código com testes equivalentes. Não tornar treino privado público, não abrir dados de saúde, não permitir que atletas publiquem na galeria institucional e não chamar a PWA atual de APK nativo.
 
 ## Referências visuais
 

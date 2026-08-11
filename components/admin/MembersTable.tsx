@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {
   Ban,
+  CalendarDays,
   CheckCircle2,
   ExternalLink,
   RotateCcw,
@@ -14,10 +15,11 @@ import {
   UserX,
   Users,
 } from 'lucide-react'
-import { toggleMemberRole, updateMembershipStatus } from '@/lib/actions/admin'
-import { formatDate } from '@/lib/utils'
+import { setMemberTeamJoinedAt, toggleMemberRole, updateMembershipStatus } from '@/lib/actions/admin'
+import { formatDate, getTodayCalendarDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/Toaster'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
+import AdminModal from '@/components/admin/AdminModal'
 import type { MemberProfile, MembershipStatus } from '@/types'
 
 type StatusFilter = MembershipStatus | 'all'
@@ -48,7 +50,7 @@ function actionCopy(action: PendingAction) {
     return {
       title: promoting ? 'Conceder acesso de treinador' : 'Remover acesso de treinador',
       description: promoting
-        ? `${name} poderá gerenciar membros, grupos, treinos e comunicados.`
+        ? `${name} poderá aprovar membros, gerenciar grupos, publicar treinos privados, avaliações e fotos institucionais.`
         : `${name} continuará na equipe, mas perderá o acesso ao painel do treinador.`,
       label: promoting ? 'Tornar treinador' : 'Remover função',
     }
@@ -92,6 +94,8 @@ export default function MembersTable({
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<StatusFilter>('all')
   const [pending, setPending] = useState<PendingAction>(null)
+  const [tenureMember, setTenureMember] = useState<MemberProfile | null>(null)
+  const [tenureError, setTenureError] = useState('')
   const [working, setWorking] = useState(false)
 
   const filtered = useMemo(() => {
@@ -122,6 +126,21 @@ export default function MembersTable({
       toast('error', 'Não foi possível concluir a ação. Tente novamente.')
     } finally {
       setWorking(false)
+    }
+  }
+
+  async function handleTenureSave(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!tenureMember) return
+    setWorking(true)
+    setTenureError('')
+    const form = new FormData(event.currentTarget)
+    const result = await setMemberTeamJoinedAt(tenureMember.user_id, String(form.get('team_joined_at') ?? ''))
+    setWorking(false)
+    if (result.error) setTenureError(result.error)
+    else {
+      toast('success', 'Data de entrada na equipe atualizada.')
+      setTenureMember(null)
     }
   }
 
@@ -166,7 +185,7 @@ export default function MembersTable({
               <tr className="border-b border-[#E5E1D8] bg-[#FAFAF9]">
                 <th className="px-5 py-3 text-left font-condensed text-xs font-semibold uppercase tracking-[0.12em] text-[#57534E]">Membro</th>
                 <th className="hidden px-5 py-3 text-left font-condensed text-xs font-semibold uppercase tracking-[0.12em] text-[#57534E] md:table-cell">Cidade</th>
-                <th className="hidden px-5 py-3 text-left font-condensed text-xs font-semibold uppercase tracking-[0.12em] text-[#57534E] lg:table-cell">Cadastro</th>
+                <th className="hidden px-5 py-3 text-left font-condensed text-xs font-semibold uppercase tracking-[0.12em] text-[#57534E] lg:table-cell">Na equipe desde</th>
                 <th className="px-5 py-3 text-left font-condensed text-xs font-semibold uppercase tracking-[0.12em] text-[#57534E]">Acesso</th>
                 <th className="px-5 py-3 text-right font-condensed text-xs font-semibold uppercase tracking-[0.12em] text-[#57534E]">Ações</th>
               </tr>
@@ -203,7 +222,7 @@ export default function MembersTable({
                       </div>
                     </td>
                     <td className="hidden px-5 py-3 text-[#57534E] md:table-cell">{member.cidade || '—'}</td>
-                    <td className="hidden px-5 py-3 text-[#57534E] lg:table-cell">{formatDate(member.created_at)}</td>
+                    <td className="hidden px-5 py-3 text-[#57534E] lg:table-cell">{formatDate(member.team_joined_at)}</td>
                     <td className="px-5 py-3">
                       <div className="flex flex-col items-start gap-1.5">
                         <span className={`badge ${STATUS_BADGES[member.membership_status]}`}>{STATUS_LABELS[member.membership_status]}</span>
@@ -222,6 +241,9 @@ export default function MembersTable({
                             <ExternalLink size={14} aria-hidden="true" />
                             <span className="hidden xl:inline">Perfil</span>
                           </Link>
+                        )}
+                        {isActive && (
+                          <button type="button" onClick={() => { setTenureError(''); setTenureMember(member) }} className="min-h-11 rounded-lg p-2.5 text-[#57534E] transition-colors hover:bg-[#EFF6FF] hover:text-[#2563EB]" aria-label={`Editar data de entrada de ${member.full_name}`} title="Data de entrada na equipe"><CalendarDays size={17} /></button>
                         )}
                         {!isSelf && member.membership_status === 'pending' && (
                           <>
@@ -276,6 +298,14 @@ export default function MembersTable({
         onConfirm={handleConfirm}
         onCancel={() => !working && setPending(null)}
       />
+      <AdminModal open={tenureMember !== null} title="Data de entrada na equipe" subtitle="Esta data gera pontos de permanência no nível de jornada." onClose={() => !working && setTenureMember(null)}>
+        <form onSubmit={handleTenureSave} className="space-y-4">
+          <p className="text-sm text-[#57534E]">Atleta: <strong className="text-[#171717]">{tenureMember?.full_name}</strong></p>
+          <div><label htmlFor="team-joined-at" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Entrou na equipe em</label><input id="team-joined-at" name="team_joined_at" type="date" min="2015-01-01" max={getTodayCalendarDate()} required defaultValue={tenureMember?.team_joined_at ?? getTodayCalendarDate()} className="input-base" /></div>
+          {tenureError && <p role="alert" className="rounded-lg border border-[#FECACA] bg-[#FEE2E2] px-3 py-2 text-sm text-[#B91C1C]">{tenureError}</p>}
+          <button type="submit" disabled={working} className="btn-primary w-full sm:w-auto">{working ? 'Salvando…' : 'Salvar data'}</button>
+        </form>
+      </AdminModal>
     </div>
   )
 }

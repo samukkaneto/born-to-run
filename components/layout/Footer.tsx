@@ -8,6 +8,7 @@ const quickLinks = [
   { label: 'Início', href: '/' },
   { label: 'Sobre', href: '/sobre' },
   { label: 'Galeria', href: '/galeria' },
+  { label: 'Loja', href: '/loja' },
   { label: 'Contato', href: '/contato' },
   { label: 'Instalar aplicativo', href: '/instalar' },
 ]
@@ -28,16 +29,16 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link
               href="/"
-              className="inline-flex items-center mb-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-md"
+              className="inline-flex items-center mb-7 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-md"
               aria-label="Born to Run — página inicial"
             >
-              <div className="relative w-[210px] h-[66px]">
+              <div className="relative h-[88px] w-[280px] sm:h-[104px] sm:w-[330px]">
                 <Image
                   src="/logo.png"
                   alt="Born to Run — Treinamento e Saúde"
                   fill
                   style={{ objectFit: 'contain', objectPosition: 'left center' }}
-                  sizes="210px"
+                  sizes="(max-width: 640px) 280px, 330px"
                 />
               </div>
             </Link>

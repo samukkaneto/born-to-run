@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
-import { Activity, ClipboardList, Droplets, Scale, ShieldCheck } from 'lucide-react'
+import { Activity, ClipboardList, Droplets, ExternalLink, Scale, ShieldCheck } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { createMediaUrl } from '@/lib/supabase/media'
 import { formatDate } from '@/lib/utils'
 import type { BodyAssessment } from '@/types'
 
@@ -23,6 +24,7 @@ export default async function AvaliacoesPage() {
 
   const assessments = (data ?? []) as BodyAssessment[]
   const latest = assessments[0]
+  const latestSourceUrl = await createMediaUrl(supabase, 'assessment-files', latest?.source_path)
 
   return (
     <div className="mx-auto max-w-4xl animate-fade-in space-y-8">
@@ -38,7 +40,7 @@ export default async function AvaliacoesPage() {
 
       <div className="flex items-start gap-3 rounded-xl border border-[#DDD6FE] bg-[#F5F3FF] p-4 text-sm text-[#5B21B6]">
         <ShieldCheck size={19} className="mt-0.5 shrink-0" aria-hidden="true" />
-        <p><strong>Histórico privado.</strong> Somente você e o treinador conseguem acessar estas informações.</p>
+        <p><strong>Histórico privado.</strong> Somente você, o treinador e o administrador conseguem acessar estas informações.</p>
       </div>
 
       {latest ? (
@@ -58,7 +60,11 @@ export default async function AvaliacoesPage() {
               <MetricCard icon={Activity} label="Gordura visceral" value={value(latest.visceral_fat_level)} />
               <MetricCard icon={Activity} label="IMC" value={value(latest.bmi)} />
               <MetricCard icon={Activity} label="Idade metabólica" value={latest.metabolic_age === null ? '—' : `${latest.metabolic_age} anos`} />
+              <MetricCard icon={Activity} label="Massa óssea" value={value(latest.bone_mass_kg, ' kg')} />
+              <MetricCard icon={Activity} label="Metabolismo basal" value={latest.basal_metabolic_rate === null ? '—' : `${latest.basal_metabolic_rate} kcal`} />
+              <MetricCard icon={Activity} label="Classificação física" value={value(latest.physique_rating)} />
             </div>
+            {latestSourceUrl && <a href={latestSourceUrl} target="_blank" rel="noreferrer" className="btn-outline mt-4 inline-flex text-sm"><ExternalLink size={15} aria-hidden="true" /> Ver arquivo original da Tanita</a>}
             {latest.notes && (
               <div className="card mt-4 border-l-4 border-l-[#7C3AED] p-5">
                 <h3 className="font-condensed text-sm font-semibold uppercase tracking-[0.08em] text-[#171717]">Observações do treinador</h3>

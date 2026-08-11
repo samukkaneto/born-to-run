@@ -2,9 +2,9 @@
 
 Atualizar este arquivo após cada bloco.
 
-## Estado do ciclo técnico
+## Estado do ciclo técnico — atualização 10/08/2026
 
-Todos os blocos que independiam de credenciais, plano pago, dados formais ou usuários reais foram concluídos. O Bloco 9 foi mesclado pela PR #15 e a produção foi validada no commit `0c17f86`.
+O Bloco 10 está implementado e suas cinco migrations já estão no Supabase remoto. PR #17 aberta, CI `31451093854` verde e preview `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` `READY`. Restam merge e validação da produção.
 
 ## Concluído neste ciclo
 
@@ -16,9 +16,9 @@ Todos os blocos que independiam de credenciais, plano pago, dados formais ou usu
 - Bloco 5: auditoria pesada sem P0/P1, PR #2 mesclado, CI do merge verde e deployment de produção `READY/PROMOTED` validado.
 - Bloco 8 concluído e publicado: dado institucional corrigido, formulário transacional Resend entregue de verdade, Hostinger MCP autorizado e produção validada sem erros.
 
-## Próxima ação
+## Próxima ação exata
 
-O Bloco 9 está publicado: PR #15 mesclada, CI do merge `31352438060` verde e produção `dpl_5Ef5i65VmCNTAQ1zGM2ZqRcqXJhe` validada. A próxima ação é Robson criar a conta real pelo cadastro oficial usando exatamente `ralves4101@gmail.com` e confirmar o e-mail. A pré-autorização já está aguardando no Supabase; depois, o piloto testa aprovações, treinos privados e avaliações com pessoas reais.
+Mesclar a PR #17 e validar a publicação automática em `https://equipeborntorun.com`. Depois, Robson cria a conta real pelo cadastro oficial e confirma o e-mail. A pré-autorização continua aguardando no Supabase.
 
 O administrador foi localizado e está `active` com e-mail confirmado. O proprietário recebeu o identificador exato fora do repositório. Se não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com esse e-mail.
 
@@ -30,6 +30,10 @@ O administrador foi localizado e está `active` com e-mail confirmado. O proprie
 4. solicitar à Fable 5 a aprovação/refinação visual final sem alterar os contratos técnicos.
 5. planejar o aplicativo Android nativo e APK como fase separada somente após estabilizar o piloto web/PWA.
 6. após o piloto, evoluir as avaliações com gráficos e comparação por período se o proprietário aprovar.
+7. fornecer um PDF/JPEG Tanita real anonimizado para calibrar extração automática;
+8. ampliar o editor institucional além da galeria;
+9. validar a prévia da loja com Robson antes de qualquer checkout;
+10. seguir `17-ROADMAP-PRODUTO-E-APP-NATIVO.md` para APK e integrações.
 
 ## Dependências do proprietário
 

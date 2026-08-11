@@ -8,11 +8,13 @@ O projeto deixou de ser apenas um protótipo visual. O código atual contém sit
 
 O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 53 testes unitários, 72 asserções pgTAP e a matriz de 26 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. O Bloco 9 foi mesclado pela PR [#15](https://github.com/samukkaneto/born-to-run/pull/15), o CI do merge ficou verde e a revisão `0c17f86` está em produção em **https://equipeborntorun.com**.
 
+O Bloco 10 está em publicação: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, loja conceitual, novo ícone PWA e correções da home estão implementados na branch `codex/content-studio-gamification`. Cinco migrations novas já estão aplicadas no Supabase remoto. A PR [#17](https://github.com/samukkaneto/born-to-run/pull/17) está aberta, o CI `31451093854` passou e o preview `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` está `READY`; a produção ainda serve o Bloco 9 até o merge desta branch.
+
 ## Estado por área
 
 | Área | Estado | Evidência / observação |
 |---|---|---|
-| Site institucional | Implementado e validado | Home, Sobre, Galeria, Contato com entrega real via Resend, header/footer e páginas responsivas; desktop e Pixel 7 passam no E2E. |
+| Site institucional | Implementado; Bloco 10 em publicação | Home, Sobre, galeria, loja conceitual, contato via Resend, header/footer e páginas responsivas. |
 | Identidade visual Fable 5 | Implementada, ainda refinável | A direção atual foi preservada; a Fable pode redesenhar componentes sem alterar contratos funcionais. |
 | Autenticação | Implementada e validada | Login, cadastro, confirmação e recuperação têm callback explícito, templates próprios e SMTP ativo no domínio oficial. |
 | Comunidade fechada | Implementada e validada no banco | Cadastro entra como `pending`; somente `active` acessa conteúdo interno. |
@@ -23,12 +25,15 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 | Grupos | Implementado e validado | Criar, editar, arquivar/reativar e gerenciar integrantes, preservando destinatários históricos. |
 | Comunicados | Implementado | CRUD do administrador e leitura pelos membros ativos. |
 | Painel do treinador | Implementado e validado | Dashboard, aprovações, membros, grupos, treinos privados e avaliações físicas. |
-| Bioimpedância | MVP privado implementado | Treinador registra medidas; cada atleta vê somente o próprio histórico. Gráficos são evolução futura. |
+| Bioimpedância | MVP privado ampliado | Administrador/treinador registram; arquivo Tanita original fica privado; novas medidas em português. OCR e relatório gráfico aguardam amostra real. |
+| Galeria institucional | Implementada no Bloco 10 | Admin/treinador publicam, ordenam, ocultam e removem; consentimento obrigatório; feed pessoal separado. |
+| Missões, níveis e conquistas | Implementados no Bloco 10 | 12 missões, cascata de distâncias, XP inclusivo, dez níveis, resultados e premiações gerais/por categoria. |
+| Loja | Prévia conceitual | Mockups próprios e catálogo estimativo; nenhuma venda, checkout ou estoque ativo. |
 | Fotos reais | Acervo atualizado | Nove fotos em `public/team-archive/`; `team-race-palace.jpg` é o novo destaque e as demais aguardam curadoria manual. |
-| PWA/responsividade | Instalável, push e nativo pendentes | Manifesto, ícones, instalação guiada, service worker e fallback offline público validados; dados privados nunca entram no cache. Não gera APK e não é binário nativo. |
+| PWA/responsividade | Instalável, push e nativo pendentes | Manifesto, novo ícone oficial em fundo preto, instalação guiada, service worker e fallback offline público. Não gera APK e não é binário nativo. |
 | Observabilidade | Implementada para o piloto | `/api/health`, Runtime Logs, Web Analytics habilitado e Speed Insights configurado; URLs são sanitizadas antes das métricas. |
 | Continuidade | Procedimento definido | Audit no CI, Dependabot, relato privado e runbook de release; Supabase Free exige exportação criptografada ou Pro antes de depender de backup automático. |
-| Supabase remoto | Sincronizado | Nove migrations aplicadas; estado atual termina em `20260810030102_indexa_convite_treinador`. |
+| Supabase remoto | Sincronizado com o Bloco 10 | Quatorze migrations aplicadas; estado atual termina em `20260811013659_registra_data_real_na_equipe`. |
 | Vercel | Produção publicada e validada | Deployment Git `dpl_5Ef5i65VmCNTAQ1zGM2ZqRcqXJhe`, revisão `0c17f86`, `READY`, target `production`; 34 rotas, aliases corretos, respostas 200/307 e logs sem warning/error/fatal. `dpl_DU27nprYJu1VN24kgQd6kgDeB6RF` é o rollback de produção anterior conhecido. |
 | GitHub | Publicado, revisado e mesclado | PR [#15](https://github.com/samukkaneto/born-to-run/pull/15) mesclada em `main` no commit `0c17f86995a4e88e1a8d04a0d68b3242b5d3acc7`; CI final do PR `31352323034` e CI do merge `31352438060` concluídos com sucesso. |
 
@@ -88,7 +93,7 @@ O banco preserva 1 perfil administrador ativo, convite de treinador aguardando c
 | ESLint | Aprovado, sem erros |
 | TypeScript (`tsc --noEmit`) | Aprovado |
 | Build Next.js 16.3.0 | Aprovado, 34 rotas |
-| Testes unitários | 53/53 aprovados |
+| Testes unitários | 57/57 aprovados no Bloco 10 |
 | `npm audit` | 0 vulnerabilidades conhecidas |
 | Tipos do Supabase | Gerados a partir do banco remoto |
 | Boundaries de erro/loading/not-found | Implementados |

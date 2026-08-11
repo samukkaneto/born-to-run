@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: '11mb',
+      bodySizeLimit: '16mb',
     },
   },
   images: {
@@ -36,6 +36,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'nmcaejrmmfffzeclmuob.supabase.co',
         pathname: '/storage/v1/object/sign/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'nmcaejrmmfffzeclmuob.supabase.co',
+        pathname: '/storage/v1/object/public/gallery/**',
       },
     ],
   },

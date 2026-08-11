@@ -6,6 +6,8 @@ Atualizado em 09/08/2026 após a conclusão do ciclo de prontidão para piloto.
 
 Born to Run é um site institucional e aplicativo privado para uma equipe real de corrida. A área interna funciona como comunidade fechada, rede social de treinos e canal de prescrição treinador–atleta.
 
+> Atualização 10/08/2026: o Bloco 10 está implementado na branch `codex/content-studio-gamification` e no Supabase, ainda aguardando publicação frontend. Foram adicionados editor da galeria para admin/treinador, arquivo Tanita privado, 12 missões, dez níveis de jornada, resultados/conquistas, loja conceitual, ícone PWA oficial, logo maior no rodapé e remoção do indicador duplicado da home. Para contexto completo de uma IA sem histórico, usar `15-CONTEXTO-COMPLETO-PARA-IA-SEM-HISTORICO.md`; para detalhes técnicos, usar `16-GALERIA-TANITA-MISSOES-E-LOJA.md`.
+
 O MVP web está publicado em https://born-to-run-seven.vercel.app. O código está no GitHub `samukkaneto/born-to-run`, o Supabase remoto está sincronizado e a integração automática GitHub→Vercel funciona.
 
 ## Entregue no baseline
@@ -75,7 +77,7 @@ O Codex iniciou a branch `codex/production-readiness` para:
 
 ## Fable 5
 
-A Fable 5 mantém liberdade visual. Ela deve ler `README-FABLE5.md`, este pacote e as seis imagens em `design-refs/`, preservando os contratos funcionais e de segurança.
+A Fable 5 tem carta branca visual e deve elevar de forma marcante o sistema inteiro. Ela deve ler `README-FABLE5.md`, `15-CONTEXTO-COMPLETO-PARA-IA-SEM-HISTORICO.md`, este pacote e as seis imagens em `design-refs/`, preservando os contratos funcionais e de segurança.
 
 ## Retomada
 

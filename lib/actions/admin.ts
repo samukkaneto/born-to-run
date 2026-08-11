@@ -2,7 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { cleanText, isUuid, uniqueUuids } from '@/lib/validation'
+import { removeMedia } from '@/lib/supabase/media'
+import { cleanText, isUuid, uniqueUuids, validateAssessmentSourceFile } from '@/lib/validation'
 import type { MembershipStatus, UserRole } from '@/types'
 
 export type AdminActionResult = { success?: boolean; error?: string; id?: string }
@@ -253,6 +254,27 @@ export async function updateMembershipStatus(
   return { success: true }
 }
 
+export async function setMemberTeamJoinedAt(
+  userId: string,
+  value: string,
+): Promise<AdminActionResult> {
+  if (!isUuid(userId)) return { error: 'Membro inválido.' }
+  const joinedAt = safeDate(value)
+  if (!joinedAt || joinedAt === 'invalid' || joinedAt < '2015-01-01') {
+    return { error: 'Informe uma data entre 2015 e hoje.' }
+  }
+  const { supabase, user, error: authError } = await requireAccessManager()
+  if (authError || !user) return { error: authError ?? 'Não autenticado.' }
+  const { data, error } = await supabase.rpc('staff_set_team_joined_at', {
+    target_user_id: userId,
+    target_team_joined_at: joinedAt,
+  })
+  if (error || !data) return { error: 'Não foi possível atualizar a data de entrada.' }
+  revalidatePath('/admin/membros')
+  revalidatePath('/dashboard/conquistas')
+  return { success: true }
+}
+
 export async function toggleMemberRole(userId: string): Promise<AdminActionResult> {
   if (!isUuid(userId)) return { error: 'Membro inválido.' }
   const { supabase, user, error: authError } = await requireAdmin()
@@ -341,7 +363,7 @@ export async function saveBodyAssessment(
   formData: FormData,
 ): Promise<AdminActionResult> {
   if (assessmentId && !isUuid(assessmentId)) return { error: 'Avaliação inválida.' }
-  const { supabase, user, error: authError } = await requireCoach()
+  const { supabase, user, error: authError } = await requireAccessManager()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
   const athleteUserId = String(formData.get('athlete_user_id') ?? '')
@@ -353,7 +375,12 @@ export async function saveBodyAssessment(
   const bodyWaterPct = optionalDecimal(formData.get('body_water_pct'))
   const bmi = optionalDecimal(formData.get('bmi'))
   const metabolicAge = optionalInteger(formData.get('metabolic_age'))
+  const boneMassKg = optionalDecimal(formData.get('bone_mass_kg'))
+  const basalMetabolicRate = optionalInteger(formData.get('basal_metabolic_rate'))
+  const physiqueRating = optionalInteger(formData.get('physique_rating'))
   const notes = cleanText(formData.get('notes'), 2000)
+  const sourceEntry = formData.get('source_file')
+  const sourceFile = sourceEntry instanceof File && sourceEntry.size > 0 ? sourceEntry : null
 
   if (!isUuid(athleteUserId)) return { error: 'Selecione um atleta válido.' }
   if (!assessedAt || assessedAt === 'invalid') return { error: 'Informe uma data válida.' }
@@ -365,13 +392,48 @@ export async function saveBodyAssessment(
     bodyWaterPct,
     bmi,
     metabolicAge,
+    boneMassKg,
+    basalMetabolicRate,
+    physiqueRating,
   ]
   if (measurements.includes('invalid')) return { error: 'Revise os valores numéricos informados.' }
   if (measurements.every((value) => value === null) && !notes) {
     return { error: 'Informe ao menos uma medida ou observação.' }
   }
 
-  const { data, error } = await supabase.rpc('coach_save_body_assessment', {
+  let previousSourcePath: string | null = null
+  let previousSourceMime: string | null = null
+  if (assessmentId) {
+    const { data: current, error: currentError } = await supabase
+      .from('body_assessments')
+      .select('source_path, source_mime_type')
+      .eq('id', assessmentId)
+      .maybeSingle()
+    if (currentError || !current) return { error: 'Avaliação não encontrada.' }
+    previousSourcePath = current.source_path
+    previousSourceMime = current.source_mime_type
+  }
+
+  let nextSourcePath = previousSourcePath
+  let nextSourceMime = previousSourceMime
+  let uploadedPath: string | null = null
+  if (sourceFile) {
+    const validation = await validateAssessmentSourceFile(sourceFile)
+    if ('error' in validation) return { error: validation.error }
+    uploadedPath = `${athleteUserId}/${crypto.randomUUID()}.${validation.extension}`
+    const { error: uploadError } = await supabase.storage
+      .from('assessment-files')
+      .upload(uploadedPath, sourceFile, {
+        cacheControl: '3600',
+        contentType: validation.mimeType,
+        upsert: false,
+      })
+    if (uploadError) return { error: 'Não foi possível enviar o arquivo da Tanita.' }
+    nextSourcePath = uploadedPath
+    nextSourceMime = validation.mimeType
+  }
+
+  const { data, error } = await supabase.rpc('staff_save_body_assessment', {
     target_assessment_id: assessmentId as string,
     target_athlete_user_id: athleteUserId,
     target_assessed_at: assessedAt,
@@ -382,10 +444,21 @@ export async function saveBodyAssessment(
     target_body_water_pct: bodyWaterPct as number,
     target_bmi: bmi as number,
     target_metabolic_age: metabolicAge as number,
+    target_bone_mass_kg: boneMassKg as number,
+    target_basal_metabolic_rate: basalMetabolicRate as number,
+    target_physique_rating: physiqueRating as number,
+    target_source_path: nextSourcePath as string,
+    target_source_mime_type: nextSourceMime as string,
     target_notes: notes,
   })
 
-  if (error || !data) return { error: 'Não foi possível salvar a avaliação. Revise as medidas.' }
+  if (error || !data) {
+    await removeMedia(supabase, 'assessment-files', uploadedPath)
+    return { error: 'Não foi possível salvar a avaliação. Revise as medidas.' }
+  }
+  if (uploadedPath && previousSourcePath && uploadedPath !== previousSourcePath) {
+    await removeMedia(supabase, 'assessment-files', previousSourcePath)
+  }
   revalidatePath('/admin/avaliacoes')
   revalidatePath('/dashboard/avaliacoes')
   return { success: true, id: data }
@@ -393,13 +466,15 @@ export async function saveBodyAssessment(
 
 export async function deleteBodyAssessment(id: string): Promise<AdminActionResult> {
   if (!isUuid(id)) return { error: 'Avaliação inválida.' }
-  const { supabase, user, error: authError } = await requireCoach()
+  const { supabase, user, error: authError } = await requireAccessManager()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
-  const { data, error } = await supabase.rpc('coach_delete_body_assessment', {
+  const { data, error } = await supabase.rpc('staff_delete_body_assessment', {
     target_assessment_id: id,
   })
-  if (error || !data) return { error: 'Não foi possível remover a avaliação.' }
+  if (error || data === null) return { error: 'Não foi possível remover a avaliação.' }
+
+  await removeMedia(supabase, 'assessment-files', data || null)
 
   revalidatePath('/admin/avaliacoes')
   revalidatePath('/dashboard/avaliacoes')
