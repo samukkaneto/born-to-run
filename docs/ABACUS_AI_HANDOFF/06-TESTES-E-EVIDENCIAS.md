@@ -1,5 +1,7 @@
 # Testes e evidências
 
+> Atualização 11/08/2026: a 17ª migration e `coach_import_workouts` passaram uma suíte remota transacional adicional de 8/8; fixtures e treinos foram revertidos. OCR, parser XLSX e gerador PDF possuem testes unitários. O checkpoint fechou lint, TypeScript, 69/69 unitários, build de 38 rotas e Playwright 28/28 em Desktop Chrome/Pixel 7. Consulte `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md`.
+
 > Bloco 10: TypeScript aprovado, ESLint direcionado aprovado, Vitest 57/57, build Next.js 16.3 com 37 rotas e E2E público 28/28 em Desktop Chrome/Pixel 7 sem violações axe sérias/críticas. O CI final do PR é `31451093854` e o preview Vercel é `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU`, ambos aprovados/`READY` no commit `131b879`.
 
 ## Baseline automatizado

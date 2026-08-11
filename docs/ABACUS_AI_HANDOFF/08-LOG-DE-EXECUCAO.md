@@ -347,3 +347,17 @@ Cada entrada futura deve registrar:
 - Relatório detalhado: `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
 - PR #25 mesclada em `119bc640`; CI da PR `31516494439` e CI do merge `31516776891` aprovados.
 - Vercel publicou `dpl_42CnrorJzo91kgQGYVKGeSQXbRPA` em produção `READY`; domínio oficial e guards responderam corretamente, health confirmou `119bc64` e não houve logs `error`/`fatal`.
+
+## 11/08/2026 — OCR Tanita, PDF e importação do cronograma
+
+- Corrigida a causa estrutural dos logos pequenos sem alterar a arte: contêineres ocultam apenas o espaço transparente do PNG e ampliam o conteúdo visível em header, footer, autenticação e áreas privadas.
+- A home ganhou três cartões explícitos para as pós-graduações do Prof. Robson.
+- Implementados parser Tanita bilíngue, leitura direta de PDF, fallback OCR local, progresso e pré-preenchimento com revisão humana.
+- O atleta ganhou download de PDF A4 privado com foto, dados, observações e aviso não diagnóstico.
+- Implementado parser XLSX local com datas, semanas, conteúdo e seis categorias cromáticas. A amostra real passou no smoke test sem ser versionada.
+- O treinador ganhou prévia editável, seleção de nível/destinatários e publicação atômica do ciclo.
+- Aplicada `20260811191007_importa_planilha_treinos_prescritos`; pgTAP novo passou 8/8 e o rollback das fixtures foi comprovado.
+- Dependências fixadas e auditadas; `npm audit --omit=dev` ficou em zero vulnerabilidades.
+- Primeiro gate: ESLint, TypeScript, 68/68 unitários e build de 38 rotas aprovados. O teste de PDF foi acrescentado na sequência para o fechamento 69/69.
+- Gate de navegador repetido em ambiente equivalente ao CI: 28/28 Playwright aprovados em Desktop Chrome e Pixel 7; as rotas cobertas não apresentaram violações axe sérias/críticas.
+- Relatório detalhado: `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md`.

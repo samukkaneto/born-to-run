@@ -1,6 +1,6 @@
 # Supabase, Auth e segurança
 
-> Atualização 11/08/2026: o remoto possui 16 migrations. As duas mais recentes corrigem a leitura de `team_joined_at`, adicionam a categoria semântica do treino e permitem avaliar qualquer perfil ativo sem ampliar quem pode gravar. Detalhes e testes em `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
+> Atualização 11/08/2026: o remoto possui 17 migrations. A mais recente adiciona importação atômica de cronogramas prescritos, exclusiva do treinador e privada por destinatário. Detalhes e teste remoto 8/8 em `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md`.
 
 > Atualização 10/08/2026: o remoto contém também `gallery_items`, `mission_catalog`, `race_results`, data real de entrada na equipe, campos Tanita adicionais, bucket público `gallery` e bucket privado `assessment-files`. A migration mais recente é `20260811013659_registra_data_real_na_equipe`. Consulte `16-GALERIA-TANITA-MISSOES-E-LOJA.md`.
 
@@ -28,6 +28,7 @@
 14. `20260811013659_registra_data_real_na_equipe`
 15. `20260811162800_corrige_perfil_e_categorias_de_treino`
 16. `20260811163511_permite_avaliacao_de_todos_perfis_ativos`
+17. `20260811191007_importa_planilha_treinos_prescritos`
 
 Nunca editar ou reaplicar essas migrations. Toda alteração entra em uma migration nova.
 

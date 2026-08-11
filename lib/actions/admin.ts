@@ -7,7 +7,15 @@ import { cleanText, isUuid, uniqueUuids, validateAssessmentSourceFile } from '@/
 import { isTrainingType } from '@/lib/workouts/training-types'
 import type { MembershipStatus, UserRole } from '@/types'
 
-export type AdminActionResult = { success?: boolean; error?: string; id?: string }
+export type AdminActionResult = { success?: boolean; error?: string; id?: string; count?: number }
+
+export type ImportedWorkoutInput = {
+  scheduled_date: string
+  title: string
+  description: string
+  objective: string
+  training_type: string
+}
 
 const VALID_LEVELS = ['iniciante', 'intermediario', 'avancado'] as const
 const VALID_STATUSES: MembershipStatus[] = ['pending', 'active', 'suspended', 'rejected']
@@ -157,6 +165,74 @@ export async function deleteWorkout(id: string): Promise<AdminActionResult> {
 
   refreshWorkouts()
   return { success: true }
+}
+
+export async function importWorkoutPlan(
+  items: ImportedWorkoutInput[],
+  level: string,
+  memberIds: string[],
+  groupIds: string[],
+): Promise<AdminActionResult> {
+  const { supabase, user, error: authError } = await requireCoach()
+  if (authError || !user) return { error: authError ?? 'Não autenticado.' }
+  if (!VALID_LEVELS.includes(level as (typeof VALID_LEVELS)[number])) {
+    return { error: 'Selecione um nível válido.' }
+  }
+  if (!Array.isArray(items) || items.length < 1 || items.length > 62) {
+    return { error: 'A importação deve conter entre 1 e 62 treinos.' }
+  }
+  if (
+    !Array.isArray(memberIds)
+    || !Array.isArray(groupIds)
+    || memberIds.some((id) => !isUuid(id))
+    || groupIds.some((id) => !isUuid(id))
+  ) {
+    return { error: 'A lista de destinatários é inválida.' }
+  }
+  const uniqueMemberIds = [...new Set(memberIds)]
+  const uniqueGroupIds = [...new Set(groupIds)]
+  if (uniqueMemberIds.length === 0 && uniqueGroupIds.length === 0) {
+    return { error: 'Escolha ao menos um atleta ou grupo.' }
+  }
+
+  const cleanedItems: ImportedWorkoutInput[] = []
+  for (const item of items) {
+    if (!item || typeof item !== 'object') return { error: 'A planilha contém um treino inválido.' }
+    const scheduledDate = safeDate(item.scheduled_date)
+    const title = cleanText(item.title, 160)
+    const description = cleanText(item.description, 5000)
+    const objective = cleanText(item.objective, 500)
+    if (
+      scheduledDate === null
+      || scheduledDate === 'invalid'
+      || title.length < 3
+      || !description
+      || !objective
+      || !isTrainingType(item.training_type)
+    ) {
+      return { error: 'Revise as datas, descrições e tipos de todos os treinos importados.' }
+    }
+    cleanedItems.push({
+      scheduled_date: scheduledDate,
+      title,
+      description,
+      objective,
+      training_type: item.training_type,
+    })
+  }
+
+  const { data, error } = await supabase.rpc('coach_import_workouts', {
+    target_items: cleanedItems,
+    target_level: level,
+    target_member_ids: uniqueMemberIds,
+    target_group_ids: uniqueGroupIds,
+  })
+  if (error || !data || data.length !== cleanedItems.length) {
+    return { error: 'Não foi possível publicar o ciclo. Nenhum treino foi importado.' }
+  }
+
+  refreshWorkouts()
+  return { success: true, count: data.length }
 }
 
 export async function createAnnouncement(formData: FormData): Promise<AdminActionResult> {

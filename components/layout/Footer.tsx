@@ -31,12 +31,13 @@ export default function Footer() {
               className="inline-flex items-center mb-7 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-md"
               aria-label="Born to Run — página inicial"
             >
-              <div className="relative h-[88px] w-[280px] sm:h-[104px] sm:w-[330px]">
+              <div className="relative h-[122px] w-[280px] overflow-hidden sm:h-[144px] sm:w-[330px]">
                 <Image
                   src="/logo.png"
                   alt="Born to Run — Treinamento e Saúde"
-                  fill
-                  style={{ objectFit: 'contain', objectPosition: 'left center' }}
+                  width={330}
+                  height={200}
+                  className="absolute left-0 top-0 h-auto w-[280px] sm:w-[330px]"
                   sizes="(max-width: 640px) 280px, 330px"
                 />
               </div>

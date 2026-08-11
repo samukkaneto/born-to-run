@@ -114,3 +114,11 @@ A área de avaliações exibe foto/nome do usuário, indicadores em português e
 O institucional enfatiza atendimento presencial e individual e registra as três pós-graduações de Robson. A loja preserva preto premium, corrige contraste do logotipo em peças claras e exibe somente aos gestores a relação de fornecedores/custos. Consulte o relatório completo `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
 
 Release concluído: PR `#25`, merge `119bc640`, CIs `31516494439` e `31516776891` aprovados e produção `dpl_42CnrorJzo91kgQGYVKGeSQXbRPA` `READY`. O domínio oficial respondeu corretamente, o health confirmou a revisão e não houve logs `error`/`fatal` na janela auditada.
+
+## Adendo — automação Tanita e cronograma prescrito
+
+O fluxo Tanita deixou de depender de transcrição integral: PDF/JPG/PNG é lido no navegador, valores plausíveis preenchem uma prévia em português e a equipe técnica precisa conferir antes de salvar. O original permanece privado. A área do usuário gera PDF A4 com marca, foto, dez indicadores e observações.
+
+O treinador pode anexar o mesociclo XLSX, revisar os dias interpretados e publicar os treinos em lote privado/atômico para atletas ou grupos. Isso representa **prescrição**; atividade realmente concluída e futura integração Strava continuam um módulo separado.
+
+O Supabase está em 17 migrations, com `coach_import_workouts` protegido e 8/8 testes remotos transacionais. Há exatamente um administrador ativo e um treinador ativo. Nenhum P0/P1 foi identificado; permanecem o aviso planejado de senhas vazadas e avisos intencionais dos RPCs `SECURITY DEFINER` com autorização interna. Detalhes em `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md`.

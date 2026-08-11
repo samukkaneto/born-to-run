@@ -1,5 +1,7 @@
 # Status técnico atual
 
+> Atualização mais recente — OCR Tanita assistido, PDF A4 e importação atômica do XLSX foram implementados. O remoto está em 17 migrations, terminando em `20260811191007_importa_planilha_treinos_prescritos`. Consulte `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md`; esta nota substitui qualquer menção abaixo de que OCR/importação ainda seriam futuros.
+
 > Atualização 11/08/2026 — bloco de perfis/Tanita/treinos publicado: o erro de perfil foi corrigido no Supabase, Robson já possui perfil `coach/active`, administrador e treinador podem receber avaliações, e os treinos agora possuem as seis categorias cromáticas definidas pelo treinador. O remoto contém 16 migrations, terminando em `20260811163511_permite_avaliacao_de_todos_perfis_ativos`. PR #25, CI da PR/merge e produção Vercel foram concluídos. Consulte `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`; esta nota substitui contagens e o estado “convite aguardando” mantidos abaixo como cronologia.
 
 > Atualização 11/08/2026: a antiga loja conceitual pública foi retirada. O catálogo profissional fica em `/admin/loja`, protegido pelo layout server-side e disponível somente para administrador e treinador. O login voltou a usar diretamente `public/logo.png`, sem a adaptação de cor reprovada. A PR #23, CI do merge e produção Vercel foram concluídos. Detalhes em `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.

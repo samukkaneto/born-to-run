@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createMediaUrl } from '@/lib/supabase/media'
 import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
 import { formatDate } from '@/lib/utils'
+import AssessmentPdfButton from '@/components/assessments/AssessmentPdfButton'
 import type { BodyAssessment } from '@/types'
 
 function value(value: number | null, suffix = '') {
@@ -93,7 +94,25 @@ export default async function AvaliacoesPage() {
                 <p className="mt-2 text-xs leading-relaxed text-[#78716C]">As setas mostram apenas a variação entre medições; não representam diagnóstico ou classificação clínica.</p>
               </div>
             )}
-            {latestSourceUrl && <a href={latestSourceUrl} target="_blank" rel="noreferrer" className="btn-outline mt-4 inline-flex text-sm"><ExternalLink size={15} aria-hidden="true" /> Ver arquivo original da Tanita</a>}
+            <div className="mt-5 flex flex-wrap items-start gap-3">
+              <AssessmentPdfButton assessment={{
+                athleteName,
+                avatarUrl,
+                assessed_at: latest.assessed_at,
+                weight_kg: latest.weight_kg,
+                body_fat_pct: latest.body_fat_pct,
+                muscle_mass_kg: latest.muscle_mass_kg,
+                visceral_fat_level: latest.visceral_fat_level,
+                body_water_pct: latest.body_water_pct,
+                bmi: latest.bmi,
+                metabolic_age: latest.metabolic_age,
+                bone_mass_kg: latest.bone_mass_kg,
+                basal_metabolic_rate: latest.basal_metabolic_rate,
+                physique_rating: latest.physique_rating,
+                notes: latest.notes,
+              }} />
+              {latestSourceUrl && <a href={latestSourceUrl} target="_blank" rel="noreferrer" className="btn-outline inline-flex text-sm"><ExternalLink size={15} aria-hidden="true" /> Ver arquivo original da Tanita</a>}
+            </div>
             {latest.notes && (
               <div className="card mt-4 border-l-4 border-l-[#7C3AED] p-5">
                 <h3 className="font-condensed text-sm font-semibold uppercase tracking-[0.08em] text-[#171717]">Observações do treinador</h3>

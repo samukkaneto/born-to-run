@@ -1,5 +1,7 @@
 # Bloco 9 — treinador exclusivo, fotos reais e avaliações privadas
 
+> Arquivo histórico: OCR Tanita e PDF foram implementados posteriormente. Consulte `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md` para o estado atual.
+
 Atualizado em 10/08/2026. Este documento registra o bloco iniciado pelo pedido do proprietário para separar administrador e treinador, atualizar a imagem institucional e criar a primeira versão das avaliações de bioimpedância.
 
 ## Decisões de produto confirmadas
