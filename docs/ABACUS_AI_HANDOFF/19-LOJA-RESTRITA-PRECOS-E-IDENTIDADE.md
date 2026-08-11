@@ -82,4 +82,13 @@ O ciclo anterior usava `public/brand/logo-on-light.png`, uma adaptação de cor 
 - O HTML remoto do login contém `/logo.png`, não contém `logo-on-light` e mantém o formulário esperado.
 - A rota `/loja` anônima responde `307` para `/login`, sem cache e com `X-Robots-Tag: noindex`.
 
-O merge e a produção devem ser registrados no log de execução ao final da publicação.
+## Fechamento de produção
+
+- PR `#23` mesclada por squash em `1f37f2e5848a972973691ab209c6533cc5907f43`.
+- CI do merge: `31468553109`, aprovado em todas as etapas.
+- Vercel Production: `dpl_AJkfB6nyag24AMzKgL5qs6nQT3tT`, URL `https://born-to-3ilhoivzw-shabuneto.vercel.app`, estado `READY`.
+- Domínio oficial: `https://equipeborntorun.com` apontando para o deployment novo.
+- Smoke remoto: login com `/logo.png` e sem `logo-on-light`; loja e painel sem sessão redirecionam ao login; health na revisão `1f37f2e`.
+- Observabilidade: nenhuma entrada `error` ou `fatal` encontrada nos 15 minutos auditados.
+
+Estado do bloco: concluído e publicado. A loja transacional continua deliberadamente fora deste escopo.

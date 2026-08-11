@@ -322,3 +322,12 @@ Cada entrada futura deve registrar:
 - GitHub Actions `Qualidade` run `31468117855` passou integralmente; Preview Vercel `dpl_CF4Usg4S1Tp3Wv99R4bbm1jM9R9t` ficou `READY`.
 - Smoke do Preview: `/login` contém `/logo.png`, não contém `logo-on-light` e renderiza o título de acesso; `/loja` anônima responde `307 Location: /login`, `no-store`, HSTS e `X-Robots-Tag: noindex`.
 - Merge e produção ainda em andamento neste checkpoint; registrar os identificadores finais abaixo quando concluídos.
+
+### Fechamento e produção
+
+- PR `#23` retirada de draft e mesclada por squash na `main`, commit `1f37f2e5848a972973691ab209c6533cc5907f43`.
+- GitHub Actions do merge `31468553109` aprovou audit, lint, TypeScript, 60 unitários, build, Chromium e 28 testes de navegador.
+- Deployment Vercel `dpl_AJkfB6nyag24AMzKgL5qs6nQT3tT`, URL imutável `https://born-to-3ilhoivzw-shabuneto.vercel.app`, ficou `READY` e recebeu `equipeborntorun.com`, `www` e aliases do projeto.
+- Smoke oficial: `/login` contém `/logo.png`, não contém `logo-on-light` e mantém o formulário; `/loja` anônima responde `307 Location: /login` sem cache; `/admin/loja` anônima responde `307` para login; health confirma revisão `1f37f2e`.
+- Runtime Logs do deployment não apresentaram entradas `error` ou `fatal` nos 15 minutos auditados.
+- Estado funcional: concluído e publicado. Checkout, fornecedores, estoque, frete e pagamentos permanecem uma fase comercial futura.
