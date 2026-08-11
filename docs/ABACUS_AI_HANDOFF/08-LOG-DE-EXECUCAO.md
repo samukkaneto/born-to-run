@@ -345,3 +345,5 @@ Cada entrada futura deve registrar:
 - Loja manteve preto/carbono, recebeu campanha cromática v2 com logo completo e passou a exibir internamente fornecedores, custo e cálculo × 2.
 - Banco: 16 migrations; novo pgTAP 10/10; TypeScript, ESLint completo, 64/64 unitários, build de 38 rotas e Playwright 28/28 aprovados.
 - Relatório detalhado: `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
+- PR #25 mesclada em `119bc640`; CI da PR `31516494439` e CI do merge `31516776891` aprovados.
+- Vercel publicou `dpl_42CnrorJzo91kgQGYVKGeSQXbRPA` em produção `READY`; domínio oficial e guards responderam corretamente, health confirmou `119bc64` e não houve logs `error`/`fatal`.

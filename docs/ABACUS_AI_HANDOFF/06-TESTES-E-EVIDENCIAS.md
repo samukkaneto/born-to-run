@@ -133,3 +133,5 @@ Nenhum bloco será declarado concluído somente por compilar. Alterações de Au
 - Vitest: 64/64;
 - build Next.js 16.3: aprovado, 38 rotas;
 - Playwright completo: 28/28 em Desktop Chrome e Pixel 7; as rotas públicas cobertas não apresentaram violações axe sérias/críticas.
+- PR #25: CI `31516494439` aprovado; merge: CI `31516776891` aprovado.
+- Produção `dpl_42CnrorJzo91kgQGYVKGeSQXbRPA` `READY`; health em `119bc64`; zero logs `error`/`fatal` na janela auditada.

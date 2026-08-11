@@ -112,3 +112,5 @@ O erro de perfil não era visual: `team_joined_at` havia sido adicionada sem per
 A área de avaliações exibe foto/nome do usuário, indicadores em português e comparação entre as duas medições mais recentes; original Tanita permanece privado. OCR continua futuro e exige revisão humana. Treinos receberam seis categorias com cor funcional definida pelo Prof. Robson. A amostra de mesociclo foi analisada localmente e não importada por conter dados de atleta.
 
 O institucional enfatiza atendimento presencial e individual e registra as três pós-graduações de Robson. A loja preserva preto premium, corrige contraste do logotipo em peças claras e exibe somente aos gestores a relação de fornecedores/custos. Consulte o relatório completo `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
+
+Release concluído: PR `#25`, merge `119bc640`, CIs `31516494439` e `31516776891` aprovados e produção `dpl_42CnrorJzo91kgQGYVKGeSQXbRPA` `READY`. O domínio oficial respondeu corretamente, o health confirmou a revisão e não houve logs `error`/`fatal` na janela auditada.
