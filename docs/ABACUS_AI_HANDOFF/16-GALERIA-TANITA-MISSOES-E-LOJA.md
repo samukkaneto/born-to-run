@@ -1,5 +1,7 @@
 # Bloco 10 — galeria, Tanita, missões, conquistas e loja
 
+> Registro histórico de 10/08/2026. O estado atual da loja substitui a seção abaixo e está em `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`: ela não é mais pública nem exibe linguagem de demonstração.
+
 ## Estado em 10/08/2026
 
 Código implementado e publicado. As cinco migrations deste bloco estão no Supabase remoto. PR #17 mesclada no commit `bd738177`; CI do merge `31451446812` verde; produção Vercel `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex` `READY` no domínio oficial.

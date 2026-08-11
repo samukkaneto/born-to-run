@@ -15,6 +15,11 @@ test('site institucional e login carregam sem erros de console', async ({ page }
 
   await page.goto('/login')
   await expect(page.getByRole('heading', { name: /Acesse sua conta/i })).toBeVisible()
+  const loginLogo = page
+    .getByRole('link', { name: /Born to Run — página inicial/i })
+    .locator('img')
+  await expect(loginLogo).toHaveAttribute('src', /%2Flogo\.png|\/logo\.png/)
+  await expect(loginLogo).not.toHaveAttribute('src', /logo-on-light/)
   await expect(page.getByLabel('E-mail')).toBeVisible()
   await expect(page.getByLabel('Senha')).toBeVisible()
   expect(errors).toEqual([])
@@ -85,15 +90,15 @@ test('formulário de contato envia sem abrir o cliente de e-mail', async ({ page
   await expect(page.getByRole('status')).toContainText('contato@equipeborntorun.com')
 })
 
-test('galeria e loja conceitual deixam o estado de publicação claro', async ({ page }) => {
+test('galeria pública e loja reservada respeitam seus públicos', async ({ page }) => {
   await page.goto('/galeria')
   await expect(page.getByRole('heading', { name: /Momentos da equipe/i })).toBeVisible()
   await expect(page.getByText(/selecionada pelo administrador e pelo treinador/i)).toBeVisible()
 
   await page.goto('/loja')
-  await expect(page.getByRole('heading', { name: /Vista a jornada/i })).toBeVisible()
-  await expect(page.getByText(/Vendas ainda não estão ativas/i)).toBeVisible()
-  await expect(page.getByText(/Não constituem oferta comercial/i)).toBeVisible()
+  await expect(page).toHaveURL(/\/login$/)
+  await expect(page.getByRole('heading', { name: /Acesse sua conta/i })).toBeVisible()
+  await expect(page.getByText(/Vendas ainda não estão ativas/i)).toHaveCount(0)
 })
 
 test('health check informa a revisão sem permitir cache', async ({ request }) => {

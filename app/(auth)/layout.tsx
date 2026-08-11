@@ -32,16 +32,20 @@ export default function AuthLayout({
         <section className="hidden flex-col justify-between px-12 py-11 lg:flex xl:px-16 xl:py-14">
           <Link
             href="/"
-            className="relative block h-28 w-72 focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#DC2626] xl:h-32 xl:w-80"
+            className="relative block h-32 w-80 focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#DC2626] xl:h-36 xl:w-96"
             aria-label="Born to Run — página inicial"
           >
             <Image
-              src="/brand/logo-on-light.png"
+              src="/logo.png"
               alt="Born to Run — Treinamento e Saúde"
               fill
               className="object-contain object-left"
+              style={{
+                filter:
+                  'drop-shadow(0 2px 1px rgba(0,0,0,0.95)) drop-shadow(0 8px 18px rgba(0,0,0,0.28))',
+              }}
               priority
-              sizes="320px"
+              sizes="384px"
             />
           </Link>
 
@@ -81,16 +85,20 @@ export default function AuthLayout({
           <div className="mb-5 flex w-full max-w-md flex-col items-center lg:hidden">
             <Link
               href="/"
-              className="relative block h-24 w-[min(76vw,280px)] focus-visible:outline-2 focus-visible:outline-offset-6 focus-visible:outline-[#DC2626]"
+              className="relative block h-32 w-[min(88vw,340px)] focus-visible:outline-2 focus-visible:outline-offset-6 focus-visible:outline-[#DC2626]"
               aria-label="Born to Run — página inicial"
             >
               <Image
-                src="/brand/logo-on-light.png"
+                src="/logo.png"
                 alt="Born to Run — Treinamento e Saúde"
                 fill
                 className="object-contain"
+                style={{
+                  filter:
+                    'drop-shadow(0 2px 1px rgba(0,0,0,0.95)) drop-shadow(0 7px 16px rgba(0,0,0,0.3))',
+                }}
                 priority
-                sizes="280px"
+                sizes="340px"
               />
             </Link>
             <p className="mt-1 font-condensed text-[11px] font-semibold uppercase tracking-[0.2em] text-[#57534E]">

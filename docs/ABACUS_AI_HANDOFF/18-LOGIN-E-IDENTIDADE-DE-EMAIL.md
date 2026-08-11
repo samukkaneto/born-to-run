@@ -20,10 +20,12 @@ Atualizado em 11/08/2026. Este documento registra o redesign do acesso e separa,
 - A caixa preta anterior foi removida integralmente.
 - A fotografia é decorativa no HTML (`alt=""`) porque o conteúdo textual já apresenta a equipe; isso evita repetição para leitores de tela.
 - A forma e o comportamento dos campos, Server Action de autenticação e rotas não foram alterados.
+- Em 11/08/2026, a versão adaptada para fundo claro também foi removida da tela. O login voltou a referenciar diretamente `public/logo.png`, ampliado e com apenas sombra CSS de legibilidade, sem alterar seus pixels.
 
 ### Ativos de marca
 
-- `public/brand/logo-on-light.png`: derivação mecânica de `public/logo.png`. Os elementos claros do nome e slogan foram convertidos para carbono; o batimento, corredores, contornos e desenho oficial foram preservados pixel a pixel.
+- `public/brand/logo-on-light.png`: derivação criada no ciclo anterior, posteriormente reprovada pelo proprietário e retirada de uso no login. Não reutilizar.
+- `public/logo.png`: única fonte visual usada no login atual. Deve permanecer completo, incluindo batimento, corredores, nome `BORN TO RUN` e slogan `Treinamento e Saúde`.
 - `public/brand/email-avatar-512.png`: arquivo 512 × 512, fundo branco, contorno neutro, acento vermelho e logotipo oficial completo. Ele foi pensado para a foto da conta do remetente, não como substituto do logotipo completo dentro do template.
 - Nenhum desses arquivos foi gerado redesenhando a marca com inteligência artificial.
 

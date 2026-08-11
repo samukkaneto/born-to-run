@@ -34,7 +34,7 @@ Direção desejada:
 - separação entre galeria institucional pública e fotos pessoais do feed;
 - avaliações Tanita e arquivos-fonte privados;
 - semântica distinta entre missão, nível de jornada, resultado e conquista real;
-- loja marcada como prévia, sem simular checkout ativo.
+- catálogo da loja reservado ao administrador e treinador, com apresentação profissional e sem recados internos na interface; checkout permanece fase futura.
 
 ## Liberdade que não é autorização para quebrar o produto
 

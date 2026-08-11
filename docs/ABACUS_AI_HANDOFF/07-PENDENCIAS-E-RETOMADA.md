@@ -2,9 +2,9 @@
 
 Atualizar este arquivo após cada bloco.
 
-## Estado do ciclo técnico — atualização 10/08/2026
+## Estado do ciclo técnico — atualização 11/08/2026
 
-O Bloco 10 está implementado e publicado. As cinco migrations estão no Supabase remoto; PR #17 foi mesclada; CI do merge `31451446812` ficou verde; produção `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex` foi validada no domínio oficial.
+O Bloco 10 está implementado e publicado. O bloco seguinte retirou a loja da área pública, criou catálogo profissional reservado a administrador/treinador, atualizou cores e preços pesquisados e restaurou o logotipo oficial puro no login. A publicação deste último bloco deve ser conferida no log antes da retomada.
 
 ## Concluído neste ciclo
 
@@ -32,7 +32,7 @@ O administrador foi localizado e está `active` com e-mail confirmado. O proprie
 6. após o piloto, evoluir as avaliações com gráficos e comparação por período se o proprietário aprovar.
 7. fornecer um PDF/JPEG Tanita real anonimizado para calibrar extração automática;
 8. ampliar o editor institucional além da galeria;
-9. validar a prévia da loja com Robson antes de qualquer checkout;
+9. validar o catálogo reservado com Robson antes de contratar fornecedores ou implementar checkout;
 10. seguir `17-ROADMAP-PRODUTO-E-APP-NATIVO.md` para APK e integrações.
 
 ## Dependências do proprietário

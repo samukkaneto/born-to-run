@@ -8,7 +8,7 @@ Este documento foi escrito para uma instância isolada do Fable 5, executada den
 
 Born to Run — Treinamento e Saúde é uma equipe fechada de corrida de rua e caminhada de Descalvado/SP, fundada em 2015 e liderada pelo Prof. Robson Alves, Educador Físico, CREF 119911-G/SP e treinador nível 1 World Athletics. O produto não é um aplicativo público genérico de corrida. Ele atende atletas autorizados da equipe e combina:
 
-- site institucional público para apresentar história, treinador, equipe, galeria, contato e futura loja;
+- site institucional público para apresentar história, treinador, equipe, galeria e contato;
 - comunidade privada com feed social de fotos e treinos, curtidas e comentários;
 - comunicação entre equipe e alunos;
 - prescrição de treinos privados pelo treinador para atletas ou grupos específicos;
@@ -23,7 +23,7 @@ Garmin Connect, Strava e Sports Tracker foram citados como referências de exper
 - Samuel: proprietário do produto e administrador. Aprova cadastros junto com Robson, gerencia papéis, conteúdo institucional, comunicados e pode revisar avaliações.
 - Robson Alves: treinador único. E-mail pré-autorizado no Supabase, informado ao proprietário fora de segredos. Aprova cadastros, cria grupos, prescreve e remove treinos e registra avaliações. Somente o treinador publica treinos.
 - Atleta/membro: entra apenas após confirmação de e-mail e aprovação. Publica no feed privado, recebe seus treinos, vê suas avaliações, registra provas e conquistas próprias.
-- Visitante: vê somente o site institucional, contato, galeria pública e prévia da loja.
+- Visitante: vê somente o site institucional, contato e galeria pública. A loja não é pública.
 
 Estados de acesso: `pending`, `active`, `suspended`, `rejected`. Papel e status são protegidos no banco, não apenas escondidos na interface.
 
@@ -57,7 +57,7 @@ A versão atual é uma PWA instalável pelo navegador. Ela pode aparecer como ap
 - 12 missões iniciais de distância e ritmo;
 - nível de jornada por XP de missões e tempo de equipe;
 - resultados de provas e conquistas gerais/por categoria, com destaques principais;
-- prévia conceitual de loja com mockups da marca, sem checkout;
+- catálogo profissional reservado a administrador e treinador, com mockups da marca e sem checkout;
 - PWA, offline público seguro, ícone real da marca e headers de segurança;
 - contato transacional via Resend.
 
@@ -85,7 +85,7 @@ A fundação e o formulário manual já existem. A extração automática não d
 
 ## Loja
 
-A rota `/loja` é uma prévia para mostrar a Robson. Os mockups incluem roupas, shorts, top, moletom, garrafa, boné, viseira, mochila, toalha, caneca e copo. Preços são estimativas de conceito, não oferta. Para vender de verdade ainda serão necessários fornecedor, variantes, estoque, checkout, pagamento, frete, trocas, pedidos, nota fiscal e termos comerciais.
+A rota `/loja` funciona somente como portão de acesso: visitante vai para login, atleta ativo volta ao dashboard e apenas administrador/treinador chegam a `/admin/loja`. O catálogo inclui roupas, shorts, top, moletom, garrafa, boné, viseira, mochila, toalha, caneca e copo. Os preços sugeridos são calculados como custo brasileiro pesquisado × 2, conforme decisão do proprietário. Para vender de verdade ainda serão necessários fornecedor contratado, variantes, estoque, checkout, pagamento, frete, trocas, pedidos, nota fiscal e termos comerciais. A interface nunca deve exibir recados de desenvolvimento ao usuário.
 
 ## Mandato visual para Fable 5
 

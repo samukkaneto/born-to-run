@@ -138,5 +138,5 @@ Não esconder estados nem remover controles apenas para simplificar o layout.
 
 - O login não deve voltar a usar uma grande faixa preta com o logotipo reduzido.
 - Usar fotografia real da equipe como ambiente, com tratamento que preserve contraste e leitura.
-- Exibir o logotipo oficial completo, grande e sem redesenho. A versão para fundo claro está em `public/brand/logo-on-light.png`.
+- Exibir o logotipo oficial completo, grande e sem redesenho, usando `public/logo.png`. A adaptação `public/brand/logo-on-light.png` foi reprovada e não deve ser utilizada.
 - A implementação local de referência está documentada em `docs/ABACUS_AI_HANDOFF/18-LOGIN-E-IDENTIDADE-DE-EMAIL.md`. A Fable 5 pode superá-la visualmente, preservando formulário, acessibilidade e contratos de autenticação.

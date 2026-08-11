@@ -1,6 +1,6 @@
 # Status técnico atual
 
-> Atualização Bloco 10 — 10/08/2026: galeria institucional, Tanita ampliada, missões/níveis/conquistas, loja conceitual e novo ícone PWA estão publicados; cinco migrations foram aplicadas no Supabase. PR #17 mesclada, CI do merge verde e produção validada. Detalhes em `16-GALERIA-TANITA-MISSOES-E-LOJA.md`.
+> Atualização 11/08/2026: a antiga loja conceitual pública foi retirada. O catálogo profissional fica em `/admin/loja`, protegido pelo layout server-side e disponível somente para administrador e treinador. O login voltou a usar diretamente `public/logo.png`, sem a adaptação de cor reprovada. Detalhes em `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
 
 Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 
@@ -109,7 +109,7 @@ O produto está pronto como MVP web publicado. Banco, Auth, SMTP, PWA, transpar�
 
 - O login antigo usava um retângulo carbono desproporcional no celular e reduzia o logotipo oficial. O componente foi reconstruído em `app/(auth)/layout.tsx` e `app/(auth)/login/page.tsx`.
 - A nova composição usa a foto real `public/team-archive/team-race-palace.jpg`, com tratamento claro para preservar a leitura, logo oficial grande sem bloco preto e formulário branco de alto contraste.
-- A versão para fundo claro foi derivada do arquivo oficial, sem redesenho generativo, em `public/brand/logo-on-light.png`.
+- O login usa diretamente o arquivo oficial completo `public/logo.png`; a adaptação `public/brand/logo-on-light.png` foi retirada de uso e não deve ser reutilizada.
 - O avatar quadrado preparado para contas de e-mail está em `public/brand/email-avatar-512.png`, com fundo branco, logotipo completo e acento vermelho. O arquivo não ativa sozinho o avatar no Gmail.
 - Verificação local: 412 × 915 e 1440 × 1000 renderizados; conteúdo presente; sem overlay de erro; home acessível pelo link da marca; axe WCAG A/AA sem violações; ESLint completo, TypeScript, 57/57 unitários, build de 37 rotas e E2E direcionado 4/4 aprovados.
 - DNS observado: SPF do domínio presente, DMARC em `p=none` e nenhum registro BIMI. Não endurecer DMARC sem auditar conjuntamente os envios Hostinger e Resend.

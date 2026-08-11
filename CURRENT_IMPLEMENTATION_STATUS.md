@@ -8,13 +8,13 @@ O projeto deixou de ser apenas um protótipo visual. O código atual contém sit
 
 O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 53 testes unitários, 72 asserções pgTAP e a matriz de 26 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. O Bloco 9 foi mesclado pela PR [#15](https://github.com/samukkaneto/born-to-run/pull/15), o CI do merge ficou verde e a revisão `0c17f86` está em produção em **https://equipeborntorun.com**.
 
-O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, loja conceitual, novo ícone PWA e correções da home estão em produção. Cinco migrations novas foram aplicadas no Supabase remoto. A PR [#17](https://github.com/samukkaneto/born-to-run/pull/17) foi mesclada no commit `bd738177`; o CI do merge `31451446812` passou e o deployment `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex` está `READY` em `https://equipeborntorun.com`.
+O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, novo ícone PWA e correções da home estão em produção. Em 11/08/2026, a loja foi retirada da área pública e reconstruída como catálogo profissional reservado a administrador/treinador; o login voltou a usar o logotipo oficial original. O estado de publicação desta atualização está no relatório `docs/ABACUS_AI_HANDOFF/19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
 
 ## Estado por área
 
 | Área | Estado | Evidência / observação |
 |---|---|---|
-| Site institucional | Implementado e publicado | Home, Sobre, galeria, loja conceitual, contato via Resend, header/footer e páginas responsivas. |
+| Site institucional | Implementado e publicado | Home, Sobre, galeria, contato via Resend, header/footer e páginas responsivas. A loja não integra a navegação pública. |
 | Identidade visual Fable 5 | Implementada, ainda refinável | A direção atual foi preservada; a Fable pode redesenhar componentes sem alterar contratos funcionais. |
 | Autenticação | Implementada e validada | Login, cadastro, confirmação e recuperação têm callback explícito, templates próprios e SMTP ativo no domínio oficial. |
 | Comunidade fechada | Implementada e validada no banco | Cadastro entra como `pending`; somente `active` acessa conteúdo interno. |
@@ -28,7 +28,7 @@ O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, ní
 | Bioimpedância | MVP privado ampliado | Administrador/treinador registram; arquivo Tanita original fica privado; novas medidas em português. OCR e relatório gráfico aguardam amostra real. |
 | Galeria institucional | Implementada no Bloco 10 | Admin/treinador publicam, ordenam, ocultam e removem; consentimento obrigatório; feed pessoal separado. |
 | Missões, níveis e conquistas | Implementados no Bloco 10 | 12 missões, cascata de distâncias, XP inclusivo, dez níveis, resultados e premiações gerais/por categoria. |
-| Loja | Prévia conceitual | Mockups próprios e catálogo estimativo; nenhuma venda, checkout ou estoque ativo. |
+| Loja | Catálogo reservado | Somente administrador/treinador ativos; 13 produtos, cores ampliadas e preços por custo pesquisado × 2. Sem venda, checkout ou estoque ativo. |
 | Fotos reais | Acervo atualizado | Nove fotos em `public/team-archive/`; `team-race-palace.jpg` é o novo destaque e as demais aguardam curadoria manual. |
 | PWA/responsividade | Instalável, push e nativo pendentes | Manifesto, novo ícone oficial em fundo preto, instalação guiada, service worker e fallback offline público. Não gera APK e não é binário nativo. |
 | Observabilidade | Implementada para o piloto | `/api/health`, Runtime Logs, Web Analytics habilitado e Speed Insights configurado; URLs são sanitizadas antes das métricas. |
