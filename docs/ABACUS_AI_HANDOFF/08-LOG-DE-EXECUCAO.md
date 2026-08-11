@@ -306,3 +306,16 @@ Cada entrada futura deve registrar:
 - Inspeção visual em 412 × 915 no domínio oficial confirmou foto real, logo sem caixa preta, formulário completo e ausência de overlay. Axe WCAG A/AA não encontrou violações.
 - Runtime Logs do deployment de produção não apresentaram entradas em nível `error` nos 30 minutos consultados.
 - Estado final do código: concluído e publicado. Permanecem somente as operações externas do template Supabase e da foto da Conta Google; BIMI é fase futura separada.
+
+## 11/08/2026 — Loja reservada, catálogo colorido e logo oficial
+
+- Retirada a adaptação `public/brand/logo-on-light.png` da tela de acesso; mobile e desktop agora usam diretamente `public/logo.png`, completo e sem alteração de pixels.
+- A marca foi ampliada e validada em screenshot móvel sobre a fotografia real, sem o antigo retângulo preto.
+- Removidos os links públicos da loja no cabeçalho e rodapé.
+- `/loja` virou um portão server-side: visitante → login; acesso pendente/bloqueado → telas próprias; atleta ativo → dashboard; administrador/treinador ativo → `/admin/loja`.
+- Criado catálogo reservado com 13 produtos, materiais esportivos, paleta ampliada e dois mockups coloridos em WebP.
+- Os preços passam a vir de `lib/shop/catalog.ts`, com fontes datadas e fórmula automática custo × 2; nenhum preço fica duplicado no JSX.
+- Removidos da interface todos os recados de demonstração, aviso de vendas inativas e explicações técnicas ao Prof. Robson.
+- Gates locais: TypeScript, ESLint completo, 60/60 unitários, build de 38 rotas e Playwright 28/28 em Desktop Chrome/Pixel 7 aprovados. A matriz cobre o logotipo oficial e o redirecionamento anônimo da loja ao login.
+- Relatório detalhado: `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
+- Publicação ainda em andamento neste checkpoint; registrar commit, PR, CI, merge e Vercel abaixo quando concluídos.

@@ -22,6 +22,7 @@ Atualizado em 11/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 16. `16-GALERIA-TANITA-MISSOES-E-LOJA.md` — implementação do ciclo atual, decisões de produto, banco e ponto de publicação.
 17. `17-ROADMAP-PRODUTO-E-APP-NATIVO.md` — fases futuras: OCR Tanita, aplicativo nativo, loja real e integrações esportivas.
 18. `18-LOGIN-E-IDENTIDADE-DE-EMAIL.md` — redesign do login, ativos oficiais de marca e plano correto para avatar do remetente/BIMI.
+19. `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md` — restrição da loja, catálogo colorido, referências de custo e correção do logotipo oficial no login.
 
 ## Fontes complementares no repositório
 

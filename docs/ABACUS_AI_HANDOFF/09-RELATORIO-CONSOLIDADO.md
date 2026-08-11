@@ -93,8 +93,12 @@ A fotografia inicial do e-mail de recuperação foi rejeitada por mutilar a marc
 
 ## Adendo de login e avatar do remetente — 11/08/2026
 
-O login foi reconstruído localmente para eliminar a caixa preta criticada: usa fotografia real da equipe com opacidade controlada, logotipo oficial grande adaptado ao fundo claro e card de acesso de alto contraste. A versão móvel e a desktop foram inspecionadas sem overlay, falha de conteúdo ou violação axe. Os arquivos de marca novos são `public/brand/logo-on-light.png` e `public/brand/email-avatar-512.png`; ambos derivam do logotipo oficial, não de uma recriação por IA.
+O login foi reconstruído para eliminar a caixa preta criticada: usa fotografia real da equipe com opacidade controlada e card de acesso de alto contraste. Em 11/08/2026, a adaptação `public/brand/logo-on-light.png` foi reprovada e retirada da tela. O login atual usa diretamente o logotipo oficial completo `public/logo.png`, sem redesenho ou alteração de pixels.
 
 O avatar da lista do Gmail não pode ser embutido pelo HTML do Supabase/Resend. O caminho imediato é associar o remetente profissional a uma Conta Google e usar o PNG quadrado preparado. Para identidade verificada entre provedores, será preciso um projeto BIMI separado. O domínio está hoje com DMARC `p=none` e sem BIMI; Gmail exige CMC/VMC e DMARC de aplicação. Nenhum DNS foi alterado para não arriscar os fluxos ativos da Hostinger e da Resend. Detalhes e procedimento em `18-LOGIN-E-IDENTIDADE-DE-EMAIL.md`.
 
 Release concluído: PR `#21` mesclada em `c1dc445`; CI final da PR `31461939571` e CI do merge `31462110659` integralmente verdes; produção Vercel `dpl_FaJKjbYHCFYGygVWTFzo1HMu4wii` `READY`. No domínio oficial, login e avatar responderam `200`, health confirmou a revisão, a inspeção mobile ficou sem overlay/violação axe e os Runtime Logs não apresentaram erro. Restam somente o salvamento manual do template no Supabase hospedado e a configuração da foto da Conta Google; BIMI continua uma fase separada.
+
+## Adendo de loja restrita e logo oficial — 11/08/2026
+
+A antiga loja conceitual pública foi retirada do cabeçalho e rodapé. `/loja` agora funciona como portão autenticado e somente administrador/treinador ativos chegam ao catálogo em `/admin/loja`; atletas voltam ao dashboard. A linguagem de demonstração e os recados técnicos ao proprietário foram eliminados da interface. O catálogo recebeu duas campanhas coloridas, 13 produtos e preços calculados por custo brasileiro pesquisado × 2. O login voltou a usar o arquivo oficial `public/logo.png`. Detalhes completos, tabela de preços e estado de publicação estão em `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
