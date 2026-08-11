@@ -259,3 +259,13 @@ Cada entrada futura deve registrar:
 - Domínio oficial validado: home, galeria, loja, login, cadastro, manifesto, ícones e health 200; dashboard anônimo 307 para login.
 - Health confirmou revisão `bd73817`; build remoto sem erro; zero clusters de runtime em 30 minutos.
 - Estado final: Bloco 10 publicado. Próximo passo humano é cadastro/confirmação da conta real do treinador e piloto assistido.
+
+## 11/08/2026 — Correção da fotografia do e-mail de recuperação
+
+- A primeira fotografia criada para o e-mail de recuperação preservava apenas o símbolo colorido nas roupas e omitia o nome `BORN TO RUN` e o slogan `Treinamento e Saúde`; ela foi reprovada e não deve ser reutilizada.
+- A imagem foi refeita como edição precisa, usando simultaneamente a foto-base, o arquivo oficial `public/logo.png` e os mockups anteriores de aplicação em vestuário como referências obrigatórias.
+- A versão corrigida contém a identidade completa nos quatro pontos: camiseta verde com texto escuro, camiseta rosa com texto branco e ambos os shorts pretos com texto branco. Símbolo, nome e slogan permanecem juntos.
+- O arquivo otimizado para e-mail foi salvo como `public/email/recovery-athletes-v2.jpg` em 1200 × 800 e aproximadamente 100 KB.
+- `supabase/templates/recovery.html` passou a usar uma URL versionada (`/email/recovery-athletes-v2.jpg`), evitando que cache de navegador ou cliente de e-mail mantenha a arte antiga.
+- Regra de marca para futuras IAs: nunca extrair ou redesenhar apenas o símbolo. Em roupas claras, usar a versão completa com nome/slogan escuros; em roupas escuras, usar a versão completa com nome/slogan brancos. Validar em ampliação antes de publicar.
+- Neste checkpoint, a alteração está no repositório local e ainda precisa passar por commit, CI, deploy Vercel e atualização do HTML hospedado no Supabase Auth.

@@ -97,3 +97,9 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 ## Veredito
 
 O produto está pronto como MVP web publicado. Banco, Auth, SMTP, PWA, transparência LGPD, observabilidade e operação estão preparados. Permanecem como decisões posteriores o plano Supabase Pro, os dados jurídicos formais, o piloto com usuários reais, o refinamento Fable 5 e o aplicativo nativo.
+
+## E-mail de recuperação — correção visual de 11/08/2026
+
+- A fotografia anterior foi reprovada porque apresentava somente o símbolo da marca nos uniformes.
+- A substituta aprovada localmente é `public/email/recovery-athletes-v2.jpg`: camisetas e shorts exibem símbolo, `BORN TO RUN` e `Treinamento e Saúde`, com contraste coerente para tecidos claros e pretos.
+- O template local já referencia a URL versionada. Ainda faltam a publicação desse asset e a cópia do HTML atualizado para o template Reset Password do Supabase hospedado antes de considerar a correção disponível nos e-mails reais.
