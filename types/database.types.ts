@@ -741,6 +741,15 @@ export type Database = {
         }
         Returns: string
       }
+      coach_import_workouts: {
+        Args: {
+          target_group_ids: string[]
+          target_items: Json
+          target_level: string
+          target_member_ids: string[]
+        }
+        Returns: string[]
+      }
       get_my_access_profile: {
         Args: never
         Returns: {

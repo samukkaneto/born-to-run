@@ -16,6 +16,7 @@ import { formatDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/Toaster'
 import AdminModal from '@/components/admin/AdminModal'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
+import WorkoutWorkbookImporter from '@/components/admin/WorkoutWorkbookImporter'
 import { TRAINING_TYPES, TRAINING_TYPE_VISUALS, getTrainingTypeVisual } from '@/lib/workouts/training-types'
 import type { MemberProfile, TrainingGroup, WorkoutWithAssignments } from '@/types'
 
@@ -177,6 +178,8 @@ export default function WorkoutsManager({
 
   return (
     <div className="space-y-6">
+      <WorkoutWorkbookImporter members={members} groups={groups} />
+
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#78716C]" aria-hidden="true" />

@@ -10,6 +10,7 @@ import {
   Target,
   Award,
   BadgeCheck,
+  GraduationCap,
 } from 'lucide-react'
 import InstagramIcon from '@/components/ui/InstagramIcon'
 import { site } from '@/lib/site'
@@ -181,13 +182,19 @@ export default function HomePage() {
                 Run, <strong>{site.coach.name}</strong> acompanha a evolução de
                 cada atleta com planejamento individual, segurança e constância.
               </p>
-              <p className="text-[#44403C] leading-relaxed mb-8">
-                Sua formação combina experiência prática em corrida de rua,
-                pós-graduações em Treinamento Desportivo, Fisiologia do Exercício
-                e Treinamento especializado e funcional para corrida, além da
-                certificação internacional como Treinador Nível 1 pela World Athletics.
+              <p className="text-[#44403C] leading-relaxed mb-5">
+                Sua formação combina experiência prática em corrida de rua com
+                especialização acadêmica e certificação internacional.
               </p>
-              <div className="mb-8 flex flex-wrap gap-2" aria-label="Credenciais do treinador">
+              <div className="mb-5 grid gap-2 sm:grid-cols-3" aria-label="Pós-graduações do treinador">
+                {site.coach.credentials.filter((credential) => credential.startsWith('Pós-graduação')).map((credential) => (
+                  <div key={credential} className="flex items-start gap-2 rounded-lg border border-[#E5E1D8] bg-white px-3 py-3 text-sm font-semibold leading-snug text-[#292524]">
+                    <GraduationCap size={17} className="mt-0.5 shrink-0 text-[#DC2626]" aria-hidden="true" />
+                    <span>{credential.replace('Pós-graduação em ', '')}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mb-8 flex flex-wrap gap-2" aria-label="Credenciais profissionais do treinador">
                 <span className="badge badge-solid-red"><BadgeCheck size={13} aria-hidden="true" /> {site.coach.cref}</span>
                 <span className="badge badge-gray"><Award size={13} aria-hidden="true" /> World Athletics Nível 1</span>
               </div>

@@ -6,11 +6,13 @@ Atualizado em **11/08/2026**. Este arquivo separa o que já está implementado e
 
 O projeto deixou de ser apenas um protótipo visual. O código atual contém site institucional, área privada do atleta, feed social, administração e painel exclusivo do treinador conectados ao Supabase real. A comunidade é fechada: cadastros comuns aguardam aprovação e todo treino exige atleta ou grupo destinatário. Avaliações de bioimpedância têm histórico privado entre treinador e atleta.
 
-O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 53 testes unitários, 72 asserções pgTAP e a matriz de 26 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. O Bloco 9 foi mesclado pela PR [#15](https://github.com/samukkaneto/born-to-run/pull/15), o CI do merge ficou verde e a revisão `0c17f86` está em produção em **https://equipeborntorun.com**.
+O Supabase remoto foi sincronizado e testado. No checkpoint atual, lint, TypeScript, build de produção, auditoria de dependências, 69 testes unitários e 28 testes públicos de navegador passaram. A nova RPC de importação também passou 8/8 asserções remotas transacionais, com rollback comprovado. O fluxo hospedado anterior já havia sido validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois.
 
 O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, novo ícone PWA e correções da home estão em produção. Em 11/08/2026, a loja foi retirada da área pública e reconstruída como catálogo profissional reservado a administrador/treinador; o login voltou a usar o logotipo oficial original. A PR #23 foi mesclada em `1f37f2e`, o CI do merge passou e o deployment `dpl_AJkfB6nyag24AMzKgL5qs6nQT3tT` está `READY` no domínio oficial.
 
 O bloco publicado pela PR #25 corrige a leitura do perfil, confirma 1 administrador e 1 treinador ativos, permite que os dois também tenham avatar e recebam avaliação, entrega comparação Tanita em português e incorpora a linguagem de cores definida por Robson: azul-claro descanso, amarelo contínuo, roxo intervalado rápido, verde leve/moderado, mostarda potência aeróbia e vermelho competição. O Supabase remoto contém 16 migrations; CI do merge `31516776891` aprovado e produção funcional `dpl_42CnrorJzo91kgQGYVKGeSQXbRPA` `READY`. Consulte `docs/ABACUS_AI_HANDOFF/20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
+
+O checkpoint funcional seguinte foi concluído no código e no Supabase: logotipos oficiais ampliados sem alteração da arte, pós-graduações destacadas na home, OCR Tanita com revisão humana, relatório privado e PDF A4, além da importação local/editável do cronograma XLSX pelo treinador. O remoto contém 17 migrations e o novo RPC passou 8/8 asserções transacionais com rollback. A PR #27 está com CI aprovado e Preview Vercel `READY`; os detalhes estão em `docs/ABACUS_AI_HANDOFF/21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md`.
 
 ## Estado por área
 
@@ -23,11 +25,11 @@ O bloco publicado pela PR #25 corrige a leitura do perfil, confirma 1 administra
 | Aprovação de membros | Implementada e validada | Administrador e treinador aprovam, rejeitam, suspendem ou reativam; somente o administrador define o treinador. |
 | Feed social | MVP implementado e validado | Posts, fotos privadas, métricas, curtidas, comentários e paginação keyset por cursor; escrita real passou no preview final. |
 | Perfis | Implementado e corrigido no remoto | Edição segura e avatar privado para atleta, treinador e administrador; leitura de `team_joined_at` corrigida. |
-| Treinos | Implementado e validado | Somente o treinador cria/edita/exclui; todo treino é privado para grupos ou atletas específicos. Administrador e terceiros não conseguem ler. |
+| Treinos | Implementado e validado | Somente o treinador cria/edita/exclui; todo treino é privado. O importador XLSX lê datas/cores localmente, permite revisão e publica o ciclo atomicamente. |
 | Grupos | Implementado e validado | Criar, editar, arquivar/reativar e gerenciar integrantes, preservando destinatários históricos. |
 | Comunicados | Implementado | CRUD do administrador e leitura pelos membros ativos. |
 | Painel do treinador | Implementado e validado | Dashboard, aprovações, membros, grupos, treinos privados e avaliações físicas. |
-| Bioimpedância | MVP privado ampliado | Qualquer perfil ativo pode ser avaliado; admin/treinador registram; original privado; relatório pessoal em português e comparação entre duas medições. OCR continua futuro. |
+| Bioimpedância | OCR assistido e PDF implementados | Admin/treinador anexam PDF/JPG/PNG, recebem pré-preenchimento local, revisam, salvam privadamente e o usuário exporta PDF A4. |
 | Galeria institucional | Implementada no Bloco 10 | Admin/treinador publicam, ordenam, ocultam e removem; consentimento obrigatório; feed pessoal separado. |
 | Missões, níveis e conquistas | Implementados no Bloco 10 | 12 missões, cascata de distâncias, XP inclusivo, dez níveis, resultados e premiações gerais/por categoria. |
 | Loja | Catálogo reservado | Somente administrador/treinador ativos; 13 produtos, cores ampliadas e preços por custo pesquisado × 2. Sem venda, checkout ou estoque ativo. |
@@ -35,7 +37,7 @@ O bloco publicado pela PR #25 corrige a leitura do perfil, confirma 1 administra
 | PWA/responsividade | Instalável, push e nativo pendentes | Manifesto, novo ícone oficial em fundo preto, instalação guiada, service worker e fallback offline público. Não gera APK e não é binário nativo. |
 | Observabilidade | Implementada para o piloto | `/api/health`, Runtime Logs, Web Analytics habilitado e Speed Insights configurado; URLs são sanitizadas antes das métricas. |
 | Continuidade | Procedimento definido | Audit no CI, Dependabot, relato privado e runbook de release; Supabase Free exige exportação criptografada ou Pro antes de depender de backup automático. |
-| Supabase remoto | Sincronizado com o bloco atual | Dezesseis migrations aplicadas; estado atual termina em `20260811163511_permite_avaliacao_de_todos_perfis_ativos`. |
+| Supabase remoto | Sincronizado com o bloco atual | Dezessete migrations aplicadas; estado atual termina em `20260811191007_importa_planilha_treinos_prescritos`. |
 | Vercel | Produção do Bloco 10 validada | Deployment Git `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex`, revisão `bd73817`, `READY`, target `production`; 37 rotas, respostas 200/307, build sem erros e zero clusters de runtime em 30 minutos. |
 | GitHub | Publicado, revisado e mesclado | PR [#17](https://github.com/samukkaneto/born-to-run/pull/17) mesclada em `main` no commit `bd7381777a0fe58b71365af75f53635a8f8b0667`; CI final do PR `31451292679` e CI do merge `31451446812` concluídos com sucesso. |
 
@@ -94,14 +96,14 @@ O banco preserva 1 perfil administrador ativo, 1 perfil treinador ativo e nenhum
 |---|---|
 | ESLint | Aprovado, sem erros |
 | TypeScript (`tsc --noEmit`) | Aprovado |
-| Build Next.js 16.3.0 | Aprovado, 34 rotas |
-| Testes unitários | 57/57 aprovados no Bloco 10 |
+| Build Next.js 16.3.0 | Aprovado, 38 rotas |
+| Testes unitários | 69/69 aprovados no checkpoint atual |
 | `npm audit` | 0 vulnerabilidades conhecidas |
 | Tipos do Supabase | Gerados a partir do banco remoto |
 | Boundaries de erro/loading/not-found | Implementados |
 | Acessibilidade básica | Skip links, foco visível, modais com foco, redução de movimento e controles ampliados |
 | Testes pgTAP versionados | 72/72 asserções remotas transacionais após treinador, avaliações e convite |
-| E2E público | 26 fluxos equivalentes aprovados em Desktop Chrome e Pixel 7; zero violações axe sérias/críticas |
+| E2E público | 28/28 aprovados em Desktop Chrome e Pixel 7; zero violações axe sérias/críticas nas rotas cobertas |
 | E2E autenticado hospedado | Login, feed, publicação, curtida, comentário, painel admin, grupo e treino dirigido validados; dados técnicos removidos |
 | Vercel | Produção `READY` no domínio canônico, revisão `0c17f86`, 34 rotas, respostas 200/307 corretas, integração Git automática validada e sem warning/error/fatal nos logs consultados |
 | GitHub Actions | Runs `31352323034` (PR final) e `31352438060` (merge) aprovadas integralmente |

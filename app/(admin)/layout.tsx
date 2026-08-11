@@ -34,15 +34,16 @@ export default async function AdminLayout({
         </a>
         {/* ── Sidebar carbono fixa (desktop) ── */}
         <aside className="panel-carbon fixed inset-y-0 left-0 z-40 hidden w-64 flex-col md:flex">
-          <div className="border-b border-[#2E2E2E] px-5 py-5">
-            <Link href="/admin" className="inline-flex" aria-label="Painel de gestão">
-              <div className="relative h-[46px] w-[150px]">
+          <div className="border-b border-[#2E2E2E] px-4 py-4">
+            <Link href="/admin" className="block w-full" aria-label="Painel de gestão">
+              <div className="relative h-[88px] w-full overflow-hidden">
                 <Image
                   src="/logo.png"
                   alt="Born to Run — Treinamento e Saúde"
-                  fill
-                  style={{ objectFit: 'contain', objectPosition: 'left center' }}
-                  sizes="150px"
+                  width={210}
+                  height={127}
+                  className="absolute left-0 top-0 h-auto w-[210px]"
+                  priority
                 />
               </div>
             </Link>
@@ -75,13 +76,14 @@ export default async function AdminLayout({
           <header className="panel-carbon sticky top-0 z-30 md:hidden">
             <div className="flex h-16 items-center justify-between px-4">
               <Link href="/admin" className="flex shrink-0 items-center gap-3">
-                <div className="relative h-[40px] w-[124px]">
+                <div className="relative h-[56px] w-[138px] overflow-hidden">
                   <Image
                     src="/logo.png"
                     alt="Born to Run"
-                    fill
-                    style={{ objectFit: 'contain', objectPosition: 'left center' }}
-                    sizes="124px"
+                    width={138}
+                    height={84}
+                    className="absolute left-0 top-0 h-auto w-[138px]"
+                    priority
                   />
                 </div>
                 <span className="rounded-md bg-[#DC2626] px-2 py-0.5 font-condensed text-[10px] font-semibold uppercase tracking-[0.12em] text-white">

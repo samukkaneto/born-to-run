@@ -1,5 +1,7 @@
 # Perfis, Tanita, cores de treino e catálogo — bloco de 11/08/2026
 
+> Nota posterior: a seção “OCR futuro” registra o estado histórico deste bloco e foi superada pela implementação em `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md`.
+
 Este é o relatório canônico do bloco iniciado após o proprietário fornecer exemplos reais da Tanita e a prescrição mensal de treino usada pelo Prof. Robson Alves. Ele deve ser lido por qualquer IA antes de alterar perfil, avaliações, treinos ou loja.
 
 ## Objetivos recebidos

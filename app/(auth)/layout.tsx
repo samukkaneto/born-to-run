@@ -32,14 +32,15 @@ export default function AuthLayout({
         <section className="hidden flex-col justify-between px-12 py-11 lg:flex xl:px-16 xl:py-14">
           <Link
             href="/"
-            className="relative block h-32 w-80 focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#DC2626] xl:h-36 xl:w-96"
+            className="relative block h-36 w-80 overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#DC2626] xl:h-40 xl:w-96"
             aria-label="Born to Run — página inicial"
           >
             <Image
               src="/logo.png"
               alt="Born to Run — Treinamento e Saúde"
-              fill
-              className="object-contain object-left"
+              width={384}
+              height={233}
+              className="absolute left-0 top-0 h-auto w-80 xl:w-96"
               style={{
                 filter:
                   'drop-shadow(0 2px 1px rgba(0,0,0,0.95)) drop-shadow(0 8px 18px rgba(0,0,0,0.28))',
@@ -85,14 +86,15 @@ export default function AuthLayout({
           <div className="mb-5 flex w-full max-w-md flex-col items-center lg:hidden">
             <Link
               href="/"
-              className="relative block h-32 w-[min(88vw,340px)] focus-visible:outline-2 focus-visible:outline-offset-6 focus-visible:outline-[#DC2626]"
+              className="relative block h-[146px] w-[min(88vw,340px)] overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-6 focus-visible:outline-[#DC2626]"
               aria-label="Born to Run — página inicial"
             >
               <Image
                 src="/logo.png"
                 alt="Born to Run — Treinamento e Saúde"
-                fill
-                className="object-contain"
+                width={340}
+                height={206}
+                className="absolute left-1/2 top-0 h-auto w-[min(88vw,340px)] -translate-x-1/2"
                 style={{
                   filter:
                     'drop-shadow(0 2px 1px rgba(0,0,0,0.95)) drop-shadow(0 7px 16px rgba(0,0,0,0.3))',

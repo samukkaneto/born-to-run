@@ -44,8 +44,11 @@ Não inventar telefone, WhatsApp, endereço, e-mail, CNPJ, depoimentos, atletas,
 - Somente o treinador publica treinos; todo treino exige grupo ou atleta destinatário e não é visível ao administrador.
 - Avaliações físicas são privadas entre treinador e atleta avaliado.
 - `proxy.ts` é a convenção ativa do Next 16; não recriar `middleware.ts`.
-- As migrations até `20260811163511_permite_avaliacao_de_todos_perfis_ativos.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
+- As migrations até `20260811191007_importa_planilha_treinos_prescritos.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
 - Tipos de treino têm semântica fixa: azul-claro descanso, amarelo contínuo, roxo intervalado rápido, verde leve/moderado, mostarda potência aeróbia e vermelho competição.
+- `workouts` representa prescrição privada do treinador. Atividade concluída e futura sincronização Strava são conceitos separados.
+- OCR Tanita preenche somente uma prévia; a equipe técnica deve conferir antes de salvar e nunca gerar diagnóstico médico automaticamente.
+- O logotipo oficial deve permanecer completo, com `BORN TO RUN`, `Treinamento e Saúde`, eletrocardiograma e corredores. Nunca redesenhar, separar ou reduzir a marca até ficar ilegível.
 - Nunca expor `service_role`, segredos ou arquivos `.env*`.
 
 ## Arquivos sensíveis

@@ -56,21 +56,22 @@ export default function Header() {
       )}
     >
       <div className="container-main">
-        <div className="flex items-center justify-between h-16 md:h-[76px]">
+        <div className="flex h-[76px] items-center justify-between md:h-[96px]">
           {/* Logo — texto branco funciona sobre o carbono */}
           <Link
             href="/"
             className="relative flex items-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] rounded-md"
             aria-label="Born to Run — página inicial"
           >
-            <div className="relative w-[150px] h-[52px] md:w-[190px] md:h-[64px]">
+            <div className="relative h-[66px] w-[158px] overflow-hidden md:h-[86px] md:w-[205px]">
               <Image
                 src="/logo.png"
                 alt="Born to Run — Treinamento e Saúde"
-                fill
-                style={{ objectFit: 'contain', objectPosition: 'left center' }}
+                width={205}
+                height={124}
+                className="absolute left-0 top-0 h-auto w-[158px] md:w-[205px]"
                 priority
-                sizes="(max-width: 768px) 150px, 190px"
+                sizes="(max-width: 768px) 158px, 205px"
               />
             </div>
           </Link>
