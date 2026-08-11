@@ -133,3 +133,14 @@ Gates do checkpoint:
 3. adicionar gráficos por período e leitura segmental depois do fluxo básico;
 4. projetar atividades concluídas/Strava como módulo separado;
 5. usar Fable 5 futuramente para elevar o visual sem remover revisão humana, privacidade ou cores.
+
+## Checkpoint de publicação
+
+- branch: `codex/tanita-ocr-workout-import`;
+- commit funcional: `1b469edebe4c6ae4dea0d7ee8a2eacea73846a09`;
+- PR: [#27](https://github.com/samukkaneto/born-to-run/pull/27);
+- GitHub Actions: run `31530524038`, aprovado integralmente;
+- Preview Vercel: `dpl_AwjLv3iz6qGEaaPFUpVk3UgDLQGb`, URL imutável `https://born-to-fnh0sn0cw-shabuneto.vercel.app`, estado `READY`;
+- smoke do Preview: home `200`, `/api/health` retornou revisão `1b469ed` e `/admin` anônimo manteve redirect `307` para o login.
+
+O merge, o CI da `main` e o deployment final de produção devem ser acrescentados neste documento no fechamento operacional.

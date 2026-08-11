@@ -12,7 +12,7 @@ O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, ní
 
 O bloco publicado pela PR #25 corrige a leitura do perfil, confirma 1 administrador e 1 treinador ativos, permite que os dois também tenham avatar e recebam avaliação, entrega comparação Tanita em português e incorpora a linguagem de cores definida por Robson: azul-claro descanso, amarelo contínuo, roxo intervalado rápido, verde leve/moderado, mostarda potência aeróbia e vermelho competição. O Supabase remoto contém 16 migrations; CI do merge `31516776891` aprovado e produção funcional `dpl_42CnrorJzo91kgQGYVKGeSQXbRPA` `READY`. Consulte `docs/ABACUS_AI_HANDOFF/20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
 
-O checkpoint funcional seguinte foi concluído no código e no Supabase: logotipos oficiais ampliados sem alteração da arte, pós-graduações destacadas na home, OCR Tanita com revisão humana, relatório privado e PDF A4, além da importação local/editável do cronograma XLSX pelo treinador. O remoto contém 17 migrations e o novo RPC passou 8/8 asserções transacionais com rollback. A publicação Git/Vercel deste checkpoint será registrada em `docs/ABACUS_AI_HANDOFF/21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md`.
+O checkpoint funcional seguinte foi concluído no código e no Supabase: logotipos oficiais ampliados sem alteração da arte, pós-graduações destacadas na home, OCR Tanita com revisão humana, relatório privado e PDF A4, além da importação local/editável do cronograma XLSX pelo treinador. O remoto contém 17 migrations e o novo RPC passou 8/8 asserções transacionais com rollback. A PR #27 está com CI aprovado e Preview Vercel `READY`; os detalhes estão em `docs/ABACUS_AI_HANDOFF/21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md`.
 
 ## Estado por área
 

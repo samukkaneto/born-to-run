@@ -361,3 +361,5 @@ Cada entrada futura deve registrar:
 - Primeiro gate: ESLint, TypeScript, 68/68 unitários e build de 38 rotas aprovados. O teste de PDF foi acrescentado na sequência para o fechamento 69/69.
 - Gate de navegador repetido em ambiente equivalente ao CI: 28/28 Playwright aprovados em Desktop Chrome e Pixel 7; as rotas cobertas não apresentaram violações axe sérias/críticas.
 - Relatório detalhado: `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md`.
+- Commit funcional `1b469ed` publicado na PR draft `#27`; GitHub Actions `31530524038` passou integralmente.
+- Preview Vercel `dpl_AwjLv3iz6qGEaaPFUpVk3UgDLQGb` ficou `READY`; home `200`, health na revisão `1b469ed` e guard anônimo do painel `307` foram confirmados.
