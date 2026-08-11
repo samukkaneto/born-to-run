@@ -101,5 +101,6 @@ O produto está pronto como MVP web publicado. Banco, Auth, SMTP, PWA, transpar�
 ## E-mail de recuperação — correção visual de 11/08/2026
 
 - A fotografia anterior foi reprovada porque apresentava somente o símbolo da marca nos uniformes.
-- A substituta aprovada localmente é `public/email/recovery-athletes-v2.jpg`: camisetas e shorts exibem símbolo, `BORN TO RUN` e `Treinamento e Saúde`, com contraste coerente para tecidos claros e pretos.
-- O template local já referencia a URL versionada. Ainda faltam a publicação desse asset e a cópia do HTML atualizado para o template Reset Password do Supabase hospedado antes de considerar a correção disponível nos e-mails reais.
+- A substituta publicada é `public/email/recovery-athletes-v2.jpg`: camisetas e shorts exibem símbolo, `BORN TO RUN` e `Treinamento e Saúde`, com contraste coerente para tecidos claros e pretos.
+- PR `#19` mesclada no commit `37b75c6`; CI do merge `31456328022` aprovado e deployment Vercel `dpl_CzjmVrL8vjpTbAFWCF1gYGLHo74D` em produção, sem erros de runtime. A URL oficial da imagem responde `200` com JPEG de 100.351 bytes.
+- O template versionado já referencia a URL nova. Falta somente copiar o HTML de `supabase/templates/recovery.html` para o template Reset Password do Supabase hospedado e fazer um envio real; o painel interno abriu a autenticação do GitHub, mas não havia sessão disponível para concluir a gravação automaticamente.
