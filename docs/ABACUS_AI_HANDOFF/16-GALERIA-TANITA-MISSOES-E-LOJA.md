@@ -2,7 +2,7 @@
 
 ## Estado em 10/08/2026
 
-Código implementado na branch `codex/content-studio-gamification`. As cinco migrations deste bloco já foram aplicadas no Supabase remoto. PR #17 aberta; CI `31451093854` verde; preview Vercel `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` `READY` no commit `131b879`. Restam merge e auditoria de produção.
+Código implementado e publicado. As cinco migrations deste bloco estão no Supabase remoto. PR #17 mesclada no commit `bd738177`; CI do merge `31451446812` verde; produção Vercel `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex` `READY` no domínio oficial.
 
 ## Correções visuais imediatas
 
@@ -71,4 +71,8 @@ Supabase remoto após aplicação:
 - a primeira execução de CI (`31450271727`) identificou que a galeria derrubava a página quando o Supabase estava indisponível; a página passou a usar o acervo local autorizado como fallback;
 - a repetição local exata passou 2/2 e o CI completo `31451093854` passou em todas as etapas;
 - preview Vercel `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` ficou `READY`, ligado ao commit corrigido `131b879`;
-- produção será registrada após o merge.
+- PR #17 foi mesclada por squash em `main` no commit `bd7381777a0fe58b71365af75f53635a8f8b0667`;
+- CI do merge `31451446812` passou integralmente;
+- Vercel publicou `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex`, `READY`, target `production`;
+- home, galeria, loja, login, cadastro, manifesto, ícones e health responderam 200; dashboard anônimo respondeu 307 para login;
+- health confirmou revisão `bd73817`, build remoto não apresentou erros e não houve cluster de runtime nos 30 minutos auditados.

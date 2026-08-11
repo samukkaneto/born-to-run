@@ -6,7 +6,7 @@ Atualizado em 09/08/2026 após a conclusão do ciclo de prontidão para piloto.
 
 Born to Run é um site institucional e aplicativo privado para uma equipe real de corrida. A área interna funciona como comunidade fechada, rede social de treinos e canal de prescrição treinador–atleta.
 
-> Atualização 10/08/2026: o Bloco 10 está implementado na branch `codex/content-studio-gamification` e no Supabase, ainda aguardando publicação frontend. Foram adicionados editor da galeria para admin/treinador, arquivo Tanita privado, 12 missões, dez níveis de jornada, resultados/conquistas, loja conceitual, ícone PWA oficial, logo maior no rodapé e remoção do indicador duplicado da home. Para contexto completo de uma IA sem histórico, usar `15-CONTEXTO-COMPLETO-PARA-IA-SEM-HISTORICO.md`; para detalhes técnicos, usar `16-GALERIA-TANITA-MISSOES-E-LOJA.md`.
+> Atualização 10/08/2026: o Bloco 10 está implementado no Supabase e publicado em produção pelo merge `bd738177`. Foram adicionados editor da galeria para admin/treinador, arquivo Tanita privado, 12 missões, dez níveis de jornada, resultados/conquistas, loja conceitual, ícone PWA oficial, logo maior no rodapé e remoção do indicador duplicado da home. Para contexto completo de uma IA sem histórico, usar `15-CONTEXTO-COMPLETO-PARA-IA-SEM-HISTORICO.md`; para detalhes técnicos, usar `16-GALERIA-TANITA-MISSOES-E-LOJA.md`.
 
 O MVP web está publicado em https://born-to-run-seven.vercel.app. O código está no GitHub `samukkaneto/born-to-run`, o Supabase remoto está sincronizado e a integração automática GitHub→Vercel funciona.
 

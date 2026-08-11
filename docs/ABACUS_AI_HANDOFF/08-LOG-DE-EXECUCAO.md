@@ -249,3 +249,13 @@ Cada entrada futura deve registrar:
 - Reprodução com as mesmas variáveis do CI passou 2/2 em Desktop Chrome/Pixel 7.
 - CI completo `31451093854` passou audit, lint, tipos, 57 unitários, build e 28 testes E2E.
 - Preview Vercel `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` ficou `READY` no commit `131b879`; merge e auditoria de produção ainda pendentes neste checkpoint.
+
+## 10/08/2026 — Fechamento do Bloco 10
+
+- Checkpoint documental publicado no commit `8c13763`; CI final do PR `31451292679` passou.
+- PR #17 retirada de draft e mesclada por squash em `main` no commit `bd7381777a0fe58b71365af75f53635a8f8b0667`.
+- CI do merge `31451446812` passou audit, lint, TypeScript, 57 unitários, build e 28 E2E.
+- Deployment automático `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex` ficou `READY`, target `production`.
+- Domínio oficial validado: home, galeria, loja, login, cadastro, manifesto, ícones e health 200; dashboard anônimo 307 para login.
+- Health confirmou revisão `bd73817`; build remoto sem erro; zero clusters de runtime em 30 minutos.
+- Estado final: Bloco 10 publicado. Próximo passo humano é cadastro/confirmação da conta real do treinador e piloto assistido.

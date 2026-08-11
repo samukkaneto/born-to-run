@@ -1,6 +1,6 @@
 # Status técnico atual
 
-> Atualização Bloco 10 — 10/08/2026: galeria institucional, Tanita ampliada, missões/níveis/conquistas, loja conceitual e novo ícone PWA estão implementados; cinco migrations já foram aplicadas no Supabase. Build e E2E locais passaram; frontend aguarda publicação. Detalhes em `16-GALERIA-TANITA-MISSOES-E-LOJA.md`.
+> Atualização Bloco 10 — 10/08/2026: galeria institucional, Tanita ampliada, missões/níveis/conquistas, loja conceitual e novo ícone PWA estão publicados; cinco migrations foram aplicadas no Supabase. PR #17 mesclada, CI do merge verde e produção validada. Detalhes em `16-GALERIA-TANITA-MISSOES-E-LOJA.md`.
 
 Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 
@@ -70,9 +70,9 @@ Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 | Institucional | Implementado e publicado |
 | Comunidade fechada | Implementada e protegida por RLS |
 | Feed social | MVP funcional com Storage privado e paginação |
-| Administração e treinador | Papéis e painéis separados; publicação deste bloco pendente |
+| Administração e treinador | Papéis e painéis separados; Bloco 10 publicado |
 | Grupos e treinos dirigidos | Privados e exclusivos do treinador no banco; UI pendente de publicação |
-| Avaliações de bioimpedância | MVP privado implementado; publicação pendente |
+| Avaliações de bioimpedância | MVP privado ampliado e publicado |
 | CI/CD | GitHub Actions e GitHub→Vercel funcionando |
 | Supabase | Nove migrations, 1 admin ativo e convite de treinador aguardando cadastro |
 | SMTP próprio | Ativo com Resend, domínio autenticado, templates hospedados e recuperação testada |

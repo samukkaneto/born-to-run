@@ -8,13 +8,13 @@ O projeto deixou de ser apenas um protótipo visual. O código atual contém sit
 
 O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 53 testes unitários, 72 asserções pgTAP e a matriz de 26 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. O Bloco 9 foi mesclado pela PR [#15](https://github.com/samukkaneto/born-to-run/pull/15), o CI do merge ficou verde e a revisão `0c17f86` está em produção em **https://equipeborntorun.com**.
 
-O Bloco 10 está em publicação: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, loja conceitual, novo ícone PWA e correções da home estão implementados na branch `codex/content-studio-gamification`. Cinco migrations novas já estão aplicadas no Supabase remoto. A PR [#17](https://github.com/samukkaneto/born-to-run/pull/17) está aberta, o CI `31451093854` passou e o preview `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` está `READY`; a produção ainda serve o Bloco 9 até o merge desta branch.
+O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, loja conceitual, novo ícone PWA e correções da home estão em produção. Cinco migrations novas foram aplicadas no Supabase remoto. A PR [#17](https://github.com/samukkaneto/born-to-run/pull/17) foi mesclada no commit `bd738177`; o CI do merge `31451446812` passou e o deployment `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex` está `READY` em `https://equipeborntorun.com`.
 
 ## Estado por área
 
 | Área | Estado | Evidência / observação |
 |---|---|---|
-| Site institucional | Implementado; Bloco 10 em publicação | Home, Sobre, galeria, loja conceitual, contato via Resend, header/footer e páginas responsivas. |
+| Site institucional | Implementado e publicado | Home, Sobre, galeria, loja conceitual, contato via Resend, header/footer e páginas responsivas. |
 | Identidade visual Fable 5 | Implementada, ainda refinável | A direção atual foi preservada; a Fable pode redesenhar componentes sem alterar contratos funcionais. |
 | Autenticação | Implementada e validada | Login, cadastro, confirmação e recuperação têm callback explícito, templates próprios e SMTP ativo no domínio oficial. |
 | Comunidade fechada | Implementada e validada no banco | Cadastro entra como `pending`; somente `active` acessa conteúdo interno. |
@@ -34,8 +34,8 @@ O Bloco 10 está em publicação: galeria gerenciável, Tanita ampliada, missõe
 | Observabilidade | Implementada para o piloto | `/api/health`, Runtime Logs, Web Analytics habilitado e Speed Insights configurado; URLs são sanitizadas antes das métricas. |
 | Continuidade | Procedimento definido | Audit no CI, Dependabot, relato privado e runbook de release; Supabase Free exige exportação criptografada ou Pro antes de depender de backup automático. |
 | Supabase remoto | Sincronizado com o Bloco 10 | Quatorze migrations aplicadas; estado atual termina em `20260811013659_registra_data_real_na_equipe`. |
-| Vercel | Produção publicada e validada | Deployment Git `dpl_5Ef5i65VmCNTAQ1zGM2ZqRcqXJhe`, revisão `0c17f86`, `READY`, target `production`; 34 rotas, aliases corretos, respostas 200/307 e logs sem warning/error/fatal. `dpl_DU27nprYJu1VN24kgQd6kgDeB6RF` é o rollback de produção anterior conhecido. |
-| GitHub | Publicado, revisado e mesclado | PR [#15](https://github.com/samukkaneto/born-to-run/pull/15) mesclada em `main` no commit `0c17f86995a4e88e1a8d04a0d68b3242b5d3acc7`; CI final do PR `31352323034` e CI do merge `31352438060` concluídos com sucesso. |
+| Vercel | Produção do Bloco 10 validada | Deployment Git `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex`, revisão `bd73817`, `READY`, target `production`; 37 rotas, respostas 200/307, build sem erros e zero clusters de runtime em 30 minutos. |
+| GitHub | Publicado, revisado e mesclado | PR [#17](https://github.com/samukkaneto/born-to-run/pull/17) mesclada em `main` no commit `bd7381777a0fe58b71365af75f53635a8f8b0667`; CI final do PR `31451292679` e CI do merge `31451446812` concluídos com sucesso. |
 
 ## Regras de produto consolidadas
 
