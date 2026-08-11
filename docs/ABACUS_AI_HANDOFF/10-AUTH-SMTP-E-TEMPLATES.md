@@ -86,6 +86,14 @@ O código já valida 8 caracteres, letra e número, mas a configuração do Auth
 9. bounce, spam e logs do provedor são verificados;
 10. nenhum segredo aparece no browser, logs, GitHub ou Vercel.
 
+## Regra visual obrigatória do e-mail de recuperação
+
+- O banner aprovado está em `public/email/recovery-athletes-v2.jpg`; o template versionado é `supabase/templates/recovery.html`.
+- Qualquer uniforme ilustrado deve mostrar o logotipo completo: símbolo multicolorido, nome `BORN TO RUN` e slogan `Treinamento e Saúde`.
+- Em tecido claro, nome e slogan usam versão escura; em tecido preto, usam versão branca. Nunca publicar símbolo isolado, iniciais ou texto recriado incorretamente.
+- A URL da fotografia possui sufixo `v2` deliberadamente para invalidar caches da versão reprovada.
+- Depois do deploy do asset, o HTML de recuperação ainda deve ser copiado para **Authentication → Email Templates → Reset Password** no Supabase hospedado e validado com um envio real.
+
 ## Fontes oficiais
 
 - https://supabase.com/docs/guides/auth/auth-smtp

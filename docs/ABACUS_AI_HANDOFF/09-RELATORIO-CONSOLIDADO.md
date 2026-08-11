@@ -86,3 +86,7 @@ Se o ciclo for interrompido, leia `07-PENDENCIAS-E-RETOMADA.md` e a entrada mais
 Para o proprietário: as contas do piloto são criadas em `https://equipeborntorun.com/cadastro`, confirmadas pelo e-mail recebido e aprovadas pelo administrador dentro do aplicativo. Se o administrador não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com o e-mail informado diretamente a ele.
 
 Para a Abacus/Fable: não reintroduzir qualquer quantidade atual de atletas. Usar somente fundação em 2015 e mais de 200 participações em corridas até nova confirmação expressa do proprietário.
+
+## Adendo visual do e-mail — 11/08/2026
+
+A fotografia inicial do e-mail de recuperação foi rejeitada por mutilar a marca nos uniformes. A correção está em `public/email/recovery-athletes-v2.jpg` e mantém, em todas as quatro estampas, o símbolo multicolorido, o nome `BORN TO RUN` e o slogan `Treinamento e Saúde`. O arquivo `supabase/templates/recovery.html` usa a URL versionada para evitar cache. Ao retomar, publicar o asset, atualizar o template Reset Password no Supabase hospedado e executar um teste real de recuperação antes de fechar o bloco.
