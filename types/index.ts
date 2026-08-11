@@ -1,4 +1,5 @@
 import type { Tables } from '@/types/database.types'
+import type { TrainingType } from '@/lib/workouts/training-types'
 
 export type UserRole = 'member' | 'coach' | 'admin'
 export type MembershipStatus = 'pending' | 'active' | 'suspended' | 'rejected'
@@ -35,9 +36,10 @@ export type Comment = Tables<'comments'> & {
   profiles?: Pick<PublicProfile, 'id' | 'user_id' | 'full_name' | 'avatar_url'>
 }
 export type Like = Tables<'likes'>
-export type Workout = Omit<Tables<'workouts'>, 'level' | 'audience'> & {
+export type Workout = Omit<Tables<'workouts'>, 'level' | 'audience' | 'training_type'> & {
   level: 'iniciante' | 'intermediario' | 'avancado'
   audience: 'team' | 'targeted'
+  training_type: TrainingType
 }
 export type Announcement = Tables<'announcements'> & { profiles?: Profile }
 export type TrainingGroup = Tables<'training_groups'>

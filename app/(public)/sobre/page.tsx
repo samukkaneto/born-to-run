@@ -32,7 +32,7 @@ const values = [
     icon: Target,
     title: 'Treino com propósito',
     description:
-      'Planilhas e orientações pensadas para a evolução de cada atleta, com acompanhamento profissional e metas realistas.',
+      'Atendimento presencial, treino individual e atenção próxima a cada atleta, respeitando seus objetivos, seu ritmo e sua evolução.',
   },
   {
     icon: Flag,
@@ -170,8 +170,8 @@ export default function SobrePage() {
             <p className="mt-6 leading-relaxed text-[#57534E]">
               À frente da equipe desde a fundação, Robson acompanha de perto a
               evolução de cada atleta, unindo formação acadêmica e certificação
-              internacional para orientar treinos de meio fundo e fundo com
-              segurança e resultado.
+              internacional para orientar cada atleta de forma individual, com
+              presença, segurança e atenção aos objetivos de cada pessoa.
             </p>
           </div>
         </div>

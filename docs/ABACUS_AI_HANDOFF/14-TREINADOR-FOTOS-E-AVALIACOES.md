@@ -114,3 +114,7 @@ A Fable 5 pode refinar livremente o visual, mas deve preservar:
 - avaliação privada entre treinador e atleta;
 - pasta `public/team-archive/` como acervo, sem publicar todas as fotos automaticamente;
 - nenhum número inventado de atletas, resultados, troféus ou patrocinadores.
+
+## Atualização do MVP Tanita — 11/08/2026
+
+O treinador já está cadastrado e ativo. A migration `20260811163511_permite_avaliacao_de_todos_perfis_ativos` substitui a antiga limitação de alvo `member`: atleta, treinador e administrador ativos podem possuir avaliação e avatar próprios. Quem grava continua sendo somente administrador/treinador. A tela pessoal agora apresenta foto, medidas em português e comparação entre medições; o arquivo original continua privado. OCR não foi ativado. Detalhes em `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.

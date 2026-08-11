@@ -74,6 +74,11 @@ As imagens são seis arquivos PNG separados em `design-refs/`; elas não ficam i
 - Instagram: `@equipeborntorun`.
 - Robson Alves — Educador Físico, CREF 119911-G/SP.
 - Especialização em corridas de meio-fundo e fundo; Treinador Nível 1 World Athletics.
+- Pós-graduação em Treinamento Desportivo, Fisiologia do Exercício e Treinamento especializado e funcional para corrida.
+
+### Cores funcionais dos treinos
+
+Não trocar a associação cromática definida pelo treinador: azul-claro é descanso; amarelo é ritmo contínuo; roxo é intervalado rápido; verde é leve a moderado; mostarda é potência aeróbia; vermelho é competição. A Fable 5 pode elevar a apresentação dos cards e do calendário mantendo essa semântica.
 
 ## 7. Conteúdo que não pode ser inventado
 
@@ -130,7 +135,7 @@ Não esconder estados nem remover controles apenas para simplificar o layout.
 ## 11. Limitações atuais que o visual não deve mascarar
 
 - O feed já possui paginação keyset por cursor. A otimização da renovação/cache de URLs assinadas pode evoluir quando houver volume real.
-- A avaliação física já possui indicadores e histórico; gráficos e tendências são visão futura e não devem ser apresentados como existentes.
+- A avaliação física já possui indicadores, histórico e comparação numérica entre as duas medições mais recentes. Gráficos clínicos avançados e OCR automático continuam visão futura e não devem ser apresentados como existentes.
 - Notificações push, funcionamento offline completo e integrações Garmin/Strava não fazem parte da entrega atual.
 - A implementação atual é um Next.js responsivo e instalável como PWA, já validado em desktop e mobile. Ela não gera APK e ainda não existe aplicativo nativo publicado na App Store ou Google Play; essa será uma fase posterior.
 

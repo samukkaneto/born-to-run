@@ -16,6 +16,7 @@ import { formatDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/Toaster'
 import AdminModal from '@/components/admin/AdminModal'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
+import { TRAINING_TYPES, TRAINING_TYPE_VISUALS, getTrainingTypeVisual } from '@/lib/workouts/training-types'
 import type { MemberProfile, TrainingGroup, WorkoutWithAssignments } from '@/types'
 
 const LEVEL_LABELS: Record<string, string> = {
@@ -192,12 +193,14 @@ export default function WorkoutsManager({
 
       <div className="space-y-3">
         {filtered.length > 0 ? filtered.map((workout) => (
-          <article key={workout.id} className="card flex items-start gap-4 p-4 sm:p-5">
-            <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#FEE2E2] sm:flex"><Dumbbell size={19} className="text-[#DC2626]" aria-hidden="true" /></div>
+          <article key={workout.id} className="card relative flex items-start gap-4 overflow-hidden p-4 sm:p-5">
+            <span className="absolute inset-y-0 left-0 w-1.5" style={{ backgroundColor: getTrainingTypeVisual(workout.training_type).color }} aria-hidden="true" />
+            <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-lg sm:flex" style={{ backgroundColor: getTrainingTypeVisual(workout.training_type).background, color: getTrainingTypeVisual(workout.training_type).text }}><Dumbbell size={19} aria-hidden="true" /></div>
             <div className="min-w-0 flex-1">
               <div className="mb-1 flex flex-wrap items-center gap-2">
                 <h3 className="font-condensed text-base font-semibold uppercase tracking-[0.03em] text-[#171717]">{workout.title}</h3>
                 <span className={`badge ${LEVEL_BADGES[workout.level] || 'badge-gray'}`}>{LEVEL_LABELS[workout.level] || workout.level}</span>
+                <span className="badge" style={{ backgroundColor: getTrainingTypeVisual(workout.training_type).background, borderColor: getTrainingTypeVisual(workout.training_type).border, color: getTrainingTypeVisual(workout.training_type).text }}>{getTrainingTypeVisual(workout.training_type).label}</span>
                 <span className="badge badge-gray"><Users size={11} aria-hidden="true" /> {recipientLabel(workout)}</span>
               </div>
               <p className="line-clamp-2 text-sm text-[#57534E]">{workout.description}</p>
@@ -209,7 +212,7 @@ export default function WorkoutsManager({
             </div>
           </article>
         )) : (
-          <div className="card p-10 text-center text-[#57534E]"><Dumbbell size={28} className="mx-auto mb-3 opacity-40" aria-hidden="true" /><p className="text-sm">{workouts.length === 0 ? 'Nenhum treino cadastrado. Crie o primeiro plano para a equipe.' : 'Nenhum treino encontrado com esses filtros.'}</p></div>
+          <div className="card p-10 text-center text-[#57534E]"><Dumbbell size={28} className="mx-auto mb-3 opacity-40" aria-hidden="true" /><p className="text-sm">{workouts.length === 0 ? 'Nenhum treino cadastrado. Crie a primeira prescrição para um atleta ou grupo.' : 'Nenhum treino encontrado com esses filtros.'}</p></div>
         )}
       </div>
 
@@ -227,6 +230,19 @@ export default function WorkoutsManager({
           <div className="grid gap-4 sm:grid-cols-2">
             <div><label htmlFor="workout-objective" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Objetivo</label><input id="workout-objective" name="objective" defaultValue={editing?.objective ?? ''} maxLength={500} required className="input-base" placeholder="Ex: Melhorar o pace" /></div>
             <div><label htmlFor="workout-level" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Nível</label><select id="workout-level" name="level" defaultValue={editing?.level ?? 'iniciante'} className="input-base bg-white"><option value="iniciante">Iniciante</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option></select></div>
+          </div>
+          <div>
+            <label htmlFor="workout-training-type" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Tipo e cor do treino</label>
+            <select id="workout-training-type" name="training_type" defaultValue={editing?.training_type ?? 'easy_moderate'} className="input-base bg-white">
+              {TRAINING_TYPES.map((type) => (
+                <option key={type} value={type}>{TRAINING_TYPE_VISUALS[type].label} — {TRAINING_TYPE_VISUALS[type].description}</option>
+              ))}
+            </select>
+            <div className="mt-2 flex flex-wrap gap-2" aria-label="Legenda das cores de treino">
+              {TRAINING_TYPES.map((type) => (
+                <span key={type} className="inline-flex items-center gap-1.5 text-[11px] text-[#57534E]"><span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: TRAINING_TYPE_VISUALS[type].color }} aria-hidden="true" />{TRAINING_TYPE_VISUALS[type].shortLabel}</span>
+              ))}
+            </div>
           </div>
           <div><label htmlFor="workout-date" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Data opcional</label><input id="workout-date" name="scheduled_date" type="date" defaultValue={editing?.scheduled_date ?? ''} className="input-base" /></div>
 

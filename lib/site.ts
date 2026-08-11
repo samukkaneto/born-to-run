@@ -29,7 +29,9 @@ export const site = {
     cref: 'CREF 119911-G/SP',
     credentials: [
       'Graduação em Educação Física',
-      'Especialização em corridas de meio fundo e fundo',
+      'Pós-graduação em Treinamento Desportivo',
+      'Pós-graduação em Fisiologia do Exercício',
+      'Pós-graduação em Treinamento especializado e funcional para corrida',
       'Treinador nível 1 — World Athletics',
     ],
   },

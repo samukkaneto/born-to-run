@@ -78,3 +78,7 @@ Supabase remoto após aplicação:
 - Vercel publicou `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex`, `READY`, target `production`;
 - home, galeria, loja, login, cadastro, manifesto, ícones e health responderam 200; dashboard anônimo respondeu 307 para login;
 - health confirmou revisão `bd73817`, build remoto não apresentou erros e não houve cluster de runtime nos 30 minutos auditados.
+
+## Estado posterior deste assunto
+
+Este registro é histórico. A loja atual está em `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`; a revisão de fornecedores, contraste de marca, Tanita e categorias cromáticas de treino está em `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`. Não restaurar loja pública, linguagem de demonstração ou limitação de avaliação apenas a `member`.

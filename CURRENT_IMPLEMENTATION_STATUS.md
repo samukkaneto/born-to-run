@@ -1,6 +1,6 @@
 # Born to Run — status real de implementação
 
-Atualizado em **10/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
+Atualizado em **11/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
 
 ## Resumo executivo
 
@@ -9,6 +9,8 @@ O projeto deixou de ser apenas um protótipo visual. O código atual contém sit
 O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 53 testes unitários, 72 asserções pgTAP e a matriz de 26 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. O Bloco 9 foi mesclado pela PR [#15](https://github.com/samukkaneto/born-to-run/pull/15), o CI do merge ficou verde e a revisão `0c17f86` está em produção em **https://equipeborntorun.com**.
 
 O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, novo ícone PWA e correções da home estão em produção. Em 11/08/2026, a loja foi retirada da área pública e reconstruída como catálogo profissional reservado a administrador/treinador; o login voltou a usar o logotipo oficial original. A PR #23 foi mesclada em `1f37f2e`, o CI do merge passou e o deployment `dpl_AJkfB6nyag24AMzKgL5qs6nQT3tT` está `READY` no domínio oficial.
+
+O bloco em publicação corrige a leitura do perfil, confirma 1 administrador e 1 treinador ativos, permite que os dois também tenham avatar e recebam avaliação, entrega comparação Tanita em português e incorpora a linguagem de cores definida por Robson: azul-claro descanso, amarelo contínuo, roxo intervalado rápido, verde leve/moderado, mostarda potência aeróbia e vermelho competição. O Supabase remoto já contém 16 migrations; consulte `docs/ABACUS_AI_HANDOFF/20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
 
 ## Estado por área
 
@@ -20,12 +22,12 @@ O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, ní
 | Comunidade fechada | Implementada e validada no banco | Cadastro entra como `pending`; somente `active` acessa conteúdo interno. |
 | Aprovação de membros | Implementada e validada | Administrador e treinador aprovam, rejeitam, suspendem ou reativam; somente o administrador define o treinador. |
 | Feed social | MVP implementado e validado | Posts, fotos privadas, métricas, curtidas, comentários e paginação keyset por cursor; escrita real passou no preview final. |
-| Perfis | Perfil básico implementado | Edição segura e avatar privado; evolução analítica com gráficos/tendências ainda não existe. |
+| Perfis | Implementado e corrigido no remoto | Edição segura e avatar privado para atleta, treinador e administrador; leitura de `team_joined_at` corrigida. |
 | Treinos | Implementado e validado | Somente o treinador cria/edita/exclui; todo treino é privado para grupos ou atletas específicos. Administrador e terceiros não conseguem ler. |
 | Grupos | Implementado e validado | Criar, editar, arquivar/reativar e gerenciar integrantes, preservando destinatários históricos. |
 | Comunicados | Implementado | CRUD do administrador e leitura pelos membros ativos. |
 | Painel do treinador | Implementado e validado | Dashboard, aprovações, membros, grupos, treinos privados e avaliações físicas. |
-| Bioimpedância | MVP privado ampliado | Administrador/treinador registram; arquivo Tanita original fica privado; novas medidas em português. OCR e relatório gráfico aguardam amostra real. |
+| Bioimpedância | MVP privado ampliado | Qualquer perfil ativo pode ser avaliado; admin/treinador registram; original privado; relatório pessoal em português e comparação entre duas medições. OCR continua futuro. |
 | Galeria institucional | Implementada no Bloco 10 | Admin/treinador publicam, ordenam, ocultam e removem; consentimento obrigatório; feed pessoal separado. |
 | Missões, níveis e conquistas | Implementados no Bloco 10 | 12 missões, cascata de distâncias, XP inclusivo, dez níveis, resultados e premiações gerais/por categoria. |
 | Loja | Catálogo reservado | Somente administrador/treinador ativos; 13 produtos, cores ampliadas e preços por custo pesquisado × 2. Sem venda, checkout ou estoque ativo. |
@@ -33,7 +35,7 @@ O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, ní
 | PWA/responsividade | Instalável, push e nativo pendentes | Manifesto, novo ícone oficial em fundo preto, instalação guiada, service worker e fallback offline público. Não gera APK e não é binário nativo. |
 | Observabilidade | Implementada para o piloto | `/api/health`, Runtime Logs, Web Analytics habilitado e Speed Insights configurado; URLs são sanitizadas antes das métricas. |
 | Continuidade | Procedimento definido | Audit no CI, Dependabot, relato privado e runbook de release; Supabase Free exige exportação criptografada ou Pro antes de depender de backup automático. |
-| Supabase remoto | Sincronizado com o Bloco 10 | Quatorze migrations aplicadas; estado atual termina em `20260811013659_registra_data_real_na_equipe`. |
+| Supabase remoto | Sincronizado com o bloco atual | Dezesseis migrations aplicadas; estado atual termina em `20260811163511_permite_avaliacao_de_todos_perfis_ativos`. |
 | Vercel | Produção do Bloco 10 validada | Deployment Git `dpl_AjXfjFgjZd92Vh4KXjoP99gfioex`, revisão `bd73817`, `READY`, target `production`; 37 rotas, respostas 200/307, build sem erros e zero clusters de runtime em 30 minutos. |
 | GitHub | Publicado, revisado e mesclado | PR [#17](https://github.com/samukkaneto/born-to-run/pull/17) mesclada em `main` no commit `bd7381777a0fe58b71365af75f53635a8f8b0667`; CI final do PR `31451292679` e CI do merge `31451446812` concluídos com sucesso. |
 
@@ -84,7 +86,7 @@ Os testes abaixo foram executados dentro de transações e revertidos, sem deixa
 11. a sexta migration passou em preflight remoto de 56/56 asserções e ocultou metadados de revisão de todos os clientes autenticados;
 12. referências de avatar/foto inexistentes foram rejeitadas e policies passaram a impedir exclusão de objetos ainda usados.
 
-O banco preserva 1 perfil administrador ativo, convite de treinador aguardando cadastro real e nenhum conteúdo fictício.
+O banco preserva 1 perfil administrador ativo, 1 perfil treinador ativo e nenhum conteúdo fictício de avaliação, treino, feed ou Storage.
 
 ## Qualidade verificada
 
@@ -108,10 +110,10 @@ O banco preserva 1 perfil administrador ativo, convite de treinador aguardando c
 
 O MVP web está publicado e o trabalho técnico independente dessas entradas foi concluído. Os itens abaixo exigem conta, decisão ou teste do proprietário e não anulam a entrega atual:
 
-1. Robson criar e confirmar a conta pré-autorizada com `ralves4101@gmail.com`;
+1. publicar o bloco atual e fazer o smoke autenticado;
 2. habilitar no Supabase Auth a proteção contra senhas vazadas depois do upgrade Pro;
 3. executar o piloto fechado com usuários reais e validar aprovação, publicação, treino e avaliação;
-4. tratar push e empacotamento nativo como fase própria, caso o objetivo passe de PWA instalável para lojas de aplicativos.
+4. tratar push e empacotamento nativo como fase própria, caso o objetivo passe de PWA instalável para lojas de aplicativos;
 5. definir backup Pro ou exportação criptografada antes do piloto gerar dados relevantes.
 
 ## Orientação para Abacus AI / Fable 5

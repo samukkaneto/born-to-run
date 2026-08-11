@@ -104,3 +104,11 @@ Release concluído: PR `#21` mesclada em `c1dc445`; CI final da PR `31461939571`
 A antiga loja conceitual pública foi retirada do cabeçalho e rodapé. `/loja` agora funciona como portão autenticado e somente administrador/treinador ativos chegam ao catálogo em `/admin/loja`; atletas voltam ao dashboard. A linguagem de demonstração e os recados técnicos ao proprietário foram eliminados da interface. O catálogo recebeu duas campanhas coloridas, 13 produtos e preços calculados por custo brasileiro pesquisado × 2. O login voltou a usar o arquivo oficial `public/logo.png`. Detalhes completos, tabela de preços e estado de publicação estão em `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
 
 Release concluído: PR `#23` mesclada em `1f37f2e`; CI do merge `31468553109` integralmente verde; produção `dpl_AJkfB6nyag24AMzKgL5qs6nQT3tT` `READY`. O domínio oficial confirmou o logo original, a ausência da adaptação reprovada, o redirecionamento da loja ao login e zero logs `error`/`fatal` no período auditado.
+
+## Adendo de perfis, Tanita e treinos — 11/08/2026
+
+O erro de perfil não era visual: `team_joined_at` havia sido adicionada sem permissão de leitura para o papel autenticado. A correção mínima já está aplicada no Supabase. O banco agora tem 16 migrations, 1 administrador ativo e 1 treinador ativo. Qualquer perfil ativo pode receber avaliação, mas somente a equipe técnica continua autorizada a registrá-la.
+
+A área de avaliações exibe foto/nome do usuário, indicadores em português e comparação entre as duas medições mais recentes; original Tanita permanece privado. OCR continua futuro e exige revisão humana. Treinos receberam seis categorias com cor funcional definida pelo Prof. Robson. A amostra de mesociclo foi analisada localmente e não importada por conter dados de atleta.
+
+O institucional enfatiza atendimento presencial e individual e registra as três pós-graduações de Robson. A loja preserva preto premium, corrige contraste do logotipo em peças claras e exibe somente aos gestores a relação de fornecedores/custos. Consulte o relatório completo `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.

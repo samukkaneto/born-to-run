@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation'
-import { Activity, ClipboardList, Droplets, ExternalLink, Scale, ShieldCheck } from 'lucide-react'
+import Image from 'next/image'
+import { Activity, ArrowDownRight, ArrowRight, ArrowUpRight, ClipboardList, Droplets, ExternalLink, Scale, ShieldCheck, UserRound } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { createMediaUrl } from '@/lib/supabase/media'
+import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
 import { formatDate } from '@/lib/utils'
 import type { BodyAssessment } from '@/types'
 
@@ -15,27 +17,42 @@ export default async function AvaliacoesPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data, error } = await supabase
-    .from('body_assessments')
-    .select('*')
-    .eq('athlete_user_id', user.id)
-    .order('assessed_at', { ascending: false })
-  if (error) throw new Error('Não foi possível carregar suas avaliações.')
+  const [assessmentsResult, profileResult] = await Promise.all([
+    supabase
+      .from('body_assessments')
+      .select('*')
+      .eq('athlete_user_id', user.id)
+      .order('assessed_at', { ascending: false }),
+    supabase
+      .from('profiles')
+      .select(MEMBER_PROFILE_COLUMNS)
+      .eq('user_id', user.id)
+      .maybeSingle(),
+  ])
+  if (assessmentsResult.error || profileResult.error) {
+    throw new Error('Não foi possível carregar suas avaliações.')
+  }
 
-  const assessments = (data ?? []) as BodyAssessment[]
+  const assessments = (assessmentsResult.data ?? []) as BodyAssessment[]
   const latest = assessments[0]
+  const previous = assessments[1]
   const latestSourceUrl = await createMediaUrl(supabase, 'assessment-files', latest?.source_path)
+  const avatarUrl = await createMediaUrl(supabase, 'avatars', profileResult.data?.avatar_url)
+  const athleteName = profileResult.data?.full_name ?? 'Atleta Born to Run'
 
   return (
     <div className="mx-auto max-w-4xl animate-fade-in space-y-8">
-      <div>
-        <p className="section-kicker mb-3">Minha evolução</p>
-        <h1 className="font-display text-4xl uppercase leading-[0.95] text-[#171717] sm:text-5xl">
-          Avaliações <span className="text-[#DC2626]">físicas</span>
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#57534E]">
-          Acompanhe os resultados registrados pelo Prof. Robson Alves nas avaliações de bioimpedância.
-        </p>
+      <div className="card overflow-hidden bg-[#171717] text-white">
+        <div className="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:items-center sm:p-8">
+          <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl border border-white/15 bg-[#292929]">
+            {avatarUrl ? <Image src={avatarUrl} alt={`Foto de ${athleteName}`} width={96} height={96} className="h-full w-full object-cover" /> : <UserRound size={38} className="text-[#A8A29E]" aria-hidden="true" />}
+          </div>
+          <div>
+            <p className="font-condensed text-xs font-semibold uppercase tracking-[0.18em] text-[#F87171]">Evolução corporal · Born to Run</p>
+            <h1 className="mt-2 font-display text-4xl uppercase leading-none sm:text-5xl">{athleteName}</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#D6D3D1]">Acompanhamento em português a partir das avaliações presenciais realizadas pelo Prof. Robson Alves.</p>
+          </div>
+        </div>
       </div>
 
       <div className="flex items-start gap-3 rounded-xl border border-[#DDD6FE] bg-[#F5F3FF] p-4 text-sm text-[#5B21B6]">
@@ -64,6 +81,18 @@ export default async function AvaliacoesPage() {
               <MetricCard icon={Activity} label="Metabolismo basal" value={latest.basal_metabolic_rate === null ? '—' : `${latest.basal_metabolic_rate} kcal`} />
               <MetricCard icon={Activity} label="Classificação física" value={value(latest.physique_rating)} />
             </div>
+            {previous && (
+              <div className="mt-5">
+                <h3 className="mb-3 font-condensed text-sm font-semibold uppercase tracking-[0.08em] text-[#44403C]">Comparação com {formatDate(previous.assessed_at)}</h3>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  <TrendCard label="Peso" current={latest.weight_kg} previous={previous.weight_kg} suffix=" kg" />
+                  <TrendCard label="Gordura corporal" current={latest.body_fat_pct} previous={previous.body_fat_pct} suffix=" p.p." />
+                  <TrendCard label="Massa muscular" current={latest.muscle_mass_kg} previous={previous.muscle_mass_kg} suffix=" kg" />
+                  <TrendCard label="Água corporal" current={latest.body_water_pct} previous={previous.body_water_pct} suffix=" p.p." />
+                </div>
+                <p className="mt-2 text-xs leading-relaxed text-[#78716C]">As setas mostram apenas a variação entre medições; não representam diagnóstico ou classificação clínica.</p>
+              </div>
+            )}
             {latestSourceUrl && <a href={latestSourceUrl} target="_blank" rel="noreferrer" className="btn-outline mt-4 inline-flex text-sm"><ExternalLink size={15} aria-hidden="true" /> Ver arquivo original da Tanita</a>}
             {latest.notes && (
               <div className="card mt-4 border-l-4 border-l-[#7C3AED] p-5">
@@ -105,6 +134,29 @@ export default async function AvaliacoesPage() {
           <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed">Quando o treinador realizar e registrar sua primeira avaliação, os resultados aparecerão aqui.</p>
         </div>
       )}
+    </div>
+  )
+}
+
+function TrendCard({
+  label,
+  current,
+  previous,
+  suffix,
+}: {
+  label: string
+  current: number | null
+  previous: number | null
+  suffix: string
+}) {
+  if (current === null || previous === null) return null
+  const delta = Number(current) - Number(previous)
+  const Icon = delta > 0 ? ArrowUpRight : delta < 0 ? ArrowDownRight : ArrowRight
+  const formatted = Math.abs(delta).toLocaleString('pt-BR', { maximumFractionDigits: 2 })
+  return (
+    <div className="rounded-xl border border-[#E5E1D8] bg-white p-4">
+      <p className="font-condensed text-xs uppercase tracking-[0.08em] text-[#78716C]">{label}</p>
+      <p className="mt-2 flex items-center gap-1.5 font-display text-2xl text-[#171717]"><Icon size={18} className="text-[#7C3AED]" aria-hidden="true" />{delta === 0 ? 'Sem alteração' : `${delta > 0 ? '+' : '−'}${formatted}${suffix}`}</p>
     </div>
   )
 }

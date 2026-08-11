@@ -44,7 +44,8 @@ Não inventar telefone, WhatsApp, endereço, e-mail, CNPJ, depoimentos, atletas,
 - Somente o treinador publica treinos; todo treino exige grupo ou atleta destinatário e não é visível ao administrador.
 - Avaliações físicas são privadas entre treinador e atleta avaliado.
 - `proxy.ts` é a convenção ativa do Next 16; não recriar `middleware.ts`.
-- As migrations até `20260810030102_indexa_convite_treinador.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
+- As migrations até `20260811163511_permite_avaliacao_de_todos_perfis_ativos.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
+- Tipos de treino têm semântica fixa: azul-claro descanso, amarelo contínuo, roxo intervalado rápido, verde leve/moderado, mostarda potência aeróbia e vermelho competição.
 - Nunca expor `service_role`, segredos ou arquivos `.env*`.
 
 ## Arquivos sensíveis

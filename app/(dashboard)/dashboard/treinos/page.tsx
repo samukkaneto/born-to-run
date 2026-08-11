@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { formatDate, getTodayCalendarDate } from '@/lib/utils'
 import { Dumbbell, Calendar, Target } from 'lucide-react'
 import type { Workout } from '@/types'
+import { TRAINING_TYPES, TRAINING_TYPE_VISUALS, getTrainingTypeVisual } from '@/lib/workouts/training-types'
 
 const levelColors: Record<string, string> = {
   iniciante:    'badge-green',
@@ -48,17 +49,20 @@ export default async function TreinosPage() {
   const undated = undatedResult.data as Workout[]
 
   function WorkoutCard({ w }: { w: Workout }) {
+    const trainingVisual = getTrainingTypeVisual(w.training_type)
     return (
-      <div className="card p-5 flex items-start gap-4 hover:-translate-y-0.5 transition-transform">
-        <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0">
-          <Dumbbell size={22} className="text-[var(--color-red)]" />
+      <article className="card relative flex items-start gap-4 overflow-hidden p-5 transition-transform hover:-translate-y-0.5">
+        <span className="absolute inset-y-0 left-0 w-1.5" style={{ backgroundColor: trainingVisual.color }} aria-hidden="true" />
+        <div className="ml-1 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: trainingVisual.background, color: trainingVisual.text }}>
+          <Dumbbell size={22} aria-hidden="true" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-display font-bold text-stone-800">{w.title}</h3>
-            <span className={`badge ${levelColors[w.level] || 'badge-gray'} flex-shrink-0`}>
-              {levelLabels[w.level] || w.level}
-            </span>
+            <div className="flex shrink-0 flex-wrap justify-end gap-1.5">
+              <span className="badge" style={{ backgroundColor: trainingVisual.background, borderColor: trainingVisual.border, color: trainingVisual.text }}>{trainingVisual.label}</span>
+              <span className={`badge ${levelColors[w.level] || 'badge-gray'}`}>{levelLabels[w.level] || w.level}</span>
+            </div>
           </div>
           <p className="text-stone-500 text-sm mt-1 leading-relaxed">{w.description}</p>
           <div className="flex flex-wrap gap-4 mt-3">
@@ -74,17 +78,30 @@ export default async function TreinosPage() {
             </span>
           </div>
         </div>
-      </div>
+      </article>
     )
   }
 
   return (
     <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
       <div>
-        <h1 className="font-display text-2xl font-black text-stone-900">Treinos 💪</h1>
-        <p className="text-stone-500 text-sm mt-1">
-          Planos publicados pelo Prof. Robson Alves
+        <p className="section-kicker mb-2">Prescrição individual</p>
+        <h1 className="font-display text-4xl uppercase leading-none text-stone-900">Meus treinos</h1>
+        <p className="mt-2 max-w-xl text-sm leading-relaxed text-stone-500">
+          Treinos prescritos pelo Prof. Robson Alves para seus objetivos, seu momento e sua evolução.
         </p>
+      </div>
+
+      <div className="card p-4">
+        <p className="mb-3 font-condensed text-xs font-semibold uppercase tracking-[0.08em] text-stone-600">Entenda as cores</p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {TRAINING_TYPES.map((type) => (
+            <div key={type} className="flex items-start gap-2.5 rounded-lg border px-3 py-2" style={{ backgroundColor: TRAINING_TYPE_VISUALS[type].background, borderColor: TRAINING_TYPE_VISUALS[type].border }}>
+              <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: TRAINING_TYPE_VISUALS[type].color }} aria-hidden="true" />
+              <div><p className="text-xs font-semibold" style={{ color: TRAINING_TYPE_VISUALS[type].text }}>{TRAINING_TYPE_VISUALS[type].label}</p><p className="text-[11px] leading-snug text-stone-600">{TRAINING_TYPE_VISUALS[type].description}</p></div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Próximos */}
