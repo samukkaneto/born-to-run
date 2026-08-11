@@ -8,7 +8,7 @@ O projeto deixou de ser apenas um protótipo visual. O código atual contém sit
 
 O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 53 testes unitários, 72 asserções pgTAP e a matriz de 26 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. O Bloco 9 foi mesclado pela PR [#15](https://github.com/samukkaneto/born-to-run/pull/15), o CI do merge ficou verde e a revisão `0c17f86` está em produção em **https://equipeborntorun.com**.
 
-O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, novo ícone PWA e correções da home estão em produção. Em 11/08/2026, a loja foi retirada da área pública e reconstruída como catálogo profissional reservado a administrador/treinador; o login voltou a usar o logotipo oficial original. O estado de publicação desta atualização está no relatório `docs/ABACUS_AI_HANDOFF/19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
+O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, novo ícone PWA e correções da home estão em produção. Em 11/08/2026, a loja foi retirada da área pública e reconstruída como catálogo profissional reservado a administrador/treinador; o login voltou a usar o logotipo oficial original. A PR #23 foi mesclada em `1f37f2e`, o CI do merge passou e o deployment `dpl_AJkfB6nyag24AMzKgL5qs6nQT3tT` está `READY` no domínio oficial.
 
 ## Estado por área
 

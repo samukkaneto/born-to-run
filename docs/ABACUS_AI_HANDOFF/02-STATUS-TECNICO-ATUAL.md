@@ -1,6 +1,6 @@
 # Status técnico atual
 
-> Atualização 11/08/2026: a antiga loja conceitual pública foi retirada. O catálogo profissional fica em `/admin/loja`, protegido pelo layout server-side e disponível somente para administrador e treinador. O login voltou a usar diretamente `public/logo.png`, sem a adaptação de cor reprovada. Detalhes em `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
+> Atualização 11/08/2026: a antiga loja conceitual pública foi retirada. O catálogo profissional fica em `/admin/loja`, protegido pelo layout server-side e disponível somente para administrador e treinador. O login voltou a usar diretamente `public/logo.png`, sem a adaptação de cor reprovada. A PR #23, CI do merge e produção Vercel foram concluídos. Detalhes em `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
 
 Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.
 

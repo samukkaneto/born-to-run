@@ -4,7 +4,7 @@ Atualizar este arquivo após cada bloco.
 
 ## Estado do ciclo técnico — atualização 11/08/2026
 
-O Bloco 10 está implementado e publicado. O bloco seguinte retirou a loja da área pública, criou catálogo profissional reservado a administrador/treinador, atualizou cores e preços pesquisados e restaurou o logotipo oficial puro no login. A publicação deste último bloco deve ser conferida no log antes da retomada.
+O Bloco 10 está implementado e publicado. O bloco seguinte retirou a loja da área pública, criou catálogo profissional reservado a administrador/treinador, atualizou cores e preços pesquisados e restaurou o logotipo oficial puro no login. A PR #23 foi mesclada, o CI do merge passou e a produção foi validada no domínio oficial.
 
 ## Concluído neste ciclo
 

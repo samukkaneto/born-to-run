@@ -102,3 +102,5 @@ Release concluído: PR `#21` mesclada em `c1dc445`; CI final da PR `31461939571`
 ## Adendo de loja restrita e logo oficial — 11/08/2026
 
 A antiga loja conceitual pública foi retirada do cabeçalho e rodapé. `/loja` agora funciona como portão autenticado e somente administrador/treinador ativos chegam ao catálogo em `/admin/loja`; atletas voltam ao dashboard. A linguagem de demonstração e os recados técnicos ao proprietário foram eliminados da interface. O catálogo recebeu duas campanhas coloridas, 13 produtos e preços calculados por custo brasileiro pesquisado × 2. O login voltou a usar o arquivo oficial `public/logo.png`. Detalhes completos, tabela de preços e estado de publicação estão em `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
+
+Release concluído: PR `#23` mesclada em `1f37f2e`; CI do merge `31468553109` integralmente verde; produção `dpl_AJkfB6nyag24AMzKgL5qs6nQT3tT` `READY`. O domínio oficial confirmou o logo original, a ausência da adaptação reprovada, o redirecionamento da loja ao login e zero logs `error`/`fatal` no período auditado.
