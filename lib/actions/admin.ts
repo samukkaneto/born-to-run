@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { removeMedia } from '@/lib/supabase/media'
 import { cleanText, isUuid, uniqueUuids, validateAssessmentSourceFile } from '@/lib/validation'
+import { isTrainingType } from '@/lib/workouts/training-types'
 import type { MembershipStatus, UserRole } from '@/types'
 
 export type AdminActionResult = { success?: boolean; error?: string; id?: string }
@@ -58,6 +59,7 @@ function parseWorkoutForm(formData: FormData) {
   const description = cleanText(formData.get('description'), 5000)
   const objective = cleanText(formData.get('objective'), 500)
   const level = String(formData.get('level') ?? '')
+  const trainingType = String(formData.get('training_type') ?? '')
   const scheduledDate = safeDate(formData.get('scheduled_date'))
   const memberIds = uniqueUuids(formData.getAll('member_ids'))
   const groupIds = uniqueUuids(formData.getAll('group_ids'))
@@ -68,6 +70,7 @@ function parseWorkoutForm(formData: FormData) {
   if (!VALID_LEVELS.includes(level as (typeof VALID_LEVELS)[number])) {
     return { error: 'Selecione um nível válido.' }
   }
+  if (!isTrainingType(trainingType)) return { error: 'Selecione um tipo de treino válido.' }
   if (scheduledDate === 'invalid') return { error: 'Informe uma data válida.' }
   if (!memberIds || !groupIds) return { error: 'A lista de destinatários é inválida.' }
   if (memberIds.length === 0 && groupIds.length === 0) {
@@ -80,6 +83,7 @@ function parseWorkoutForm(formData: FormData) {
       description,
       objective,
       level: level as (typeof VALID_LEVELS)[number],
+      trainingType,
       scheduledDate,
       audience: 'targeted' as const,
       memberIds,
@@ -118,7 +122,7 @@ async function saveWorkout(id: string | null, formData: FormData): Promise<Admin
   const parsed = parseWorkoutForm(formData)
   if ('error' in parsed) return { error: parsed.error }
 
-  const { data, error } = await supabase.rpc('admin_save_workout', {
+  const { data, error } = await supabase.rpc('coach_save_workout', {
     // O gerador do Supabase tipa argumentos de RPC como não nulos, embora
     // PostgreSQL aceite NULL para distinguir criação de edição.
     target_workout_id: id as string,
@@ -130,6 +134,7 @@ async function saveWorkout(id: string | null, formData: FormData): Promise<Admin
     target_audience: parsed.data.audience,
     target_member_ids: parsed.data.memberIds,
     target_group_ids: parsed.data.groupIds,
+    target_training_type: parsed.data.trainingType,
   })
 
   if (error || !data) return { error: 'Erro ao salvar treino. Confira os destinatários e tente novamente.' }
@@ -433,7 +438,7 @@ export async function saveBodyAssessment(
     nextSourceMime = validation.mimeType
   }
 
-  const { data, error } = await supabase.rpc('staff_save_body_assessment', {
+  const { data, error } = await supabase.rpc('staff_save_body_assessment_v2', {
     target_assessment_id: assessmentId as string,
     target_athlete_user_id: athleteUserId,
     target_assessed_at: assessedAt,

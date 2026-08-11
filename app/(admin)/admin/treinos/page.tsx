@@ -39,7 +39,7 @@ export default async function AdminTreinosPage() {
           Gerenciar <span className="text-[#DC2626]">treinos</span>
         </h1>
         <p className="mt-3 text-sm text-[#57534E]">
-          {workouts.length} treino(s) cadastrado(s). Cada plano é privado e aparece
+          {workouts.length} treino(s) cadastrado(s). Cada prescrição é privada e aparece
           somente para o treinador e os atletas ou grupos selecionados.
         </p>
       </div>

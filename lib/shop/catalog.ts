@@ -29,25 +29,25 @@ function product(entry: Omit<CatalogProduct, 'price'>): CatalogProduct {
 }
 
 const checkedAt = '2026-08-11'
-const apparel = '/shop-preview/apparel-color-collection.webp'
+const apparel = '/shop-preview/apparel-color-collection-v2.webp'
 const accessories = '/shop-preview/accessories-color-collection.webp'
 
 export const catalogProducts: CatalogProduct[] = [
   product({
     name: 'Camiseta técnica', category: 'Vestuário',
     description: 'Modelagem leve para treinos, provas e uso diário da equipe.',
-    material: 'Malha dry-fit 100% poliéster com personalização colorida', referenceCost: 81.99,
-    image: '/shop-preview/apparel-main.webp', imagePosition: '70% center',
+    material: 'Malha dry-fit 100% poliéster com personalização colorida', referenceCost: 35.99,
+    image: '/shop-preview/apparel-premium.webp', imagePosition: '20% center',
     colors: [colors.lime, colors.pink, colors.blue, colors.carbon, colors.white],
-    reference: { label: 'FuturaIM — camiseta dry-fit personalizada', url: 'https://www.futuraim.com.br/camiseta-dry-fit-personalizada', checkedAt },
+    reference: { label: 'FuturaIM — camiseta dry-fit masculina', url: 'https://www.futuraim.com.br/produto/camiseta-dry-fit-masculina', checkedAt },
   }),
   product({
     name: 'Regata performance', category: 'Vestuário',
     description: 'Respirabilidade e liberdade de movimento para os dias mais quentes.',
-    material: 'Dry-fit de alta performance, 100% poliéster', referenceCost: 42,
-    image: '/shop-preview/apparel-main.webp', imagePosition: '51% center',
+    material: 'Dry-fit personalizado para uso esportivo', referenceCost: 79.9,
+    image: apparel, imagePosition: '52% center',
     colors: [colors.pink, colors.lime, colors.cyan, colors.yellow, colors.carbon],
-    reference: { label: 'Pesquisa pública — regata esportiva em malha dry', url: 'https://www.ce.gov.br/sps/wp-content/uploads/sites/65/2025/06/Edital-008.2025.pdf', checkedAt },
+    reference: { label: 'D21 Fitness — regata dry-fit personalizada', url: 'https://www.d21fitness.com.br/regata/regata-dry-fit-personalizada', checkedAt },
   }),
   product({
     name: 'Top feminino performance', category: 'Vestuário',
@@ -60,10 +60,10 @@ export const catalogProducts: CatalogProduct[] = [
   product({
     name: 'Short de corrida', category: 'Vestuário',
     description: 'Leve, versátil e desenvolvido para acompanhar passadas longas.',
-    material: 'Tactel esportivo personalizado com bolso', referenceCost: 46.17,
+    material: 'Poliamida esportiva personalizada', referenceCost: 89.9,
     image: apparel, imagePosition: '48% 76%',
     colors: [colors.pink, colors.lime, colors.cyan, colors.carbon],
-    reference: { label: 'Pesquisa pública — bermuda esportiva personalizada', url: 'https://prefeituramacuco.rj.gov.br/transparencia/arquivos/licitacao/2026/389/Aviso%20de%20Dispensa%20unifomes.pdf', checkedAt },
+    reference: { label: 'D21 Fitness — short personalizado em poliamida', url: 'https://www.d21fitness.com.br/short/short-personalizado-fitness-poliamida', checkedAt },
   }),
   product({
     name: 'Manga longa técnica', category: 'Vestuário',
@@ -102,7 +102,7 @@ export const catalogProducts: CatalogProduct[] = [
     description: 'Aba esportiva leve para treinos e provas sob sol forte.',
     material: 'Dry-fit ajustável, disponível em múltiplas cores', referenceCost: 45,
     image: accessories, imagePosition: '76% 20%',
-    colors: [colors.pink, colors.lime, colors.yellow, colors.blue, colors.white],
+    colors: [colors.carbon, colors.pink, colors.lime, colors.yellow, colors.blue, colors.white],
     reference: { label: 'Mercado Livre — viseira premium dry-fit personalizada', url: 'https://lista.mercadolivre.com.br/bone-dry-fit-personalizado', checkedAt },
   }),
   product({
@@ -118,7 +118,7 @@ export const catalogProducts: CatalogProduct[] = [
     description: 'Compacta, leve e adequada para treinos intensos.',
     material: 'Tecido esportivo refrescante personalizado', referenceCost: 32,
     image: accessories, imagePosition: '17% 82%',
-    colors: [colors.yellow, colors.pink, colors.lime, colors.blue, colors.cyan],
+    colors: [colors.carbon, colors.yellow, colors.pink, colors.lime, colors.blue, colors.cyan],
     reference: { label: 'Elo7 — toalha esportiva personalizada', url: 'https://www.elo7.com.br/lista/toalhas-esportiva-personalizadas', checkedAt },
   }),
   product({
@@ -143,3 +143,9 @@ export const catalogPricingRule = {
   description: 'Preço sugerido calculado com acréscimo de 100% sobre o custo de referência.',
   checkedAt,
 }
+
+export const catalogBrandRules = [
+  'Peças pretas e escuras usam o logotipo completo com nome e slogan em branco.',
+  'Peças amarelas, verde-lima e azul-turquesa usam o logotipo completo com nome e slogan em preto.',
+  'Nenhuma aplicação pode remover BORN TO RUN, Treinamento e Saúde ou os corredores do símbolo.',
+] as const

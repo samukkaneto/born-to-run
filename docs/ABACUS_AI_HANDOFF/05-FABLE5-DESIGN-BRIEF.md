@@ -20,6 +20,12 @@ Direção desejada:
 - logotipo valorizado e grande quando a composição comportar; não reduzi-lo a elemento decorativo tímido.
 - ícones de níveis, missões e conquistas com personalidade própria, leitura em tamanho pequeno e evolução visual entre níveis.
 
+## Contrato visual dos treinos
+
+As cores dos cards de treino possuem significado definido pelo Prof. Robson e não podem ser trocadas apenas por preferência estética: azul-claro = descanso; amarelo = ritmo contínuo; roxo = intervalado rápido; verde = leve a moderado; mostarda = potência aeróbia; vermelho = competição. A Fable 5 pode melhorar tipografia, hierarquia, ícones, motion e contraste, preservando essa associação.
+
+Na loja, preto/carbono continua sendo base premium, com cores esportivas como apoio. Aplicações claras usam a versão completa de letras escuras; peças escuras usam a versão completa de letras claras. Nome, slogan e corredores nunca podem desaparecer do logotipo.
+
 ## Contratos que o design não pode remover
 
 - cadastro pendente e aprovação;

@@ -331,3 +331,17 @@ Cada entrada futura deve registrar:
 - Smoke oficial: `/login` contém `/logo.png`, não contém `logo-on-light` e mantém o formulário; `/loja` anônima responde `307 Location: /login` sem cache; `/admin/loja` anônima responde `307` para login; health confirma revisão `1f37f2e`.
 - Runtime Logs do deployment não apresentaram entradas `error` ou `fatal` nos 15 minutos auditados.
 - Estado funcional: concluído e publicado. Checkout, fornecedores, estoque, frete e pagamentos permanecem uma fase comercial futura.
+
+## 11/08/2026 — perfis, Tanita, prescrição cromática e revisão da loja
+
+- Runtime Logs ligaram o erro de Meu Perfil à seleção de `team_joined_at` sem grant correspondente.
+- Aplicada `20260811162800_corrige_perfil_e_categorias_de_treino`: leitura mínima corrigida, `workouts.training_type` com seis valores e RPC exclusiva do treinador.
+- Aplicada `20260811163511_permite_avaliacao_de_todos_perfis_ativos`: administrador, treinador e atleta ativos podem ser o alvo da avaliação, sem ampliar a equipe autorizada a gravar.
+- Perfil seguro e avatar privado passam a ser explicitamente acessíveis também pelas duas contas técnicas.
+- Avaliações ganharam cabeçalho pessoal, métricas em português e comparação neutra com a medição anterior.
+- A amostra Tanita e o mesociclo identificável foram usados localmente; nenhum dado pessoal foi versionado ou importado.
+- Treinos passaram a exibir o contrato de cores do Prof. Robson; a interface pública deixou de usar “planilha” como diferencial.
+- Currículo de Robson recebeu três pós-graduações informadas pelo proprietário.
+- Loja manteve preto/carbono, recebeu campanha cromática v2 com logo completo e passou a exibir internamente fornecedores, custo e cálculo × 2.
+- Banco: 16 migrations; novo pgTAP 10/10; TypeScript, ESLint completo, 64/64 unitários, build de 38 rotas e Playwright 28/28 aprovados.
+- Relatório detalhado: `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.

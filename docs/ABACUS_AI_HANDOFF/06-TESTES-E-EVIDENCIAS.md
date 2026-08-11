@@ -120,3 +120,16 @@ Nenhum bloco será declarado concluído somente por compilar. Alterações de Au
 - Guarda: `/dashboard` anônimo respondeu 307 para `/login?next=%2Fdashboard`.
 - Health: 200, `no-store`, revisão `7f66eb8` e headers de segurança esperados.
 - Runtime pós-release: zero clusters de erro e zero warning/error/fatal no deployment consultado.
+
+## Bloco perfis/Tanita/treinos — 11/08/2026
+
+- grant remoto de `team_joined_at` confirmado para `authenticated`;
+- consultas equivalentes ao app aprovadas para administrador e treinador;
+- 16 migrations remotas, terminando em `20260811163511`;
+- teste transacional provou avaliações para os dois papéis técnicos com rollback;
+- pgTAP novo: 10/10;
+- TypeScript: aprovado;
+- ESLint completo: aprovado;
+- Vitest: 64/64;
+- build Next.js 16.3: aprovado, 38 rotas;
+- Playwright completo: 28/28 em Desktop Chrome e Pixel 7; as rotas públicas cobertas não apresentaram violações axe sérias/críticas.

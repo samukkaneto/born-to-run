@@ -95,11 +95,15 @@ Liberdade visual não permite mudar fatos, inventar atletas/premiações, remove
 
 ## Próximas fases, em ordem racional
 
-1. publicar e validar o ciclo descrito no documento `16`;
-2. piloto com contas reais, incluindo cadastro real de Robson;
-3. receber um relatório Tanita real anonimizado e implementar extração assistida;
-4. redesign completo pelo Fable 5 preservando contratos;
+1. publicar e validar o ciclo descrito no documento `20`;
+2. piloto com as contas de administrador e treinador já ativas e novos atletas reais;
+3. validar uma avaliação Tanita real; só depois projetar extração assistida com revisão humana;
+4. redesign completo pelo Fable 5 preservando contratos e o significado das cores de treino;
 5. transformar gestão de textos/fotos institucionais em CMS mais amplo para dar autonomia ao proprietário;
 6. aplicativo Android nativo e distribuição;
 7. loja transacional;
 8. avaliar APIs oficiais Garmin/Strava com consentimento e conformidade.
+
+## Atualização indispensável de 11/08/2026
+
+Robson já é `coach/active`; não orientar novo cadastro técnico. Administrador e treinador também possuem perfil de atleta, avatar e podem receber avaliação. Os treinos usam: azul-claro descanso, amarelo contínuo, roxo intervalado rápido, verde leve/moderado, mostarda potência aeróbia e vermelho competição. O diferencial institucional é o atendimento presencial e individual, não “planilhas”. Ler `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md` antes de modificar essas áreas.

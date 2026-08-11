@@ -16,7 +16,6 @@ export default async function AdminAvaliacoesPage() {
     supabase
       .from('profiles')
       .select(MEMBER_PROFILE_COLUMNS)
-      .eq('role', 'member')
       .eq('membership_status', 'active')
       .order('full_name'),
   ])

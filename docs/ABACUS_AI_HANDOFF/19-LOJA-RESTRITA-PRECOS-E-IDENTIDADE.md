@@ -92,3 +92,7 @@ O ciclo anterior usava `public/brand/logo-on-light.png`, uma adaptação de cor 
 - Observabilidade: nenhuma entrada `error` ou `fatal` encontrada nos 15 minutos auditados.
 
 Estado do bloco: concluído e publicado. A loja transacional continua deliberadamente fora deste escopo.
+
+## Revisão posterior da coleção — 11/08/2026
+
+O preto/carbono foi reafirmado como base premium e permanece em vestuário e acessórios. A campanha `apparel-color-collection-v2.webp` aplica logo completo com letras escuras em amarelo/verde-lima/turquesa e letras claras em tecidos escuros. A tabela interna da loja passou a mostrar links de referência, custo unitário pesquisado e valor × 2. Camiseta, regata e short agora usam páginas comerciais específicas (FuturaIM/D21) em vez de referências públicas genéricas. Os valores e o relatório completo estão em `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.

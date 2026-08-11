@@ -183,8 +183,9 @@ export default function HomePage() {
               </p>
               <p className="text-[#44403C] leading-relaxed mb-8">
                 Sua formação combina experiência prática em corrida de rua,
-                especialização em provas de meio fundo e fundo e certificação
-                internacional como Treinador Nível 1 pela World Athletics.
+                pós-graduações em Treinamento Desportivo, Fisiologia do Exercício
+                e Treinamento especializado e funcional para corrida, além da
+                certificação internacional como Treinador Nível 1 pela World Athletics.
               </p>
               <div className="mb-8 flex flex-wrap gap-2" aria-label="Credenciais do treinador">
                 <span className="badge badge-solid-red"><BadgeCheck size={13} aria-hidden="true" /> {site.coach.cref}</span>
@@ -249,7 +250,7 @@ export default function HomePage() {
               <p className="text-[#A8A29E] leading-relaxed mt-6 mb-8">
                 Quem faz parte da Born to Run tem acesso à área de membros:
                 feed da equipe para compartilhar treinos e conquistas,
-                planilhas publicadas pelo treinador e comunicados oficiais —
+                prescrições individuais do treinador e comunicados oficiais —
                 tudo em um só lugar.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -267,7 +268,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
                 { title: 'Feed', text: 'Compartilhe suas corridas e conquistas' },
-                { title: 'Treinos', text: 'Planilhas publicadas pelo treinador' },
+                { title: 'Treinos', text: 'Prescrições privadas e individuais do treinador' },
                 { title: 'Avisos', text: 'Comunicados oficiais da equipe' },
               ].map(({ title, text }) => (
                 <div

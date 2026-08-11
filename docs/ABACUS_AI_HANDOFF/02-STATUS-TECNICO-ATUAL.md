@@ -1,5 +1,7 @@
 # Status técnico atual
 
+> Atualização 11/08/2026 — bloco de perfis/Tanita/treinos: o erro de perfil foi corrigido no Supabase, Robson já possui perfil `coach/active`, administrador e treinador podem receber avaliações, e os treinos agora possuem as seis categorias cromáticas definidas pelo treinador. O remoto contém 16 migrations, terminando em `20260811163511_permite_avaliacao_de_todos_perfis_ativos`. TypeScript, ESLint direcionado, 64/64 unitários, build de 38 rotas e 10/10 pgTAP do novo bloco passaram. O código deste bloco ainda aguarda PR/CI/deploy. Consulte `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`; esta nota substitui contagens e o estado “convite aguardando” mantidos abaixo como cronologia.
+
 > Atualização 11/08/2026: a antiga loja conceitual pública foi retirada. O catálogo profissional fica em `/admin/loja`, protegido pelo layout server-side e disponível somente para administrador e treinador. O login voltou a usar diretamente `public/logo.png`, sem a adaptação de cor reprovada. A PR #23, CI do merge e produção Vercel foram concluídos. Detalhes em `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
 
 Baseline registrado em 08/08/2026 no início do ciclo de prontidão para piloto.

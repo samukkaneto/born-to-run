@@ -623,6 +623,7 @@ export type Database = {
           objective: string
           scheduled_date: string | null
           title: string
+          training_type: string
           updated_at: string
         }
         Insert: {
@@ -635,6 +636,7 @@ export type Database = {
           objective: string
           scheduled_date?: string | null
           title: string
+          training_type?: string
           updated_at?: string
         }
         Update: {
@@ -647,6 +649,7 @@ export type Database = {
           objective?: string
           scheduled_date?: string | null
           title?: string
+          training_type?: string
           updated_at?: string
         }
         Relationships: [
@@ -723,6 +726,21 @@ export type Database = {
         }
         Returns: string
       }
+      coach_save_workout: {
+        Args: {
+          target_audience: string
+          target_description: string
+          target_group_ids: string[]
+          target_level: string
+          target_member_ids: string[]
+          target_objective: string
+          target_scheduled_date: string
+          target_title: string
+          target_training_type: string
+          target_workout_id: string
+        }
+        Returns: string
+      }
       get_my_access_profile: {
         Args: never
         Returns: {
@@ -743,6 +761,27 @@ export type Database = {
         Returns: string
       }
       staff_save_body_assessment: {
+        Args: {
+          target_assessed_at: string
+          target_assessment_id: string
+          target_athlete_user_id: string
+          target_basal_metabolic_rate: number
+          target_bmi: number
+          target_body_fat_pct: number
+          target_body_water_pct: number
+          target_bone_mass_kg: number
+          target_metabolic_age: number
+          target_muscle_mass_kg: number
+          target_notes: string
+          target_physique_rating: number
+          target_source_mime_type: string
+          target_source_path: string
+          target_visceral_fat_level: number
+          target_weight_kg: number
+        }
+        Returns: string
+      }
+      staff_save_body_assessment_v2: {
         Args: {
           target_assessed_at: string
           target_assessment_id: string

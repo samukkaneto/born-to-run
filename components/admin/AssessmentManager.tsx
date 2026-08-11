@@ -70,11 +70,25 @@ export default function AssessmentManager({
       <div className="flex flex-col gap-3 rounded-xl border border-[#E5E1D8] bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="font-condensed text-sm font-semibold uppercase tracking-[0.08em] text-[#171717]">Dados privados de saúde</p>
-          <p className="mt-1 text-sm text-[#57534E]">Cada atleta vê somente o próprio histórico. Administrador e treinador podem registrar ou revisar avaliações.</p>
+          <p className="mt-1 text-sm text-[#57534E]">Cada pessoa vê somente o próprio histórico. Administrador e treinador podem registrar ou revisar avaliações.</p>
         </div>
         <button type="button" onClick={() => { setError(''); setModal('create') }} disabled={athletes.length === 0} className="btn-primary shrink-0">
           <Plus size={16} aria-hidden="true" /> Nova avaliação
         </button>
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-3" aria-label="Como registrar uma avaliação Tanita">
+        {[
+          ['01', 'Anexe a origem', 'Envie o PDF, JPG ou PNG gerado pela Tanita.'],
+          ['02', 'Confira as medidas', 'Transcreva os números do relatório para os campos em português.'],
+          ['03', 'Publique no perfil', 'Salve para gerar o acompanhamento visual privado da pessoa avaliada.'],
+        ].map(([number, title, description]) => (
+          <div key={number} className="rounded-xl border border-[#E5E1D8] bg-white p-4">
+            <span className="font-display text-2xl text-[#DC2626]">{number}</span>
+            <p className="mt-1 font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#171717]">{title}</p>
+            <p className="mt-1 text-xs leading-relaxed text-[#57534E]">{description}</p>
+          </div>
+        ))}
       </div>
 
       <div className="space-y-3">
@@ -113,13 +127,13 @@ export default function AssessmentManager({
       <AdminModal
         open={modal !== null}
         title={editing ? 'Editar avaliação' : 'Nova avaliação'}
-        subtitle="Anexe o relatório Tanita e registre os valores que serão apresentados em português."
+        subtitle="Anexe o relatório Tanita, confira as medidas e publique a apresentação em português."
         onClose={() => !working && setModal(null)}
       >
         <form key={editing?.id ?? 'create'} onSubmit={handleSave} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="assessment-athlete" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Atleta</label>
+              <label htmlFor="assessment-athlete" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Pessoa avaliada</label>
               {editing ? (
                 <>
                   <input type="hidden" name="athlete_user_id" value={editing.athlete_user_id} />
@@ -127,7 +141,7 @@ export default function AssessmentManager({
                 </>
               ) : (
                 <select id="assessment-athlete" name="athlete_user_id" required defaultValue="" className="input-base bg-white">
-                  <option value="" disabled>Selecione o atleta</option>
+                  <option value="" disabled>Selecione um perfil ativo</option>
                   {athletes.map((athlete) => <option key={athlete.user_id} value={athlete.user_id}>{athlete.full_name}</option>)}
                 </select>
               )}
@@ -166,7 +180,7 @@ export default function AssessmentManager({
           <div className="rounded-xl border border-[#DBEAFE] bg-[#EFF6FF] p-4">
             <label htmlFor="assessment-source" className="mb-1.5 flex items-center gap-2 font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#1E3A8A]"><FileUp size={16} aria-hidden="true" /> Arquivo original Tanita</label>
             <input id="assessment-source" name="source_file" type="file" accept="application/pdf,image/jpeg,image/png" className="input-base bg-white file:mr-3 file:rounded-md file:border-0 file:bg-[#1E3A8A] file:px-3 file:py-2 file:text-xs file:font-semibold file:text-white" />
-            <p className="mt-1.5 text-xs leading-relaxed text-[#1E40AF]">PDF, JPG ou PNG · máximo 15 MB. O arquivo fica privado entre atleta e equipe técnica. Nesta etapa ele serve como fonte conferível; a leitura automática será calibrada depois que recebermos um exemplo real da Tanita.</p>
+            <p className="mt-1.5 text-xs leading-relaxed text-[#1E40AF]">PDF, JPG ou PNG · máximo 15 MB. O documento original fica privado e serve como fonte conferível para a apresentação em português.</p>
           </div>
 
           <div>
