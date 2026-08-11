@@ -271,3 +271,19 @@ Cada entrada futura deve registrar:
 - PR `#19` mesclada no commit `37b75c6`; CI de PR e CI do merge passaram. O deployment de produção `dpl_CzjmVrL8vjpTbAFWCF1gYGLHo74D` ficou `READY`, e `https://equipeborntorun.com/email/recovery-athletes-v2.jpg` respondeu `200` com o tamanho esperado.
 - A Vercel não apresentou erros de runtime nos 30 minutos auditados.
 - Única pendência deste bloco: copiar o HTML atualizado para **Authentication → Emails → Templates → Reset Password** no Supabase hospedado e executar uma recuperação real. O conector Supabase não expõe Auth config; o Chrome não estava conectado à automação; o navegador interno chegou ao login GitHub e foi preservado para retomada.
+
+## 11/08/2026 — Redesign do login e identidade visual do remetente
+
+- Reproduzida a tela móvel criticada: logotipo oficial reduzido dentro de uma faixa preta desproporcional e fundo institucional sem fotografia.
+- Criada `public/brand/logo-on-light.png` diretamente a partir de `public/logo.png`; apenas os pixels claros do nome/slogan foram convertidos para carbono, preservando traços, contornos e cores oficiais.
+- Criada `public/brand/email-avatar-512.png`, quadrada, branca e sem o fundo preto rejeitado. O centro usa o logotipo completo oficial; não foram usadas iniciais genéricas.
+- `app/(auth)/layout.tsx` passou a usar `team-race-palace.jpg` como fundo real em toda a experiência, com sobreposição clara responsiva. O logo ganhou destaque sem caixa; o desktop recebeu composição editorial e o celular manteve o formulário legível.
+- `app/(auth)/login/page.tsx` recebeu novo card, hierarquia tipográfica, separação editorial, foco visível e estado de carregamento textual.
+- A revisão React/Next confirmou uso correto de `next/image`, ausência de efeitos ou estado desnecessários e hierarquia sem dois `h1` após correção.
+- O ambiente local inicialmente abriu em branco porque `.env.local` continha somente OIDC. As variáveis de Preview foram recuperadas de forma segura para `.env.development.local`, arquivo ignorado pelo Git; nenhum valor foi impresso ou versionado.
+- Inspeções: login `200`; screenshots em 412 × 915 e 1440 × 1000; texto presente; nenhum overlay de framework; rota inicial navegável; axe sem violações WCAG A/AA; ESLint completo, TypeScript e 57/57 unitários aprovados; build de 37 rotas aprovado.
+- A primeira matriz Playwright completa em modo dev ficou inconclusiva por duas condições ambientais: `VERCEL=1` vindo do arquivo temporário de Preview ativou o Analytics em localhost e o teste antigo do service worker excedeu 90 segundos. O build foi repetido com as variáveis públicas somente em memória e, no modo de produção equivalente ao CI, os quatro testes que cobrem home/login/redirecionamento privado passaram 4/4 em Desktop Chrome e Pixel 7.
+- Auditoria pública do domínio: SPF existente, `_dmarc` com `v=DMARC1; p=none` e `default._bimi` inexistente.
+- Pesquisa oficial confirmou: HTML de e-mail não define o avatar da caixa de entrada; Gmail aceita foto de uma Conta Google para o mesmo remetente, com limitações de exibição; BIMI no Gmail exige CMC ou VMC e DMARC em `p=quarantine` ou `p=reject`, `pct=100`.
+- Não houve alteração de DNS neste bloco. Endurecer DMARC sem validar Hostinger e Resend poderia prejudicar entregabilidade.
+- O template remoto do Supabase continua pendente: nenhuma ferramenta conectada possui Auth config e a CLI retornou `Access token not provided`. O arquivo versionado permanece correto.

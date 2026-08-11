@@ -52,3 +52,16 @@ Essas dependências não impedem o Codex de adiantar código, documentação, te
 - A chave redundante `Supabase Auth Born to Run v2` foi removida da Resend em 09/08/2026. A credencial SMTP ativa, restrita ao domínio `equipeborntorun.com`, foi preservada.
 - A exclusão do token temporário `Codex Born to Run DNS` foi confirmada anteriormente no modal da Hostinger. Três novas tentativas de abrir/reler `hpanel.hostinger.com/api` ficaram presas no carregamento e interromperam a conexão do painel. A confirmação visual da tabela continua pendente, sem impacto funcional no aplicativo.
 - Se a Hostinger voltar a carregar normalmente, a única ação remanescente é verificar que não existe uma linha chamada `Codex Born to Run DNS`. Não criar novo token só para realizar essa conferência.
+
+## Retomada do bloco visual e de e-mail — 11/08/2026
+
+Estado local pronto para publicação:
+
+1. publicar o redesign responsivo do login e os dois ativos em `public/brand/`;
+2. repetir os gates completos e validar a URL de produção após o merge;
+3. no Supabase hospedado, salvar o conteúdo de `supabase/templates/recovery.html` em **Authentication → Email Templates → Reset Password** e disparar uma recuperação real;
+4. criar ou acessar uma Conta Google usando `contato@equipeborntorun.com` e carregar `public/brand/email-avatar-512.png` como foto do perfil;
+5. confirmar o avatar no Gmail mobile e dentro de um e-mail aberto no desktop. Não prometer exibição universal;
+6. manter BIMI como etapa separada. Antes de trocar DMARC de `p=none`, auditar alinhamento de SPF/DKIM de Hostinger e Resend, política de subdomínios, recebimento de relatórios e possibilidade de CMC/VMC.
+
+Bloqueio operacional atual do item 3: o conector Supabase não expõe configuração de Auth, a CLI não possui token de Management API e o controle do Codex não está conectado ao Chrome comum, embora o proprietário esteja logado nele. Não criar outro Personal Access Token apenas para este ajuste; preferir reconectar o navegador ou executar o salvamento manual assistido.

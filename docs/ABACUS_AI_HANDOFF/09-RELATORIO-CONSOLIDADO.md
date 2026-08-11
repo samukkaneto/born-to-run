@@ -90,3 +90,9 @@ Para a Abacus/Fable: não reintroduzir qualquer quantidade atual de atletas. Usa
 ## Adendo visual do e-mail — 11/08/2026
 
 A fotografia inicial do e-mail de recuperação foi rejeitada por mutilar a marca nos uniformes. A correção está em `public/email/recovery-athletes-v2.jpg` e mantém, em todas as quatro estampas, o símbolo multicolorido, o nome `BORN TO RUN` e o slogan `Treinamento e Saúde`. A PR #19, CI e produção Vercel foram concluídas; a URL oficial da imagem está pública e validada. O arquivo `supabase/templates/recovery.html` usa a URL versionada para evitar cache. Ao retomar, falta somente atualizar o template Reset Password no Supabase hospedado e executar um teste real de recuperação.
+
+## Adendo de login e avatar do remetente — 11/08/2026
+
+O login foi reconstruído localmente para eliminar a caixa preta criticada: usa fotografia real da equipe com opacidade controlada, logotipo oficial grande adaptado ao fundo claro e card de acesso de alto contraste. A versão móvel e a desktop foram inspecionadas sem overlay, falha de conteúdo ou violação axe. Os arquivos de marca novos são `public/brand/logo-on-light.png` e `public/brand/email-avatar-512.png`; ambos derivam do logotipo oficial, não de uma recriação por IA.
+
+O avatar da lista do Gmail não pode ser embutido pelo HTML do Supabase/Resend. O caminho imediato é associar o remetente profissional a uma Conta Google e usar o PNG quadrado preparado. Para identidade verificada entre provedores, será preciso um projeto BIMI separado. O domínio está hoje com DMARC `p=none` e sem BIMI; Gmail exige CMC/VMC e DMARC de aplicação. Nenhum DNS foi alterado para não arriscar os fluxos ativos da Hostinger e da Resend. Detalhes e procedimento em `18-LOGIN-E-IDENTIDADE-DE-EMAIL.md`.
