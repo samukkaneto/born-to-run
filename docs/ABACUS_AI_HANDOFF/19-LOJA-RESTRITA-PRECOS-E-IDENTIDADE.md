@@ -72,4 +72,14 @@ O ciclo anterior usava `public/brand/logo-on-light.png`, uma adaptação de cor 
 - Playwright em modo equivalente ao CI: 28/28 testes aprovados em Desktop Chrome e Pixel 7, incluindo acessibilidade, PWA, login com o arquivo oficial e bloqueio da loja.
 - Build de produção: 38 rotas geradas, incluindo `/admin/loja` e o portão dinâmico `/loja`.
 
-O build, a matriz E2E completa, CI, merge e produção devem ser registrados no log de execução ao final da publicação.
+## Checkpoint GitHub/Vercel
+
+- Branch: `codex/restrict-store-fix-official-logo`.
+- Commit funcional: `008928d`.
+- Pull request: `#23`.
+- GitHub Actions: run `31468117855`, aprovado.
+- Preview Vercel: `dpl_CF4Usg4S1Tp3Wv99R4bbm1jM9R9t`, URL `https://born-to-3ndbm8mln-shabuneto.vercel.app`, estado `READY`.
+- O HTML remoto do login contém `/logo.png`, não contém `logo-on-light` e mantém o formulário esperado.
+- A rota `/loja` anônima responde `307` para `/login`, sem cache e com `X-Robots-Tag: noindex`.
+
+O merge e a produção devem ser registrados no log de execução ao final da publicação.

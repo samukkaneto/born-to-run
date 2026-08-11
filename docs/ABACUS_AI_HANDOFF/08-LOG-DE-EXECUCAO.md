@@ -318,4 +318,7 @@ Cada entrada futura deve registrar:
 - Removidos da interface todos os recados de demonstração, aviso de vendas inativas e explicações técnicas ao Prof. Robson.
 - Gates locais: TypeScript, ESLint completo, 60/60 unitários, build de 38 rotas e Playwright 28/28 em Desktop Chrome/Pixel 7 aprovados. A matriz cobre o logotipo oficial e o redirecionamento anônimo da loja ao login.
 - Relatório detalhado: `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md`.
-- Publicação ainda em andamento neste checkpoint; registrar commit, PR, CI, merge e Vercel abaixo quando concluídos.
+- Checkpoint funcional `008928d` publicado na PR `#23`.
+- GitHub Actions `Qualidade` run `31468117855` passou integralmente; Preview Vercel `dpl_CF4Usg4S1Tp3Wv99R4bbm1jM9R9t` ficou `READY`.
+- Smoke do Preview: `/login` contém `/logo.png`, não contém `logo-on-light` e renderiza o título de acesso; `/loja` anônima responde `307 Location: /login`, `no-store`, HSTS e `X-Robots-Tag: noindex`.
+- Merge e produção ainda em andamento neste checkpoint; registrar os identificadores finais abaixo quando concluídos.
