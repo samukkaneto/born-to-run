@@ -4,7 +4,7 @@ Atualizar este arquivo após cada bloco.
 
 ## Estado do ciclo técnico — atualização 11/08/2026
 
-O treinador já concluiu o cadastro e aparece como `coach/active`; não repetir o antigo fluxo de convite. O bloco atual corrigiu Perfil/Avaliações, permitiu avatar e avaliação para todos os papéis ativos, adicionou as seis categorias cromáticas dos treinos, atualizou currículo/posicionamento institucional e revisou a loja/fornecedores. Banco e testes locais estão concluídos; falta fechar PR, CI e deployment. Consulte `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
+O treinador já concluiu o cadastro e aparece como `coach/active`; não repetir o antigo fluxo de convite. O bloco atual corrigiu Perfil/Avaliações, permitiu avatar e avaliação para todos os papéis ativos, adicionou as seis categorias cromáticas dos treinos, atualizou currículo/posicionamento institucional e revisou a loja/fornecedores. PR #25, CIs e produção foram concluídos. Consulte `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
 
 O Bloco 10 está implementado e publicado. O bloco seguinte retirou a loja da área pública, criou catálogo profissional reservado a administrador/treinador, atualizou cores e preços pesquisados e restaurou o logotipo oficial puro no login. A PR #23 foi mesclada, o CI do merge passou e a produção foi validada no domínio oficial.
 
@@ -20,7 +20,7 @@ O Bloco 10 está implementado e publicado. O bloco seguinte retirou a loja da á
 
 ## Próxima ação exata
 
-Publicar o bloco atual e executar o piloto assistido com as duas contas técnicas já ativas: adicionar fotos reais de perfil, prescrever um treino privado com categoria cromática, registrar uma avaliação Tanita conferida e validar a experiência do destinatário.
+Executar o piloto assistido com as duas contas técnicas já ativas: adicionar fotos reais de perfil, prescrever um treino privado com categoria cromática, registrar uma avaliação Tanita conferida e validar a experiência do destinatário.
 
 O administrador foi localizado e está `active` com e-mail confirmado. O proprietário recebeu o identificador exato fora do repositório. Se não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com esse e-mail.
 

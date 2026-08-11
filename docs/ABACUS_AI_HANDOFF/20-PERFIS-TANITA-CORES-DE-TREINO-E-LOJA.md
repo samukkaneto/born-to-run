@@ -169,10 +169,25 @@ Preço × 2 é acréscimo de 100% sobre o custo. Não equivale a margem líquida
 
 ## Pendências reais depois deste bloco
 
-1. publicar o código e validar as rotas autenticadas no deployment final;
-2. o proprietário e Robson adicionarem suas fotos reais em Meu Perfil;
-3. cadastrar os primeiros atletas reais e executar um treino privado completo;
-4. registrar uma avaliação Tanita real conferida e validar a compreensão do relatório;
-5. só depois estudar OCR assistido, sem publicação automática;
-6. Fable 5 pode elevar todo o visual mantendo este contrato de cor, autorização e privacidade;
-7. checkout/estoque/pagamentos e aplicativo Android nativo continuam fases separadas.
+1. o proprietário e Robson adicionarem suas fotos reais em Meu Perfil;
+2. cadastrar os primeiros atletas reais e executar um treino privado completo;
+3. registrar uma avaliação Tanita real conferida e validar a compreensão do relatório;
+4. só depois estudar OCR assistido, sem publicação automática;
+5. Fable 5 pode elevar todo o visual mantendo este contrato de cor, autorização e privacidade;
+6. checkout/estoque/pagamentos e aplicativo Android nativo continuam fases separadas.
+
+## Publicação e auditoria final
+
+- commit funcional: `4baf07b351769ce3b2286f8122b88c930b84ef8e`;
+- PR: `#25`, mesclada por squash;
+- commit na `main`: `119bc640be220e82d05bed036a4a77c89b0ad6a6`;
+- CI da PR: run `31516494439`, aprovado;
+- CI do merge: run `31516776891`, aprovado integralmente;
+- preview: `dpl_DGDRicdoCvejzroSg9maA7fZD1uF`, `READY` e protegido pela autenticação Vercel;
+- produção funcional: `dpl_42CnrorJzo91kgQGYVKGeSQXbRPA`, `READY`;
+- domínio oficial: home, Sobre, Login e Health responderam `200`;
+- Perfil e Avaliações anônimos responderam `307` para login, preservando o `next`;
+- Health confirmou `revision: 119bc64`;
+- Runtime Logs: nenhuma entrada `error` ou `fatal` nos 15 minutos auditados.
+
+Estado do bloco: **concluído e publicado**. O fechamento documental posterior não altera código, banco ou contratos descritos acima.

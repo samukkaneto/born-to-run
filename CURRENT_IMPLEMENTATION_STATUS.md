@@ -10,7 +10,7 @@ O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produç
 
 O Bloco 10 está publicado: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, novo ícone PWA e correções da home estão em produção. Em 11/08/2026, a loja foi retirada da área pública e reconstruída como catálogo profissional reservado a administrador/treinador; o login voltou a usar o logotipo oficial original. A PR #23 foi mesclada em `1f37f2e`, o CI do merge passou e o deployment `dpl_AJkfB6nyag24AMzKgL5qs6nQT3tT` está `READY` no domínio oficial.
 
-O bloco em publicação corrige a leitura do perfil, confirma 1 administrador e 1 treinador ativos, permite que os dois também tenham avatar e recebam avaliação, entrega comparação Tanita em português e incorpora a linguagem de cores definida por Robson: azul-claro descanso, amarelo contínuo, roxo intervalado rápido, verde leve/moderado, mostarda potência aeróbia e vermelho competição. O Supabase remoto já contém 16 migrations; consulte `docs/ABACUS_AI_HANDOFF/20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
+O bloco publicado pela PR #25 corrige a leitura do perfil, confirma 1 administrador e 1 treinador ativos, permite que os dois também tenham avatar e recebam avaliação, entrega comparação Tanita em português e incorpora a linguagem de cores definida por Robson: azul-claro descanso, amarelo contínuo, roxo intervalado rápido, verde leve/moderado, mostarda potência aeróbia e vermelho competição. O Supabase remoto contém 16 migrations; CI do merge `31516776891` aprovado e produção funcional `dpl_42CnrorJzo91kgQGYVKGeSQXbRPA` `READY`. Consulte `docs/ABACUS_AI_HANDOFF/20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md`.
 
 ## Estado por área
 
