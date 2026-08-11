@@ -94,6 +94,15 @@ O código já valida 8 caracteres, letra e número, mas a configuração do Auth
 - A URL da fotografia possui sufixo `v2` deliberadamente para invalidar caches da versão reprovada.
 - Depois do deploy do asset, o HTML de recuperação ainda deve ser copiado para **Authentication → Email Templates → Reset Password** no Supabase hospedado e validado com um envio real.
 
+## Avatar do remetente e BIMI
+
+- O avatar exibido na lista do Gmail não é controlado por `<img>` no template HTML nem por uma opção da Resend.
+- Ativo pronto: `public/brand/email-avatar-512.png`, em fundo branco e com o logotipo oficial completo.
+- Solução imediata para Gmail: criar ou usar uma Conta Google vinculada exatamente a `contato@equipeborntorun.com` e definir esse PNG como foto. Segundo a Resend, a foto aparece no Gmail mobile, notificações e dentro do e-mail aberto no desktop; o provedor decide a exibição.
+- Solução ampla: BIMI. Em 11/08/2026, o domínio possui DMARC `p=none` e não possui `default._bimi`; Gmail não mostra BIMI sem CMC/VMC.
+- Não publicar um registro BIMI improvisado e não mudar diretamente DMARC para `quarantine/reject`. Antes, confirmar alinhamento SPF/DKIM de todos os emissores legítimos, receber/analisar relatórios DMARC, preparar SVG Tiny PS e contratar/obter CMC ou VMC.
+- Fontes oficiais: `https://resend.com/docs/knowledge-base/how-do-i-send-with-an-avatar`, `https://resend.com/docs/dashboard/domains/bimi` e `https://support.google.com/a/answer/10911320`.
+
 ## Fontes oficiais
 
 - https://supabase.com/docs/guides/auth/auth-smtp

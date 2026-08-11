@@ -133,3 +133,10 @@ Não esconder estados nem remover controles apenas para simplificar o layout.
 - A avaliação física já possui indicadores e histórico; gráficos e tendências são visão futura e não devem ser apresentados como existentes.
 - Notificações push, funcionamento offline completo e integrações Garmin/Strava não fazem parte da entrega atual.
 - A implementação atual é um Next.js responsivo e instalável como PWA, já validado em desktop e mobile. Ela não gera APK e ainda não existe aplicativo nativo publicado na App Store ou Google Play; essa será uma fase posterior.
+
+## 12. Direção específica para o login
+
+- O login não deve voltar a usar uma grande faixa preta com o logotipo reduzido.
+- Usar fotografia real da equipe como ambiente, com tratamento que preserve contraste e leitura.
+- Exibir o logotipo oficial completo, grande e sem redesenho. A versão para fundo claro está em `public/brand/logo-on-light.png`.
+- A implementação local de referência está documentada em `docs/ABACUS_AI_HANDOFF/18-LOGIN-E-IDENTIDADE-DE-EMAIL.md`. A Fable 5 pode superá-la visualmente, preservando formulário, acessibilidade e contratos de autenticação.

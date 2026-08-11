@@ -104,3 +104,14 @@ O produto está pronto como MVP web publicado. Banco, Auth, SMTP, PWA, transpar�
 - A substituta publicada é `public/email/recovery-athletes-v2.jpg`: camisetas e shorts exibem símbolo, `BORN TO RUN` e `Treinamento e Saúde`, com contraste coerente para tecidos claros e pretos.
 - PR `#19` mesclada no commit `37b75c6`; CI do merge `31456328022` aprovado e deployment Vercel `dpl_CzjmVrL8vjpTbAFWCF1gYGLHo74D` em produção, sem erros de runtime. A URL oficial da imagem responde `200` com JPEG de 100.351 bytes.
 - O template versionado já referencia a URL nova. Falta somente copiar o HTML de `supabase/templates/recovery.html` para o template Reset Password do Supabase hospedado e fazer um envio real; o painel interno abriu a autenticação do GitHub, mas não havia sessão disponível para concluir a gravação automaticamente.
+
+## Login e identidade do remetente — implementação local de 11/08/2026
+
+- O login antigo usava um retângulo carbono desproporcional no celular e reduzia o logotipo oficial. O componente foi reconstruído em `app/(auth)/layout.tsx` e `app/(auth)/login/page.tsx`.
+- A nova composição usa a foto real `public/team-archive/team-race-palace.jpg`, com tratamento claro para preservar a leitura, logo oficial grande sem bloco preto e formulário branco de alto contraste.
+- A versão para fundo claro foi derivada do arquivo oficial, sem redesenho generativo, em `public/brand/logo-on-light.png`.
+- O avatar quadrado preparado para contas de e-mail está em `public/brand/email-avatar-512.png`, com fundo branco, logotipo completo e acento vermelho. O arquivo não ativa sozinho o avatar no Gmail.
+- Verificação local: 412 × 915 e 1440 × 1000 renderizados; conteúdo presente; sem overlay de erro; home acessível pelo link da marca; axe WCAG A/AA sem violações; ESLint completo, TypeScript, 57/57 unitários, build de 37 rotas e E2E direcionado 4/4 aprovados.
+- DNS observado: SPF do domínio presente, DMARC em `p=none` e nenhum registro BIMI. Não endurecer DMARC sem auditar conjuntamente os envios Hostinger e Resend.
+- Para Gmail, o caminho imediato é usar `contato@equipeborntorun.com` como uma Conta Google e carregar o avatar preparado. A exibição não é universal. O caminho corporativo multicliente é BIMI com DMARC `quarantine/reject`, CMC/VMC e logo SVG Tiny PS.
+- Commit funcional `ec35108` publicado na PR draft `#21`; CI `31461532992` aprovado por completo e preview Vercel `dpl_H9fR4oKqDuwqF51unFTCs3jBt7kq` em estado `READY`. `/login` e o ativo de marca responderam `200`; nenhum runtime error foi encontrado no período auditado. Consulte `18-LOGIN-E-IDENTIDADE-DE-EMAIL.md`.

@@ -1,6 +1,6 @@
 # Born to Run — entrega técnica para Abacus AI / Fable 5
 
-Atualizado em 10/08/2026. Esta pasta é o ponto de entrada canônico para uma IA ou pessoa retomar o projeto sem depender do histórico da conversa no Codex.
+Atualizado em 11/08/2026. Esta pasta é o ponto de entrada canônico para uma IA ou pessoa retomar o projeto sem depender do histórico da conversa no Codex.
 
 ## Ordem de leitura
 
@@ -21,6 +21,7 @@ Atualizado em 10/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 15. `15-CONTEXTO-COMPLETO-PARA-IA-SEM-HISTORICO.md` — documento obrigatório para uma instância isolada do Fable 5 que nunca viu o projeto.
 16. `16-GALERIA-TANITA-MISSOES-E-LOJA.md` — implementação do ciclo atual, decisões de produto, banco e ponto de publicação.
 17. `17-ROADMAP-PRODUTO-E-APP-NATIVO.md` — fases futuras: OCR Tanita, aplicativo nativo, loja real e integrações esportivas.
+18. `18-LOGIN-E-IDENTIDADE-DE-EMAIL.md` — redesign do login, ativos oficiais de marca e plano correto para avatar do remetente/BIMI.
 
 ## Fontes complementares no repositório
 
