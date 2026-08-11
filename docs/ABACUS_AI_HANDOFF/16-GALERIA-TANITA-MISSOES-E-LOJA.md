@@ -2,7 +2,7 @@
 
 ## Estado em 10/08/2026
 
-Código implementado na branch `codex/content-studio-gamification`. As cinco migrations deste bloco já foram aplicadas no Supabase remoto. No momento desta atualização, ainda faltam commit, PR, CI, preview e promoção para produção.
+Código implementado na branch `codex/content-studio-gamification`. As cinco migrations deste bloco já foram aplicadas no Supabase remoto. PR #17 aberta; CI `31451093854` verde; preview Vercel `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` `READY` no commit `131b879`. Restam merge e auditoria de produção.
 
 ## Correções visuais imediatas
 
@@ -67,5 +67,8 @@ Supabase remoto após aplicação:
 - ESLint direcionado aos arquivos alterados aprovado;
 - Vitest 57/57 aprovado, incluindo arquivo Tanita, cascata de maratona, pace e XP por tempo de equipe;
 - build Next.js 16.3 aprovado, 37 rotas;
-- E2E público equivalente a 28/28 aprovado em Desktop Chrome e Pixel 7: matriz anterior 26/26 mais 2/2 específicos de galeria/loja, sem violações axe sérias/críticas;
-- CI, preview e produção ainda devem ser registrados abaixo ao concluir a publicação.
+- E2E público 28/28 aprovado em Desktop Chrome e Pixel 7, sem violações axe sérias/críticas;
+- a primeira execução de CI (`31450271727`) identificou que a galeria derrubava a página quando o Supabase estava indisponível; a página passou a usar o acervo local autorizado como fallback;
+- a repetição local exata passou 2/2 e o CI completo `31451093854` passou em todas as etapas;
+- preview Vercel `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` ficou `READY`, ligado ao commit corrigido `131b879`;
+- produção será registrada após o merge.

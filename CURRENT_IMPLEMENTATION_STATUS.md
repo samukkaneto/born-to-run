@@ -8,7 +8,7 @@ O projeto deixou de ser apenas um protótipo visual. O código atual contém sit
 
 O Supabase remoto foi sincronizado e testado. Lint, TypeScript, build de produção, auditoria de dependências, 53 testes unitários, 72 asserções pgTAP e a matriz de 26 testes públicos de navegador passaram. O fluxo hospedado também foi validado com login, publicação, curtida, comentário, administração, grupos e treino direcionado reais; todos os dados técnicos foram removidos depois. O Bloco 9 foi mesclado pela PR [#15](https://github.com/samukkaneto/born-to-run/pull/15), o CI do merge ficou verde e a revisão `0c17f86` está em produção em **https://equipeborntorun.com**.
 
-O Bloco 10 está em publicação: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, loja conceitual, novo ícone PWA e correções da home estão implementados na branch `codex/content-studio-gamification`. Quatro migrations novas já estão aplicadas no Supabase remoto; a produção ainda serve o Bloco 9 até o merge desta branch.
+O Bloco 10 está em publicação: galeria gerenciável, Tanita ampliada, missões, níveis, resultados/conquistas, loja conceitual, novo ícone PWA e correções da home estão implementados na branch `codex/content-studio-gamification`. Cinco migrations novas já estão aplicadas no Supabase remoto. A PR [#17](https://github.com/samukkaneto/born-to-run/pull/17) está aberta, o CI `31451093854` passou e o preview `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` está `READY`; a produção ainda serve o Bloco 9 até o merge desta branch.
 
 ## Estado por área
 

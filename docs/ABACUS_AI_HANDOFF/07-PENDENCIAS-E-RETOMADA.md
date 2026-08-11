@@ -4,7 +4,7 @@ Atualizar este arquivo após cada bloco.
 
 ## Estado do ciclo técnico — atualização 10/08/2026
 
-O Bloco 10 está implementado e suas cinco migrations já estão no Supabase remoto. Build/E2E locais passaram. O frontend ainda precisa de commit, PR, CI, preview, merge e validação de produção.
+O Bloco 10 está implementado e suas cinco migrations já estão no Supabase remoto. PR #17 aberta, CI `31451093854` verde e preview `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` `READY`. Restam merge e validação da produção.
 
 ## Concluído neste ciclo
 
@@ -18,7 +18,7 @@ O Bloco 10 está implementado e suas cinco migrations já estão no Supabase rem
 
 ## Próxima ação exata
 
-Concluir os gates do Bloco 10 e publicar a branch `codex/content-studio-gamification`. Depois, Robson cria a conta real pelo cadastro oficial e confirma o e-mail. A pré-autorização continua aguardando no Supabase.
+Mesclar a PR #17 e validar a publicação automática em `https://equipeborntorun.com`. Depois, Robson cria a conta real pelo cadastro oficial e confirma o e-mail. A pré-autorização continua aguardando no Supabase.
 
 O administrador foi localizado e está `active` com e-mail confirmado. O proprietário recebeu o identificador exato fora do repositório. Se não lembrar a senha, deve usar `https://equipeborntorun.com/recuperar-senha` com esse e-mail.
 

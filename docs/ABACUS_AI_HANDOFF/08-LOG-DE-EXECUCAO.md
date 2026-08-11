@@ -243,4 +243,9 @@ Cada entrada futura deve registrar:
 - A permanência passou a usar a data real de entrada na equipe, editável somente por administrador/treinador; não depende mais da data de criação da conta.
 - Supabase verificado: buckets público/privado corretos, 12 missões e grants por coluna para resultados.
 - Gates locais: TypeScript aprovado, ESLint direcionado aprovado, Vitest 57/57, build de 37 rotas e E2E equivalente a 28/28 em Desktop Chrome/Pixel 7 sem violações axe sérias/críticas.
-- Publicação GitHub/Vercel continua pendente no momento deste registro.
+- Commit funcional `dc85da6` e correção de resiliência `131b879` enviados à branch `codex/content-studio-gamification`; PR #17 aberta.
+- O primeiro CI `31450271727` bloqueou a entrega porque o Supabase fictício do ambiente de teste fazia `/galeria` lançar erro. A produção permaneceu intacta.
+- A galeria pública passou a mostrar o acervo local autorizado quando a leitura remota estiver indisponível; gravações administrativas continuam falhando explicitamente.
+- Reprodução com as mesmas variáveis do CI passou 2/2 em Desktop Chrome/Pixel 7.
+- CI completo `31451093854` passou audit, lint, tipos, 57 unitários, build e 28 testes E2E.
+- Preview Vercel `dpl_5iugxLc26VFU1F3gP59D8jQM9pKU` ficou `READY` no commit `131b879`; merge e auditoria de produção ainda pendentes neste checkpoint.
