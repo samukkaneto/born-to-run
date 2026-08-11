@@ -268,4 +268,6 @@ Cada entrada futura deve registrar:
 - O arquivo otimizado para e-mail foi salvo como `public/email/recovery-athletes-v2.jpg` em 1200 × 800 e aproximadamente 100 KB.
 - `supabase/templates/recovery.html` passou a usar uma URL versionada (`/email/recovery-athletes-v2.jpg`), evitando que cache de navegador ou cliente de e-mail mantenha a arte antiga.
 - Regra de marca para futuras IAs: nunca extrair ou redesenhar apenas o símbolo. Em roupas claras, usar a versão completa com nome/slogan escuros; em roupas escuras, usar a versão completa com nome/slogan brancos. Validar em ampliação antes de publicar.
-- Neste checkpoint, a alteração está no repositório local e ainda precisa passar por commit, CI, deploy Vercel e atualização do HTML hospedado no Supabase Auth.
+- PR `#19` mesclada no commit `37b75c6`; CI de PR e CI do merge passaram. O deployment de produção `dpl_CzjmVrL8vjpTbAFWCF1gYGLHo74D` ficou `READY`, e `https://equipeborntorun.com/email/recovery-athletes-v2.jpg` respondeu `200` com o tamanho esperado.
+- A Vercel não apresentou erros de runtime nos 30 minutos auditados.
+- Única pendência deste bloco: copiar o HTML atualizado para **Authentication → Emails → Templates → Reset Password** no Supabase hospedado e executar uma recuperação real. O conector Supabase não expõe Auth config; o Chrome não estava conectado à automação; o navegador interno chegou ao login GitHub e foi preservado para retomada.
