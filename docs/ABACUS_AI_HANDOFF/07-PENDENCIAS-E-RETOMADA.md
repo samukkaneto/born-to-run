@@ -55,13 +55,11 @@ Essas dependências não impedem o Codex de adiantar código, documentação, te
 
 ## Retomada do bloco visual e de e-mail — 11/08/2026
 
-Estado publicado em preview e pronto para fechamento:
+Estado de código concluído e publicado em produção:
 
-1. publicar este checkpoint documental na PR `#21`, aguardar o CI final e mesclar;
-2. validar a URL de produção após o merge e revisar runtime logs;
-3. no Supabase hospedado, salvar o conteúdo de `supabase/templates/recovery.html` em **Authentication → Email Templates → Reset Password** e disparar uma recuperação real;
-4. criar ou acessar uma Conta Google usando `contato@equipeborntorun.com` e carregar `public/brand/email-avatar-512.png` como foto do perfil;
-5. confirmar o avatar no Gmail mobile e dentro de um e-mail aberto no desktop. Não prometer exibição universal;
-6. manter BIMI como etapa separada. Antes de trocar DMARC de `p=none`, auditar alinhamento de SPF/DKIM de Hostinger e Resend, política de subdomínios, recebimento de relatórios e possibilidade de CMC/VMC.
+1. no Supabase hospedado, salvar o conteúdo de `supabase/templates/recovery.html` em **Authentication → Email Templates → Reset Password** e disparar uma recuperação real;
+2. criar ou acessar uma Conta Google usando `contato@equipeborntorun.com` e carregar `public/brand/email-avatar-512.png` como foto do perfil;
+3. confirmar o avatar no Gmail mobile e dentro de um e-mail aberto no desktop. Não prometer exibição universal;
+4. manter BIMI como etapa separada. Antes de trocar DMARC de `p=none`, auditar alinhamento de SPF/DKIM de Hostinger e Resend, política de subdomínios, recebimento de relatórios e possibilidade de CMC/VMC.
 
 Bloqueio operacional atual do item 3: o conector Supabase não expõe configuração de Auth, a CLI não possui token de Management API e o controle do Codex não está conectado ao Chrome comum, embora o proprietário esteja logado nele. Não criar outro Personal Access Token apenas para este ajuste; preferir reconectar o navegador ou executar o salvamento manual assistido.

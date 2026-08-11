@@ -295,3 +295,14 @@ Cada entrada futura deve registrar:
 - Preview Vercel `dpl_H9fR4oKqDuwqF51unFTCs3jBt7kq`, URL imutável `https://born-to-rf1on4z84-shabuneto.vercel.app`, estado `READY`, target `preview`.
 - Validação remota com bypass oficial: `/login` retornou `200`, HTML prerenderizado de 31.445 bytes; `/brand/logo-on-light.png` retornou `200`, PNG de 146.181 bytes; HSTS e `X-Robots-Tag: noindex` presentes; nenhuma entrada de runtime em nível `error` no período consultado.
 - Próximo passo: publicar este checkpoint, repetir o CI, retirar a PR de draft, mesclar e auditar a produção automática.
+
+### Fechamento e produção
+
+- Checkpoint documental `b17157a` publicado; GitHub Actions final da PR `31461939571` aprovado e Vercel Preview final concluído.
+- PR `#21` retirada de draft e mesclada por squash no commit `c1dc4450514520a6e0847b94a677722913b3cec0`.
+- CI do merge `31462110659` aprovou audit, lint, TypeScript, 57 unitários, build e matriz completa de navegador.
+- Deployment de produção `dpl_FaJKjbYHCFYGygVWTFzo1HMu4wii`, URL imutável `https://born-to-impjxpn8u-shabuneto.vercel.app`, ficou `READY` e recebeu os aliases `equipeborntorun.com`, `www`, alias principal e alias de `main`.
+- Smoke test oficial: `/login` `200`; `/brand/email-avatar-512.png` `200`, PNG de 59.544 bytes; `/api/health` `ok` com revisão `c1dc445`.
+- Inspeção visual em 412 × 915 no domínio oficial confirmou foto real, logo sem caixa preta, formulário completo e ausência de overlay. Axe WCAG A/AA não encontrou violações.
+- Runtime Logs do deployment de produção não apresentaram entradas em nível `error` nos 30 minutos consultados.
+- Estado final do código: concluído e publicado. Permanecem somente as operações externas do template Supabase e da foto da Conta Google; BIMI é fase futura separada.
