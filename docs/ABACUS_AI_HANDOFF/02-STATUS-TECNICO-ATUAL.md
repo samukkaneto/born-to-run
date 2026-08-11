@@ -114,4 +114,4 @@ O produto está pronto como MVP web publicado. Banco, Auth, SMTP, PWA, transpar�
 - Verificação local: 412 × 915 e 1440 × 1000 renderizados; conteúdo presente; sem overlay de erro; home acessível pelo link da marca; axe WCAG A/AA sem violações; ESLint completo, TypeScript, 57/57 unitários, build de 37 rotas e E2E direcionado 4/4 aprovados.
 - DNS observado: SPF do domínio presente, DMARC em `p=none` e nenhum registro BIMI. Não endurecer DMARC sem auditar conjuntamente os envios Hostinger e Resend.
 - Para Gmail, o caminho imediato é usar `contato@equipeborntorun.com` como uma Conta Google e carregar o avatar preparado. A exibição não é universal. O caminho corporativo multicliente é BIMI com DMARC `quarantine/reject`, CMC/VMC e logo SVG Tiny PS.
-- Código ainda não publicado neste checkpoint. Consulte `18-LOGIN-E-IDENTIDADE-DE-EMAIL.md`.
+- Commit funcional `ec35108` publicado na PR draft `#21`; CI `31461532992` aprovado por completo e preview Vercel `dpl_H9fR4oKqDuwqF51unFTCs3jBt7kq` em estado `READY`. `/login` e o ativo de marca responderam `200`; nenhum runtime error foi encontrado no período auditado. Consulte `18-LOGIN-E-IDENTIDADE-DE-EMAIL.md`.

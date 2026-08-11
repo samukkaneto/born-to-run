@@ -55,10 +55,10 @@ Essas dependências não impedem o Codex de adiantar código, documentação, te
 
 ## Retomada do bloco visual e de e-mail — 11/08/2026
 
-Estado local pronto para publicação:
+Estado publicado em preview e pronto para fechamento:
 
-1. publicar o redesign responsivo do login e os dois ativos em `public/brand/`;
-2. repetir os gates completos e validar a URL de produção após o merge;
+1. publicar este checkpoint documental na PR `#21`, aguardar o CI final e mesclar;
+2. validar a URL de produção após o merge e revisar runtime logs;
 3. no Supabase hospedado, salvar o conteúdo de `supabase/templates/recovery.html` em **Authentication → Email Templates → Reset Password** e disparar uma recuperação real;
 4. criar ou acessar uma Conta Google usando `contato@equipeborntorun.com` e carregar `public/brand/email-avatar-512.png` como foto do perfil;
 5. confirmar o avatar no Gmail mobile e dentro de um e-mail aberto no desktop. Não prometer exibição universal;

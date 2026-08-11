@@ -81,6 +81,16 @@ O domínio usa Hostinger para a caixa e Resend para transacionais. Trocar `p=non
 - O conector Supabase disponível não expõe Auth config; a CLI não possui Personal Access Token e respondeu `Access token not provided`; o Chrome comum está autenticado, mas o controle do Codex não se conectou a ele.
 - Não criar novo token permanente somente para esse ajuste. Preferir reconectar o controle do navegador ou fazer o salvamento assistido no painel já aberto.
 
+## Checkpoint de publicação
+
+- Branch: `codex/login-email-identity`.
+- Commit funcional: `ec35108`.
+- Pull request: `#21`, aberta como draft.
+- GitHub Actions: run `31461532992`, aprovado em todas as etapas.
+- Vercel Preview: deployment `dpl_H9fR4oKqDuwqF51unFTCs3jBt7kq`, `READY`.
+- Verificação remota: login `200`, ativo de marca `200`, HSTS/noindex presentes e nenhum runtime error encontrado no período consultado.
+- Estado deste documento: aguarda commit documental, CI final, merge e validação da produção automática.
+
 ## Liberdade futura da Fable 5
 
 A Fable 5 pode elevar novamente tipografia, enquadramento, tratamento de fotografia, microinterações e composição do login. Deve preservar obrigatoriamente:

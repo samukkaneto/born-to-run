@@ -287,3 +287,11 @@ Cada entrada futura deve registrar:
 - Pesquisa oficial confirmou: HTML de e-mail não define o avatar da caixa de entrada; Gmail aceita foto de uma Conta Google para o mesmo remetente, com limitações de exibição; BIMI no Gmail exige CMC ou VMC e DMARC em `p=quarantine` ou `p=reject`, `pct=100`.
 - Não houve alteração de DNS neste bloco. Endurecer DMARC sem validar Hostinger e Resend poderia prejudicar entregabilidade.
 - O template remoto do Supabase continua pendente: nenhuma ferramenta conectada possui Auth config e a CLI retornou `Access token not provided`. O arquivo versionado permanece correto.
+
+### Checkpoint GitHub/Vercel
+
+- Branch `codex/login-email-identity`, commit funcional `ec35108` e PR draft `#21` publicados.
+- GitHub Actions `Qualidade` run `31461532992`: audit, lint, TypeScript, 57 unitários, build, instalação do Chromium e matriz completa de navegador aprovados.
+- Preview Vercel `dpl_H9fR4oKqDuwqF51unFTCs3jBt7kq`, URL imutável `https://born-to-rf1on4z84-shabuneto.vercel.app`, estado `READY`, target `preview`.
+- Validação remota com bypass oficial: `/login` retornou `200`, HTML prerenderizado de 31.445 bytes; `/brand/logo-on-light.png` retornou `200`, PNG de 146.181 bytes; HSTS e `X-Robots-Tag: noindex` presentes; nenhuma entrada de runtime em nível `error` no período consultado.
+- Próximo passo: publicar este checkpoint, repetir o CI, retirar a PR de draft, mesclar e auditar a produção automática.
