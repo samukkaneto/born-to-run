@@ -149,7 +149,7 @@ export default function PerfilForm({ profile, personalGoal }: { profile: MemberP
         </div>
         <div>
           <label htmlFor="profile-goal" className="mb-1.5 block text-sm font-semibold text-stone-700">
-            Meta pessoal privada
+            Meta
           </label>
           <input
             id="profile-goal"

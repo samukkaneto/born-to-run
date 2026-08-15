@@ -48,7 +48,7 @@ export default async function PerfilPage() {
         {[
           { icon: Rss,    value: count ?? 0,                label: 'Posts'           },
           { icon: MapPin, value: profileForView.cidade || '—',     label: 'Cidade'          },
-          { icon: Target, value: personalGoalResult.data?.goal ? '✓' : '—', label: 'Meta privada' },
+          { icon: Target, value: personalGoalResult.data?.goal ? '✓' : '—', label: 'Meta' },
         ].map(({ icon: Icon, value, label }) => (
           <div key={label} className="card p-4 text-center">
             <Icon size={18} className="mx-auto mb-1 text-[var(--color-red)]" />

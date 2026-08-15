@@ -6,12 +6,13 @@ import { createMediaUrl } from '@/lib/supabase/media'
 import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
 import { formatDate } from '@/lib/utils'
 import AssessmentPdfButton from '@/components/assessments/AssessmentPdfButton'
+import AssessmentEvolution from '@/components/assessments/AssessmentEvolution'
+import SegmentedBodyMap from '@/components/assessments/SegmentedBodyMap'
 import type { BodyAssessment } from '@/types'
 
 type AssessmentView = BodyAssessment & {
   body_assessment_files: { slot: number; storage_path: string; mime_type: string }[]
 }
-
 const BODY_FAT_CATEGORY: Record<string, string> = {
   underfat: 'Abaixo da faixa',
   healthy: 'Saudável',
@@ -68,16 +69,15 @@ export default async function AvaliacoesPage() {
   const athleteName = profileResult.data?.full_name ?? 'Atleta Born to Run'
 
   return (
-    <div className="mx-auto max-w-4xl animate-fade-in space-y-8">
+    <div className="mx-auto max-w-6xl animate-fade-in space-y-10">
       <div className="card overflow-hidden bg-[#171717] text-white">
         <div className="grid gap-6 p-6 sm:grid-cols-[auto_1fr] sm:items-center sm:p-8">
-          <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl border border-white/15 bg-[#292929]">
+          <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-[#DC2626] bg-[#292929] ring-4 ring-white/10">
             {avatarUrl ? <Image src={avatarUrl} alt={`Foto de ${athleteName}`} width={96} height={96} className="h-full w-full object-cover" /> : <UserRound size={38} className="text-[#A8A29E]" aria-hidden="true" />}
           </div>
           <div>
-            <p className="font-condensed text-xs font-semibold uppercase tracking-[0.18em] text-[#F87171]">Evolução corporal · Born to Run</p>
-            <h1 className="mt-2 font-display text-4xl uppercase leading-none sm:text-5xl">{athleteName}</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#D6D3D1]">Acompanhamento em português a partir das avaliações presenciais realizadas pelo Prof. Robson Alves.</p>
+            <h1 className="font-display text-4xl uppercase leading-none sm:text-5xl">Avaliação Tetrapolar Segmentada</h1>
+            <p className="mt-3 font-condensed text-sm font-semibold uppercase tracking-[0.1em] text-[#FCA5A5]">{athleteName}</p>
           </div>
         </div>
       </div>
@@ -126,7 +126,7 @@ export default async function AvaliacoesPage() {
                 <p className="mt-2 text-xs leading-relaxed text-[#78716C]">As setas mostram apenas a variação entre medições; não representam diagnóstico ou classificação clínica.</p>
               </div>
             )}
-            <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_1.2fr]">
+            <div className="mt-6 grid gap-5 xl:grid-cols-[0.72fr_1.28fr]">
               <section className="border border-[#E5E1D8] bg-white p-5" aria-labelledby="reference-ranges">
                 <h3 id="reference-ranges" className="font-condensed text-base font-semibold uppercase text-[#171717]">Faixas de referência</h3>
                 <p className="mt-1 text-xs leading-relaxed text-[#78716C]">Versão traduzida da Foto 2. O marcador mostra a posição do resultado na escala visual, sem substituir avaliação profissional.</p>
@@ -137,8 +137,9 @@ export default async function AvaliacoesPage() {
                   <ReferenceBar label="Gordura visceral" metricValue={latest.visceral_fat_level} min={1} max={30} suffix="" />
                 </div>
               </section>
-              <SegmentalPanel assessment={latest} />
+              <SegmentedBodyMap assessment={latest} />
             </div>
+            <div className="mt-8"><AssessmentEvolution assessments={assessments} /></div>
             <div className="mt-5 flex flex-wrap items-start gap-3">
               <AssessmentPdfButton assessment={{
                 athleteName,
@@ -146,15 +147,40 @@ export default async function AvaliacoesPage() {
                 assessed_at: latest.assessed_at,
                 weight_kg: latest.weight_kg,
                 body_fat_pct: latest.body_fat_pct,
+                body_fat_category: latest.body_fat_category,
+                fat_mass_kg: latest.fat_mass_kg,
+                fat_free_mass_kg: latest.fat_free_mass_kg,
                 muscle_mass_kg: latest.muscle_mass_kg,
                 visceral_fat_level: latest.visceral_fat_level,
                 body_water_pct: latest.body_water_pct,
+                body_water_mass_kg: latest.body_water_mass_kg,
                 bmi: latest.bmi,
                 metabolic_age: latest.metabolic_age,
                 bone_mass_kg: latest.bone_mass_kg,
                 basal_metabolic_rate: latest.basal_metabolic_rate,
+                daily_calorie_intake: latest.daily_calorie_intake,
+                heart_rate_bpm: latest.heart_rate_bpm,
                 physique_rating: latest.physique_rating,
+                segment_left_arm_fat_pct: latest.segment_left_arm_fat_pct,
+                segment_left_arm_muscle_kg: latest.segment_left_arm_muscle_kg,
+                segment_right_arm_fat_pct: latest.segment_right_arm_fat_pct,
+                segment_right_arm_muscle_kg: latest.segment_right_arm_muscle_kg,
+                segment_trunk_fat_pct: latest.segment_trunk_fat_pct,
+                segment_trunk_muscle_kg: latest.segment_trunk_muscle_kg,
+                segment_left_leg_fat_pct: latest.segment_left_leg_fat_pct,
+                segment_left_leg_muscle_kg: latest.segment_left_leg_muscle_kg,
+                segment_right_leg_fat_pct: latest.segment_right_leg_fat_pct,
+                segment_right_leg_muscle_kg: latest.segment_right_leg_muscle_kg,
                 notes: latest.notes,
+                history: assessments.map((assessment) => ({
+                  assessed_at: assessment.assessed_at,
+                  weight_kg: assessment.weight_kg,
+                  body_fat_pct: assessment.body_fat_pct,
+                  muscle_mass_kg: assessment.muscle_mass_kg,
+                  body_water_pct: assessment.body_water_pct,
+                  bmi: assessment.bmi,
+                  visceral_fat_level: assessment.visceral_fat_level,
+                })),
               }} />
               {latestSourceFiles.map((file) => file.url && <a key={file.slot} href={file.url} target="_blank" rel="noreferrer" className="btn-outline inline-flex text-sm"><ExternalLink size={15} aria-hidden="true" /> Foto {file.slot}</a>)}
               {latestSourceUrl && <a href={latestSourceUrl} target="_blank" rel="noreferrer" className="btn-outline inline-flex text-sm"><ExternalLink size={15} aria-hidden="true" /> Arquivo original antigo</a>}
@@ -202,7 +228,6 @@ export default async function AvaliacoesPage() {
     </div>
   )
 }
-
 function TrendCard({
   label,
   current,
@@ -225,7 +250,6 @@ function TrendCard({
     </div>
   )
 }
-
 function MetricCard({
   icon: Icon,
   label,
@@ -267,28 +291,5 @@ function ReferenceBar({
       </div>
       <div className="mt-1 flex justify-between text-[10px] uppercase text-[#A8A29E]"><span>Menor</span><span>Referência</span><span>Maior</span></div>
     </div>
-  )
-}
-
-function SegmentalPanel({ assessment }: { assessment: BodyAssessment }) {
-  const segments = [
-    ['Braço esquerdo', assessment.segment_left_arm_fat_pct, assessment.segment_left_arm_muscle_kg],
-    ['Braço direito', assessment.segment_right_arm_fat_pct, assessment.segment_right_arm_muscle_kg],
-    ['Tronco', assessment.segment_trunk_fat_pct, assessment.segment_trunk_muscle_kg],
-    ['Perna esquerda', assessment.segment_left_leg_fat_pct, assessment.segment_left_leg_muscle_kg],
-    ['Perna direita', assessment.segment_right_leg_fat_pct, assessment.segment_right_leg_muscle_kg],
-  ] as const
-  const hasSegmentalData = segments.some(([, fat, muscle]) => fat !== null || muscle !== null)
-  return (
-    <section className="border border-[#E5E1D8] bg-[#171717] p-5 text-white" aria-labelledby="segmental-title">
-      <h3 id="segmental-title" className="font-condensed text-base font-semibold uppercase">Análise segmental</h3>
-      <p className="mt-1 text-xs leading-relaxed text-[#A8A29E]">Versão em português da Foto 3 · gordura e massa muscular por região.</p>
-      {hasSegmentalData ? (
-        <div className="mt-5 divide-y divide-white/10">
-          <div className="grid grid-cols-[1fr_86px_86px] gap-2 pb-2 text-right text-[10px] font-semibold uppercase text-[#A8A29E]"><span className="text-left">Região</span><span>Gordura</span><span>Músculo</span></div>
-          {segments.map(([label, fat, muscle]) => <div key={label} className="grid min-h-12 grid-cols-[1fr_86px_86px] items-center gap-2 py-2 text-right text-sm"><span className="text-left text-[#E7E5E4]">{label}</span><strong className="text-[#FCA5A5]">{value(fat, '%')}</strong><strong className="text-[#86EFAC]">{value(muscle, ' kg')}</strong></div>)}
-        </div>
-      ) : <p className="mt-8 border border-dashed border-white/20 p-6 text-center text-sm text-[#A8A29E]">Dados segmentais ainda não registrados nesta avaliação.</p>}
-    </section>
   )
 }

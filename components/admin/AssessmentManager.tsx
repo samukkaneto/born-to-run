@@ -237,7 +237,7 @@ export default function AssessmentManager({
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 border-l-4 border-l-[#7C3AED] bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
-        <div><p className="font-condensed text-sm font-semibold uppercase tracking-[0.08em] text-[#171717]">Avaliação privada em três imagens</p><p className="mt-1 text-sm text-[#57534E]">Foto 1: resumo · Foto 2: faixas · Foto 3: segmentos. Administrador e treinador podem registrar qualquer perfil ativo.</p></div>
+        <div><p className="font-condensed text-sm font-semibold uppercase tracking-[0.08em] text-[#171717]">Avaliação Tetrapolar Segmentada</p><p className="mt-1 text-sm text-[#57534E]">Foto 1: resumo · Foto 2: faixas · Foto 3: segmentos. Administrador e treinador podem registrar qualquer perfil ativo.</p></div>
         <button type="button" onClick={openCreate} disabled={athletes.length === 0} className="btn-primary shrink-0"><Plus size={16} aria-hidden="true" /> Nova avaliação</button>
       </div>
 
@@ -259,7 +259,7 @@ export default function AssessmentManager({
         )) : <div className="card p-10 text-center text-[#57534E]"><ClipboardList size={30} className="mx-auto mb-3 opacity-40" aria-hidden="true" /><p className="text-sm">Nenhuma avaliação registrada ainda.</p></div>}
       </div>
 
-      <AdminModal open={modal !== null} title={editing ? 'Editar avaliação Tanita' : 'Nova avaliação Tanita'} subtitle="Anexe as três imagens na ordem correta, confira a leitura automática e publique em português." onClose={() => !working && ocrState.status !== 'reading' && setModal(null)}>
+      <AdminModal open={modal !== null} title={editing ? 'Editar Avaliação Tetrapolar Segmentada' : 'Nova Avaliação Tetrapolar Segmentada'} subtitle="Anexe as três imagens na ordem correta e confira a leitura automática antes de salvar." onClose={() => !working && ocrState.status !== 'reading' && setModal(null)}>
         <form key={editing?.id ?? 'create'} onSubmit={handleSave} className="space-y-5">
           <div className="grid gap-4 sm:grid-cols-2">
             <div><label htmlFor="assessment-athlete" className="mb-1.5 block font-condensed text-sm font-semibold uppercase text-[#44403C]">Pessoa avaliada</label>{editing ? <><input type="hidden" name="athlete_user_id" value={editing.athlete_user_id} /><input id="assessment-athlete" value={athleteNames.get(editing.athlete_user_id) ?? 'Atleta'} disabled className="input-base bg-[#F5F5F4]" /></> : <select id="assessment-athlete" name="athlete_user_id" required defaultValue="" className="input-base bg-white"><option value="" disabled>Selecione o aluno ou atleta</option>{athletes.map((athlete) => <option key={athlete.user_id} value={athlete.user_id}>{athlete.full_name}{athlete.role === 'admin' ? ' · Perfil de aluno' : athlete.role === 'coach' ? ' · Perfil de atleta' : ''}</option>)}</select>}</div>

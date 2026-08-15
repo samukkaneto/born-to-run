@@ -81,7 +81,7 @@ export default async function DashboardPage() {
         </h1>
         <p className="text-[#57534E] text-sm mt-3">
           {personalGoalResult.data?.goal
-            ? <>Sua meta privada: <span className="font-medium text-[#171717]">{personalGoalResult.data.goal}</span></>
+            ? <>Sua meta: <span className="font-medium text-[#171717]">{personalGoalResult.data.goal}</span></>
             : 'Bem-vindo(a) à área de membros da Born to Run.'}
         </p>
       </div>
