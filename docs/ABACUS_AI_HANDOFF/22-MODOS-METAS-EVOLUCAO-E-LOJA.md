@@ -33,7 +33,7 @@ O OCR atual usa `pdfjs-dist` e `tesseract.js` no navegador. Não existe chamada 
 - Qualidade local: lint e TypeScript aprovados; 13 arquivos com 70 testes unitários aprovados; build Next.js com 40 rotas concluído.
 - Navegador: 28/28 cenários Playwright aprovados em Desktop Chrome e Pixel 7, incluindo acessibilidade séria/crítica, PWA, contato, rotas públicas e guardas anônimas.
 - QA autenticado: modos, evolução, conquistas, loja, cores e PDF inspecionados em desktop/mobile sem overflow ou imagens quebradas.
-- Publicação: PR `#28`, CI Linux `31870804865` aprovado e preview Vercel `5bcivLct5w9yJ2KzJeX9zYMPzbUJ` concluído; merge/produção registrados no encerramento do bloco.
+- Publicação: PR `#28` mesclada em `7c5561b28051f6aad873f2ba56e77649ae052165`; CI da `main` `31871069506` aprovado; produção Vercel `dpl_FqV47iK47bRQ1vLkk3AofS2A3vbA` em estado `READY`.
 
 ## Onde os dados ficam
 
@@ -44,8 +44,16 @@ O OCR atual usa `pdfjs-dist` e `tesseract.js` no navegador. Não existe chamada 
 
 O crescimento de fotos e originais Tanita consome armazenamento/egress do Supabase. Antes de escala real, acompanhar o painel de uso, definir retenção dos originais e escolher Supabase Pro ou backup externo criptografado.
 
+## Conexões operacionais verificadas
+
+- GitHub CLI autenticada e com leitura/escrita em `samukkaneto/born-to-run`.
+- Vercel CLI autenticada no projeto `born-to-run`; aliases `equipeborntorun.com` e `www.equipeborntorun.com` ativos.
+- Supabase conectado ao projeto `nmcaejrmmfffzeclmuob`; migration, testes e advisors executados remotamente.
+- Hostinger MCP disponível para o domínio/DNS; Resend configurada no ambiente local e na Vercel sem versionar a chave.
+- O Firewall do Windows já contém duas regras de entrada `Codex`, habilitadas para TCP/UDP e perfis Privado/Público; nenhuma regra duplicada foi criada.
+
 ## Estado e próximos passos
 
-Migration remota aplicada: `20260815043638_admin_training_private_goals`. O PDF de fornecedores foi gerado em duas páginas e inspecionado localmente. No momento desta escrita, os gates finais, PR, merge e deploy ainda estão em execução; os identificadores serão acrescentados após a publicação.
+Migration remota aplicada: `20260815043638_admin_training_private_goals`. O PDF de fornecedores foi gerado em duas páginas e inspecionado localmente. A entrega está publicada no domínio oficial; health respondeu `200` na revisão `7c5561b`, as áreas privadas redirecionaram visitantes ao login e o PDF protegido respondeu `401` sem sessão.
 
 Refinamento visual amplo com Abacus/Fable 5 continua uma fase posterior. Esse refinamento pode elevar composição, mockups e acabamento, mas deve preservar RLS, papéis, privacidade de metas/avaliações, acesso protegido aos fornecedores e integridade do logotipo oficial.

@@ -4,7 +4,7 @@
 
 O bloco solicitado pelo proprietário está implementado e validado localmente e no Supabase: modos de atuação, administrador com funções técnicas, metas privadas, tolerância a falhas em conquistas, evolução do atleta, enquadramento integral dos logos e revisão da loja com PDF protegido. Não repetir as regras antigas que impediam o administrador de acessar treinos durante desenvolvimento. Consulte `22-MODOS-METAS-EVOLUCAO-E-LOJA.md`.
 
-Próxima ação exata: mesclar a PR `#28`, validar o deployment de produção e registrar os IDs finais neste pacote. Os gates locais já passaram: lint, TypeScript, 70 unitários, build de 40 rotas, 20 asserções pgTAP e 28 cenários Playwright em desktop/mobile. O CI Linux `31870804865` e o preview Vercel `5bcivLct5w9yJ2KzJeX9zYMPzbUJ` também foram aprovados.
+O bloco foi publicado pela PR `#28`, merge `7c5561b28051f6aad873f2ba56e77649ae052165`, CI da `main` `31871069506` e deployment Vercel `dpl_FqV47iK47bRQ1vLkk3AofS2A3vbA`. O domínio oficial foi validado na mesma revisão. Próxima ação: iniciar um novo bloco de produto a partir das pendências abaixo; o refinamento amplo com Abacus/Fable 5 permanece posterior e não deve alterar os contratos de segurança já entregues.
 
 Atualizar este arquivo após cada bloco.
 
