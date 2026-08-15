@@ -40,6 +40,8 @@ Estados de acesso: `pending`, `active`, `suspended`, `rejected`. Papel e status 
 
 Aplicação Next.js 16.3, React, TypeScript, Tailwind e Supabase, hospedada na Vercel. O domínio oficial é `equipeborntorun.com`. Auth, SMTP Resend, e-mail profissional, RLS, Storage e CI/CD já existem. O repositório oficial é `samukkaneto/born-to-run`.
 
+Checkpoint publicado em 15/08/2026: PR `#32`, merge `fa7ac1b`, CI da `main` `31887206903` e Vercel `dpl_CJLzvTXyAS9fffKpPuNXuWSZr3Au` `READY`. Esse checkpoint separa integralmente os modos, corrige o modal Tanita no Android e calibra o OCR posicional para as três telas do Healthy Edge Lite. As fontes são autocontidas no repositório para builds reproduzíveis. Não houve alteração de Supabase nem da loja.
+
 A versão atual é uma PWA instalável pelo navegador. Ela pode aparecer como aplicativo no Android, funcionar em tela própria e ter ícone, mas não é um APK nativo. O aplicativo Android profissional será outra fase, após o piloto e a estabilização das regras de negócio. Não fingir que um APK já existe.
 
 ## Funcionalidades implementadas
