@@ -1,5 +1,11 @@
 # Pendências e ponto de retomada
 
+## Retomada mais recente — prescrição e Tanita em três fotos
+
+O bloco funcional de 15/08/2026 está implementado no código e no Supabase. Não voltar a filtrar destinatários por `role = member`: Samuel e Robson são perfis técnicos e atletas ao mesmo tempo. O modo atleta usa `get_my_assigned_workouts()` para não mostrar prescrições alheias.
+
+Próxima ação exata: publicar um mesociclo piloto para Samuel, um treino para Robson e uma avaliação real com Foto 1, Foto 2 e Foto 3; conferir as telas autenticadas em desktop/Android. Depois disso, abrir outro bloco exclusivo para os mockups da loja. Consulte `23-PRESCRICAO-PRIVADA-MESOCICLO-E-TANITA-3-FOTOS.md`.
+
 ## Retomada atual — 15/08/2026
 
 O bloco solicitado pelo proprietário está implementado e validado localmente e no Supabase: modos de atuação, administrador com funções técnicas, metas privadas, tolerância a falhas em conquistas, evolução do atleta, enquadramento integral dos logos e revisão da loja com PDF protegido. Não repetir as regras antigas que impediam o administrador de acessar treinos durante desenvolvimento. Consulte `22-MODOS-METAS-EVOLUCAO-E-LOJA.md`.

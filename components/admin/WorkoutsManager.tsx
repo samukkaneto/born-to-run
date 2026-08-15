@@ -8,6 +8,7 @@ import {
   Pencil,
   Plus,
   Search,
+  ShieldCheck,
   Trash2,
   Users,
 } from 'lucide-react'
@@ -18,7 +19,7 @@ import AdminModal from '@/components/admin/AdminModal'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import WorkoutWorkbookImporter from '@/components/admin/WorkoutWorkbookImporter'
 import { TRAINING_TYPES, TRAINING_TYPE_VISUALS, getTrainingTypeVisual } from '@/lib/workouts/training-types'
-import type { MemberProfile, TrainingGroup, WorkoutWithAssignments } from '@/types'
+import type { MemberProfile, TrainingCycle, TrainingGroup, WorkoutWithAssignments } from '@/types'
 
 const LEVEL_LABELS: Record<string, string> = {
   iniciante: 'Iniciante',
@@ -50,15 +51,18 @@ export default function WorkoutsManager({
   workouts,
   members,
   groups,
+  cycles,
 }: {
   workouts: WorkoutWithAssignments[]
   members: MemberProfile[]
   groups: TrainingGroup[]
+  cycles: TrainingCycle[]
 }) {
   const { toast } = useToast()
   const [search, setSearch] = useState('')
   const [level, setLevel] = useState('todos')
   const [memberSearch, setMemberSearch] = useState('')
+  const [primaryAthleteId, setPrimaryAthleteId] = useState('')
   const [modal, setModal] = useState<'create' | WorkoutWithAssignments | null>(null)
   const [toDelete, setToDelete] = useState<WorkoutWithAssignments | null>(null)
   const [selectedMembers, setSelectedMembers] = useState<string[]>([])
@@ -110,12 +114,12 @@ export default function WorkoutsManager({
     )
   }, [eligibleMembers, memberSearch])
 
-  function openEditor(value: 'create' | WorkoutWithAssignments) {
+  function openEditor(value: 'create' | WorkoutWithAssignments, initialMemberIds: string[] = []) {
     setError('')
     setMemberSearch('')
     setModal(value)
     if (value === 'create') {
-      setSelectedMembers([])
+      setSelectedMembers(initialMemberIds)
       setSelectedGroups([])
       return
     }
@@ -178,7 +182,27 @@ export default function WorkoutsManager({
 
   return (
     <div className="space-y-6">
-      <WorkoutWorkbookImporter members={members} groups={groups} />
+      <section className="overflow-hidden rounded-xl border border-[#27272A] bg-[#171717] text-white">
+        <div className="grid gap-5 p-5 lg:grid-cols-[1fr_minmax(280px,0.8fr)_auto] lg:items-end">
+          <div>
+            <p className="flex items-center gap-2 font-condensed text-sm font-semibold uppercase tracking-[0.08em] text-[#FCA5A5]"><ShieldCheck size={17} aria-hidden="true" /> Prescrição privada</p>
+            <h2 className="mt-2 font-display text-2xl uppercase leading-none">Para quem é este treino?</h2>
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-[#D6D3D1]">Escolha a pessoa primeiro. O treino prescrito ficará visível apenas para a equipe técnica e para esse atleta.</p>
+          </div>
+          <div>
+            <label htmlFor="primary-workout-athlete" className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.08em] text-[#D6D3D1]">Atleta destinatário</label>
+            <select id="primary-workout-athlete" value={primaryAthleteId} onChange={(event) => setPrimaryAthleteId(event.target.value)} className="input-base border-white/20 bg-white text-[#171717]">
+              <option value="">Selecione um perfil ativo</option>
+              {eligibleMembers.filter((member) => member.membership_status === 'active').map((member) => (
+                <option key={member.user_id} value={member.user_id}>{member.full_name}{member.role === 'admin' ? ' · Admin no modo atleta' : member.role === 'coach' ? ' · Treinador no modo atleta' : ''}</option>
+              ))}
+            </select>
+          </div>
+          <button type="button" disabled={!primaryAthleteId} onClick={() => openEditor('create', [primaryAthleteId])} className="btn-primary shrink-0"><Plus size={16} aria-hidden="true" /> Prescrever treino</button>
+        </div>
+      </section>
+
+      <WorkoutWorkbookImporter members={members} groups={groups} preferredAthleteId={primaryAthleteId} />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
@@ -248,6 +272,7 @@ export default function WorkoutsManager({
             </div>
           </div>
           <div><label htmlFor="workout-date" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Data opcional</label><input id="workout-date" name="scheduled_date" type="date" defaultValue={editing?.scheduled_date ?? ''} className="input-base" /></div>
+          <div><label htmlFor="workout-cycle" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Mesociclo opcional</label><select id="workout-cycle" name="training_cycle_id" defaultValue={editing?.training_cycle_id ?? ''} className="input-base bg-white"><option value="">Treino avulso</option>{cycles.map((cycle) => <option key={cycle.id} value={cycle.id}>{cycle.name} · {formatDate(cycle.starts_on)} a {formatDate(cycle.ends_on)}</option>)}</select></div>
 
           <fieldset className="space-y-3 rounded-xl border border-[#E5E1D8] p-4">
             <legend className="px-1 font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Destinatários</legend>
@@ -265,7 +290,7 @@ export default function WorkoutsManager({
                   <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]"><Users size={13} /> Atletas</p>
                   <div className="relative mb-2"><Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[#78716C]" /><input type="search" value={memberSearch} onChange={(event) => setMemberSearch(event.target.value)} className="input-base py-2 pl-8 text-xs" placeholder="Buscar…" aria-label="Buscar atleta destinatário" /></div>
                   <div className="max-h-36 space-y-1 overflow-y-auto rounded-lg border border-[#E5E1D8] p-2">
-                    {visibleMembers.length > 0 ? visibleMembers.map((member) => <label key={member.user_id} className="flex min-h-11 cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[#FAFAF9]"><input type="checkbox" checked={selectedMembers.includes(member.user_id)} onChange={(event) => toggleSelection(setSelectedMembers, member.user_id, event.target.checked)} className="accent-[#DC2626]" /><span className="min-w-0 flex-1 truncate">{member.full_name}</span>{member.membership_status !== 'active' && <span className="badge badge-gray shrink-0">{MEMBER_STATUS_LABELS[member.membership_status]}</span>}</label>) : <p className="p-3 text-center text-xs text-[#57534E]">Nenhum atleta encontrado.</p>}
+                    {visibleMembers.length > 0 ? visibleMembers.map((member) => <label key={member.user_id} className="flex min-h-11 cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[#FAFAF9]"><input type="checkbox" checked={selectedMembers.includes(member.user_id)} onChange={(event) => toggleSelection(setSelectedMembers, member.user_id, event.target.checked)} className="accent-[#DC2626]" /><span className="min-w-0 flex-1 truncate">{member.full_name}</span>{member.role !== 'member' && <span className="badge badge-gray shrink-0">{member.role === 'admin' ? 'Admin · atleta' : 'Treinador · atleta'}</span>}{member.membership_status !== 'active' && <span className="badge badge-gray shrink-0">{MEMBER_STATUS_LABELS[member.membership_status]}</span>}</label>) : <p className="p-3 text-center text-xs text-[#57534E]">Nenhum atleta encontrado.</p>}
                   </div>
                 </div>
             </div>

@@ -43,8 +43,10 @@ export type Workout = Omit<Tables<'workouts'>, 'level' | 'audience' | 'training_
 export type Announcement = Tables<'announcements'> & { profiles?: Profile }
 export type TrainingGroup = Tables<'training_groups'>
 export type TrainingGroupMember = Tables<'training_group_members'>
+export type TrainingCycle = Tables<'training_cycles'>
 export type WorkoutAssignment = Tables<'workout_assignments'>
 export type BodyAssessment = Tables<'body_assessments'>
+export type BodyAssessmentFile = Tables<'body_assessment_files'>
 export type GalleryItem = Tables<'gallery_items'>
 export type Mission = Tables<'mission_catalog'>
 export type RaceResult = Tables<'race_results'>
@@ -54,6 +56,24 @@ export type WorkoutWithAssignments = Workout & {
     WorkoutAssignment,
     'athlete_user_id' | 'group_id'
   >[]
+}
+
+export type AssignedWorkout = Pick<
+  Workout,
+  | 'id'
+  | 'title'
+  | 'description'
+  | 'level'
+  | 'objective'
+  | 'scheduled_date'
+  | 'training_type'
+  | 'training_cycle_id'
+  | 'created_at'
+  | 'updated_at'
+> & {
+  cycle_name: string | null
+  cycle_starts_on: string | null
+  cycle_ends_on: string | null
 }
 
 export type TrainingGroupWithMembers = TrainingGroup & {

@@ -276,12 +276,12 @@ content_path = "./supabase/templates/reauthentication.html"
 [auth.email.notification.password_changed]
 enabled = true
 subject = "Sua senha da Born to Run foi alterada"
-content_path = "./supabase/templates/password-changed.html"
+content_path = "./templates/password-changed.html"
 
 [auth.email.notification.email_changed]
 enabled = true
 subject = "Seu e-mail da Born to Run foi alterado"
-content_path = "./supabase/templates/email-changed.html"
+content_path = "./templates/email-changed.html"
 
 [auth.sms]
 # Allow/disallow new user signups via SMS to your project.

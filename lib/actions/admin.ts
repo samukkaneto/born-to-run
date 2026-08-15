@@ -74,6 +74,7 @@ function parseWorkoutForm(formData: FormData) {
   const scheduledDate = safeDate(formData.get('scheduled_date'))
   const memberIds = uniqueUuids(formData.getAll('member_ids'))
   const groupIds = uniqueUuids(formData.getAll('group_ids'))
+  const trainingCycleId = String(formData.get('training_cycle_id') ?? '').trim()
 
   if (title.length < 3) return { error: 'Informe um título com pelo menos 3 caracteres.' }
   if (!description) return { error: 'A descrição do treino é obrigatória.' }
@@ -84,6 +85,7 @@ function parseWorkoutForm(formData: FormData) {
   if (!isTrainingType(trainingType)) return { error: 'Selecione um tipo de treino válido.' }
   if (scheduledDate === 'invalid') return { error: 'Informe uma data válida.' }
   if (!memberIds || !groupIds) return { error: 'A lista de destinatários é inválida.' }
+  if (trainingCycleId && !isUuid(trainingCycleId)) return { error: 'Selecione um mesociclo válido.' }
   if (memberIds.length === 0 && groupIds.length === 0) {
     return { error: 'Escolha ao menos um atleta ou grupo para este treino.' }
   }
@@ -99,6 +101,7 @@ function parseWorkoutForm(formData: FormData) {
       audience: 'targeted' as const,
       memberIds,
       groupIds,
+      trainingCycleId: trainingCycleId || null,
     },
   }
 }
@@ -133,7 +136,7 @@ async function saveWorkout(id: string | null, formData: FormData): Promise<Admin
   const parsed = parseWorkoutForm(formData)
   if ('error' in parsed) return { error: parsed.error }
 
-  const { data, error } = await supabase.rpc('coach_save_workout', {
+  const { data, error } = await supabase.rpc('staff_save_workout_v2', {
     // O gerador do Supabase tipa argumentos de RPC como não nulos, embora
     // PostgreSQL aceite NULL para distinguir criação de edição.
     target_workout_id: id as string,
@@ -142,10 +145,10 @@ async function saveWorkout(id: string | null, formData: FormData): Promise<Admin
     target_level: parsed.data.level,
     target_objective: parsed.data.objective,
     target_scheduled_date: parsed.data.scheduledDate as string,
-    target_audience: parsed.data.audience,
     target_member_ids: parsed.data.memberIds,
     target_group_ids: parsed.data.groupIds,
     target_training_type: parsed.data.trainingType,
+    target_training_cycle_id: parsed.data.trainingCycleId as string,
   })
 
   if (error || !data) return { error: 'Erro ao salvar treino. Confira os destinatários e tente novamente.' }
@@ -171,6 +174,7 @@ export async function deleteWorkout(id: string): Promise<AdminActionResult> {
 }
 
 export async function importWorkoutPlan(
+  cycleName: string,
   items: ImportedWorkoutInput[],
   level: string,
   memberIds: string[],
@@ -178,6 +182,8 @@ export async function importWorkoutPlan(
 ): Promise<AdminActionResult> {
   const { supabase, user, error: authError } = await requireTrainingManager()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
+  const cleanedCycleName = cleanText(cycleName, 120)
+  if (cleanedCycleName.length < 3) return { error: 'Informe um nome para o mesociclo.' }
   if (!VALID_LEVELS.includes(level as (typeof VALID_LEVELS)[number])) {
     return { error: 'Selecione um nível válido.' }
   }
@@ -224,18 +230,19 @@ export async function importWorkoutPlan(
     })
   }
 
-  const { data, error } = await supabase.rpc('coach_import_workouts', {
+  const { data, error } = await supabase.rpc('staff_import_training_cycle', {
+    target_name: cleanedCycleName,
     target_items: cleanedItems,
     target_level: level,
     target_member_ids: uniqueMemberIds,
     target_group_ids: uniqueGroupIds,
   })
-  if (error || !data || data.length !== cleanedItems.length) {
+  if (error || !data) {
     return { error: 'Não foi possível publicar o ciclo. Nenhum treino foi importado.' }
   }
 
   refreshWorkouts()
-  return { success: true, count: data.length }
+  return { success: true, id: data, count: cleanedItems.length }
 }
 
 export async function createAnnouncement(formData: FormData): Promise<AdminActionResult> {
@@ -442,6 +449,42 @@ function optionalInteger(value: FormDataEntryValue | null): number | null | 'inv
   return Number.isInteger(parsed) ? parsed : 'invalid'
 }
 
+const ASSESSMENT_MEASUREMENT_FIELDS = [
+  'weight_kg',
+  'body_fat_pct',
+  'muscle_mass_kg',
+  'visceral_fat_level',
+  'body_water_pct',
+  'bmi',
+  'metabolic_age',
+  'bone_mass_kg',
+  'basal_metabolic_rate',
+  'physique_rating',
+  'fat_mass_kg',
+  'fat_free_mass_kg',
+  'body_water_mass_kg',
+  'daily_calorie_intake',
+  'heart_rate_bpm',
+  'segment_left_arm_fat_pct',
+  'segment_right_arm_fat_pct',
+  'segment_trunk_fat_pct',
+  'segment_left_leg_fat_pct',
+  'segment_right_leg_fat_pct',
+  'segment_left_arm_muscle_kg',
+  'segment_right_arm_muscle_kg',
+  'segment_trunk_muscle_kg',
+  'segment_left_leg_muscle_kg',
+  'segment_right_leg_muscle_kg',
+] as const
+
+const INTEGER_ASSESSMENT_FIELDS = new Set<string>([
+  'metabolic_age',
+  'basal_metabolic_rate',
+  'physique_rating',
+  'daily_calorie_intake',
+  'heart_rate_bpm',
+])
+
 export async function saveBodyAssessment(
   assessmentId: string | null,
   formData: FormData,
@@ -452,96 +495,96 @@ export async function saveBodyAssessment(
 
   const athleteUserId = String(formData.get('athlete_user_id') ?? '')
   const assessedAt = safeDate(formData.get('assessed_at'))
-  const weightKg = optionalDecimal(formData.get('weight_kg'))
-  const bodyFatPct = optionalDecimal(formData.get('body_fat_pct'))
-  const muscleMassKg = optionalDecimal(formData.get('muscle_mass_kg'))
-  const visceralFatLevel = optionalDecimal(formData.get('visceral_fat_level'))
-  const bodyWaterPct = optionalDecimal(formData.get('body_water_pct'))
-  const bmi = optionalDecimal(formData.get('bmi'))
-  const metabolicAge = optionalInteger(formData.get('metabolic_age'))
-  const boneMassKg = optionalDecimal(formData.get('bone_mass_kg'))
-  const basalMetabolicRate = optionalInteger(formData.get('basal_metabolic_rate'))
-  const physiqueRating = optionalInteger(formData.get('physique_rating'))
   const notes = cleanText(formData.get('notes'), 2000)
-  const sourceEntry = formData.get('source_file')
-  const sourceFile = sourceEntry instanceof File && sourceEntry.size > 0 ? sourceEntry : null
+  const measurements: Record<string, number | string | null> = {}
+  let hasInvalidMeasurement = false
+  for (const field of ASSESSMENT_MEASUREMENT_FIELDS) {
+    const parsed = INTEGER_ASSESSMENT_FIELDS.has(field)
+      ? optionalInteger(formData.get(field))
+      : optionalDecimal(formData.get(field))
+    if (parsed === 'invalid') hasInvalidMeasurement = true
+    else measurements[field] = parsed
+  }
+  const bodyFatCategory = String(formData.get('body_fat_category') ?? '').trim()
+  if (bodyFatCategory && !['underfat', 'healthy', 'overfat', 'obese'].includes(bodyFatCategory)) {
+    return { error: 'Selecione uma faixa de gordura corporal válida.' }
+  }
+  measurements.body_fat_category = bodyFatCategory || null
+  const sourceFiles = [1, 2, 3].map((slot) => {
+    const entry = formData.get(`source_photo_${slot}`)
+    return entry instanceof File && entry.size > 0 ? entry : null
+  })
+  const selectedSourceCount = sourceFiles.filter(Boolean).length
 
   if (!isUuid(athleteUserId)) return { error: 'Selecione um atleta válido.' }
   if (!assessedAt || assessedAt === 'invalid') return { error: 'Informe uma data válida.' }
-  const measurements = [
-    weightKg,
-    bodyFatPct,
-    muscleMassKg,
-    visceralFatLevel,
-    bodyWaterPct,
-    bmi,
-    metabolicAge,
-    boneMassKg,
-    basalMetabolicRate,
-    physiqueRating,
-  ]
-  if (measurements.includes('invalid')) return { error: 'Revise os valores numéricos informados.' }
-  if (measurements.every((value) => value === null) && !notes) {
+  if (hasInvalidMeasurement) return { error: 'Revise os valores numéricos informados.' }
+  if (ASSESSMENT_MEASUREMENT_FIELDS.every((field) => measurements[field] === null) && !notes) {
     return { error: 'Informe ao menos uma medida ou observação.' }
   }
+  if ((!assessmentId && selectedSourceCount !== 3) || (selectedSourceCount > 0 && selectedSourceCount !== 3)) {
+    return { error: 'Envie as três imagens da Tanita nas posições Foto 1, Foto 2 e Foto 3.' }
+  }
 
-  let previousSourcePath: string | null = null
-  let previousSourceMime: string | null = null
+  let previousFilePaths: string[] = []
   if (assessmentId) {
-    const { data: current, error: currentError } = await supabase
-      .from('body_assessments')
-      .select('source_path, source_mime_type')
-      .eq('id', assessmentId)
-      .maybeSingle()
-    if (currentError || !current) return { error: 'Avaliação não encontrada.' }
-    previousSourcePath = current.source_path
-    previousSourceMime = current.source_mime_type
+    const { data: currentFiles, error: currentFilesError } = await supabase
+      .from('body_assessment_files')
+      .select('storage_path')
+      .eq('assessment_id', assessmentId)
+    if (currentFilesError) return { error: 'Avaliação não encontrada.' }
+    previousFilePaths = (currentFiles ?? []).map((file) => file.storage_path)
   }
 
-  let nextSourcePath = previousSourcePath
-  let nextSourceMime = previousSourceMime
-  let uploadedPath: string | null = null
-  if (sourceFile) {
-    const validation = await validateAssessmentSourceFile(sourceFile)
-    if ('error' in validation) return { error: validation.error }
-    uploadedPath = `${athleteUserId}/${crypto.randomUUID()}.${validation.extension}`
-    const { error: uploadError } = await supabase.storage
-      .from('assessment-files')
-      .upload(uploadedPath, sourceFile, {
-        cacheControl: '3600',
-        contentType: validation.mimeType,
-        upsert: false,
-      })
-    if (uploadError) return { error: 'Não foi possível enviar o arquivo da Tanita.' }
-    nextSourcePath = uploadedPath
-    nextSourceMime = validation.mimeType
+  const uploadedPaths: string[] = []
+  const uploadedMimes: string[] = []
+  if (selectedSourceCount === 3) {
+    const batchId = crypto.randomUUID()
+    for (let index = 0; index < sourceFiles.length; index += 1) {
+      const sourceFile = sourceFiles[index]
+      if (!sourceFile) continue
+      if (!['image/jpeg', 'image/png'].includes(sourceFile.type)) {
+        await Promise.all(uploadedPaths.map((path) => removeMedia(supabase, 'assessment-files', path)))
+        return { error: `A Foto ${index + 1} deve ser uma imagem JPG ou PNG.` }
+      }
+      const validation = await validateAssessmentSourceFile(sourceFile)
+      if ('error' in validation) {
+        await Promise.all(uploadedPaths.map((path) => removeMedia(supabase, 'assessment-files', path)))
+        return { error: validation.error }
+      }
+      const uploadedPath = `${athleteUserId}/${batchId}-${index + 1}.${validation.extension}`
+      const { error: uploadError } = await supabase.storage
+        .from('assessment-files')
+        .upload(uploadedPath, sourceFile, {
+          cacheControl: '3600',
+          contentType: validation.mimeType,
+          upsert: false,
+        })
+      if (uploadError) {
+        await Promise.all(uploadedPaths.map((path) => removeMedia(supabase, 'assessment-files', path)))
+        return { error: `Não foi possível enviar a Foto ${index + 1} da Tanita.` }
+      }
+      uploadedPaths.push(uploadedPath)
+      uploadedMimes.push(validation.mimeType)
+    }
   }
 
-  const { data, error } = await supabase.rpc('staff_save_body_assessment_v2', {
+  const { data, error } = await supabase.rpc('staff_save_body_assessment_v4', {
     target_assessment_id: assessmentId as string,
     target_athlete_user_id: athleteUserId,
     target_assessed_at: assessedAt,
-    target_weight_kg: weightKg as number,
-    target_body_fat_pct: bodyFatPct as number,
-    target_muscle_mass_kg: muscleMassKg as number,
-    target_visceral_fat_level: visceralFatLevel as number,
-    target_body_water_pct: bodyWaterPct as number,
-    target_bmi: bmi as number,
-    target_metabolic_age: metabolicAge as number,
-    target_bone_mass_kg: boneMassKg as number,
-    target_basal_metabolic_rate: basalMetabolicRate as number,
-    target_physique_rating: physiqueRating as number,
-    target_source_path: nextSourcePath as string,
-    target_source_mime_type: nextSourceMime as string,
+    target_measurements: measurements,
+    target_source_paths: uploadedPaths,
+    target_source_mime_types: uploadedMimes,
     target_notes: notes,
   })
 
   if (error || !data) {
-    await removeMedia(supabase, 'assessment-files', uploadedPath)
+    await Promise.all(uploadedPaths.map((path) => removeMedia(supabase, 'assessment-files', path)))
     return { error: 'Não foi possível salvar a avaliação. Revise as medidas.' }
   }
-  if (uploadedPath && previousSourcePath && uploadedPath !== previousSourcePath) {
-    await removeMedia(supabase, 'assessment-files', previousSourcePath)
+  if (uploadedPaths.length === 3 && previousFilePaths.length) {
+    await Promise.all(previousFilePaths.map((path) => removeMedia(supabase, 'assessment-files', path)))
   }
   revalidatePath('/admin/avaliacoes')
   revalidatePath('/dashboard/avaliacoes')
@@ -553,12 +596,20 @@ export async function deleteBodyAssessment(id: string): Promise<AdminActionResul
   const { supabase, user, error: authError } = await requireAccessManager()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
+  const { data: files } = await supabase
+    .from('body_assessment_files')
+    .select('storage_path')
+    .eq('assessment_id', id)
+
   const { data, error } = await supabase.rpc('staff_delete_body_assessment', {
     target_assessment_id: id,
   })
   if (error || data === null) return { error: 'Não foi possível remover a avaliação.' }
 
-  await removeMedia(supabase, 'assessment-files', data || null)
+  await Promise.all([
+    removeMedia(supabase, 'assessment-files', data || null),
+    ...(files ?? []).map((file) => removeMedia(supabase, 'assessment-files', file.storage_path)),
+  ])
 
   revalidatePath('/admin/avaliacoes')
   revalidatePath('/dashboard/avaliacoes')
