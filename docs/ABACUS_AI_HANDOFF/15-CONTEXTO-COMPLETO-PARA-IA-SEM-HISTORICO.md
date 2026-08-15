@@ -40,7 +40,7 @@ Estados de acesso: `pending`, `active`, `suspended`, `rejected`. Papel e status 
 
 Aplicação Next.js 16.3, React, TypeScript, Tailwind e Supabase, hospedada na Vercel. O domínio oficial é `equipeborntorun.com`. Auth, SMTP Resend, e-mail profissional, RLS, Storage e CI/CD já existem. O repositório oficial é `samukkaneto/born-to-run`.
 
-Checkpoint publicado em 15/08/2026: PR `#32`, merge `fa7ac1b`, CI da `main` `31887206903` e Vercel `dpl_CJLzvTXyAS9fffKpPuNXuWSZr3Au` `READY`. Esse checkpoint separa integralmente os modos, corrige o modal Tanita no Android e calibra o OCR posicional para as três telas do Healthy Edge Lite. As fontes são autocontidas no repositório para builds reproduzíveis. Não houve alteração de Supabase nem da loja.
+Checkpoint publicado em 15/08/2026: PR `#34`, merge `6a38acc`, CI da `main` `31894361903` e Vercel `dpl_DoAT7djHUS9JgJSBDZUP5Ew477ZS` `READY`. Os modos continuam separados e o OCR continua calibrado. A versão atual acrescenta a **Avaliação Tetrapolar Segmentada** premium com mapa corporal, equilíbrio bilateral, evolução, PDF completo em três páginas, logo transparente e favicon oficial. As fontes permanecem autocontidas. Não houve alteração de Supabase nem da loja neste bloco.
 
 A versão atual é uma PWA instalável pelo navegador. Ela pode aparecer como aplicativo no Android, funcionar em tela própria e ter ícone, mas não é um APK nativo. O aplicativo Android profissional será outra fase, após o piloto e a estabilização das regras de negócio. Não fingir que um APK já existe.
 
@@ -53,7 +53,7 @@ A versão atual é uma PWA instalável pelo navegador. Ela pode aparecer como ap
 - grupos e treinos privados;
 - comunicados;
 - perfil e fotos privadas;
-- avaliação Tanita privada em três imagens, 25 campos, faixa traduzida, gráficos, segmentos e histórico em português;
+- Avaliação Tetrapolar Segmentada privada em três imagens, 25 campos, faixas traduzidas, mapa corporal, equilíbrio bilateral, evolução e PDF completo em português;
 - OCR posicional calibrado no Healthy Edge Lite, com revisão humana e original privado;
 - galeria institucional gerenciável por administrador/treinador;
 - 12 missões iniciais de distância e ritmo;
@@ -83,7 +83,7 @@ O equipamento Tanita gera PDF ou imagem visualmente fraca, com termos em inglês
 6. comparar avaliações ao longo do tempo sem emitir diagnóstico médico automático;
 7. permitir impressão/PDF bonito.
 
-O fluxo atual já exige as três imagens reais na ordem Resumo/Faixas/Segmentos. O parser foi calibrado pelas posições fixas do Healthy Edge Lite: a amostra privada recuperou os 14 indicadores gerais preenchidos e 10/10 segmentos; frequência cardíaca vazia permaneceu vazia. Continuar exigindo conferência humana e nunca emitir diagnóstico automático. Ler `24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md` antes de alterar o OCR ou o modal.
+O fluxo atual já exige as três imagens reais na ordem Resumo/Faixas/Segmentos. O parser foi calibrado pelas posições fixas do Healthy Edge Lite: a amostra privada recuperou os 14 indicadores gerais preenchidos e 10/10 segmentos; frequência cardíaca vazia permaneceu vazia. O app apresenta corpo humano por região e seis tendências; o PDF apresenta 15 indicadores gerais, 10 leituras segmentares e histórico em três páginas A4. Continuar exigindo conferência humana e nunca emitir diagnóstico automático. Ler os documentos `24` e `25` antes de alterar OCR, modal, avaliação ou PDF.
 
 ## Loja
 
@@ -97,7 +97,7 @@ Liberdade visual não permite mudar fatos, inventar atletas/premiações, remove
 
 ## Próximas fases, em ordem racional
 
-1. validar no Android real a avaliação Tanita calibrada descrita no documento `24`;
+1. validar no Android real a avaliação calibrada e o PDF premium descritos nos documentos `24` e `25`;
 2. piloto com as contas de administrador e treinador já ativas e novos atletas reais;
 3. validar o OCR em novas amostras do mesmo padrão e acrescentar importador CSV somente se o software Tanita realmente exportar um arquivo utilizável;
 4. redesign completo pelo Fable 5 preservando contratos e o significado das cores de treino;

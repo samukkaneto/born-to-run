@@ -1,5 +1,11 @@
 # Pendências e ponto de retomada
 
+## Retomada mais recente — validar a Avaliação Tetrapolar premium com dados reais
+
+A avaliação e o PDF premium estão publicados. A próxima ação exata é Samuel testar a própria avaliação no modo Aluno e Robson testar no modo Atleta, comparar os 25 valores com as três imagens Healthy Edge Lite, baixar o PDF em Android/desktop e registrar uma segunda medição para validar a evolução. O título oficial é `Avaliação Tetrapolar Segmentada`; não reintroduzir a descrição rejeitada. OCR continua com revisão humana. Loja continua em espera.
+
+Checkpoint: PR `#34`, merge `6a38acc`, CI da `main` `31894361903`, Vercel `dpl_DoAT7djHUS9JgJSBDZUP5Ew477ZS` `READY` e health oficial na revisão `6a38acc`. Consulte `25-AVALIACAO-TETRAPOLAR-PREMIUM-PDF-E-IDENTIDADE.md`.
+
 ## Retomada mais recente — modos realmente separados e Tanita calibrada
 
 Não misturar menus de gestão com menus esportivos. Samuel alterna entre **Administrador** e **Aluno**; Robson alterna entre **Treinador** e **Atleta**. A mesma conta autenticada mantém o papel técnico, mas `/admin/*` e `/dashboard/*` são contextos independentes e `RoleModeSwitcher` é a única passagem entre eles.
