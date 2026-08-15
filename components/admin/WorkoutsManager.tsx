@@ -194,7 +194,7 @@ export default function WorkoutsManager({
             <select id="primary-workout-athlete" value={primaryAthleteId} onChange={(event) => setPrimaryAthleteId(event.target.value)} className="input-base border-white/20 bg-white text-[#171717]">
               <option value="">Selecione um perfil ativo</option>
               {eligibleMembers.filter((member) => member.membership_status === 'active').map((member) => (
-                <option key={member.user_id} value={member.user_id}>{member.full_name}{member.role === 'admin' ? ' · Admin no modo atleta' : member.role === 'coach' ? ' · Treinador no modo atleta' : ''}</option>
+                <option key={member.user_id} value={member.user_id}>{member.full_name}{member.role === 'admin' ? ' · Perfil de aluno' : member.role === 'coach' ? ' · Perfil de atleta' : ''}</option>
               ))}
             </select>
           </div>

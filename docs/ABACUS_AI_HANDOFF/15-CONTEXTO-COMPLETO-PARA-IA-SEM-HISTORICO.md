@@ -20,8 +20,8 @@ Garmin Connect, Strava e Sports Tracker foram citados como referências de exper
 
 ## Pessoas e papéis
 
-- Samuel: proprietário do produto e administrador. Aprova cadastros junto com Robson, gerencia papéis, conteúdo institucional, comunicados e pode revisar avaliações.
-- Robson Alves: treinador único. E-mail pré-autorizado no Supabase, informado ao proprietário fora de segredos. Aprova cadastros, cria grupos, prescreve e remove treinos e registra avaliações. Somente o treinador publica treinos.
+- Samuel: proprietário do produto. No modo Administrador, aprova cadastros, gerencia papéis/conteúdo e possui ferramentas técnicas equivalentes às do treinador apenas para testar e auditar o sistema. No modo Aluno, deve ver exatamente a experiência de qualquer aluno, sem menus administrativos misturados.
+- Robson Alves: treinador único. No modo Treinador, aprova cadastros, cria grupos, prescreve/remove treinos e registra avaliações. No modo Atleta, deve ver exatamente a experiência de qualquer atleta. Na operação real, é Robson quem prescreve; o poder técnico de Samuel serve para QA.
 - Atleta/membro: entra apenas após confirmação de e-mail e aprovação. Publica no feed privado, recebe seus treinos, vê suas avaliações, registra provas e conquistas próprias.
 - Visitante: vê somente o site institucional, contato e galeria pública. A loja não é pública.
 
@@ -31,7 +31,7 @@ Estados de acesso: `pending`, `active`, `suspended`, `rejected`. Papel e status 
 
 1. Treinos são privados. Não existe treino aberto para toda a internet nem feed público de prescrição. O treinador escolhe grupos e/ou atletas.
 2. Fotos pessoais de atletas pertencem ao feed privado e ao perfil. Elas não entram automaticamente no material de propaganda.
-3. A galeria institucional pública só pode ser administrada por Samuel e Robson. Título e legenda são opcionais; descrição acessível e confirmação de autorização de imagem são obrigatórias.
+3. A galeria institucional pública só pode ser administrada por Samuel e Robson. Título, legenda e descrição acessível são opcionais; quando a descrição fica vazia, o servidor grava texto alternativo genérico não exibido. A confirmação de autorização de imagem continua obrigatória.
 4. Avaliações de bioimpedância e arquivo Tanita original são dados sensíveis. Somente o atleta avaliado, treinador e administrador têm acesso.
 5. Conquista significa premiação real em prova. Missão significa desafio do aplicativo. Nunca misturar os dois conceitos.
 6. Premiação geral e premiação por categoria são registros diferentes e devem aparecer identificados.
@@ -46,13 +46,13 @@ A versão atual é uma PWA instalável pelo navegador. Ela pode aparecer como ap
 
 - site institucional responsivo;
 - cadastro, login, recuperação de senha, confirmação de e-mail e aprovação;
-- administrador e treinador separados;
+- modos Administrador/Aluno e Treinador/Atleta separados, sem menus cruzados;
 - feed privado com fotos, métricas, curtidas, comentários e paginação;
 - grupos e treinos privados;
 - comunicados;
 - perfil e fotos privadas;
-- avaliações básicas e histórico em português;
-- upload privado do PDF/JPEG/PNG Tanita como fonte conferível;
+- avaliação Tanita privada em três imagens, 25 campos, faixa traduzida, gráficos, segmentos e histórico em português;
+- OCR posicional calibrado no Healthy Edge Lite, com revisão humana e original privado;
 - galeria institucional gerenciável por administrador/treinador;
 - 12 missões iniciais de distância e ritmo;
 - nível de jornada por XP de missões e tempo de equipe;
@@ -69,7 +69,7 @@ Desempenho esportivo excepcional é uma dimensão separada. Um atleta de 5 km em
 
 Uma atividade de 42,195 km cumpre automaticamente as missões inferiores de 1, 3, 5, 10, 15, 21,1 e 30 km. Missões de ritmo exigem simultaneamente distância e pace.
 
-## Avaliações Tanita — visão final desejada
+## Avaliações Tanita — estado atual e direção
 
 O equipamento Tanita gera PDF ou imagem visualmente fraca, com termos em inglês. O sistema deve:
 
@@ -81,7 +81,7 @@ O equipamento Tanita gera PDF ou imagem visualmente fraca, com termos em inglês
 6. comparar avaliações ao longo do tempo sem emitir diagnóstico médico automático;
 7. permitir impressão/PDF bonito.
 
-A fundação e o formulário manual já existem. A extração automática não deve ser inventada sem um arquivo real de exemplo; é necessário calibrar o parser e testar valores contra o original.
+O fluxo atual já exige as três imagens reais na ordem Resumo/Faixas/Segmentos. O parser foi calibrado pelas posições fixas do Healthy Edge Lite: a amostra privada recuperou os 14 indicadores gerais preenchidos e 10/10 segmentos; frequência cardíaca vazia permaneceu vazia. Continuar exigindo conferência humana e nunca emitir diagnóstico automático. Ler `24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md` antes de alterar o OCR ou o modal.
 
 ## Loja
 
@@ -95,9 +95,9 @@ Liberdade visual não permite mudar fatos, inventar atletas/premiações, remove
 
 ## Próximas fases, em ordem racional
 
-1. publicar e validar o ciclo descrito no documento `20`;
+1. validar no Android real a avaliação Tanita calibrada descrita no documento `24`;
 2. piloto com as contas de administrador e treinador já ativas e novos atletas reais;
-3. validar uma avaliação Tanita real; só depois projetar extração assistida com revisão humana;
+3. validar o OCR em novas amostras do mesmo padrão e acrescentar importador CSV somente se o software Tanita realmente exportar um arquivo utilizável;
 4. redesign completo pelo Fable 5 preservando contratos e o significado das cores de treino;
 5. transformar gestão de textos/fotos institucionais em CMS mais amplo para dar autonomia ao proprietário;
 6. aplicativo Android nativo e distribuição;
@@ -107,3 +107,7 @@ Liberdade visual não permite mudar fatos, inventar atletas/premiações, remove
 ## Atualização indispensável de 11/08/2026
 
 Robson já é `coach/active`; não orientar novo cadastro técnico. Administrador e treinador também possuem perfil de atleta, avatar e podem receber avaliação. Os treinos usam: azul-claro descanso, amarelo contínuo, roxo intervalado rápido, verde leve/moderado, mostarda potência aeróbia e vermelho competição. O diferencial institucional é o atendimento presencial e individual, não “planilhas”. Ler `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md` antes de modificar essas áreas.
+
+## Atualização indispensável de 15/08/2026
+
+Não confundir poder técnico com identidade esportiva. Samuel e Robson não usam menus híbridos: `/admin/*` é gestão, `/dashboard/*` é aluno/atleta e o seletor de modo é a única ponte. O modal Tanita móvel usa `100dvh` e rolagem interna. O OCR é calibrado para as três telas 16:9 do Healthy Edge Lite; qualquer redesign do Fable 5 deve preservar os campos, a ordem Foto 1/2/3, a revisão humana e a privacidade.

@@ -1,5 +1,21 @@
 # Log de execução
 
+## 15/08/2026 — modos separados, modal Android e OCR Tanita calibrado
+
+- Corrigida a interpretação de produto: Samuel possui modo Administrador e modo Aluno; Robson possui modo Treinador e modo Atleta.
+- Removidos atalhos administrativos do menu esportivo e links de perfil/dashboard do menu de gestão. O seletor de modo no cabeçalho é a única transição explícita.
+- Rótulos de destinatário agora dizem `Perfil de aluno` para Samuel e `Perfil de atleta` para Robson.
+- Reproduzida a causa do corte móvel no `AdminModal`: `92vh` alinhado ao rodapé não acompanhava o viewport visual dinâmico do Android.
+- Modal convertido para `100dvh`, tela inteira móvel, cabeçalho fixo, corpo rolável independente, safe areas e rolagem reiniciada no topo.
+- Playwright 390 × 844 confirmou título, pessoa avaliada e data visíveis; cabeçalho estável e botão final acessível após rolagem.
+- Reanalisadas localmente as três imagens reais do Healthy Edge Lite sem copiá-las para o repositório.
+- OCR genérico complementado por template posicional: células 16:9 normalizadas, ampliação 20×/24×, leitura por tipo, restauração decimal e reconciliação de massas redundantes.
+- Calibração: 14 indicadores gerais preenchidos na Foto 1; frequência cardíaca corretamente vazia; 10/10 medidas segmentais na Foto 3.
+- Pesquisa oficial registrou que TANITA PRO atual exporta CSV/Excel, mas sua compatibilidade publicada não inclui BC-1500; Healthy Edge Lite não tem exportação CSV confirmada na documentação consultada. Imagens permanecem o fluxo canônico até existir um CSV real.
+- Loja, banco, migrations, RLS, Storage, logos e mockups não foram alterados.
+- Gates antes da publicação: TypeScript, ESLint, 76/76 unitários, build Next.js 16.3 de 40 rotas e Playwright 28/28 em Desktop Chrome/Pixel 7 aprovados.
+- Relatório detalhado: `24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md`.
+
 ## 15/08/2026 — prescrição privada, mesociclo e Tanita em três fotos
 
 - Confirmados no Supabase Samuel `admin/active` e Robson Alves `coach/active`.

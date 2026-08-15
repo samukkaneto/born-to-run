@@ -9,13 +9,11 @@ import {
   Megaphone,
   User,
   Plus,
-  ShieldCheck,
   ClipboardList,
   Trophy,
   TrendingUp,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { UserRole } from '@/types'
 
 const navItems = [
   { href: '/dashboard',             icon: Home,      label: 'Início',         short: 'Início'  },
@@ -34,11 +32,7 @@ function isActive(pathname: string, href: string): boolean {
 }
 
 /** Menu lateral (desktop) — painel carbono, item ativo vermelho sólido. */
-export function DashboardSidebarNav({
-  managementRole,
-}: {
-  managementRole?: Extract<UserRole, 'admin' | 'coach'> | null
-}) {
+export function DashboardSidebarNav() {
   const pathname = usePathname()
   return (
     <nav className="flex flex-col gap-1" aria-label="Navegação do painel">
@@ -67,27 +61,6 @@ export function DashboardSidebarNav({
           </Link>
         )
       })}
-
-      {managementRole && (
-        <>
-          <div className="my-3 border-t border-[#2E2E2E]" aria-hidden="true" />
-          <Link
-            href="/admin"
-            className={cn(
-              'group flex items-center gap-3 rounded-lg px-3.5 py-3 font-condensed text-sm font-medium uppercase tracking-[0.08em] transition-colors',
-              pathname.startsWith('/admin')
-                ? 'bg-[#DC2626] text-white'
-                : 'text-[#A8A29E] hover:bg-[#232323] hover:text-white'
-            )}
-          >
-            <ShieldCheck
-              className="h-5 w-5 flex-shrink-0 text-[#16A34A]"
-              aria-hidden="true"
-            />
-            {managementRole === 'coach' ? 'Painel do treinador' : 'Administração'}
-          </Link>
-        </>
-      )}
     </nav>
   )
 }

@@ -7,11 +7,9 @@ import {
   Dumbbell,
   Megaphone,
   Users,
-  ArrowLeft,
   ClipboardList,
   Images,
   ShoppingBag,
-  UserRound,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { UserRole } from '@/types'
@@ -22,8 +20,6 @@ const commonItems = [
   { href: '/admin/galeria', icon: Images, label: 'Galeria do site' },
   { href: '/admin/membros', icon: Users, label: 'Membros' },
 ]
-const profileItem = { href: '/dashboard/perfil', icon: UserRound, label: 'Meu perfil e foto' }
-
 function itemsForRole(role: UserRole) {
   if (role === 'coach') {
     return [
@@ -33,7 +29,6 @@ function itemsForRole(role: UserRole) {
       { href: '/admin/avaliacoes', icon: ClipboardList, label: 'Avaliações' },
       commonItems[2],
       commonItems[3],
-      profileItem,
     ]
   }
   return [
@@ -44,7 +39,6 @@ function itemsForRole(role: UserRole) {
     { href: '/admin/avaliacoes', icon: ClipboardList, label: 'Avaliações' },
     commonItems[2],
     commonItems[3],
-    profileItem,
   ]
 }
 
@@ -53,12 +47,12 @@ function isActive(pathname: string, href: string): boolean {
   return pathname.startsWith(href)
 }
 
-/** Navegação do painel do treinador (sidebar carbono, ativo vermelho). */
+/** Navegação exclusiva do contexto de gestão. */
 export default function AdminNav({ role }: { role: UserRole }) {
   const pathname = usePathname()
   const navItems = itemsForRole(role)
   return (
-    <nav className="flex flex-col gap-1" aria-label="Navegação do painel do treinador">
+    <nav className="flex flex-col gap-1" aria-label="Navegação da gestão">
       {navItems.map(({ href, icon: Icon, label }) => {
         const active = isActive(pathname, href)
         return (
@@ -85,18 +79,6 @@ export default function AdminNav({ role }: { role: UserRole }) {
         )
       })}
 
-      <div className="my-3 border-t border-[#2E2E2E]" aria-hidden="true" />
-
-      <Link
-        href="/dashboard"
-        className="group flex items-center gap-3 rounded-lg px-3.5 py-3 font-condensed text-sm font-medium uppercase tracking-[0.08em] text-[#A8A29E] transition-colors hover:bg-[#232323] hover:text-white"
-      >
-        <ArrowLeft
-          className="h-5 w-5 flex-shrink-0 text-[#78716C] group-hover:text-[#DC2626]"
-          aria-hidden="true"
-        />
-        Voltar ao dashboard
-      </Link>
     </nav>
   )
 }
@@ -108,7 +90,7 @@ export function AdminNavMobile({ role }: { role: UserRole }) {
   return (
     <nav
       className="flex gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none]"
-      aria-label="Navegação do painel do treinador"
+      aria-label="Navegação da gestão"
     >
       {navItems.map(({ href, icon: Icon, label }) => {
         const active = isActive(pathname, href)

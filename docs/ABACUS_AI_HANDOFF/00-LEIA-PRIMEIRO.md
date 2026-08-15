@@ -27,6 +27,7 @@ Atualizado em 15/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 21. `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md` — OCR Tanita assistido, PDF premium, importação atômica do cronograma XLSX e distinção entre prescrição e atividade concluída.
 22. `22-MODOS-METAS-EVOLUCAO-E-LOJA.md` — modos de usuário, poderes técnicos temporários do administrador, metas privadas, evolução do atleta e fornecedores protegidos.
 23. `23-PRESCRICAO-PRIVADA-MESOCICLO-E-TANITA-3-FOTOS.md` — destinatários técnicos no modo atleta, calendário/mesociclo privado, Tanita padronizada em três imagens e galeria sem legenda obrigatória.
+24. `24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md` — separação integral entre gestão e atleta, correção do modal Android, OCR posicional calibrado nas três telas reais e pesquisa de exportação Tanita.
 
 ## Fontes complementares no repositório
 
