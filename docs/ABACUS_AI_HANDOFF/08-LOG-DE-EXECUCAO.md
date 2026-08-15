@@ -13,6 +13,8 @@
 - Lint, TypeScript, 74 unitários e build de 40 rotas aprovados. Playwright público: 26 cenários em dev e 2 PWA em produção aprovados em desktop/Pixel 7. pgTAP novo versionado; execução local indisponível sem Docker.
 - Loja explicitamente deixada intacta neste bloco.
 - Relatório detalhado: `23-PRESCRICAO-PRIVADA-MESOCICLO-E-TANITA-3-FOTOS.md`.
+- PR `#30` mesclada em `694be8c`; CI da PR `31882073973` e da `main` `31882239549` aprovados.
+- Produção `dpl_DiEf7ec6fTdPqFji4AvX9NYZAM58` `READY`; domínio oficial confirmou home/galeria/health `200`, revisão `694be8c` e guards privados `307`.
 
 ## 15/08/2026 — retomada, modos, privacidade e evolução
 

@@ -88,4 +88,11 @@ As novas tabelas possuem RLS. RPCs usam `SECURITY DEFINER`, `search_path` vazio,
 
 ## Publicação
 
-Branch: `codex/private-mesocycle-tanita-gallery`. Preencher PR, commit final, CI, deployment Vercel e smoke no domínio após o push/merge deste bloco.
+- branch funcional: `codex/private-mesocycle-tanita-gallery`;
+- commit funcional: `5fbbfcae4e29c932bc0ec22a4fe07a7995b6b52a`;
+- PR [#30](https://github.com/samukkaneto/born-to-run/pull/30), mesclada por squash em `694be8c4f959ed13cb9b7a140d2b80ec3806051c`;
+- GitHub Actions da PR `31882073973` e da `main` `31882239549`: aprovados integralmente;
+- Preview Vercel `https://born-to-qw3zaypdt-shabuneto.vercel.app`: `READY` e protegido por SSO;
+- produção Vercel `dpl_DiEf7ec6fTdPqFji4AvX9NYZAM58`, URL imutável `https://born-to-4bvu40wx6-shabuneto.vercel.app`: `READY`;
+- aliases `equipeborntorun.com`, `www` e `born-to-run-seven.vercel.app` apontados para o deployment;
+- smoke oficial: home, galeria e health `200`; health na revisão `694be8c`; `/admin/treinos`, `/dashboard/treinos` e `/dashboard/avaliacoes` anônimos mantiveram `307` para login.
