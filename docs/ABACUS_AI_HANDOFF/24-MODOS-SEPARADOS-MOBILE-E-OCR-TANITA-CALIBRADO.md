@@ -116,7 +116,7 @@ Decisão atual: manter as três imagens como entrada oficial já funcional. Ante
 
 Não houve alteração de banco, migration, RLS, Storage, loja, catálogo, logotipos ou mockups neste bloco.
 
-## Evidências antes da publicação
+## Evidências e publicação
 
 - TypeScript: aprovado;
 - ESLint direcionado: aprovado;
@@ -128,7 +128,17 @@ Não houve alteração de banco, migration, RLS, Storage, loja, catálogo, logot
 - inspeção mobile: viewport 390 × 844 aprovada, com topo e rodapé acessíveis.
 - build repetido após a adoção das fontes locais: aprovado sem requisições ao Google Fonts.
 
-Os identificadores de PR, CI, merge e Vercel devem ser acrescentados ao fechamento desta seção após a publicação.
+Checkpoint de publicação:
+
+- commit funcional `a465b0190540be447c1a0a91a83730c049b8ac32`;
+- primeiro CI `31885900377`: falhou somente no build por `404` externo da Oswald e originou a correção autocontida;
+- commit final da PR `2e2642f5d1d2c04e0aa4de6491c646ffec790cb7`;
+- PR [#32](https://github.com/samukkaneto/born-to-run/pull/32), CI final `31887079146` aprovado;
+- preview Vercel `dpl_6rkddz7z733ckG6X2PpxV3XXau7J` `READY`, com health na revisão `2e2642f`;
+- merge `fa7ac1bf169f5dd3ee1b09f9ebb2c8b017a25e3a`;
+- CI da `main` `31887206903` aprovado integralmente;
+- produção Vercel `dpl_CJLzvTXyAS9fffKpPuNXuWSZr3Au` `READY` nos aliases oficiais;
+- domínio oficial: home e health `200`, revisão `fa7ac1b`; `/admin/avaliacoes` anônimo respondeu `307` para login.
 
 ## Próximo teste real
 

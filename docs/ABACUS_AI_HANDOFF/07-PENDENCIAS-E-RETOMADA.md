@@ -6,6 +6,8 @@ Não misturar menus de gestão com menus esportivos. Samuel alterna entre **Admi
 
 O erro de enquadramento Android da nova avaliação foi corrigido e medido em 390 × 844. O OCR agora está calibrado pelas posições fixas do Healthy Edge Lite; a amostra real recupera 14 indicadores gerais preenchidos e 10/10 segmentos. Próxima ação exata: repetir o fluxo autenticado no Android do proprietário, comparar os 24 valores com as três telas e salvar uma avaliação piloto. Loja continua fora deste bloco. Consulte `24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md`.
 
+Este bloco está publicado pela PR `#32`, merge `fa7ac1b`, CI da `main` `31887206903` e deployment Vercel `dpl_CJLzvTXyAS9fffKpPuNXuWSZr3Au` `READY`. O domínio oficial confirmou home e health `200`, revisão `fa7ac1b` e proteção anônima de `/admin/avaliacoes` com `307` para login.
+
 ## Retomada mais recente — prescrição e Tanita em três fotos
 
 O bloco funcional de 15/08/2026 está implementado no código e no Supabase. Não voltar a filtrar destinatários por `role = member`: Samuel e Robson são perfis técnicos e atletas ao mesmo tempo. O modo atleta usa `get_my_assigned_workouts()` para não mostrar prescrições alheias.

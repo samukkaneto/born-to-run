@@ -2,7 +2,7 @@
 
 Atualizado em **15/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
 
-> Estado mais recente: os modos Administrador/Aluno de Samuel e Treinador/Atleta de Robson são experiências independentes, sem menus cruzados. O modal Tanita Android foi corrigido e o OCR posicional do Healthy Edge Lite recupera os 14 indicadores gerais preenchidos e 10/10 segmentos da amostra real, com revisão humana. Consulte `docs/ABACUS_AI_HANDOFF/24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md`. A loja ficou fora deste bloco.
+> Estado mais recente: os modos Administrador/Aluno de Samuel e Treinador/Atleta de Robson são experiências independentes, sem menus cruzados. O modal Tanita Android foi corrigido e o OCR posicional do Healthy Edge Lite recupera os 14 indicadores gerais preenchidos e 10/10 segmentos da amostra real, com revisão humana. O bloco foi publicado pela PR `#32`, merge `fa7ac1b`, CI da `main` `31887206903` e Vercel `dpl_CJLzvTXyAS9fffKpPuNXuWSZr3Au` `READY`. Consulte `docs/ABACUS_AI_HANDOFF/24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md`. A loja ficou fora deste bloco.
 
 ## Resumo executivo
 

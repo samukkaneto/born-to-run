@@ -15,6 +15,10 @@
 - Loja, banco, migrations, RLS, Storage, logos e mockups não foram alterados.
 - Gates antes da publicação: TypeScript, ESLint, 76/76 unitários, build Next.js 16.3 de 40 rotas e Playwright 28/28 em Desktop Chrome/Pixel 7 aprovados.
 - O primeiro CI Linux da PR encontrou uma URL antiga da Oswald retornando `404` em um build sem cache. Inter, Bebas Neue e Oswald foram incorporadas localmente com suas licenças OFL e `next/font/local`; tipografia preservada e build repetido com sucesso, agora independente do Google Fonts.
+- Commit funcional `a465b01`; correção final das fontes `2e2642f`; PR `#32` mesclada em `fa7ac1bf169f5dd3ee1b09f9ebb2c8b017a25e3a`.
+- CI final da PR `31887079146` e CI da `main` `31887206903` aprovados integralmente.
+- Preview `dpl_6rkddz7z733ckG6X2PpxV3XXau7J` e produção `dpl_CJLzvTXyAS9fffKpPuNXuWSZr3Au` ficaram `READY`.
+- Domínio oficial validado: home/health `200`, revisão `fa7ac1b` e `/admin/avaliacoes` anônimo `307` para login.
 - Relatório detalhado: `24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md`.
 
 ## 15/08/2026 — prescrição privada, mesociclo e Tanita em três fotos
