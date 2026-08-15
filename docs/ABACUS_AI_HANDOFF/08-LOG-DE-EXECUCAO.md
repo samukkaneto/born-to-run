@@ -1,5 +1,19 @@
 # Log de execução
 
+## 15/08/2026 — Avaliação Tetrapolar premium, PDF completo e identidade
+
+- Analisadas as referências Tanita e as seis imagens fornecidas pelo proprietário; a interface Tanita foi tratada como referência de conteúdo, não como identidade visual.
+- Título padronizado para `Avaliação Tetrapolar Segmentada` no app, gestão e PDF; descrição rejeitada removida.
+- Criado mapa corporal responsivo com cinco regiões, 10 leituras e quatro balanços bilaterais.
+- Criada evolução histórica de peso, gordura, músculo, água, IMC e gordura visceral.
+- PDF reconstruído em três páginas A4 com 15 indicadores gerais, segmentos completos, foto circular e histórico.
+- Logo de autenticação trocado pela variante oficial transparente de letras escuras; sombras e painel artificial removidos.
+- Favicon genérico substituído pelo ícone oficial multirresolução; `Meta privada` reduzida para `Meta` nas telas.
+- Loja, OCR, banco, migrations, RLS e Storage preservados sem alteração.
+- `npm run check`, 76 unitários, build de 40 rotas e matriz Playwright 28/28 aprovados.
+- Screenshots 1440 × 1000 e 390 × 844 sem overflow/console error; PDF renderizado em três PNGs a 150 DPI e inspecionado.
+- PR `#34`, CI da PR `31894121724`, merge `6a38acc`, CI da `main` `31894361903` e produção `dpl_DoAT7djHUS9JgJSBDZUP5Ew477ZS` concluídos.
+
 ## 15/08/2026 — modos separados, modal Android e OCR Tanita calibrado
 
 - Corrigida a interpretação de produto: Samuel possui modo Administrador e modo Aluno; Robson possui modo Treinador e modo Atleta.
