@@ -16,7 +16,9 @@
 - Inspeção autenticada cobriu dashboard, gestão, evolução, conquistas, loja, troca de cores e PDF; sem overflow, imagem quebrada ou acesso anônimo ao relatório.
 - PR `#28` aberta; CI Linux `31870804865` aprovado e preview Vercel `5bcivLct5w9yJ2KzJeX9zYMPzbUJ` concluído.
 - O primeiro CI identificou uma regra React específica do runner Linux na observabilidade; a implementação foi substituída por `useSyncExternalStore`, o lint local foi repetido e o CI seguinte passou.
-- Merge e deployment de produção ainda em andamento; os identificadores finais serão registrados após a publicação.
+- PR `#28` mesclada no commit `7c5561b28051f6aad873f2ba56e77649ae052165`; CI da `main` `31871069506` passou todas as etapas, incluindo auditoria npm, build e navegador.
+- Deployment de produção `dpl_FqV47iK47bRQ1vLkk3AofS2A3vbA` ficou `READY` com os aliases oficiais.
+- Produção validada: home/login/health `200`; health na revisão `7c5561b`; evolução e conquistas anônimas `307` para login; PDF anônimo `401`.
 
 ## 08/08/2026 — início do ciclo de prontidão
 

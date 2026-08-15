@@ -1,6 +1,6 @@
 # Born to Run — relatório consolidado para Abacus AI
 
-> Atualização 15/08/2026: o bloco de modos, privacidade, evolução e loja está implementado e validado. Administrador/treinador podem alternar para sua experiência de atleta; o administrador também exerce funções técnicas durante desenvolvimento. Metas pessoais deixaram o perfil compartilhado e usam RLS exclusiva do titular. A nova área de evolução consolida atividades, provas e avaliações. Fornecedores saíram da vitrine e estão em PDF protegido. Lint, tipos, 70 unitários, build, 20 asserções pgTAP e 28 cenários Playwright passaram. Consulte `22-MODOS-METAS-EVOLUCAO-E-LOJA.md`.
+> Atualização 15/08/2026: o bloco de modos, privacidade, evolução e loja foi publicado pela PR `#28`, merge `7c5561b`, CI `31871069506` e Vercel `dpl_FqV47iK47bRQ1vLkk3AofS2A3vbA`. Administrador/treinador podem alternar para sua experiência de atleta; o administrador também exerce funções técnicas durante desenvolvimento. Metas pessoais deixaram o perfil compartilhado e usam RLS exclusiva do titular. A nova área de evolução consolida atividades, provas e avaliações. Fornecedores saíram da vitrine e estão em PDF protegido. Lint, tipos, 70 unitários, build, 20 asserções pgTAP e 28 cenários Playwright passaram. Consulte `22-MODOS-METAS-EVOLUCAO-E-LOJA.md`.
 
 Atualizado em 09/08/2026 após a conclusão do ciclo de prontidão para piloto.
 
