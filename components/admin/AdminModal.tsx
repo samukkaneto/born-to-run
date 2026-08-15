@@ -20,6 +20,7 @@ export default function AdminModal({
   children,
 }: AdminModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const onCloseRef = useRef(onClose)
 
@@ -30,6 +31,7 @@ export default function AdminModal({
   useEffect(() => {
     if (!open) return
     const previousFocus = document.activeElement as HTMLElement | null
+    scrollRef.current?.scrollTo({ top: 0 })
     closeRef.current?.focus()
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onCloseRef.current()
@@ -61,7 +63,7 @@ export default function AdminModal({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-end justify-center p-0 sm:items-center sm:p-4"
+      className="fixed inset-0 z-[60] flex h-[100dvh] items-stretch justify-center overflow-hidden p-0 sm:items-center sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="admin-modal-title"
@@ -73,8 +75,8 @@ export default function AdminModal({
         aria-label="Fechar janela"
         tabIndex={-1}
       />
-      <div ref={dialogRef} className="animate-scale-in relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-xl border border-[#E5E1D8] bg-white shadow-card-lg sm:rounded-xl">
-        <div className="sticky top-0 flex items-start justify-between gap-4 border-b border-[#E5E1D8] bg-white px-6 py-4">
+      <div ref={dialogRef} className="animate-scale-in relative z-10 flex h-[100dvh] min-h-0 w-full max-w-lg flex-col overflow-hidden border border-[#E5E1D8] bg-white shadow-card-lg sm:h-auto sm:max-h-[92dvh] sm:rounded-xl">
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-[#E5E1D8] bg-white px-4 pb-3 pt-[max(1rem,env(safe-area-inset-top))] sm:px-6 sm:py-4">
           <div>
             <h2
               id="admin-modal-title"
@@ -96,7 +98,7 @@ export default function AdminModal({
             <X size={18} />
           </button>
         </div>
-        <div className="px-6 py-5">{children}</div>
+        <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:px-6">{children}</div>
       </div>
     </div>
   )

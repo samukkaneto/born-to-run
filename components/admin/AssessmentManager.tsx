@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Activity, CheckCircle2, ClipboardList, ExternalLink, FileImage, FileSearch, LoaderCircle, LockKeyhole, Pencil, Plus, Scale, Trash2 } from 'lucide-react'
 import { deleteBodyAssessment, saveBodyAssessment } from '@/lib/actions/admin'
 import { extractTanitaFile } from '@/lib/assessments/ocr-client'
+import type { TanitaPhotoSlot } from '@/lib/assessments/tanita-template'
 import { formatDate, getTodayCalendarDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/Toaster'
 import AdminModal from '@/components/admin/AdminModal'
@@ -109,6 +110,15 @@ const TANITA_PHOTOS = [
   { slot: 3, title: 'Foto 3 · Segmentos', description: 'Gordura e massa muscular em braços, tronco e pernas.' },
 ] as const
 
+const SUMMARY_KEYS = MEASUREMENT_KEYS.filter((key) => !key.startsWith('segment_'))
+const GRAPH_KEYS: MeasurementKey[] = ['bmi', 'body_fat_pct', 'body_water_pct', 'visceral_fat_level']
+const SEGMENT_KEYS = MEASUREMENT_KEYS.filter((key) => key.startsWith('segment_'))
+const PHOTO_KEYS: Record<TanitaPhotoSlot, readonly MeasurementKey[]> = {
+  1: SUMMARY_KEYS,
+  2: GRAPH_KEYS,
+  3: SEGMENT_KEYS,
+}
+
 function emptyDraft(): AssessmentDraft {
   return Object.fromEntries([
     ['assessed_at', getTodayCalendarDate()],
@@ -166,17 +176,17 @@ export default function AssessmentManager({
     setDraft((current) => ({ ...current, [key]: value }))
   }
 
-  async function handleSourceFile(slot: number, file: File | undefined) {
+  async function handleSourceFile(slot: TanitaPhotoSlot, file: File | undefined) {
     if (!file) return
     setError('')
     setOcrState({ status: 'reading', progress: 0.02, message: `Preparando a Foto ${slot}…` })
     try {
-      const result = await extractTanitaFile(file, (progress, message) => {
+      const result = await extractTanitaFile(file, slot, (progress, message) => {
         setOcrState({ status: 'reading', progress, message: `Foto ${slot}: ${message}` })
       })
       setDraft((current) => {
         const next = { ...current }
-        for (const key of MEASUREMENT_KEYS) {
+        for (const key of PHOTO_KEYS[slot]) {
           const value = result.measurements[key]
           if (value !== undefined) next[key] = String(value)
         }
@@ -184,8 +194,9 @@ export default function AssessmentManager({
         if (result.labels.bodyFatCategory) next.body_fat_category = result.labels.bodyFatCategory
         return next
       })
+      const recognizedCount = PHOTO_KEYS[slot].filter((key) => result.measurements[key] !== undefined).length
       const confidence = result.confidence === null ? '' : ` · confiança visual ${Math.round(result.confidence)}%`
-      setOcrState({ status: 'done', progress: 1, message: `Foto ${slot}: ${result.detectedCount} medida(s) reconhecida(s)${confidence}. Confira os valores antes de salvar.` })
+      setOcrState({ status: 'done', progress: 1, message: `Foto ${slot}: ${recognizedCount} campo(s) preenchido(s)${confidence}. Confira os valores antes de salvar.` })
     } catch (caught) {
       setOcrState({ status: 'error', progress: 0, message: caught instanceof Error ? caught.message : `Não foi possível ler a Foto ${slot}.` })
     }
@@ -251,7 +262,7 @@ export default function AssessmentManager({
       <AdminModal open={modal !== null} title={editing ? 'Editar avaliação Tanita' : 'Nova avaliação Tanita'} subtitle="Anexe as três imagens na ordem correta, confira a leitura automática e publique em português." onClose={() => !working && ocrState.status !== 'reading' && setModal(null)}>
         <form key={editing?.id ?? 'create'} onSubmit={handleSave} className="space-y-5">
           <div className="grid gap-4 sm:grid-cols-2">
-            <div><label htmlFor="assessment-athlete" className="mb-1.5 block font-condensed text-sm font-semibold uppercase text-[#44403C]">Pessoa avaliada</label>{editing ? <><input type="hidden" name="athlete_user_id" value={editing.athlete_user_id} /><input id="assessment-athlete" value={athleteNames.get(editing.athlete_user_id) ?? 'Atleta'} disabled className="input-base bg-[#F5F5F4]" /></> : <select id="assessment-athlete" name="athlete_user_id" required defaultValue="" className="input-base bg-white"><option value="" disabled>Selecione um perfil ativo</option>{athletes.map((athlete) => <option key={athlete.user_id} value={athlete.user_id}>{athlete.full_name}{athlete.role === 'admin' ? ' · Admin no modo atleta' : athlete.role === 'coach' ? ' · Treinador no modo atleta' : ''}</option>)}</select>}</div>
+            <div><label htmlFor="assessment-athlete" className="mb-1.5 block font-condensed text-sm font-semibold uppercase text-[#44403C]">Pessoa avaliada</label>{editing ? <><input type="hidden" name="athlete_user_id" value={editing.athlete_user_id} /><input id="assessment-athlete" value={athleteNames.get(editing.athlete_user_id) ?? 'Atleta'} disabled className="input-base bg-[#F5F5F4]" /></> : <select id="assessment-athlete" name="athlete_user_id" required defaultValue="" className="input-base bg-white"><option value="" disabled>Selecione o aluno ou atleta</option>{athletes.map((athlete) => <option key={athlete.user_id} value={athlete.user_id}>{athlete.full_name}{athlete.role === 'admin' ? ' · Perfil de aluno' : athlete.role === 'coach' ? ' · Perfil de atleta' : ''}</option>)}</select>}</div>
             <div><label htmlFor="assessment-date" className="mb-1.5 block font-condensed text-sm font-semibold uppercase text-[#44403C]">Data</label><input id="assessment-date" name="assessed_at" type="date" required max={getTodayCalendarDate()} value={draft.assessed_at} onChange={(event) => updateDraft('assessed_at', event.target.value)} className="input-base" /></div>
           </div>
 

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { parseTanitaOcrText } from '@/lib/assessments/tanita-ocr'
+import { parseTanitaTemplateNumber, reconcileTanitaMeasurements } from '@/lib/assessments/tanita-template'
 
 describe('leitura de relatório Tanita', () => {
   it('extrai medidas e data de um texto em inglês', () => {
@@ -65,5 +66,31 @@ describe('leitura de relatório Tanita', () => {
     const result = parseTanitaOcrText('Weight 9999 kg Body Fat Percentage 120 % BMI 300')
     expect(result.detectedCount).toBe(0)
     expect(result.warnings[0]).toContain('Nenhuma medida')
+  })
+
+  it('restaura a casa decimal omitida pelo OCR das células fixas', () => {
+    expect(parseTanitaTemplateNumber('618', 'weight_kg')).toBe(61.8)
+    expect(parseTanitaTemplateNumber('357', 'body_fat_pct')).toBe(35.7)
+    expect(parseTanitaTemplateNumber('18', 'segment_left_arm_muscle_kg')).toBe(1.8)
+    expect(parseTanitaTemplateNumber('1202', 'basal_metabolic_rate')).toBe(1202)
+    expect(parseTanitaTemplateNumber('', 'heart_rate_bpm')).toBeNull()
+  })
+
+  it('corrige massas truncadas usando as relações redundantes da própria Tanita', () => {
+    expect(reconcileTanitaMeasurements({
+      weight_kg: 61.8,
+      body_fat_pct: 35.7,
+      fat_mass_kg: 22.1,
+      fat_free_mass_kg: 9.7,
+      body_water_pct: 46.7,
+      body_water_mass_kg: 2.9,
+      bone_mass_kg: 2,
+      muscle_mass_kg: 7.7,
+    })).toMatchObject({
+      fat_mass_kg: 22.1,
+      fat_free_mass_kg: 39.7,
+      body_water_mass_kg: 28.9,
+      muscle_mass_kg: 37.7,
+    })
   })
 })

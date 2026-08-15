@@ -2,7 +2,7 @@
 
 Atualizado em **15/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
 
-> Estado mais recente: qualquer perfil ativo, inclusive administrador e treinador, pode receber prescrição privada. O atleta possui Hoje/Calendário/Mesociclo; a Tanita usa três imagens privadas, 25 medidas, faixa traduzida e análise segmental; a galeria não obriga legenda. Consulte `docs/ABACUS_AI_HANDOFF/23-PRESCRICAO-PRIVADA-MESOCICLO-E-TANITA-3-FOTOS.md`. A loja ficou fora deste bloco.
+> Estado mais recente: os modos Administrador/Aluno de Samuel e Treinador/Atleta de Robson são experiências independentes, sem menus cruzados. O modal Tanita Android foi corrigido e o OCR posicional do Healthy Edge Lite recupera os 14 indicadores gerais preenchidos e 10/10 segmentos da amostra real, com revisão humana. Consulte `docs/ABACUS_AI_HANDOFF/24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md`. A loja ficou fora deste bloco.
 
 ## Resumo executivo
 
@@ -31,7 +31,7 @@ O checkpoint funcional seguinte foi concluído no código e no Supabase: logotip
 | Grupos | Implementado e validado | Criar, editar, arquivar/reativar e gerenciar integrantes, preservando destinatários históricos. |
 | Comunicados | Implementado | CRUD do administrador e leitura pelos membros ativos. |
 | Painel do treinador | Implementado e validado | Dashboard, aprovações, membros, grupos, treinos privados e avaliações físicas. |
-| Bioimpedância | OCR assistido e PDF implementados | Admin/treinador anexam PDF/JPG/PNG, recebem pré-preenchimento local, revisam, salvam privadamente e o usuário exporta PDF A4. |
+| Bioimpedância | OCR posicional calibrado e PDF implementados | Admin/treinador anexam Foto 1/2/3 em JPG/PNG, recebem pré-preenchimento calibrado para Healthy Edge Lite, revisam, salvam privadamente e o usuário exporta PDF A4. |
 | Galeria institucional | Implementada no Bloco 10 | Admin/treinador publicam, ordenam, ocultam e removem; consentimento obrigatório; feed pessoal separado. |
 | Missões, níveis e conquistas | Implementados no Bloco 10 | 12 missões, cascata de distâncias, XP inclusivo, dez níveis, resultados e premiações gerais/por categoria. |
 | Loja | Catálogo reservado | Somente administrador/treinador ativos; 13 produtos, cores ampliadas e preços por custo pesquisado × 2. Sem venda, checkout ou estoque ativo. |
@@ -98,8 +98,8 @@ O banco preserva 1 perfil administrador ativo, 1 perfil treinador ativo e nenhum
 |---|---|
 | ESLint | Aprovado, sem erros |
 | TypeScript (`tsc --noEmit`) | Aprovado |
-| Build Next.js 16.3.0 | Aprovado, 38 rotas |
-| Testes unitários | 69/69 aprovados no checkpoint atual |
+| Build Next.js 16.3.0 | Aprovado, 40 rotas |
+| Testes unitários | 76/76 aprovados no checkpoint atual |
 | `npm audit` | 0 vulnerabilidades conhecidas |
 | Tipos do Supabase | Gerados a partir do banco remoto |
 | Boundaries de erro/loading/not-found | Implementados |

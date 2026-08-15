@@ -1,5 +1,11 @@
 # Pendências e ponto de retomada
 
+## Retomada mais recente — modos realmente separados e Tanita calibrada
+
+Não misturar menus de gestão com menus esportivos. Samuel alterna entre **Administrador** e **Aluno**; Robson alterna entre **Treinador** e **Atleta**. A mesma conta autenticada mantém o papel técnico, mas `/admin/*` e `/dashboard/*` são contextos independentes e `RoleModeSwitcher` é a única passagem entre eles.
+
+O erro de enquadramento Android da nova avaliação foi corrigido e medido em 390 × 844. O OCR agora está calibrado pelas posições fixas do Healthy Edge Lite; a amostra real recupera 14 indicadores gerais preenchidos e 10/10 segmentos. Próxima ação exata: repetir o fluxo autenticado no Android do proprietário, comparar os 24 valores com as três telas e salvar uma avaliação piloto. Loja continua fora deste bloco. Consulte `24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md`.
+
 ## Retomada mais recente — prescrição e Tanita em três fotos
 
 O bloco funcional de 15/08/2026 está implementado no código e no Supabase. Não voltar a filtrar destinatários por `role = member`: Samuel e Robson são perfis técnicos e atletas ao mesmo tempo. O modo atleta usa `get_my_assigned_workouts()` para não mostrar prescrições alheias.
@@ -45,8 +51,8 @@ O administrador foi localizado e está `active` com e-mail confirmado. O proprie
 3. completar a identificação formal do controlador quando houver os dados jurídicos;
 4. solicitar à Fable 5 a aprovação/refinação visual final sem alterar os contratos técnicos.
 5. planejar o aplicativo Android nativo e APK como fase separada somente após estabilizar o piloto web/PWA.
-6. após o piloto, evoluir as avaliações com gráficos por período e dados segmentais se o proprietário aprovar;
-7. calibrar o OCR com novas amostras reais, mantendo correção humana obrigatória;
+6. após o piloto, evoluir as avaliações com gráficos por período;
+7. validar a calibração posicional em novas amostras do mesmo Healthy Edge Lite, mantendo correção humana obrigatória;
 8. ampliar o editor institucional além da galeria;
 9. validar o catálogo reservado com Robson antes de contratar fornecedores ou implementar checkout;
 10. seguir `17-ROADMAP-PRODUTO-E-APP-NATIVO.md` para APK e integrações.

@@ -66,7 +66,7 @@ export default async function DashboardLayout({
           <p className="mb-3 px-3.5 font-condensed text-[11px] font-semibold uppercase tracking-[0.2em] text-[#57534E]">
             Área do atleta
           </p>
-          <DashboardSidebarNav managementRole={managementRole} />
+          <DashboardSidebarNav />
         </div>
 
         <div className="border-t border-[#2E2E2E] p-3">
