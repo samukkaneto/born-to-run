@@ -1,5 +1,11 @@
 # Pendências e ponto de retomada
 
+## Retomada atual — 15/08/2026
+
+O bloco solicitado pelo proprietário está implementado e validado localmente e no Supabase: modos de atuação, administrador com funções técnicas, metas privadas, tolerância a falhas em conquistas, evolução do atleta, enquadramento integral dos logos e revisão da loja com PDF protegido. Não repetir as regras antigas que impediam o administrador de acessar treinos durante desenvolvimento. Consulte `22-MODOS-METAS-EVOLUCAO-E-LOJA.md`.
+
+Próxima ação exata: mesclar a PR `#28`, validar o deployment de produção e registrar os IDs finais neste pacote. Os gates locais já passaram: lint, TypeScript, 70 unitários, build de 40 rotas, 20 asserções pgTAP e 28 cenários Playwright em desktop/mobile. O CI Linux `31870804865` e o preview Vercel `5bcivLct5w9yJ2KzJeX9zYMPzbUJ` também foram aprovados.
+
 Atualizar este arquivo após cada bloco.
 
 ## Estado do ciclo técnico — atualização 11/08/2026

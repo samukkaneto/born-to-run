@@ -1,9 +1,13 @@
 'use client'
 
+import { useSyncExternalStore } from 'react'
 import { Analytics, type BeforeSendEvent as AnalyticsEvent } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const UUID_SEGMENT = /\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b/gi
+const subscribeToHost = () => () => undefined
+const getServerHost = () => false
+const getBrowserHost = () => !['localhost', '127.0.0.1'].includes(window.location.hostname)
 
 function sanitizeUrl(rawUrl: string) {
   try {
@@ -18,7 +22,9 @@ function sanitizeUrl(rawUrl: string) {
 }
 
 export default function VercelObservability({ enabled }: { enabled: boolean }) {
-  if (!enabled) return null
+  const isHosted = useSyncExternalStore(subscribeToHost, getBrowserHost, getServerHost)
+
+  if (!enabled || !isHosted) return null
 
   return (
     <>

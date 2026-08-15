@@ -79,7 +79,9 @@ export default function RootLayout({
     >
       <body className="font-sans antialiased text-[#171717]">
         <PwaProvider>{children}</PwaProvider>
-        <VercelObservability enabled={process.env.VERCEL === '1'} />
+        <VercelObservability
+          enabled={process.env.VERCEL === '1' && Boolean(process.env.VERCEL_ENV)}
+        />
       </body>
     </html>
   )

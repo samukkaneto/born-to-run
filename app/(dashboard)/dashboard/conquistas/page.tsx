@@ -14,18 +14,29 @@ export default async function ConquistasPage() {
     supabase.from('race_results').select('*').eq('athlete_user_id', user.id).order('event_date', { ascending: false }),
     supabase.from('posts').select('distance_km, duration_minutes').eq('user_id', user.id).not('distance_km', 'is', null),
   ])
-  if (profileResult.error || missionsResult.error || raceResultsResult.error || postsResult.error) throw new Error('Não foi possível carregar sua jornada e conquistas.')
+  if (profileResult.error || !profileResult.data) throw new Error('Não foi possível carregar o início da sua jornada.')
 
-  const raceResults = (raceResultsResult.data ?? []) as RaceResult[]
+  const unavailableSections = [
+    missionsResult.error && 'missões',
+    raceResultsResult.error && 'resultados',
+    postsResult.error && 'atividades',
+  ].filter(Boolean)
+
+  const raceResults = (raceResultsResult.error ? [] : raceResultsResult.data ?? []) as RaceResult[]
   const activities = [
-    ...(postsResult.data ?? []).map((post) => ({ distanceKm: Number(post.distance_km), durationSeconds: post.duration_minutes ? Number(post.duration_minutes) * 60 : null })),
+    ...(postsResult.error ? [] : postsResult.data ?? []).map((post) => ({ distanceKm: Number(post.distance_km), durationSeconds: post.duration_minutes ? Number(post.duration_minutes) * 60 : null })),
     ...raceResults.map((result) => ({ distanceKm: Number(result.distance_km), durationSeconds: result.duration_seconds })),
-  ]
+  ].filter((activity) => Number.isFinite(activity.distanceKm) && activity.distanceKm > 0)
 
   return (
     <div className="mx-auto max-w-5xl animate-fade-in space-y-8">
       <div><p className="section-kicker mb-3">Minha jornada</p><h1 className="font-display text-4xl uppercase leading-[0.95] text-[#171717] sm:text-5xl">Missões e <span className="text-[#DC2626]">conquistas</span></h1><p className="mt-3 max-w-3xl text-sm leading-relaxed text-[#57534E]">Missões reconhecem sua evolução nos treinos. Conquistas registram premiações reais em provas — classificação geral ou por categoria.</p></div>
-      <AchievementsManager missions={(missionsResult.data ?? []) as Mission[]} results={raceResults} activities={activities} joinedAt={profileResult.data.team_joined_at} />
+      {unavailableSections.length > 0 && (
+        <p role="status" className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          Parte da sua jornada está temporariamente indisponível ({unavailableSections.join(', ')}). Os demais dados continuam acessíveis.
+        </p>
+      )}
+      <AchievementsManager missions={(missionsResult.error ? [] : missionsResult.data ?? []) as Mission[]} results={raceResults} activities={activities} joinedAt={profileResult.data.team_joined_at} />
     </div>
   )
 }

@@ -1,5 +1,23 @@
 # Log de execução
 
+## 15/08/2026 — retomada, modos, privacidade e evolução
+
+- Recuperadas as ordens finais da sessão anterior e confirmada a cópia principal em `C:\Users\ander\Documents\Codex\born-to-run-rebirth`.
+- Criada a branch `codex/admin-modes-shop-evolution` a partir da `main` limpa.
+- Adicionados seletores de modo nos layouts privados; o administrador acessa funções de treino/grupos e o Supabase passou a reconhecê-lo como equipe técnica durante desenvolvimento/testes.
+- Aplicada a migration `20260815043638_admin_training_private_goals`: metas antigas foram preservadas em `personal_goals`, o campo público foi esvaziado/revogado e a nova tabela aceita somente o próprio atleta por RLS.
+- Missões/conquistas deixaram de derrubar a página inteira quando uma fonte opcional falha; a escrita de resultados próprios foi reafirmada.
+- Criada `/dashboard/evolucao` com atividades, distâncias, ritmo, série de seis meses e comparação de composição corporal.
+- Loja administrativa teve orientações internas e tabela de fornecedores removidas. Cores agora são controles interativos e o catálogo usa enquadramento ampliado por produto.
+- Criado PDF interno de fornecedores com rota autenticada `GET /api/admin/shop/suppliers`; as duas páginas foram renderizadas para inspeção local.
+- Logos nos layouts públicos, autenticação, atleta e gestão passaram a usar `object-contain`, sem recorte de pixels do arquivo oficial.
+- Supabase remoto validado com 4/4 asserções de metas e 16/16 de avaliações/papéis técnicos; advisors sem nova falha de RLS.
+- Gates locais concluídos: lint, TypeScript, 13 arquivos/70 testes unitários, build das 40 rotas e 28/28 cenários Playwright em Desktop Chrome e Pixel 7.
+- Inspeção autenticada cobriu dashboard, gestão, evolução, conquistas, loja, troca de cores e PDF; sem overflow, imagem quebrada ou acesso anônimo ao relatório.
+- PR `#28` aberta; CI Linux `31870804865` aprovado e preview Vercel `5bcivLct5w9yJ2KzJeX9zYMPzbUJ` concluído.
+- O primeiro CI identificou uma regra React específica do runner Linux na observabilidade; a implementação foi substituída por `useSyncExternalStore`, o lint local foi repetido e o CI seguinte passou.
+- Merge e deployment de produção ainda em andamento; os identificadores finais serão registrados após a publicação.
+
 ## 08/08/2026 — início do ciclo de prontidão
 
 - Proprietário autorizou executar as pendências técnicas em blocos.

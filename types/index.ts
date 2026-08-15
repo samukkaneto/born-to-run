@@ -15,7 +15,6 @@ export type MemberProfile = Pick<
   | 'avatar_url'
   | 'bio'
   | 'cidade'
-  | 'objetivo'
   | 'role'
   | 'membership_status'
   | 'team_joined_at'

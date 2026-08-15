@@ -17,14 +17,14 @@ export default async function DashboardPage() {
 
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .select('full_name, cidade, objetivo')
+    .select('full_name, cidade')
     .eq('user_id', user.id)
     .single()
   if (profileError) throw new Error('Não foi possível carregar seu painel.')
 
   const today = getTodayCalendarDate()
 
-  const [workoutsResult, announcementsResult, postsResult, postsCountResult] = await Promise.all([
+  const [workoutsResult, announcementsResult, postsResult, postsCountResult, personalGoalResult] = await Promise.all([
       supabase
         .from('workouts')
         .select('id, title, level, scheduled_date, objective')
@@ -45,6 +45,7 @@ export default async function DashboardPage() {
         .from('posts')
         .select('id', { count: 'exact', head: true })
         .eq('user_id', user.id),
+      supabase.from('personal_goals').select('goal').eq('user_id', user.id).maybeSingle(),
     ])
 
   if (
@@ -52,6 +53,7 @@ export default async function DashboardPage() {
     || announcementsResult.error
     || postsResult.error
     || postsCountResult.error
+    || personalGoalResult.error
   ) {
     throw new Error('Não foi possível carregar os dados do painel.')
   }
@@ -80,8 +82,8 @@ export default async function DashboardPage() {
           <span className="text-[#DC2626]">Seu próximo passo começa agora.</span>
         </h1>
         <p className="text-[#57534E] text-sm mt-3">
-          {profile?.objetivo
-            ? <>Seu objetivo: <span className="font-medium text-[#171717]">{profile.objetivo}</span></>
+          {personalGoalResult.data?.goal
+            ? <>Sua meta privada: <span className="font-medium text-[#171717]">{personalGoalResult.data.goal}</span></>
             : 'Bem-vindo(a) à área de membros da Born to Run.'}
         </p>
       </div>

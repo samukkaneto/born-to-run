@@ -87,7 +87,10 @@ test('formulário de contato envia sem abrir o cliente de e-mail', async ({ page
   await page.getByRole('button', { name: 'Enviar mensagem' }).click()
 
   await expect(page.getByRole('heading', { name: 'Mensagem enviada, Maria!' })).toBeVisible()
-  await expect(page.getByRole('status')).toContainText('contato@equipeborntorun.com')
+  await expect(page.getByRole('status')).toContainText('Ela foi entregue para')
+  await expect(page.getByRole('status')).toContainText(
+    'A equipe responderá no e-mail que você informou.',
+  )
 })
 
 test('galeria pública e loja reservada respeitam seus públicos', async ({ page }) => {

@@ -9,6 +9,8 @@ import {
   DashboardSidebarNav,
   DashboardBottomNav,
 } from '@/components/dashboard/DashboardNav'
+import RoleModeSwitcher from '@/components/navigation/RoleModeSwitcher'
+import ToastProvider from '@/components/ui/Toaster'
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false, nocache: true },
@@ -38,7 +40,8 @@ export default async function DashboardLayout({
     (profile?.full_name || user.user_metadata?.full_name || 'Atleta').split(' ')[0]
 
   return (
-    <div className="flex min-h-screen bg-[#F7F4EF]">
+    <ToastProvider>
+      <div className="flex min-h-screen bg-[#F7F4EF]">
       <a href="#conteudo-principal" className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-lg bg-white px-4 py-3 font-semibold text-[#171717] shadow-card-lg transition-transform focus:translate-y-0">
         Pular para o conteúdo
       </a>
@@ -52,7 +55,7 @@ export default async function DashboardLayout({
                 alt="Born to Run — Treinamento e Saúde"
                 width={210}
                 height={127}
-                className="absolute left-0 top-0 h-auto w-[210px]"
+                className="absolute -top-[9px] left-0 h-auto w-[210px]"
                 priority
               />
             </div>
@@ -85,13 +88,13 @@ export default async function DashboardLayout({
         <header className="panel-carbon sticky top-0 z-30 md:hidden">
           <div className="flex h-16 items-center justify-between px-4">
             <Link href="/dashboard" className="flex shrink-0 items-center">
-              <div className="relative h-[56px] w-[138px] overflow-hidden">
+              <div className="relative h-[58px] w-[138px] overflow-hidden">
                 <Image
                   src="/logo.png"
                   alt="Born to Run"
                   width={138}
                   height={84}
-                  className="absolute left-0 top-0 h-auto w-[138px]"
+                  className="absolute -top-[6px] left-0 h-auto w-[138px]"
                   priority
                 />
               </div>
@@ -106,6 +109,11 @@ export default async function DashboardLayout({
               </button>
             </form>
           </div>
+          {managementRole && (
+            <div className="border-t border-[#2E2E2E] bg-white px-4 py-2.5">
+              <RoleModeSwitcher role={managementRole} activeMode="athlete" compact />
+            </div>
+          )}
         </header>
 
         {/* Barra de saudação (desktop) */}
@@ -114,9 +122,13 @@ export default async function DashboardLayout({
             <p className="font-condensed text-sm font-medium uppercase tracking-[0.12em] text-[#57534E]">
               Olá, <span className="text-[#171717]">{firstName}</span> — bom treino hoje!
             </p>
-            <span className="font-condensed text-xs uppercase tracking-[0.18em] text-[#A8A29E]">
-              Born to Run · área do atleta
-            </span>
+            {managementRole ? (
+              <RoleModeSwitcher role={managementRole} activeMode="athlete" />
+            ) : (
+              <span className="font-condensed text-xs uppercase tracking-[0.18em] text-[#A8A29E]">
+                Born to Run · área do atleta
+              </span>
+            )}
           </div>
         </div>
 
@@ -127,7 +139,8 @@ export default async function DashboardLayout({
       </div>
 
       {/* Navegação inferior (mobile) */}
-      <DashboardBottomNav />
-    </div>
+        <DashboardBottomNav />
+      </div>
+    </ToastProvider>
   )
 }

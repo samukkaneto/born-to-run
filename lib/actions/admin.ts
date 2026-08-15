@@ -45,7 +45,10 @@ async function requireRole(allowedRoles: UserRole[], message: string) {
 }
 
 const requireAdmin = () => requireRole(['admin'], 'Acesso restrito ao administrador.')
-const requireCoach = () => requireRole(['coach'], 'Acesso restrito ao treinador.')
+const requireTrainingManager = () => requireRole(
+  ['admin', 'coach'],
+  'Acesso restrito ao administrador ou treinador.',
+)
 const requireAccessManager = () => requireRole(
   ['admin', 'coach'],
   'Acesso restrito ao administrador ou treinador.',
@@ -124,7 +127,7 @@ export async function updateWorkout(id: string, formData: FormData): Promise<Adm
 }
 
 async function saveWorkout(id: string | null, formData: FormData): Promise<AdminActionResult> {
-  const { supabase, user, error: authError } = await requireCoach()
+  const { supabase, user, error: authError } = await requireTrainingManager()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
   const parsed = parseWorkoutForm(formData)
@@ -152,7 +155,7 @@ async function saveWorkout(id: string | null, formData: FormData): Promise<Admin
 
 export async function deleteWorkout(id: string): Promise<AdminActionResult> {
   if (!isUuid(id)) return { error: 'Treino inválido.' }
-  const { supabase, user, error: authError } = await requireCoach()
+  const { supabase, user, error: authError } = await requireTrainingManager()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
   const { data, error } = await supabase
@@ -173,7 +176,7 @@ export async function importWorkoutPlan(
   memberIds: string[],
   groupIds: string[],
 ): Promise<AdminActionResult> {
-  const { supabase, user, error: authError } = await requireCoach()
+  const { supabase, user, error: authError } = await requireTrainingManager()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
   if (!VALID_LEVELS.includes(level as (typeof VALID_LEVELS)[number])) {
     return { error: 'Selecione um nível válido.' }
@@ -389,7 +392,7 @@ export async function saveTrainingGroup(
   formData: FormData,
 ): Promise<AdminActionResult> {
   if (groupId && !isUuid(groupId)) return { error: 'Grupo inválido.' }
-  const { supabase, user, error: authError } = await requireCoach()
+  const { supabase, user, error: authError } = await requireTrainingManager()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
   const name = cleanText(formData.get('name'), 100)
@@ -413,7 +416,7 @@ export async function saveTrainingGroup(
 
 export async function archiveTrainingGroup(groupId: string): Promise<AdminActionResult> {
   if (!isUuid(groupId)) return { error: 'Grupo inválido.' }
-  const { supabase, user, error: authError } = await requireCoach()
+  const { supabase, user, error: authError } = await requireTrainingManager()
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
 
   const { data, error } = await supabase.rpc('admin_archive_training_group', {

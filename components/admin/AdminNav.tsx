@@ -39,6 +39,7 @@ function itemsForRole(role: UserRole) {
   return [
     commonItems[0],
     commonItems[1],
+    { href: '/admin/treinos', icon: Dumbbell, label: 'Treinos' },
     { href: '/admin/comunicados', icon: Megaphone, label: 'Comunicados' },
     { href: '/admin/avaliacoes', icon: ClipboardList, label: 'Avaliações' },
     commonItems[2],
