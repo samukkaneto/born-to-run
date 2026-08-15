@@ -14,6 +14,7 @@
 - Pesquisa oficial registrou que TANITA PRO atual exporta CSV/Excel, mas sua compatibilidade publicada não inclui BC-1500; Healthy Edge Lite não tem exportação CSV confirmada na documentação consultada. Imagens permanecem o fluxo canônico até existir um CSV real.
 - Loja, banco, migrations, RLS, Storage, logos e mockups não foram alterados.
 - Gates antes da publicação: TypeScript, ESLint, 76/76 unitários, build Next.js 16.3 de 40 rotas e Playwright 28/28 em Desktop Chrome/Pixel 7 aprovados.
+- O primeiro CI Linux da PR encontrou uma URL antiga da Oswald retornando `404` em um build sem cache. Inter, Bebas Neue e Oswald foram incorporadas localmente com suas licenças OFL e `next/font/local`; tipografia preservada e build repetido com sucesso, agora independente do Google Fonts.
 - Relatório detalhado: `24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md`.
 
 ## 15/08/2026 — prescrição privada, mesociclo e Tanita em três fotos

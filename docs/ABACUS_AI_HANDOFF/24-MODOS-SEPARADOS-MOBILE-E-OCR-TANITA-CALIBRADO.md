@@ -82,6 +82,12 @@ Na calibração local das imagens reais:
 
 Os testes unitários cobrem restauração decimal, rejeição de valores impossíveis e reconciliação das massas truncadas.
 
+## Estabilização das fontes no build
+
+O primeiro CI Linux da PR expôs uma dependência externa que não aparecia no ambiente local: durante um build sem cache, `next/font/google` tentou baixar uma URL antiga da Oswald em `fonts.gstatic.com` e recebeu `404`. A aplicação e o preview da Vercel estavam íntegros, mas o gate do GitHub foi corretamente mantido fechado.
+
+Inter, Bebas Neue e Oswald passaram a ser carregadas com `next/font/local` a partir dos arquivos oficiais do projeto Google Fonts, acompanhados das respectivas licenças OFL. A identidade tipográfica, pesos e variáveis CSS foram preservados; o build deixou de depender da disponibilidade do Google Fonts.
+
 ## Exportação do software Tanita
 
 Pesquisa feita em fontes oficiais em 15/08/2026:
@@ -104,7 +110,9 @@ Decisão atual: manter as três imagens como entrada oficial já funcional. Ante
 - `components/admin/WorkoutsManager.tsx`;
 - `lib/assessments/ocr-client.ts`;
 - `lib/assessments/tanita-template.ts`;
-- `tests/unit/tanita-ocr.test.ts`.
+- `tests/unit/tanita-ocr.test.ts`;
+- `app/layout.tsx`;
+- `app/fonts/`, com as três fontes locais e licenças OFL.
 
 Não houve alteração de banco, migration, RLS, Storage, loja, catálogo, logotipos ou mockups neste bloco.
 
@@ -118,6 +126,7 @@ Não houve alteração de banco, migration, RLS, Storage, loja, catálogo, logot
 - Playwright de produção: 28/28 em Desktop Chrome e Pixel 7, incluindo PWA e acessibilidade pública;
 - calibração privada: Foto 1 completa nos campos preenchidos e Foto 3 em 10/10;
 - inspeção mobile: viewport 390 × 844 aprovada, com topo e rodapé acessíveis.
+- build repetido após a adoção das fontes locais: aprovado sem requisições ao Google Fonts.
 
 Os identificadores de PR, CI, merge e Vercel devem ser acrescentados ao fechamento desta seção após a publicação.
 

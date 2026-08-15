@@ -1,27 +1,31 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Bebas_Neue, Oswald } from 'next/font/google'
+import localFont from 'next/font/local'
 import PwaProvider from '@/components/pwa/PwaProvider'
 import VercelObservability from '@/components/observability/VercelObservability'
 import './globals.css'
 
-const inter = Inter({
-  subsets: ['latin'],
+const inter = localFont({
+  src: './fonts/Inter-Variable.ttf',
+  weight: '100 900',
+  style: 'normal',
   variable: '--font-inter',
   display: 'swap',
 })
 
 /** Títulos condensados atléticos — identidade editorial Born to Run */
-const bebasNeue = Bebas_Neue({
-  subsets: ['latin'],
+const bebasNeue = localFont({
+  src: './fonts/BebasNeue-Regular.ttf',
   weight: '400',
+  style: 'normal',
   variable: '--font-bebas',
   display: 'swap',
 })
 
 /** Subtítulos condensados (Oswald SemiBold) */
-const oswald = Oswald({
-  subsets: ['latin'],
-  weight: ['500', '600', '700'],
+const oswald = localFont({
+  src: './fonts/Oswald-Variable.ttf',
+  weight: '500 700',
+  style: 'normal',
   variable: '--font-oswald',
   display: 'swap',
 })
