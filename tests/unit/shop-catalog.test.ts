@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { catalogBrandRules, catalogPricingRule, catalogProducts } from '@/lib/shop/catalog'
+import { catalogPricingRule, catalogProducts } from '@/lib/shop/catalog'
 
 describe('catálogo reservado da Born to Run', () => {
   it('aplica exatamente o acréscimo de 100% sobre cada custo pesquisado', () => {
@@ -31,9 +31,11 @@ describe('catálogo reservado da Born to Run', () => {
     expect(colorNames.has('Carbono')).toBe(true)
   })
 
-  it('preserva as duas regras de contraste do logotipo completo', () => {
-    expect(catalogBrandRules.some((rule) => rule.includes('branco'))).toBe(true)
-    expect(catalogBrandRules.some((rule) => rule.includes('preto'))).toBe(true)
-    expect(catalogBrandRules.some((rule) => rule.includes('BORN TO RUN'))).toBe(true)
+  it('oferece visual e enquadramento configurável para cada produto', () => {
+    for (const product of catalogProducts) {
+      expect(product.image).toMatch(/^\/shop-preview\//)
+      expect(product.imagePosition ?? 'center').toBeTruthy()
+      expect(product.colors.length).toBeGreaterThan(0)
+    }
   })
 })

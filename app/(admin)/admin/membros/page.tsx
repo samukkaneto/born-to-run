@@ -19,7 +19,7 @@ export default async function AdminMembrosPage({
     createClient(),
   ])
   if (!user) redirect('/login')
-  const isCoach = profile?.role === 'coach'
+  const canManageTraining = profile?.role === 'coach' || profile?.role === 'admin'
   const isAdmin = profile?.role === 'admin'
 
   const { data: memberData, error: membersError } = await supabase
@@ -28,7 +28,7 @@ export default async function AdminMembrosPage({
     .order('created_at', { ascending: true })
   if (membersError) throw new Error('Não foi possível carregar a gestão da equipe.')
 
-  const groupResult = isCoach
+  const groupResult = canManageTraining
     ? await supabase
         .from('training_groups')
         .select('*, training_group_members ( user_id )')
@@ -44,7 +44,7 @@ export default async function AdminMembrosPage({
   )
   const groups = (groupResult.data ?? []) as unknown as TrainingGroupWithMembers[]
   const { view } = await searchParams
-  if (view === 'grupos' && !isCoach) redirect('/admin/membros')
+  if (view === 'grupos' && !canManageTraining) redirect('/admin/membros')
   const showingGroups = view === 'grupos'
   const activeMembers = members.filter((member) => member.membership_status === 'active')
   const pendingCount = members.filter((member) => member.membership_status === 'pending').length
@@ -76,7 +76,7 @@ export default async function AdminMembrosPage({
         >
           <Users size={16} aria-hidden="true" /> Membros
         </Link>
-        {isCoach && (
+        {canManageTraining && (
           <Link
             href="/admin/membros?view=grupos"
             aria-current={showingGroups ? 'page' : undefined}

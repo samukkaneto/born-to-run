@@ -56,9 +56,9 @@ export type Database = {
           athlete_user_id: string
           basal_metabolic_rate: number | null
           bmi: number | null
-          bone_mass_kg: number | null
           body_fat_pct: number | null
           body_water_pct: number | null
+          bone_mass_kg: number | null
           created_at: string
           id: string
           metabolic_age: number | null
@@ -77,9 +77,9 @@ export type Database = {
           athlete_user_id: string
           basal_metabolic_rate?: number | null
           bmi?: number | null
-          bone_mass_kg?: number | null
           body_fat_pct?: number | null
           body_water_pct?: number | null
+          bone_mass_kg?: number | null
           created_at?: string
           id?: string
           metabolic_age?: number | null
@@ -98,9 +98,9 @@ export type Database = {
           athlete_user_id?: string
           basal_metabolic_rate?: number | null
           bmi?: number | null
-          bone_mass_kg?: number | null
           body_fat_pct?: number | null
           body_water_pct?: number | null
+          bone_mass_kg?: number | null
           created_at?: string
           id?: string
           metabolic_age?: number | null
@@ -312,6 +312,38 @@ export type Database = {
           title?: string
         }
         Relationships: []
+      }
+      personal_goals: {
+        Row: {
+          created_at: string
+          goal: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          goal: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          goal?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "personal_goals_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       posts: {
         Row: {
@@ -710,6 +742,15 @@ export type Database = {
         Args: { target_assessment_id: string }
         Returns: boolean
       }
+      coach_import_workouts: {
+        Args: {
+          target_group_ids: string[]
+          target_items: Json
+          target_level: string
+          target_member_ids: string[]
+        }
+        Returns: string[]
+      }
       coach_save_body_assessment: {
         Args: {
           target_assessed_at: string
@@ -741,15 +782,6 @@ export type Database = {
         }
         Returns: string
       }
-      coach_import_workouts: {
-        Args: {
-          target_group_ids: string[]
-          target_items: Json
-          target_level: string
-          target_member_ids: string[]
-        }
-        Returns: string[]
-      }
       get_my_access_profile: {
         Args: never
         Returns: {
@@ -761,12 +793,12 @@ export type Database = {
           user_id: string
         }[]
       }
-      staff_delete_gallery_item: {
-        Args: { target_item_id: string }
-        Returns: string
-      }
       staff_delete_body_assessment: {
         Args: { target_assessment_id: string }
+        Returns: string
+      }
+      staff_delete_gallery_item: {
+        Args: { target_item_id: string }
         Returns: string
       }
       staff_save_body_assessment: {

@@ -6,7 +6,7 @@ import { createMediaUrl } from '@/lib/supabase/media'
 import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
 import { isUuid } from '@/lib/validation'
 import { formatDate, getInitials } from '@/lib/utils'
-import { ArrowLeft, MapPin, Target, Rss, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, MapPin, Rss, ShieldCheck } from 'lucide-react'
 import type { MemberProfile } from '@/types'
 
 /**
@@ -90,11 +90,6 @@ export default async function MembroPage({
             {profile.cidade && (
               <p className="text-stone-500 text-sm mt-1 flex items-center gap-1.5">
                 <MapPin size={13} /> {profile.cidade}
-              </p>
-            )}
-            {profile.objetivo && (
-              <p className="text-stone-500 text-sm mt-1 flex items-center gap-1.5">
-                <Target size={13} /> {profile.objetivo}
               </p>
             )}
           </div>

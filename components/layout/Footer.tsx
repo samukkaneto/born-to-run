@@ -37,7 +37,7 @@ export default function Footer() {
                   alt="Born to Run — Treinamento e Saúde"
                   width={330}
                   height={200}
-                  className="absolute left-0 top-0 h-auto w-[280px] sm:w-[330px]"
+                  className="absolute -top-[12px] left-0 h-auto w-[280px] sm:-top-[15px] sm:w-[330px]"
                   sizes="(max-width: 640px) 280px, 330px"
                 />
               </div>

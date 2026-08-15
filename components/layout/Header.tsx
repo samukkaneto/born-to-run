@@ -69,7 +69,7 @@ export default function Header() {
                 alt="Born to Run — Treinamento e Saúde"
                 width={205}
                 height={124}
-                className="absolute left-0 top-0 h-auto w-[158px] md:w-[205px]"
+                className="absolute -top-[7px] left-0 h-auto w-[158px] md:-top-[9px] md:w-[205px]"
                 priority
                 sizes="(max-width: 768px) 158px, 205px"
               />

@@ -40,7 +40,7 @@ export default function AuthLayout({
               alt="Born to Run — Treinamento e Saúde"
               width={384}
               height={233}
-              className="absolute left-0 top-0 h-auto w-80 xl:w-96"
+              className="absolute -top-[14px] left-0 h-auto w-80 xl:-top-[18px] xl:w-96"
               style={{
                 filter:
                   'drop-shadow(0 2px 1px rgba(0,0,0,0.95)) drop-shadow(0 8px 18px rgba(0,0,0,0.28))',
@@ -94,7 +94,7 @@ export default function AuthLayout({
                 alt="Born to Run — Treinamento e Saúde"
                 width={340}
                 height={206}
-                className="absolute left-1/2 top-0 h-auto w-[min(88vw,340px)] -translate-x-1/2"
+                className="absolute -top-[15px] left-1/2 h-auto w-[min(88vw,340px)] -translate-x-1/2"
                 style={{
                   filter:
                     'drop-shadow(0 2px 1px rgba(0,0,0,0.95)) drop-shadow(0 7px 16px rgba(0,0,0,0.3))',

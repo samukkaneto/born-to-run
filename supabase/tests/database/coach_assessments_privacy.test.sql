@@ -5,6 +5,11 @@ set local search_path = public, extensions, pg_catalog;
 
 select plan(16);
 
+-- A suíte também roda no projeto ligado, que já possui o treinador real.
+-- As fixtures abaixo são transacionais e este estado é integralmente restaurado no rollback.
+update public.profiles set role = 'member' where role = 'coach';
+delete from app_private.staff_invitations where role = 'coach';
+
 insert into app_private.staff_invitations (email, role)
 values ('coach-test@example.invalid', 'coach');
 
@@ -61,16 +66,14 @@ set local "request.jwt.claims" =
   '{"sub":"70000000-0000-4000-8000-000000000001","role":"authenticated"}';
 
 select is(app_private.is_admin(), true, 'Samuel permanece administrador');
-select is(app_private.is_coach(), false, 'administrador não herda o papel de treinador');
-select throws_ok(
+select is(app_private.is_coach(), true, 'administrador ativo recebe as funções técnicas durante o desenvolvimento');
+select lives_ok(
   $$select public.admin_save_workout(
-    null, 'Treino do admin', 'Não deve ser criado', 'iniciante',
-    'Validar separação dos papéis', current_date, 'targeted',
+    null, 'Treino do admin', 'Treino técnico de validação', 'iniciante',
+    'Validar as funções técnicas do administrador', current_date, 'targeted',
     array['70000000-0000-4000-8000-000000000003'::uuid], '{}'::uuid[]
   )$$,
-  '42501',
-  null,
-  'administrador não publica treino'
+  'administrador publica treino durante desenvolvimento e testes'
 );
 
 set local "request.jwt.claim.sub" = '70000000-0000-4000-8000-000000000002';
@@ -87,7 +90,7 @@ select lives_ok(
   'treinador publica treino privado para atleta escolhido'
 );
 select lives_ok(
-  $$select public.coach_save_body_assessment(
+  $$select public.staff_save_body_assessment_v2(
     null,
     '70000000-0000-4000-8000-000000000003'::uuid,
     current_date,
@@ -98,6 +101,11 @@ select lives_ok(
     56.8,
     23.4,
     31::smallint,
+    2.8,
+    1650,
+    5::smallint,
+    null,
+    null,
     'Avaliação inicial da suíte de privacidade'
   )$$,
   'treinador registra avaliação do atleta'
@@ -136,7 +144,7 @@ select throws_ok(
   'atleta não insere avaliação pela Data API'
 );
 select throws_ok(
-  $$select public.coach_save_body_assessment(
+  $$select public.staff_save_body_assessment_v2(
     null,
     '70000000-0000-4000-8000-000000000003'::uuid,
     current_date,
@@ -147,6 +155,11 @@ select throws_ok(
     null::numeric,
     null::numeric,
     null::smallint,
+    null::numeric,
+    null::integer,
+    null::smallint,
+    null,
+    null,
     null
   )$$,
   '42501',
@@ -175,13 +188,13 @@ set local "request.jwt.claims" =
 
 select results_eq(
   $$select count(*)::bigint from public.workouts where title = 'Rodagem individual'$$,
-  array[0::bigint],
-  'administrador não lê treino privado do treinador e atleta'
+  array[1::bigint],
+  'administrador lê os treinos como integrante da equipe técnica'
 );
 select results_eq(
   $$select count(*)::bigint from public.body_assessments$$,
-  array[0::bigint],
-  'administrador não lê avaliação privada do treinador e atleta'
+  array[1::bigint],
+  'administrador lê avaliações como integrante da equipe técnica'
 );
 
 select * from finish();

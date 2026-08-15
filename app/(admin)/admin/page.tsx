@@ -53,7 +53,7 @@ export default async function AdminPage() {
     bg: '#DBEAFE',
   })
 
-  if (isCoach) {
+  {
     const [workoutsResult, assessmentsResult] = await Promise.all([
       supabase.from('workouts').select('id', { count: 'exact', head: true }),
       supabase.from('body_assessments').select('id', { count: 'exact', head: true }),
@@ -65,16 +65,12 @@ export default async function AdminPage() {
       { icon: Dumbbell, label: 'Treinos', value: workoutsResult.count ?? 0, href: '/admin/treinos', color: '#16A34A', bg: '#DCFCE7' },
       { icon: ClipboardList, label: 'Avaliações', value: assessmentsResult.count ?? 0, href: '/admin/avaliacoes', color: '#7C3AED', bg: '#EDE9FE' },
     )
-  } else {
-    const [announcementsResult, assessmentsResult] = await Promise.all([
-      supabase.from('announcements').select('id', { count: 'exact', head: true }),
-      supabase.from('body_assessments').select('id', { count: 'exact', head: true }),
-    ])
-    if (announcementsResult.error || assessmentsResult.error) throw new Error('Não foi possível carregar os indicadores administrativos.')
-    cards.push(
-      { icon: Megaphone, label: 'Comunicados', value: announcementsResult.count ?? 0, href: '/admin/comunicados', color: '#F97316', bg: '#FFEDD5' },
-      { icon: ClipboardList, label: 'Avaliações', value: assessmentsResult.count ?? 0, href: '/admin/avaliacoes', color: '#7C3AED', bg: '#EDE9FE' },
-    )
+  }
+
+  if (!isCoach) {
+    const announcementsResult = await supabase.from('announcements').select('id', { count: 'exact', head: true })
+    if (announcementsResult.error) throw new Error('Não foi possível carregar os indicadores administrativos.')
+    cards.push({ icon: Megaphone, label: 'Comunicados', value: announcementsResult.count ?? 0, href: '/admin/comunicados', color: '#F97316', bg: '#FFEDD5' })
   }
 
   cards.push({
@@ -137,17 +133,9 @@ export default async function AdminPage() {
         <h2 className="font-condensed text-lg font-semibold uppercase tracking-[0.04em] text-[#171717]">Ações rápidas</h2>
         <p className="mb-4 mt-1 text-sm text-[#57534E]">Atalhos para as tarefas mais comuns.</p>
         <div className="flex flex-wrap gap-3">
-          {isCoach ? (
-            <>
-              <Link href="/admin/treinos" className="btn-primary text-sm"><Plus size={15} aria-hidden="true" /> Novo treino</Link>
-              <Link href="/admin/avaliacoes" className="btn-secondary text-sm"><Plus size={15} aria-hidden="true" /> Nova avaliação</Link>
-            </>
-          ) : (
-            <>
-              <Link href="/admin/comunicados" className="btn-primary text-sm"><Plus size={15} aria-hidden="true" /> Novo comunicado</Link>
-              <Link href="/admin/avaliacoes" className="btn-secondary text-sm"><Plus size={15} aria-hidden="true" /> Nova avaliação</Link>
-            </>
-          )}
+          <Link href="/admin/treinos" className="btn-primary text-sm"><Plus size={15} aria-hidden="true" /> Novo treino</Link>
+          {!isCoach && <Link href="/admin/comunicados" className="btn-secondary text-sm"><Plus size={15} aria-hidden="true" /> Novo comunicado</Link>}
+          <Link href="/admin/avaliacoes" className="btn-secondary text-sm"><Plus size={15} aria-hidden="true" /> Nova avaliação</Link>
           <Link href="/admin/galeria" className="btn-secondary text-sm"><Plus size={15} aria-hidden="true" /> Nova foto</Link>
           <Link href="/admin/membros" className="btn-outline text-sm">Ver membros</Link>
         </div>

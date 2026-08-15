@@ -7,7 +7,7 @@ import type { MemberProfile, TrainingGroup, WorkoutWithAssignments } from '@/typ
 
 export default async function AdminTreinosPage() {
   const [{ profile }, supabase] = await Promise.all([getAccessContext(), createClient()])
-  if (profile?.role !== 'coach') redirect('/admin')
+  if (!profile || !['admin', 'coach'].includes(profile.role)) redirect('/admin')
   const [workoutsResult, membersResult, groupsResult] = await Promise.all([
     supabase
       .from('workouts')

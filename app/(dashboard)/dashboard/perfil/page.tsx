@@ -12,14 +12,15 @@ export default async function PerfilPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select(MEMBER_PROFILE_COLUMNS)
-    .eq('user_id', user.id)
-    .maybeSingle() as { data: MemberProfile | null; error: { message: string } | null }
+  const [profileResult, personalGoalResult] = await Promise.all([
+    supabase.from('profiles').select(MEMBER_PROFILE_COLUMNS).eq('user_id', user.id).maybeSingle(),
+    supabase.from('personal_goals').select('goal').eq('user_id', user.id).maybeSingle(),
+  ])
+  const { data: profile, error: profileError } = profileResult as { data: MemberProfile | null; error: { message: string } | null }
 
   if (profileError) throw new Error('Não foi possível carregar o perfil.')
   if (!profile) throw new Error('O perfil autenticado não foi encontrado.')
+  if (personalGoalResult.error) throw new Error('Não foi possível carregar sua meta privada.')
 
   const profileForView: MemberProfile = {
     ...profile,
@@ -47,7 +48,7 @@ export default async function PerfilPage() {
         {[
           { icon: Rss,    value: count ?? 0,                label: 'Posts'           },
           { icon: MapPin, value: profileForView.cidade || '—',     label: 'Cidade'          },
-          { icon: Target, value: profileForView.objetivo ? '✓' : '—', label: 'Objetivo'     },
+          { icon: Target, value: personalGoalResult.data?.goal ? '✓' : '—', label: 'Meta privada' },
         ].map(({ icon: Icon, value, label }) => (
           <div key={label} className="card p-4 text-center">
             <Icon size={18} className="mx-auto mb-1 text-[var(--color-red)]" />
@@ -63,7 +64,7 @@ export default async function PerfilPage() {
           <User size={18} className="text-[var(--color-red)]" />
           Editar informações
         </h2>
-        <PerfilForm profile={profileForView} />
+        <PerfilForm profile={profileForView} personalGoal={personalGoalResult.data?.goal ?? ''} />
       </div>
 
       {/* Histórico de posts */}

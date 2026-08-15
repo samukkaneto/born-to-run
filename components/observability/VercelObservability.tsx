@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { Analytics, type BeforeSendEvent as AnalyticsEvent } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
@@ -18,7 +19,17 @@ function sanitizeUrl(rawUrl: string) {
 }
 
 export default function VercelObservability({ enabled }: { enabled: boolean }) {
-  if (!enabled) return null
+  const [canLoad, setCanLoad] = useState(false)
+
+  useEffect(() => {
+    setCanLoad(
+      enabled
+      && window.location.hostname !== 'localhost'
+      && window.location.hostname !== '127.0.0.1',
+    )
+  }, [enabled])
+
+  if (!canLoad) return null
 
   return (
     <>

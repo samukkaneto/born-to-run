@@ -1,6 +1,6 @@
 # Born to Run — entrega técnica para Abacus AI / Fable 5
 
-Atualizado em 11/08/2026. Esta pasta é o ponto de entrada canônico para uma IA ou pessoa retomar o projeto sem depender do histórico da conversa no Codex.
+Atualizado em 15/08/2026. Esta pasta é o ponto de entrada canônico para uma IA ou pessoa retomar o projeto sem depender do histórico da conversa no Codex.
 
 ## Ordem de leitura
 
@@ -25,6 +25,7 @@ Atualizado em 11/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 19. `19-LOJA-RESTRITA-PRECOS-E-IDENTIDADE.md` — restrição da loja, catálogo colorido, referências de custo e correção do logotipo oficial no login.
 20. `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md` — correção do perfil, avaliações de todos os papéis, contrato de cores do treinador e catálogo/fornecedores revisados.
 21. `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md` — OCR Tanita assistido, PDF premium, importação atômica do cronograma XLSX e distinção entre prescrição e atividade concluída.
+22. `22-MODOS-METAS-EVOLUCAO-E-LOJA.md` — modos de usuário, poderes técnicos temporários do administrador, metas privadas, evolução do atleta e fornecedores protegidos.
 
 ## Fontes complementares no repositório
 

@@ -103,7 +103,7 @@ export default function MembersTable({
     return members.filter((member) => {
       if (status !== 'all' && member.membership_status !== status) return false
       if (!query) return true
-      return [member.full_name, member.cidade, member.objetivo]
+      return [member.full_name, member.cidade]
         .some((value) => (value || '').toLowerCase().includes(query))
     })
   }, [members, search, status])
@@ -159,7 +159,7 @@ export default function MembersTable({
             type="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Buscar membro por nome, cidade ou objetivo…"
+            placeholder="Buscar membro por nome ou cidade…"
             className="input-base pl-10"
             aria-label="Buscar membros"
           />
@@ -217,7 +217,7 @@ export default function MembersTable({
                             {member.full_name || '—'}
                             {isSelf && <span className="ml-2 text-xs font-normal text-[#78716C]">(você)</span>}
                           </p>
-                          <p className="max-w-[180px] truncate text-xs text-[#78716C]">{member.objetivo || 'Sem objetivo definido'}</p>
+                          <p className="max-w-[180px] truncate text-xs text-[#78716C]">{member.cidade || 'Cidade não informada'}</p>
                         </div>
                       </div>
                     </td>

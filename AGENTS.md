@@ -41,10 +41,11 @@ Não inventar telefone, WhatsApp, endereço, e-mail, CNPJ, depoimentos, atletas,
 - Operações administrativas usam RPCs e checagem server-side.
 - RLS permanece habilitado em todas as tabelas de negócio.
 - `avatars` e `post-images` são privados; o código guarda paths e usa URLs assinadas.
-- Somente o treinador publica treinos; todo treino exige grupo ou atleta destinatário e não é visível ao administrador.
-- Avaliações físicas são privadas entre treinador e atleta avaliado.
+- Durante desenvolvimento e testes, administrador e treinador compõem a equipe técnica e podem criar/importar treinos, gerir grupos e registrar avaliações; todo treino exige grupo ou atleta destinatário.
+- Treinos e avaliações físicas são privados entre a equipe técnica autorizada e o atleta destinatário.
+- Metas pessoais ficam em `personal_goals`, com RLS exclusiva do próprio atleta; não recolocar `profiles.objetivo` em seletores públicos ou administrativos.
 - `proxy.ts` é a convenção ativa do Next 16; não recriar `middleware.ts`.
-- As migrations até `20260811191007_importa_planilha_treinos_prescritos.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
+- As migrations até `20260815043638_admin_training_private_goals.sql` já foram aplicadas. Nunca editar ou reaplicar migrations registradas; mudanças futuras entram em uma nova migration timestampada.
 - Tipos de treino têm semântica fixa: azul-claro descanso, amarelo contínuo, roxo intervalado rápido, verde leve/moderado, mostarda potência aeróbia e vermelho competição.
 - `workouts` representa prescrição privada do treinador. Atividade concluída e futura sincronização Strava são conceitos separados.
 - OCR Tanita preenche somente uma prévia; a equipe técnica deve conferir antes de salvar e nunca gerar diagnóstico médico automaticamente.

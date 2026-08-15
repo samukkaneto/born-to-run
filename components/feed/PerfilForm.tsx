@@ -7,13 +7,13 @@ import { Camera, Loader2, Save } from 'lucide-react'
 import { updateProfile } from '@/lib/actions/profile'
 import type { MemberProfile } from '@/types'
 
-export default function PerfilForm({ profile }: { profile: MemberProfile }) {
+export default function PerfilForm({ profile, personalGoal }: { profile: MemberProfile; personalGoal: string }) {
   const router = useRouter()
   const fileRef = useRef<HTMLInputElement>(null)
   const [fullName, setFullName] = useState(profile.full_name || '')
   const [bio, setBio] = useState(profile.bio || '')
   const [cidade, setCidade] = useState(profile.cidade || '')
-  const [objetivo, setObjetivo] = useState(profile.objetivo || '')
+  const [personalGoalValue, setPersonalGoalValue] = useState(personalGoal)
   const [preview, setPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{
@@ -149,17 +149,18 @@ export default function PerfilForm({ profile }: { profile: MemberProfile }) {
         </div>
         <div>
           <label htmlFor="profile-goal" className="mb-1.5 block text-sm font-semibold text-stone-700">
-            Objetivo
+            Meta pessoal privada
           </label>
           <input
             id="profile-goal"
-            name="objetivo"
-            value={objetivo}
-            onChange={(event) => setObjetivo(event.target.value)}
+            name="personal_goal"
+            value={personalGoalValue}
+            onChange={(event) => setPersonalGoalValue(event.target.value)}
             maxLength={200}
             className="input-base"
             placeholder="Ex: Completar minha primeira corrida de 10 km"
           />
+          <p className="mt-1 text-xs text-stone-500">Somente você pode ver esta meta.</p>
         </div>
         <div>
           <label htmlFor="profile-bio" className="mb-1.5 block text-sm font-semibold text-stone-700">

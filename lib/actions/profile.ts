@@ -17,7 +17,7 @@ export async function updateProfile(formData: FormData): Promise<ProfileActionRe
 
   const fullName = cleanText(formData.get('full_name'), 120)
   const cidade = cleanText(formData.get('cidade'), 100)
-  const objetivo = cleanText(formData.get('objetivo'), 200)
+  const personalGoal = cleanText(formData.get('personal_goal'), 200)
   const bio = cleanText(formData.get('bio'), 300)
   if (fullName.length < 2) return { error: 'Informe seu nome completo.' }
 
@@ -50,7 +50,6 @@ export async function updateProfile(formData: FormData): Promise<ProfileActionRe
   const update: Database['public']['Tables']['profiles']['Update'] = {
     full_name: fullName,
     cidade: cidade || null,
-    objetivo: objetivo || null,
     bio: bio || null,
   }
   if (newAvatarPath) update.avatar_url = newAvatarPath
@@ -70,6 +69,11 @@ export async function updateProfile(formData: FormData): Promise<ProfileActionRe
   if (newAvatarPath && current.avatar_url !== newAvatarPath) {
     await removeMedia(supabase, 'avatars', current.avatar_url)
   }
+
+  const goalResult = personalGoal
+    ? await supabase.from('personal_goals').upsert({ user_id: user.id, goal: personalGoal }, { onConflict: 'user_id' })
+    : await supabase.from('personal_goals').delete().eq('user_id', user.id)
+  if (goalResult.error) return { error: 'O perfil foi salvo, mas não foi possível atualizar sua meta privada.' }
 
   revalidatePath('/dashboard', 'layout')
   revalidatePath('/dashboard/perfil')

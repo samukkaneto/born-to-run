@@ -7,6 +7,7 @@ import { getAccessContext } from '@/lib/auth/access'
 import { LogOut, ShieldCheck } from 'lucide-react'
 import AdminNav, { AdminNavMobile } from '@/components/admin/AdminNav'
 import ToastProvider from '@/components/ui/Toaster'
+import RoleModeSwitcher from '@/components/navigation/RoleModeSwitcher'
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false, nocache: true },
@@ -23,6 +24,7 @@ export default async function AdminLayout({
   if (profile.membership_status !== 'active') redirect('/acesso-bloqueado')
   if (!profile || !['admin', 'coach'].includes(profile.role)) redirect('/dashboard')
 
+  const managementRole = profile.role as 'admin' | 'coach'
   const firstName = (profile.full_name || 'Gestor').split(' ')[0]
   const roleLabel = profile.role === 'coach' ? 'Treinador' : 'Administrador'
 
@@ -42,7 +44,7 @@ export default async function AdminLayout({
                   alt="Born to Run — Treinamento e Saúde"
                   width={210}
                   height={127}
-                  className="absolute left-0 top-0 h-auto w-[210px]"
+                  className="absolute -top-[9px] left-0 h-auto w-[210px]"
                   priority
                 />
               </div>
@@ -76,13 +78,13 @@ export default async function AdminLayout({
           <header className="panel-carbon sticky top-0 z-30 md:hidden">
             <div className="flex h-16 items-center justify-between px-4">
               <Link href="/admin" className="flex shrink-0 items-center gap-3">
-                <div className="relative h-[56px] w-[138px] overflow-hidden">
+                <div className="relative h-[58px] w-[138px] overflow-hidden">
                   <Image
                     src="/logo.png"
                     alt="Born to Run"
                     width={138}
                     height={84}
-                    className="absolute left-0 top-0 h-auto w-[138px]"
+                    className="absolute -top-[6px] left-0 h-auto w-[138px]"
                     priority
                   />
                 </div>
@@ -103,6 +105,9 @@ export default async function AdminLayout({
             <div className="border-t border-[#2E2E2E]">
               <AdminNavMobile role={profile.role} />
             </div>
+            <div className="border-t border-[#E5E1D8] bg-white px-4 py-2.5">
+              <RoleModeSwitcher role={managementRole} activeMode="management" compact />
+            </div>
           </header>
 
           {/* Barra de contexto (desktop) */}
@@ -111,9 +116,7 @@ export default async function AdminLayout({
               <p className="font-condensed text-sm font-medium uppercase tracking-[0.12em] text-[#57534E]">
                 Olá, <span className="text-[#171717]">{firstName}</span> — gestão da equipe
               </p>
-              <span className="font-condensed text-xs uppercase tracking-[0.18em] text-[#A8A29E]">
-                Born to Run · painel de {roleLabel.toLowerCase()}
-              </span>
+              <RoleModeSwitcher role={managementRole} activeMode="management" />
             </div>
           </div>
 
