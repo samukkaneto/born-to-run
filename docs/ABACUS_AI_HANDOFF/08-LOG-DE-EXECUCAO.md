@@ -14,7 +14,9 @@
 - Supabase remoto validado com 4/4 asserções de metas e 16/16 de avaliações/papéis técnicos; advisors sem nova falha de RLS.
 - Gates locais concluídos: lint, TypeScript, 13 arquivos/70 testes unitários, build das 40 rotas e 28/28 cenários Playwright em Desktop Chrome e Pixel 7.
 - Inspeção autenticada cobriu dashboard, gestão, evolução, conquistas, loja, troca de cores e PDF; sem overflow, imagem quebrada ou acesso anônimo ao relatório.
-- Publicação GitHub/Vercel em andamento; os identificadores finais serão registrados após merge.
+- PR `#28` aberta; CI Linux `31870804865` aprovado e preview Vercel `5bcivLct5w9yJ2KzJeX9zYMPzbUJ` concluído.
+- O primeiro CI identificou uma regra React específica do runner Linux na observabilidade; a implementação foi substituída por `useSyncExternalStore`, o lint local foi repetido e o CI seguinte passou.
+- Merge e deployment de produção ainda em andamento; os identificadores finais serão registrados após a publicação.
 
 ## 08/08/2026 — início do ciclo de prontidão
 

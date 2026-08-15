@@ -33,6 +33,7 @@ O OCR atual usa `pdfjs-dist` e `tesseract.js` no navegador. Não existe chamada 
 - Qualidade local: lint e TypeScript aprovados; 13 arquivos com 70 testes unitários aprovados; build Next.js com 40 rotas concluído.
 - Navegador: 28/28 cenários Playwright aprovados em Desktop Chrome e Pixel 7, incluindo acessibilidade séria/crítica, PWA, contato, rotas públicas e guardas anônimas.
 - QA autenticado: modos, evolução, conquistas, loja, cores e PDF inspecionados em desktop/mobile sem overflow ou imagens quebradas.
+- Publicação: PR `#28`, CI Linux `31870804865` aprovado e preview Vercel `5bcivLct5w9yJ2KzJeX9zYMPzbUJ` concluído; merge/produção registrados no encerramento do bloco.
 
 ## Onde os dados ficam
 
