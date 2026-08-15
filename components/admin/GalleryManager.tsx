@@ -119,7 +119,7 @@ export default function GalleryManager({ items }: { items: GalleryItemWithUrl[] 
       <AdminModal
         open={modal !== null}
         title={editing ? 'Editar foto' : 'Nova foto'}
-        subtitle="Título e legenda são opcionais. A descrição acessível é obrigatória."
+        subtitle="Basta escolher a foto. Título, legenda e descrição são opcionais."
         onClose={() => !working && setModal(null)}
       >
         <form key={editing?.id ?? 'create'} onSubmit={handleSave} className="space-y-4">
@@ -148,8 +148,8 @@ export default function GalleryManager({ items }: { items: GalleryItemWithUrl[] 
             <textarea id="gallery-caption" name="caption" defaultValue={editing?.caption ?? ''} maxLength={500} rows={3} className="input-base resize-none" placeholder="Se ficar vazio, nenhuma faixa de legenda será exibida." />
           </div>
           <div>
-            <label htmlFor="gallery-alt" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Descrição da imagem</label>
-            <input id="gallery-alt" name="alt_text" defaultValue={editing?.alt_text ?? ''} minLength={5} maxLength={250} required className="input-base" placeholder="Ex: Atletas da Born to Run reunidos após a prova" />
+            <label htmlFor="gallery-alt" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Descrição acessível opcional</label>
+            <input id="gallery-alt" name="alt_text" defaultValue={editing?.alt_text === 'Foto da equipe Born to Run' ? '' : editing?.alt_text ?? ''} maxLength={250} className="input-base" placeholder="Opcional · usado apenas por leitores de tela" />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>

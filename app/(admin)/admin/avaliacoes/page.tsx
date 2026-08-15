@@ -12,7 +12,7 @@ export default async function AdminAvaliacoesPage() {
   if (!profile || !['admin', 'coach'].includes(profile.role)) redirect('/admin')
 
   const [assessmentsResult, athletesResult] = await Promise.all([
-    supabase.from('body_assessments').select('*').order('assessed_at', { ascending: false }),
+    supabase.from('body_assessments').select('*, body_assessment_files (*)').order('assessed_at', { ascending: false }),
     supabase
       .from('profiles')
       .select(MEMBER_PROFILE_COLUMNS)
@@ -26,6 +26,12 @@ export default async function AdminAvaliacoesPage() {
   const assessments = await Promise.all((assessmentsResult.data ?? []).map(async (assessment) => ({
     ...assessment,
     source_url: await createMediaUrl(supabase, 'assessment-files', assessment.source_path),
+    source_files: await Promise.all((assessment.body_assessment_files ?? [])
+      .sort((a, b) => a.slot - b.slot)
+      .map(async (file) => ({
+        ...file,
+        source_url: await createMediaUrl(supabase, 'assessment-files', file.storage_path),
+      }))),
   })))
 
   return (
@@ -41,7 +47,7 @@ export default async function AdminAvaliacoesPage() {
         </p>
       </div>
       <AssessmentManager
-        assessments={assessments as (BodyAssessment & { source_url: string | null })[]}
+        assessments={assessments as (BodyAssessment & { source_url: string | null; source_files: { slot: number; storage_path: string; mime_type: string; source_url: string | null }[] })[]}
         athletes={(athletesResult.data ?? []) as MemberProfile[]}
       />
     </div>

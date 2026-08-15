@@ -1,6 +1,8 @@
 # Born to Run — status real de implementação
 
-Atualizado em **11/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
+Atualizado em **15/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
+
+> Estado mais recente: qualquer perfil ativo, inclusive administrador e treinador, pode receber prescrição privada. O atleta possui Hoje/Calendário/Mesociclo; a Tanita usa três imagens privadas, 25 medidas, faixa traduzida e análise segmental; a galeria não obriga legenda. Consulte `docs/ABACUS_AI_HANDOFF/23-PRESCRICAO-PRIVADA-MESOCICLO-E-TANITA-3-FOTOS.md`. A loja ficou fora deste bloco.
 
 ## Resumo executivo
 

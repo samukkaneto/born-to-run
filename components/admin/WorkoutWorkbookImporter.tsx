@@ -18,9 +18,11 @@ const LEVEL_LABELS = {
 export default function WorkoutWorkbookImporter({
   members,
   groups,
+  preferredAthleteId,
 }: {
   members: MemberProfile[]
   groups: TrainingGroup[]
+  preferredAthleteId?: string
 }) {
   const { toast } = useToast()
   const [open, setOpen] = useState(false)
@@ -30,11 +32,12 @@ export default function WorkoutWorkbookImporter({
   const [fileName, setFileName] = useState('')
   const [drafts, setDrafts] = useState<ImportedWorkoutDraft[]>([])
   const [level, setLevel] = useState<keyof typeof LEVEL_LABELS>('iniciante')
+  const [cycleName, setCycleName] = useState('')
   const [memberIds, setMemberIds] = useState<string[]>([])
   const [groupIds, setGroupIds] = useState<string[]>([])
 
   const eligibleMembers = useMemo(
-    () => members.filter((member) => member.role === 'member' && member.membership_status === 'active'),
+    () => members.filter((member) => member.membership_status === 'active'),
     [members],
   )
   const eligibleGroups = useMemo(
@@ -78,6 +81,10 @@ export default function WorkoutWorkbookImporter({
 
   async function publish() {
     setError('')
+    if (cycleName.trim().length < 3) {
+      setError('Informe um nome para o mesociclo.')
+      return
+    }
     if (memberIds.length === 0 && groupIds.length === 0) {
       setError('Escolha ao menos um atleta ou grupo antes de publicar.')
       return
@@ -85,6 +92,7 @@ export default function WorkoutWorkbookImporter({
     setPublishing(true)
     try {
       const result = await importWorkoutPlan(
+        cycleName,
         drafts.map((draft) => ({
           scheduled_date: draft.scheduledDate,
           title: draft.title,
@@ -103,6 +111,7 @@ export default function WorkoutWorkbookImporter({
       toast('success', `${result.count ?? drafts.length} treinos prescritos foram publicados.`)
       setDrafts([])
       setFileName('')
+      setCycleName('')
       setMemberIds([])
       setGroupIds([])
       setOpen(false)
@@ -120,7 +129,10 @@ export default function WorkoutWorkbookImporter({
           <p className="flex items-center gap-2 font-condensed text-sm font-semibold uppercase tracking-[0.08em] text-[#78350F]"><FileSpreadsheet size={17} aria-hidden="true" /> Importar cronograma por planilha</p>
           <p className="mt-1 max-w-2xl text-sm leading-relaxed text-[#57534E]">O arquivo é lido no seu navegador. Confira a prévia, escolha os destinatários e publique todos os dias como treinos prescritos privados.</p>
         </div>
-        <button type="button" onClick={() => setOpen((current) => !current)} className="btn-secondary shrink-0" aria-expanded={open}>
+        <button type="button" onClick={() => {
+          if (!open && preferredAthleteId) setMemberIds([preferredAthleteId])
+          setOpen((current) => !current)
+        }} className="btn-secondary shrink-0" aria-expanded={open}>
           <Upload size={16} aria-hidden="true" /> {open ? 'Fechar importação' : 'Importar XLSX'}
         </button>
       </div>
@@ -140,7 +152,11 @@ export default function WorkoutWorkbookImporter({
             <>
               <div role="status" className="flex items-center gap-2 rounded-lg border border-[#BBF7D0] bg-[#F0FDF4] px-3 py-2 text-sm text-[#166534]"><CheckCircle2 size={16} aria-hidden="true" /> {drafts.length} treino(s) reconhecido(s) em “{fileName}”. Revise antes de publicar.</div>
 
-              <div className="grid gap-4 lg:grid-cols-3">
+              <div className="grid gap-4 lg:grid-cols-4">
+                <div>
+                  <label htmlFor="import-cycle-name" className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]">Nome do mesociclo</label>
+                  <input id="import-cycle-name" value={cycleName} onChange={(event) => setCycleName(event.target.value)} maxLength={120} className="input-base" placeholder="Ex: Base · Agosto 2026" />
+                </div>
                 <div>
                   <label htmlFor="import-level" className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]">Nível do ciclo</label>
                   <select id="import-level" value={level} onChange={(event) => setLevel(event.target.value as keyof typeof LEVEL_LABELS)} className="input-base bg-white">
@@ -156,7 +172,7 @@ export default function WorkoutWorkbookImporter({
                 <fieldset className="rounded-lg border border-[#E5E1D8] p-3">
                   <legend className="px-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]"><Users size={13} className="mr-1 inline" aria-hidden="true" /> Atletas</legend>
                   <div className="max-h-32 space-y-1 overflow-y-auto">
-                    {eligibleMembers.length ? eligibleMembers.map((member) => <label key={member.user_id} className="flex min-h-10 items-center gap-2 rounded-md px-2 text-sm hover:bg-[#FAFAF9]"><input type="checkbox" checked={memberIds.includes(member.user_id)} onChange={(event) => toggle(setMemberIds, member.user_id, event.target.checked)} className="accent-[#DC2626]" /> <span className="truncate">{member.full_name}</span></label>) : <p className="px-2 py-3 text-xs text-[#78716C]">Nenhum atleta ativo.</p>}
+                    {eligibleMembers.length ? eligibleMembers.map((member) => <label key={member.user_id} className="flex min-h-10 items-center gap-2 rounded-md px-2 text-sm hover:bg-[#FAFAF9]"><input type="checkbox" checked={memberIds.includes(member.user_id)} onChange={(event) => toggle(setMemberIds, member.user_id, event.target.checked)} className="accent-[#DC2626]" /> <span className="min-w-0 flex-1 truncate">{member.full_name}</span>{member.role !== 'member' && <span className="badge badge-gray shrink-0">{member.role === 'admin' ? 'Admin · atleta' : 'Treinador · atleta'}</span>}</label>) : <p className="px-2 py-3 text-xs text-[#78716C]">Nenhum atleta ativo.</p>}
                   </div>
                 </fieldset>
               </div>

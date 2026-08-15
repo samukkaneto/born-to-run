@@ -25,12 +25,7 @@ export default async function DashboardPage() {
   const today = getTodayCalendarDate()
 
   const [workoutsResult, announcementsResult, postsResult, postsCountResult, personalGoalResult] = await Promise.all([
-      supabase
-        .from('workouts')
-        .select('id, title, level, scheduled_date, objective')
-        .gte('scheduled_date', today)
-        .order('scheduled_date', { ascending: true })
-        .limit(3),
+      supabase.rpc('get_my_assigned_workouts'),
       supabase
         .from('announcements')
         .select('id, title, content, created_at')
@@ -58,7 +53,10 @@ export default async function DashboardPage() {
     throw new Error('Não foi possível carregar os dados do painel.')
   }
 
-  const workouts = workoutsResult.data
+  const workouts = (workoutsResult.data ?? [])
+    .filter((workout) => workout.scheduled_date && workout.scheduled_date >= today)
+    .sort((a, b) => (a.scheduled_date ?? '').localeCompare(b.scheduled_date ?? ''))
+    .slice(0, 3)
   const announcements = announcementsResult.data
   const recentPosts = postsResult.data
   const myPostsCount = postsCountResult.count

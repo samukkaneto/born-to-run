@@ -57,7 +57,7 @@ export async function saveGalleryItem(
 
   const title = cleanText(formData.get('title'), 120)
   const caption = cleanText(formData.get('caption'), 500)
-  const altText = cleanText(formData.get('alt_text'), 250)
+  const altText = cleanText(formData.get('alt_text'), 250) || 'Foto da equipe Born to Run'
   const takenAt = optionalCalendarDate(formData.get('taken_at'))
   const layout = String(formData.get('layout') ?? 'standard')
   const sortOrder = parseSortOrder(formData.get('sort_order'))
@@ -67,7 +67,6 @@ export async function saveGalleryItem(
   const file = fileEntry instanceof File && fileEntry.size > 0 ? fileEntry : null
 
   if (title && title.length < 2) return { error: 'O título precisa ter pelo menos 2 caracteres.' }
-  if (altText.length < 5) return { error: 'Descreva a foto para acessibilidade.' }
   if (takenAt === 'invalid') return { error: 'Informe uma data válida.' }
   if (!['standard', 'wide'].includes(layout)) return { error: 'Formato de exibição inválido.' }
   if (sortOrder === 'invalid') return { error: 'A ordem deve ser um número entre 0 e 10000.' }

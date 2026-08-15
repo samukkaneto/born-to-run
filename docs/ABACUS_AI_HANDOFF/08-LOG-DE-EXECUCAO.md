@@ -1,5 +1,19 @@
 # Log de execução
 
+## 15/08/2026 — prescrição privada, mesociclo e Tanita em três fotos
+
+- Confirmados no Supabase Samuel `admin/active` e Robson Alves `coach/active`.
+- Removido o filtro que impedia papéis técnicos de receber treinos; ambos aparecem identificados no seletor como modo atleta.
+- Criado bloco visível de prescrição privada com escolha do atleta antes do formulário.
+- Criados `training_cycles`, vínculo dos treinos, importação transacional nomeada e RPC privada para o próprio usuário.
+- Substituída a lista do aluno por Hoje, Calendário e Mesociclo responsivos; o resumo do dashboard usa a mesma consulta privada.
+- Padronizada a Tanita em Foto 1/2/3, 25 medidas, faixa de gordura, arquivos privados por slot, gráficos de referência e análise segmental em português.
+- Legenda/título/descrição da galeria passam a ser opcionais; fallback acessível não aparece como legenda.
+- Aplicadas três migrations e regenerados os tipos remotos; advisor de performance atendido com índice do criador do ciclo.
+- Lint, TypeScript, 74 unitários e build de 40 rotas aprovados. Playwright público: 26 cenários em dev e 2 PWA em produção aprovados em desktop/Pixel 7. pgTAP novo versionado; execução local indisponível sem Docker.
+- Loja explicitamente deixada intacta neste bloco.
+- Relatório detalhado: `23-PRESCRICAO-PRIVADA-MESOCICLO-E-TANITA-3-FOTOS.md`.
+
 ## 15/08/2026 — retomada, modos, privacidade e evolução
 
 - Recuperadas as ordens finais da sessão anterior e confirmada a cópia principal em `C:\Users\ander\Documents\Codex\born-to-run-rebirth`.

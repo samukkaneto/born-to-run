@@ -49,6 +49,38 @@ export type Database = {
           },
         ]
       }
+      body_assessment_files: {
+        Row: {
+          assessment_id: string
+          created_at: string
+          mime_type: string
+          slot: number
+          storage_path: string
+        }
+        Insert: {
+          assessment_id: string
+          created_at?: string
+          mime_type: string
+          slot: number
+          storage_path: string
+        }
+        Update: {
+          assessment_id?: string
+          created_at?: string
+          mime_type?: string
+          slot?: number
+          storage_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "body_assessment_files_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "body_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       body_assessments: {
         Row: {
           assessed_at: string
@@ -56,15 +88,31 @@ export type Database = {
           athlete_user_id: string
           basal_metabolic_rate: number | null
           bmi: number | null
+          body_fat_category: string | null
           body_fat_pct: number | null
+          body_water_mass_kg: number | null
           body_water_pct: number | null
           bone_mass_kg: number | null
           created_at: string
+          daily_calorie_intake: number | null
+          fat_free_mass_kg: number | null
+          fat_mass_kg: number | null
+          heart_rate_bpm: number | null
           id: string
           metabolic_age: number | null
           muscle_mass_kg: number | null
           notes: string | null
           physique_rating: number | null
+          segment_left_arm_fat_pct: number | null
+          segment_left_arm_muscle_kg: number | null
+          segment_left_leg_fat_pct: number | null
+          segment_left_leg_muscle_kg: number | null
+          segment_right_arm_fat_pct: number | null
+          segment_right_arm_muscle_kg: number | null
+          segment_right_leg_fat_pct: number | null
+          segment_right_leg_muscle_kg: number | null
+          segment_trunk_fat_pct: number | null
+          segment_trunk_muscle_kg: number | null
           source_mime_type: string | null
           source_path: string | null
           updated_at: string
@@ -77,15 +125,31 @@ export type Database = {
           athlete_user_id: string
           basal_metabolic_rate?: number | null
           bmi?: number | null
+          body_fat_category?: string | null
           body_fat_pct?: number | null
+          body_water_mass_kg?: number | null
           body_water_pct?: number | null
           bone_mass_kg?: number | null
           created_at?: string
+          daily_calorie_intake?: number | null
+          fat_free_mass_kg?: number | null
+          fat_mass_kg?: number | null
+          heart_rate_bpm?: number | null
           id?: string
           metabolic_age?: number | null
           muscle_mass_kg?: number | null
           notes?: string | null
           physique_rating?: number | null
+          segment_left_arm_fat_pct?: number | null
+          segment_left_arm_muscle_kg?: number | null
+          segment_left_leg_fat_pct?: number | null
+          segment_left_leg_muscle_kg?: number | null
+          segment_right_arm_fat_pct?: number | null
+          segment_right_arm_muscle_kg?: number | null
+          segment_right_leg_fat_pct?: number | null
+          segment_right_leg_muscle_kg?: number | null
+          segment_trunk_fat_pct?: number | null
+          segment_trunk_muscle_kg?: number | null
           source_mime_type?: string | null
           source_path?: string | null
           updated_at?: string
@@ -98,15 +162,31 @@ export type Database = {
           athlete_user_id?: string
           basal_metabolic_rate?: number | null
           bmi?: number | null
+          body_fat_category?: string | null
           body_fat_pct?: number | null
+          body_water_mass_kg?: number | null
           body_water_pct?: number | null
           bone_mass_kg?: number | null
           created_at?: string
+          daily_calorie_intake?: number | null
+          fat_free_mass_kg?: number | null
+          fat_mass_kg?: number | null
+          heart_rate_bpm?: number | null
           id?: string
           metabolic_age?: number | null
           muscle_mass_kg?: number | null
           notes?: string | null
           physique_rating?: number | null
+          segment_left_arm_fat_pct?: number | null
+          segment_left_arm_muscle_kg?: number | null
+          segment_left_leg_fat_pct?: number | null
+          segment_left_leg_muscle_kg?: number | null
+          segment_right_arm_fat_pct?: number | null
+          segment_right_arm_muscle_kg?: number | null
+          segment_right_leg_fat_pct?: number | null
+          segment_right_leg_muscle_kg?: number | null
+          segment_trunk_fat_pct?: number | null
+          segment_trunk_muscle_kg?: number | null
           source_mime_type?: string | null
           source_path?: string | null
           updated_at?: string
@@ -507,6 +587,47 @@ export type Database = {
           },
         ]
       }
+      training_cycles: {
+        Row: {
+          created_at: string
+          created_by: string
+          ends_on: string
+          id: string
+          level: string
+          name: string
+          starts_on: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          ends_on: string
+          id?: string
+          level: string
+          name: string
+          starts_on: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          ends_on?: string
+          id?: string
+          level?: string
+          name?: string
+          starts_on?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_cycles_creator_profile_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       training_group_members: {
         Row: {
           added_by: string
@@ -655,6 +776,7 @@ export type Database = {
           objective: string
           scheduled_date: string | null
           title: string
+          training_cycle_id: string | null
           training_type: string
           updated_at: string
         }
@@ -668,6 +790,7 @@ export type Database = {
           objective: string
           scheduled_date?: string | null
           title: string
+          training_cycle_id?: string | null
           training_type?: string
           updated_at?: string
         }
@@ -681,6 +804,7 @@ export type Database = {
           objective?: string
           scheduled_date?: string | null
           title?: string
+          training_cycle_id?: string | null
           training_type?: string
           updated_at?: string
         }
@@ -691,6 +815,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "workouts_training_cycle_id_fkey"
+            columns: ["training_cycle_id"]
+            isOneToOne: false
+            referencedRelation: "training_cycles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -793,12 +924,40 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_my_assigned_workouts: {
+        Args: never
+        Returns: {
+          created_at: string
+          cycle_ends_on: string
+          cycle_name: string
+          cycle_starts_on: string
+          description: string
+          id: string
+          level: string
+          objective: string
+          scheduled_date: string
+          title: string
+          training_cycle_id: string
+          training_type: string
+          updated_at: string
+        }[]
+      }
       staff_delete_body_assessment: {
         Args: { target_assessment_id: string }
         Returns: string
       }
       staff_delete_gallery_item: {
         Args: { target_item_id: string }
+        Returns: string
+      }
+      staff_import_training_cycle: {
+        Args: {
+          target_group_ids: string[]
+          target_items: Json
+          target_level: string
+          target_member_ids: string[]
+          target_name: string
+        }
         Returns: string
       }
       staff_save_body_assessment: {
@@ -843,6 +1002,30 @@ export type Database = {
         }
         Returns: string
       }
+      staff_save_body_assessment_v3: {
+        Args: {
+          target_assessed_at: string
+          target_assessment_id: string
+          target_athlete_user_id: string
+          target_measurements: Json
+          target_notes: string
+          target_source_mime_types: string[]
+          target_source_paths: string[]
+        }
+        Returns: string
+      }
+      staff_save_body_assessment_v4: {
+        Args: {
+          target_assessed_at: string
+          target_assessment_id: string
+          target_athlete_user_id: string
+          target_measurements: Json
+          target_notes: string
+          target_source_mime_types: string[]
+          target_source_paths: string[]
+        }
+        Returns: string
+      }
       staff_save_gallery_item: {
         Args: {
           target_alt_text: string
@@ -855,6 +1038,21 @@ export type Database = {
           target_storage_path: string
           target_taken_at: string
           target_title: string
+        }
+        Returns: string
+      }
+      staff_save_workout_v2: {
+        Args: {
+          target_description: string
+          target_group_ids: string[]
+          target_level: string
+          target_member_ids: string[]
+          target_objective: string
+          target_scheduled_date: string
+          target_title: string
+          target_training_cycle_id: string
+          target_training_type: string
+          target_workout_id: string
         }
         Returns: string
       }

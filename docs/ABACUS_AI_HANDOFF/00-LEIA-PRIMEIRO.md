@@ -26,6 +26,7 @@ Atualizado em 15/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 20. `20-PERFIS-TANITA-CORES-DE-TREINO-E-LOJA.md` — correção do perfil, avaliações de todos os papéis, contrato de cores do treinador e catálogo/fornecedores revisados.
 21. `21-OCR-PDF-E-IMPORTACAO-DE-TREINOS.md` — OCR Tanita assistido, PDF premium, importação atômica do cronograma XLSX e distinção entre prescrição e atividade concluída.
 22. `22-MODOS-METAS-EVOLUCAO-E-LOJA.md` — modos de usuário, poderes técnicos temporários do administrador, metas privadas, evolução do atleta e fornecedores protegidos.
+23. `23-PRESCRICAO-PRIVADA-MESOCICLO-E-TANITA-3-FOTOS.md` — destinatários técnicos no modo atleta, calendário/mesociclo privado, Tanita padronizada em três imagens e galeria sem legenda obrigatória.
 
 ## Fontes complementares no repositório
 

@@ -3,12 +3,12 @@ import { redirect } from 'next/navigation'
 import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
 import { getAccessContext } from '@/lib/auth/access'
 import WorkoutsManager from '@/components/admin/WorkoutsManager'
-import type { MemberProfile, TrainingGroup, WorkoutWithAssignments } from '@/types'
+import type { MemberProfile, TrainingCycle, TrainingGroup, WorkoutWithAssignments } from '@/types'
 
 export default async function AdminTreinosPage() {
   const [{ profile }, supabase] = await Promise.all([getAccessContext(), createClient()])
   if (!profile || !['admin', 'coach'].includes(profile.role)) redirect('/admin')
-  const [workoutsResult, membersResult, groupsResult] = await Promise.all([
+  const [workoutsResult, membersResult, groupsResult, cyclesResult] = await Promise.all([
     supabase
       .from('workouts')
       .select('*, workout_assignments ( athlete_user_id, group_id )')
@@ -21,15 +21,20 @@ export default async function AdminTreinosPage() {
       .from('training_groups')
       .select('*')
       .order('name'),
+    supabase
+      .from('training_cycles')
+      .select('*')
+      .order('starts_on', { ascending: false }),
   ])
 
-  if (workoutsResult.error || membersResult.error || groupsResult.error) {
+  if (workoutsResult.error || membersResult.error || groupsResult.error || cyclesResult.error) {
     throw new Error('Não foi possível carregar os treinos e destinatários.')
   }
 
   const workouts = (workoutsResult.data ?? []) as unknown as WorkoutWithAssignments[]
   const members = (membersResult.data ?? []) as MemberProfile[]
   const groups = (groupsResult.data ?? []) as TrainingGroup[]
+  const cycles = (cyclesResult.data ?? []) as TrainingCycle[]
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -44,7 +49,7 @@ export default async function AdminTreinosPage() {
         </p>
       </div>
 
-      <WorkoutsManager workouts={workouts} members={members} groups={groups} />
+      <WorkoutsManager workouts={workouts} members={members} groups={groups} cycles={cycles} />
     </div>
   )
 }
