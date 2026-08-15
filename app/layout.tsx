@@ -52,7 +52,8 @@ export const metadata: Metadata = {
     locale: 'pt_BR',
   },
   icons: {
-    icon: '/logo.png',
+    icon: [{ url: '/icons/icon-192.png', type: 'image/png', sizes: '192x192' }],
+    shortcut: '/icons/icon-192.png',
     apple: '/icons/icon-192.png',
   },
   manifest: '/manifest.json',

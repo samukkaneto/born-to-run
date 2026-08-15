@@ -18,8 +18,8 @@ test('site institucional e login carregam sem erros de console', async ({ page }
   const loginLogo = page
     .getByRole('link', { name: /Born to Run — página inicial/i })
     .locator('img')
-  await expect(loginLogo).toHaveAttribute('src', /%2Flogo\.png|\/logo\.png/)
-  await expect(loginLogo).not.toHaveAttribute('src', /logo-on-light/)
+  await expect(loginLogo).toHaveAttribute('src', /%2Fbrand%2Flogo-on-light\.png|\/brand\/logo-on-light\.png/)
+  await expect(loginLogo).toHaveCSS('filter', 'none')
   await expect(page.getByLabel('E-mail')).toBeVisible()
   await expect(page.getByLabel('Senha')).toBeVisible()
   expect(errors).toEqual([])
