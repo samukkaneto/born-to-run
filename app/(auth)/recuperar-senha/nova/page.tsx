@@ -1,6 +1,7 @@
 'use client'
 
-import { useActionState } from 'react'
+import { Suspense, useActionState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Lock, Loader2, AlertCircle } from 'lucide-react'
 import { updatePassword, type AuthActionState } from '@/lib/actions/auth'
 
@@ -11,7 +12,9 @@ const initialState: AuthActionState = {}
  * O callback (/auth/callback) troca o código por sessão e redireciona
  * para cá, onde o usuário define a nova senha.
  */
-export default function NovaSenhaPage() {
+function NovaSenhaForm() {
+  const searchParams = useSearchParams()
+  const tokenHash = searchParams.get('token_hash') ?? ''
   const [state, formAction, isPending] = useActionState(updatePassword, initialState)
 
   return (
@@ -26,6 +29,7 @@ export default function NovaSenhaPage() {
       </div>
 
       <form action={formAction} className="space-y-4">
+        {tokenHash && <input type="hidden" name="token_hash" value={tokenHash} />}
         <div>
           <label htmlFor="password" className="block text-sm font-semibold text-stone-700 mb-1.5">
             Nova senha
@@ -85,5 +89,13 @@ export default function NovaSenhaPage() {
         </button>
       </form>
     </>
+  )
+}
+
+export default function NovaSenhaPage() {
+  return (
+    <Suspense fallback={<div className="text-sm text-stone-500">Carregando recuperação segura...</div>}>
+      <NovaSenhaForm />
+    </Suspense>
   )
 }
