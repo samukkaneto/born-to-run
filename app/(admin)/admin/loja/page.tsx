@@ -14,8 +14,8 @@ export default function AdminStorePage() {
     <div className="space-y-10 pb-8">
       <section className="relative isolate overflow-hidden rounded-[2rem] bg-[#171717] text-white shadow-card-lg">
         <Image
-          src="/shop-preview/born-to-run-product-style-reference.jpg"
-          alt="Prévia visual da coleção Born to Run com vestuário e acessórios esportivos coloridos"
+          src="/shop-preview/apparel-premium.webp"
+          alt="Coleção esportiva premium em preto Born to Run"
           fill
           priority
           className="-z-20 object-cover object-center"
@@ -24,7 +24,7 @@ export default function AdminStorePage() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black via-black/80 to-black/15" />
         <div className="max-w-xl px-6 py-12 sm:px-10 sm:py-16">
           <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/30 px-3 py-1.5 font-condensed text-xs font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm">
-            <Sparkles size={14} aria-hidden="true" /> Prévia visual da coleção
+            <Sparkles size={14} aria-hidden="true" /> Coleção oficial
 
           </p>
           <h1 className="mt-5 font-display text-5xl uppercase leading-[0.88] sm:text-7xl">
