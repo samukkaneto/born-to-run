@@ -1,6 +1,7 @@
 'use client'
 
 import type { PDFFont, PDFImage, PDFPage, RGB } from 'pdf-lib'
+import { autoAnatomyAssetPath } from '@/lib/assessments/anatomy-assets'
 import type { BodyAssessment } from '@/types'
 
 type AssessmentHistoryPoint = Pick<
@@ -268,9 +269,17 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
   pageTwo.drawText('Gordura corporal e massa muscular em braços, tronco e pernas.', { x: 32, y: 662, size: 9, font: regular, color: stone })
 
   // Figura anatômica oficial (mesma família usada no aplicativo).
-  const anatomySex: 'male' | 'female' = data.sex === 'female' ? 'female' : 'male'
-  const anatomyBiotype: 'lean' | 'mid' | 'large' = data.biotype === 'lean' || data.biotype === 'large' ? data.biotype : 'mid'
-  const anatomyPath = `/brand/anatomy-${anatomySex}-${anatomyBiotype}.png`
+  const anatomyBiotype: 'lean' | 'mid' | 'large' =
+    data.biotype === 'lean' || data.biotype === 'large' ? data.biotype : 'mid'
+  const anatomyPath =
+    data.biotype === 'lean' || data.biotype === 'large'
+      ? `/brand/anatomy-${data.sex === 'female' ? 'female' : 'male'}-${anatomyBiotype}.png`
+      : autoAnatomyAssetPath({
+          sex: data.sex,
+          bodyFatPct: data.body_fat_pct,
+          bmi: data.bmi,
+          physiqueRating: data.physique_rating,
+        })
   const bodyCenterX = 298
   let anatomyImage: PDFImage | null = null
   try {
