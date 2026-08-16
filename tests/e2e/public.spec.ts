@@ -18,7 +18,9 @@ test('site institucional e login carregam sem erros de console', async ({ page }
   const loginLogo = page
     .getByRole('link', { name: /Born to Run — página inicial/i })
     .locator('img')
-  await expect(loginLogo).toHaveAttribute('src', /%2Fbrand%2Flogo-on-light\.png|\/brand\/logo-on-light\.png/)
+  // O logo de autenticação passou a ser a marca com contorno preto,
+  // legível em qualquer fundo (decisão de marca do Bloco E).
+  await expect(loginLogo).toHaveAttribute('src', /%2Fbrand%2Flogo-com-contorno\.png|\/brand\/logo-com-contorno\.png/)
   await expect(loginLogo).toHaveCSS('filter', 'none')
   await expect(page.getByLabel('E-mail')).toBeVisible()
   await expect(page.getByLabel('Senha')).toBeVisible()
