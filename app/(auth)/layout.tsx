@@ -36,10 +36,10 @@ export default function AuthLayout({
             aria-label="Born to Run — página inicial"
           >
             <Image
-              src="/brand/logo-on-light.png"
+              src="/brand/logo-com-contorno.png"
               alt="Born to Run — Treinamento e Saúde"
-              width={927}
-              height={388}
+              width={988}
+              height={599}
               className="h-auto w-full object-contain"
               priority
               sizes="384px"
@@ -86,10 +86,10 @@ export default function AuthLayout({
               aria-label="Born to Run — página inicial"
             >
               <Image
-                src="/brand/logo-on-light.png"
+                src="/brand/logo-com-contorno.png"
                 alt="Born to Run — Treinamento e Saúde"
-                width={927}
-                height={388}
+                width={988}
+                height={599}
                 className="h-auto w-full object-contain"
                 priority
                 sizes="320px"

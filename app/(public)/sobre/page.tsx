@@ -128,6 +128,7 @@ export default function SobrePage() {
 
       {/* ══ 02 · TREINADOR ══ */}
       <Section
+        id="treinador"
         kicker="02 · Comando técnico"
         title="Nosso treinador"
         subtitle="Orientação profissional em cada passo da sua evolução."
