@@ -50,6 +50,7 @@ export type AssessmentPdfData = Pick<
 > & {
   athleteName: string
   avatarUrl?: string | null
+  profileSex?: 'male' | 'female' | null
   history?: AssessmentHistoryPoint[]
 }
 
@@ -269,16 +270,25 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
   pageTwo.drawText('Gordura corporal e massa muscular em braços, tronco e pernas.', { x: 32, y: 662, size: 9, font: regular, color: stone })
 
   // Figura anatômica oficial (mesma família usada no aplicativo).
+  const profileSex = data.profileSex === 'male' || data.profileSex === 'female' ? data.profileSex : null
+  const effectiveSex = profileSex ?? data.sex
   const anatomyBiotype: 'lean' | 'mid' | 'large' =
     data.biotype === 'lean' || data.biotype === 'large' ? data.biotype : 'mid'
-  const anatomyPath =
-    data.biotype === 'lean' || data.biotype === 'large'
-      ? `/brand/anatomy-${data.sex === 'female' ? 'female' : 'male'}-${anatomyBiotype}.png`
+  const anatomyPath = profileSex
+    ? autoAnatomyAssetPath({
+        sex: profileSex,
+        bodyFatPct: data.body_fat_pct,
+        bmi: data.bmi,
+        physiqueRating: data.physique_rating,
+      })
+    : data.biotype === 'lean' || data.biotype === 'large'
+      ? `/brand/anatomy-${effectiveSex === 'female' ? 'female' : 'male'}-${anatomyBiotype}.png`
       : autoAnatomyAssetPath({
-          sex: data.sex,
+          sex: effectiveSex,
           bodyFatPct: data.body_fat_pct,
           bmi: data.bmi,
           physiqueRating: data.physique_rating,
+          visceralFatLevel: data.visceral_fat_level,
         })
   const bodyCenterX = 298
   let anatomyImage: PDFImage | null = null

@@ -7,6 +7,8 @@ export type Profile = Omit<Tables<'profiles'>, 'role' | 'membership_status'> & {
   role: UserRole
   membership_status: MembershipStatus
 }
+export type MemberHealthProfile = Tables<'member_health_profiles'>
+
 export type MemberProfile = Pick<
   Profile,
   | 'id'

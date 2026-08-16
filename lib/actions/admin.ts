@@ -515,13 +515,18 @@ export async function saveBodyAssessment(
   }
 
   let previousFilePaths: string[] = []
+  let legacyIllustration = { sex: '', biotype: '' }
   if (assessmentId) {
-    const { data: currentFiles, error: currentFilesError } = await supabase
-      .from('body_assessment_files')
-      .select('storage_path')
-      .eq('assessment_id', assessmentId)
-    if (currentFilesError) return { error: 'Avaliação não encontrada.' }
+    const [{ data: currentFiles, error: currentFilesError }, { data: currentAssessment, error: currentAssessmentError }] = await Promise.all([
+      supabase.from('body_assessment_files').select('storage_path').eq('assessment_id', assessmentId),
+      supabase.from('body_assessments').select('sex, biotype').eq('id', assessmentId).maybeSingle(),
+    ])
+    if (currentFilesError || currentAssessmentError || !currentAssessment) return { error: 'Avaliação não encontrada.' }
     previousFilePaths = (currentFiles ?? []).map((file) => file.storage_path)
+    legacyIllustration = {
+      sex: currentAssessment.sex ?? '',
+      biotype: currentAssessment.biotype ?? '',
+    }
   }
 
   const uploadedPaths: string[] = []
@@ -557,14 +562,10 @@ export async function saveBodyAssessment(
     }
   }
 
-  const submittedSex = String(formData.get('sex') ?? '').trim()
-  const submittedBiotype = String(formData.get('biotype') ?? '').trim()
-  if (submittedSex && !['male', 'female'].includes(submittedSex)) {
-    return { error: 'Selecione a variante ilustrada masculina ou feminina.' }
-  }
-  if (submittedBiotype && !['lean', 'mid', 'large'].includes(submittedBiotype)) {
-    return { error: 'Selecione o biotipo ilustrado (leve, intermediário ou maior volume).' }
-  }
+  // A variante visual não é mais editada na avaliação. Em registros legados,
+  // preservamos os valores apenas para não apagar dados históricos.
+  const submittedSex = legacyIllustration.sex
+  const submittedBiotype = legacyIllustration.biotype
   const { data, error } = await supabase.rpc('staff_save_body_assessment_v5', {
     target_assessment_id: assessmentId as string,
     target_athlete_user_id: athleteUserId,

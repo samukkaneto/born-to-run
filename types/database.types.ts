@@ -431,6 +431,50 @@ export type Database = {
           },
         ]
       }
+      member_health_profiles: {
+        Row: {
+          age: number | null
+          created_at: string
+          height_cm: number | null
+          sex: string | null
+          show_age: boolean
+          show_body_data: boolean
+          updated_at: string
+          user_id: string
+          weight_kg: number | null
+        }
+        Insert: {
+          age?: number | null
+          created_at?: string
+          height_cm?: number | null
+          sex?: string | null
+          show_age?: boolean
+          show_body_data?: boolean
+          updated_at?: string
+          user_id: string
+          weight_kg?: number | null
+        }
+        Update: {
+          age?: number | null
+          created_at?: string
+          height_cm?: number | null
+          sex?: string | null
+          show_age?: boolean
+          show_body_data?: boolean
+          updated_at?: string
+          user_id?: string
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_health_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       posts: {
         Row: {
           caption: string | null

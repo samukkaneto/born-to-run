@@ -1,8 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import Image from 'next/image'
-import { createClient } from '@/lib/supabase/client'
 import { anatomyAssetPath, classifyIllustrationBiotype, type AnatomyBiotype, type AnatomySex, BIOTYPE_LABELS, SEX_LABELS } from '@/lib/assessments/anatomy-assets'
 import type { BodyAssessment } from '@/types'
 
@@ -95,29 +94,21 @@ function isSex(value: unknown): value is AnatomySex {
   return value === 'male' || value === 'female'
 }
 
-function isBiotype(value: unknown): value is AnatomyBiotype {
-  return value === 'lean' || value === 'mid' || value === 'large'
-}
-
-export default function SegmentedBodyMap({ assessment }: { assessment: BodyAssessment }) {
-  const [sex, setSex] = useState<AnatomySex | null>(isSex(assessment.sex) ? assessment.sex : null)
-  // A escolha manual salva tem prioridade. Sem ela, o biotipo é classificado
-  // automaticamente pela balança Tanita (percentual de gordura e physique
-  // rating) ou, na ausência de avaliação, pelo IMC — conforme regra do
-  // proprietário: a balança é mais específica que o IMC (fisiculturista).
-  const autoBiotype = useMemo<AnatomyBiotype>(
+export default function SegmentedBodyMap({ assessment, profileSex }: { assessment: BodyAssessment; profileSex?: string | null }) {
+  const sex = isSex(profileSex) ? profileSex : isSex(assessment.sex) ? assessment.sex : null
+  // A ilustração é derivada automaticamente. O percentual de gordura e o
+  // physique rating da Tanita têm prioridade; o IMC é usado apenas como fallback.
+  const biotype = useMemo<AnatomyBiotype>(
     () =>
       classifyIllustrationBiotype({
-        sex: assessment.sex,
+        sex,
         bodyFatPct: assessment.body_fat_pct,
         bmi: assessment.bmi,
         physiqueRating: assessment.physique_rating,
+        visceralFatLevel: assessment.visceral_fat_level,
       }) ?? 'mid',
-    [assessment.sex, assessment.body_fat_pct, assessment.bmi, assessment.physique_rating],
+    [sex, assessment.body_fat_pct, assessment.bmi, assessment.physique_rating, assessment.visceral_fat_level],
   )
-  const [biotype, setBiotype] = useState<AnatomyBiotype>(isBiotype(assessment.biotype) ? assessment.biotype : autoBiotype)
-  const [sexSelectionNote, setSexSelectionNote] = useState('')
-  const [saving, setSaving] = useState(false)
 
   const hasData = [
     assessment.segment_left_arm_fat_pct,
@@ -133,27 +124,7 @@ export default function SegmentedBodyMap({ assessment }: { assessment: BodyAsses
   ].some((metric) => metric !== null)
 
   const readings = readingsFor(assessment)
-  const assetPath = anatomyAssetPath(sex, biotype)
-
-  async function persistIllustrationChoice(nextSex: AnatomySex | null, nextBiotype: AnatomyBiotype) {
-    if (saving) return
-    setSaving(true)
-    setSexSelectionNote('')
-    try {
-      const supabase = createClient()
-      const { error } = await supabase
-        .from('body_assessments')
-        .update({ sex: nextSex, biotype: nextBiotype })
-        .eq('id', assessment.id)
-      if (error) throw error
-      setSex(nextSex)
-      setBiotype(nextBiotype)
-    } catch {
-      setSexSelectionNote('Não foi possível salvar sua escolha de ilustração. Ela permanece apenas nesta sessão.')
-    } finally {
-      setSaving(false)
-    }
-  }
+  const assetPath = sex ? anatomyAssetPath(sex, biotype) : null
 
   return (
     <section className="overflow-hidden border border-[#292524] bg-[#171717] text-white" aria-labelledby="segmented-body-title">
@@ -173,14 +144,20 @@ export default function SegmentedBodyMap({ assessment }: { assessment: BodyAsses
 
             <div className="order-1 mx-auto flex w-full flex-col items-center xl:order-2">
               <div className="relative w-full max-w-[260px]">
-                <Image
-                  src={assetPath}
-                  alt="Ilustração anatômica com as cinco regiões avaliadas: braços, tronco e pernas"
-                  width={260}
-                  height={390}
-                  className="h-auto w-full"
-                  priority={false}
-                />
+                {assetPath ? (
+                  <Image
+                    src={assetPath}
+                    alt="Ilustração anatômica com as cinco regiões avaliadas: braços, tronco e pernas"
+                    width={260}
+                    height={390}
+                    className="h-auto w-full"
+                    priority={false}
+                  />
+                ) : (
+                  <div className="flex aspect-[2/3] w-full items-center justify-center border border-dashed border-white/20 px-5 text-center text-xs leading-relaxed text-[#A8A29E]">
+                    Informe Homem ou Mulher no seu perfil para personalizar o modelo corporal.
+                  </div>
+                )}
                 <div className="absolute inset-0" aria-hidden="true">
                   {MARKERS.map((marker) => {
                     const reading = readings[marker.region]
@@ -205,39 +182,8 @@ export default function SegmentedBodyMap({ assessment }: { assessment: BodyAsses
                 </div>
               </div>
 
-              <div className="mt-4 flex w-full max-w-[260px] items-stretch gap-1.5">
-                <select
-                  aria-label="Modelo ilustrado"
-                  value={sex ?? ''}
-                  onChange={(event) => {
-                    const next = isSex(event.target.value) ? event.target.value : null
-                    persistIllustrationChoice(next, biotype)
-                  }}
-                  disabled={saving}
-                  className="flex-1 rounded-md border border-white/15 bg-[#292524] px-2 py-1.5 text-[11px] text-white outline-none transition-colors focus:border-[#F87171]"
-                >
-                  <option value="">Não informado</option>
-                  <option value="male">Masculino</option>
-                  <option value="female">Feminino</option>
-                </select>
-                <select
-                  aria-label="Biotipo ilustrado"
-                  value={biotype}
-                  onChange={(event) => {
-                    const next = isBiotype(event.target.value) ? event.target.value : 'mid'
-                    persistIllustrationChoice(sex, next)
-                  }}
-                  disabled={saving}
-                  className="flex-1 rounded-md border border-white/15 bg-[#292524] px-2 py-1.5 text-[11px] text-white outline-none transition-colors focus:border-[#F87171]"
-                >
-                  <option value="lean">Leve</option>
-                  <option value="mid">Intermediário</option>
-                  <option value="large">Maior volume</option>
-                </select>
-              </div>
-              {sexSelectionNote && <p role="status" className="mt-2 text-center text-[10px] text-[#FCA5A5]">{sexSelectionNote}</p>}
-              <p className="mt-2 max-w-[260px] text-center text-[10px] text-[#78716C]">
-                Modelo anatômico ilustrativo da região avaliada. {SEX_LABELS[sex ?? 'male']} · {BIOTYPE_LABELS[biotype]}.
+              <p className="mt-3 max-w-[260px] text-center text-[10px] text-[#78716C]">
+                {sex ? `Modelo ${SEX_LABELS[sex].toLowerCase()} ilustrativo. Volume ${BIOTYPE_LABELS[biotype].toLowerCase()} definido automaticamente pela Tanita e pelo IMC.` : 'O modelo será personalizado assim que o sexo for informado no perfil.'}
               </p>
 
               <div className="mt-4 flex items-center justify-center gap-4 text-[10px] uppercase text-[#A8A29E]"><span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full bg-[#F87171]" /> Gordura</span><span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full border-2 border-[#86EFAC]" /> Músculo</span></div>

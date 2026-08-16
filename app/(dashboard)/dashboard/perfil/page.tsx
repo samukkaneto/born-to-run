@@ -5,22 +5,25 @@ import { MEMBER_PROFILE_COLUMNS } from '@/lib/data/profiles'
 import PerfilForm from '@/components/feed/PerfilForm'
 import { formatDate } from '@/lib/utils'
 import { User, MapPin, Target, Rss } from 'lucide-react'
-import type { MemberProfile } from '@/types'
+import type { MemberHealthProfile, MemberProfile } from '@/types'
 
 export default async function PerfilPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const [profileResult, personalGoalResult] = await Promise.all([
+  const [profileResult, personalGoalResult, healthProfileResult] = await Promise.all([
     supabase.from('profiles').select(MEMBER_PROFILE_COLUMNS).eq('user_id', user.id).maybeSingle(),
     supabase.from('personal_goals').select('goal').eq('user_id', user.id).maybeSingle(),
+    supabase.from('member_health_profiles').select('*').eq('user_id', user.id).maybeSingle(),
   ])
   const { data: profile, error: profileError } = profileResult as { data: MemberProfile | null; error: { message: string } | null }
 
   if (profileError) throw new Error('Não foi possível carregar o perfil.')
   if (!profile) throw new Error('O perfil autenticado não foi encontrado.')
   if (personalGoalResult.error) throw new Error('Não foi possível carregar sua meta privada.')
+  if (healthProfileResult.error) throw new Error('Não foi possível carregar seus dados físicos.')
+  const healthProfile = healthProfileResult.data as MemberHealthProfile | null
 
   const profileForView: MemberProfile = {
     ...profile,
@@ -64,7 +67,7 @@ export default async function PerfilPage() {
           <User size={18} className="text-[var(--color-red)]" />
           Editar informações
         </h2>
-        <PerfilForm profile={profileForView} personalGoal={personalGoalResult.data?.goal ?? ''} />
+        <PerfilForm profile={profileForView} personalGoal={personalGoalResult.data?.goal ?? ''} healthProfile={healthProfile} />
       </div>
 
       {/* Histórico de posts */}
