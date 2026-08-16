@@ -13,16 +13,27 @@ export type AuthActionState = {
   success?: string
 }
 
-/** Origem pública do site (para links de e-mail do Supabase). */
+/** Origem pública do site usada nos links de autenticação. */
 async function getSiteOrigin(): Promise<string> {
   if (process.env.NEXT_PUBLIC_SITE_URL) {
     return new URL(process.env.NEXT_PUBLIC_SITE_URL).origin
   }
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
+
+  // Em produção, nunca usar VERCEL_URL como fallback: ele pode ser o alias
+  // interno do deploy e fazer o link do e-mail sair do domínio canônico.
+  if (process.env.VERCEL_ENV === 'production') {
+    return 'https://equipeborntorun.com'
+  }
+
+  // Em previews, o host da requisição mantém o fluxo no mesmo deployment.
   const h = await headers()
-  const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000'
-  const proto = h.get('x-forwarded-proto') ?? 'http'
-  return new URL(`${proto === 'https' ? 'https' : 'http'}://${host}`).origin
+  const host = h.get('x-forwarded-host') ?? h.get('host')
+  if (host && (host.endsWith('.vercel.app') || host.startsWith('localhost'))) {
+    const proto = h.get('x-forwarded-proto') ?? 'http'
+    return new URL(`${proto === 'https' ? 'https' : 'http'}://${host}`).origin
+  }
+
+  return 'https://equipeborntorun.com'
 }
 
 export async function login(
