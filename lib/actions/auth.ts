@@ -158,9 +158,25 @@ export async function updatePassword(
 ): Promise<AuthActionState> {
   const supabase = await createClient()
 
-  const { data: { user } } = await supabase.auth.getUser()
+  let { data: { user } } = await supabase.auth.getUser()
+  const tokenHash = cleanText(formData.get('token_hash'), 512)
+
+  // Links antigos usam o callback PKCE. O fluxo novo envia TokenHash para a
+  // página e só o verifica quando o usuário confirma o formulário; assim um
+  // scanner de e-mail não consegue consumir o token apenas com um GET.
+  if (!user && tokenHash) {
+    const { error: verifyError } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: 'recovery',
+    })
+    if (verifyError) {
+      return { error: 'Este link de recuperação expirou ou já foi utilizado. Solicite um novo e-mail.' }
+    }
+    user = (await supabase.auth.getUser()).data.user
+  }
+
   if (!user) {
-    return { error: 'Sessão expirada. Solicite um novo link de recuperação.' }
+    return { error: 'Sessão de recuperação ausente. Solicite um novo link de recuperação.' }
   }
 
   const password = formData.get('password') as string

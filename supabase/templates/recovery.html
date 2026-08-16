@@ -8,7 +8,7 @@
   </head>
   <body style="margin:0;padding:0;background:#f2efea;color:#171717;font-family:Arial,Helvetica,sans-serif;-webkit-text-size-adjust:100%">
     <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">
-      Use o link seguro da Born to Run para criar uma nova senha.
+      Abra a página segura da Born to Run e confirme a criação de uma nova senha.
     </div>
 
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background:#f2efea">
@@ -33,7 +33,8 @@
               <td style="padding:34px 34px 18px">
                 <p style="margin:0 0 10px;color:#b91c1c;font-size:12px;line-height:1.4;font-weight:800;text-transform:uppercase;letter-spacing:.14em">Recuperação de conta</p>
                 <h1 style="margin:0 0 16px;color:#171717;font-size:32px;line-height:1.12;font-weight:800;letter-spacing:-.02em">Vamos colocar você de volta na pista.</h1>
-                <p style="margin:0;color:#57534e;font-size:16px;line-height:1.65">Recebemos um pedido para redefinir a senha da sua conta Born to Run. Toque no botão abaixo para criar uma nova senha com segurança.</p>
+                <p style="margin:0;color:#57534e;font-size:16px;line-height:1.65">Recebemos um pedido para redefinir a senha da sua conta Born to Run. Abra a página abaixo e confirme a criação de uma nova senha com segurança.
+</p>
               </td>
             </tr>
 
@@ -42,7 +43,7 @@
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
                   <tr>
                     <td align="center" bgcolor="#dc2626" style="border-radius:12px">
-                      <a href="{{ .ConfirmationURL }}" style="display:block;padding:16px 22px;color:#ffffff;font-size:16px;line-height:20px;font-weight:800;text-decoration:none;border-radius:12px">Redefinir minha senha</a>
+                      <a href="{{ .SiteURL }}/recuperar-senha/nova?token_hash={{ .TokenHash }}" style="display:block;padding:16px 22px;color:#ffffff;font-size:16px;line-height:20px;font-weight:800;text-decoration:none;border-radius:12px">Redefinir minha senha</a>
                     </td>
                   </tr>
                 </table>
