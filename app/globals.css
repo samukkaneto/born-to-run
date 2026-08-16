@@ -3,6 +3,15 @@
 /* Force light mode — no dark theme as primary appearance */
 @custom-variant dark (&:is(.dark *));
 
+/* ── Âncoras de seção: compensa o Header fixo (z-50, topo da página) ── */
+section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 /* ════════════════════════════════════════════════════════════
    BORN TO RUN — DESIGN SYSTEM PREMIUM (Fable 5)
    Editorial esportivo · off-white #F7F4EF · carbono #171717

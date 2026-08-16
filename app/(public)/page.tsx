@@ -198,7 +198,7 @@ export default function HomePage() {
                 <span className="badge badge-solid-red"><BadgeCheck size={13} aria-hidden="true" /> {site.coach.cref}</span>
                 <span className="badge badge-gray"><Award size={13} aria-hidden="true" /> World Athletics Nível 1</span>
               </div>
-              <Link href="/sobre" className="btn-dark">
+              <Link href="/sobre#treinador" className="btn-dark">
                 Conheça o treinador
                 <ArrowRight size={16} aria-hidden="true" />
               </Link>
