@@ -25,7 +25,6 @@ export default function AdminStorePage() {
         <div className="max-w-xl px-6 py-12 sm:px-10 sm:py-16">
           <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/30 px-3 py-1.5 font-condensed text-xs font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm">
             <Sparkles size={14} aria-hidden="true" /> Coleção oficial
-
           </p>
           <h1 className="mt-5 font-display text-5xl uppercase leading-[0.88] sm:text-7xl">
             Corra com a <span className="text-[#FACC15]">nossa energia.</span>
