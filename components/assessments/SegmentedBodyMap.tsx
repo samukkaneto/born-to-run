@@ -10,25 +10,52 @@ function formatMetric(value: number | null, suffix: string) {
   return `${Number(value).toLocaleString('pt-BR', { maximumFractionDigits: 2 })}${suffix}`
 }
 
-function SegmentReading({
-  title,
-  fat,
-  muscle,
-  align = 'left',
-}: {
-  title: string
+type SegmentRegion = 'braço esquerdo' | 'braço direito' | 'tronco' | 'perna esquerda' | 'perna direita'
+
+type SegmentReadingValue = {
   fat: number | null
   muscle: number | null
+}
+
+const REGION_INDEX: Record<SegmentRegion, string> = {
+  'braço esquerdo': '1',
+  'braço direito': '2',
+  tronco: '3',
+  'perna esquerda': '4',
+  'perna direita': '5',
+}
+
+function SegmentCard({
+  title,
+  reading,
+  align = 'left',
+}: {
+  title: SegmentRegion
+  reading: SegmentReadingValue
   align?: 'left' | 'right'
 }) {
+  const index = REGION_INDEX[title]
+
   return (
-    <div className={`border-t border-white/10 py-4 ${align === 'right' ? 'xl:text-right' : ''}`}>
-      <p className="font-condensed text-sm font-semibold uppercase text-white">{title}</p>
-      <div className={`mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs ${align === 'right' ? 'xl:justify-end' : ''}`}>
-        <span className="text-[#FCA5A5]"><strong className="text-white">{formatMetric(fat, '%')}</strong> gordura</span>
-        <span className="text-[#86EFAC]"><strong className="text-white">{formatMetric(muscle, ' kg')}</strong> músculo</span>
+    <article className={`rounded border border-white/10 bg-[#1D1D1D] p-4 shadow-[0_12px_28px_rgba(0,0,0,.12)] ${align === 'right' ? 'xl:text-right' : ''}`}>
+      <div className={`flex items-start gap-3 ${align === 'right' ? 'xl:flex-row-reverse' : ''}`}>
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#F87171]/70 bg-[#171717] font-display text-sm text-white" aria-hidden="true">{index}</span>
+        <div className="min-w-0">
+          <p className="font-condensed text-sm font-semibold uppercase tracking-[0.08em] text-white">{title}</p>
+          <p className="mt-0.5 text-[10px] uppercase tracking-[0.12em] text-[#78716C]">Leitura segmentar</p>
+        </div>
       </div>
-    </div>
+      <div className="mt-4 grid grid-cols-2 gap-3 border-t border-white/10 pt-3">
+        <div className={align === 'right' ? 'xl:text-right' : ''}>
+          <p className="text-[10px] uppercase tracking-[0.08em] text-[#FCA5A5]">Gordura corporal</p>
+          <p className="mt-1 text-base font-semibold text-white">{formatMetric(reading.fat, '%')}</p>
+        </div>
+        <div className={align === 'right' ? 'xl:text-right' : ''}>
+          <p className="text-[10px] uppercase tracking-[0.08em] text-[#86EFAC]">Músculo</p>
+          <p className="mt-1 text-base font-semibold text-white">{formatMetric(reading.muscle, ' kg')}</p>
+        </div>
+      </div>
+    </article>
   )
 }
 
@@ -68,23 +95,21 @@ function BalanceReading({
   )
 }
 
-/** Marcadores sobre a ilustração. Percentuais do container (x horizontal,
- *  y vertical), calibrados na família anatômica aprovada (fonte vista de
- *  frente, braços levemente afastados). */
-const MARKERS: Array<{ id: string; region: 'braço esquerdo' | 'braço direito' | 'tronco' | 'perna esquerda' | 'perna direita'; x: number; y: number; dot: 'muscle' | 'fat' }> = [
-  { id: 'left-arm', region: 'braço esquerdo', x: 34, y: 30, dot: 'muscle' },
-  { id: 'right-arm', region: 'braço direito', x: 66, y: 30, dot: 'muscle' },
-  { id: 'trunk', region: 'tronco', x: 50, y: 42, dot: 'fat' },
-  { id: 'left-leg', region: 'perna esquerda', x: 43, y: 62, dot: 'muscle' },
-  { id: 'right-leg', region: 'perna direita', x: 57, y: 62, dot: 'muscle' },
+/** Marcadores numerados sobre a ilustração. Os valores ficam nos cartões externos para não cobrir o corpo. */
+const MARKERS: Array<{ id: string; region: SegmentRegion; x: number; y: number }> = [
+  { id: 'left-arm', region: 'braço esquerdo', x: 34, y: 30 },
+  { id: 'right-arm', region: 'braço direito', x: 66, y: 30 },
+  { id: 'trunk', region: 'tronco', x: 50, y: 42 },
+  { id: 'left-leg', region: 'perna esquerda', x: 43, y: 62 },
+  { id: 'right-leg', region: 'perna direita', x: 57, y: 62 },
 ]
 
 /** Escolhe as leituras corretas por região. */
-function readingsFor(assessment: BodyAssessment) {
+function readingsFor(assessment: BodyAssessment): Record<SegmentRegion, SegmentReadingValue> {
   return {
     'braço esquerdo': { fat: assessment.segment_left_arm_fat_pct, muscle: assessment.segment_left_arm_muscle_kg },
     'braço direito': { fat: assessment.segment_right_arm_fat_pct, muscle: assessment.segment_right_arm_muscle_kg },
-    'tronco': { fat: assessment.segment_trunk_fat_pct, muscle: assessment.segment_trunk_muscle_kg },
+    tronco: { fat: assessment.segment_trunk_fat_pct, muscle: assessment.segment_trunk_muscle_kg },
     'perna esquerda': { fat: assessment.segment_left_leg_fat_pct, muscle: assessment.segment_left_leg_muscle_kg },
     'perna direita': { fat: assessment.segment_right_leg_fat_pct, muscle: assessment.segment_right_leg_muscle_kg },
   }
@@ -135,64 +160,70 @@ export default function SegmentedBodyMap({ assessment, profileSex }: { assessmen
 
       {hasData ? (
         <>
-          <div className="grid gap-x-6 px-5 py-6 sm:px-6 xl:grid-cols-[minmax(150px,1fr)_240px_minmax(150px,1fr)] xl:items-center">
-            <div className="order-2 xl:order-1">
-              <p className="pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#78716C]">Lado esquerdo</p>
-              <SegmentReading title="Braço esquerdo" fat={readings['braço esquerdo'].fat} muscle={readings['braço esquerdo'].muscle} />
-              <SegmentReading title="Perna esquerda" fat={readings['perna esquerda'].fat} muscle={readings['perna esquerda'].muscle} />
+          <div className="px-5 py-6 sm:px-6">
+            <div className="mb-5 flex flex-col gap-2 border-b border-white/10 pb-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="font-condensed text-xs font-semibold uppercase tracking-[0.14em] text-[#A8A29E]">Leituras por região</p>
+                <p className="mt-1 max-w-2xl text-xs leading-relaxed text-[#78716C]">Os números sobre a ilustração correspondem aos cartões identificados abaixo. As métricas ficam fora do corpo para facilitar a leitura.</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-3 text-[10px] uppercase tracking-[0.08em] text-[#A8A29E]" aria-label="Legenda das métricas">
+                <span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-[#F87171]" aria-hidden="true" /> Gordura corporal</span>
+                <span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-[#86EFAC]" aria-hidden="true" /> Músculo</span>
+              </div>
             </div>
 
-            <div className="order-1 mx-auto flex w-full flex-col items-center xl:order-2">
-              <div className="relative w-full max-w-[260px]">
-                {assetPath ? (
-                  <Image
-                    src={assetPath}
-                    alt="Ilustração anatômica com as cinco regiões avaliadas: braços, tronco e pernas"
-                    width={260}
-                    height={390}
-                    className="h-auto w-full"
-                    priority={false}
-                  />
-                ) : (
-                  <div className="flex aspect-[2/3] w-full items-center justify-center border border-dashed border-white/20 px-5 text-center text-xs leading-relaxed text-[#A8A29E]">
-                    Informe Homem ou Mulher no seu perfil para personalizar o modelo corporal.
-                  </div>
-                )}
-                <div className="absolute inset-0" aria-hidden="true">
-                  {MARKERS.map((marker) => {
-                    const reading = readings[marker.region]
-                    return (
-                      <span key={marker.id} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${marker.x}%`, top: `${marker.y}%` }}>
-                        {marker.dot === 'muscle' ? (
-                          <span className="block h-4 w-4 rounded-full border-[3px] border-[#86EFAC] bg-[#171717]" />
-                        ) : (
-                          <span className="block h-5 w-5 rounded-full border-[3px] border-[#F87171] bg-[#171717]" />
-                        )}
-                        
-                        {reading.fat !== null || reading.muscle !== null ? (
-                          <span className="pointer-events-none absolute left-1/2 top-full mt-1 w-max -translate-x-1/2 whitespace-nowrap rounded border border-white/15 bg-[#171717]/95 px-2 py-1 text-[10px] leading-tight">
-                            <span className="text-[#FCA5A5]"><strong className="text-white">{formatMetric(reading.fat, '%')}</strong> gordura</span>
-                            <span className="mx-1 text-white/40">·</span>
-                            <span className="text-[#86EFAC]"><strong className="text-white">{formatMetric(reading.muscle, ' kg')}</strong> músculo</span>
-                          </span>
-                        ) : null}
-                      </span>
-                    )
-                  })}
-                </div>
+            <div className="grid items-start gap-5 xl:grid-cols-[minmax(190px,1fr)_260px_minmax(190px,1fr)] xl:gap-6">
+              <div className="order-2 space-y-3 xl:order-1">
+                <p className="pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#78716C]">Lado esquerdo</p>
+                <SegmentCard title="braço esquerdo" reading={readings['braço esquerdo']} />
+                <SegmentCard title="perna esquerda" reading={readings['perna esquerda']} />
               </div>
 
-              <p className="mt-3 max-w-[260px] text-center text-[10px] text-[#78716C]">
-                {sex ? `Modelo ${SEX_LABELS[sex].toLowerCase()} ilustrativo. Volume ${BIOTYPE_LABELS[biotype].toLowerCase()} definido automaticamente pela Tanita e pelo IMC.` : 'O modelo será personalizado assim que o sexo for informado no perfil.'}
-              </p>
+              <div className="order-1 mx-auto flex w-full max-w-[260px] flex-col items-center xl:order-2">
+                <div className="relative w-full">
+                  {assetPath ? (
+                    <Image
+                      src={assetPath}
+                      alt="Ilustração anatômica com as cinco regiões avaliadas: braços, tronco e pernas"
+                      width={260}
+                      height={390}
+                      className="h-auto w-full"
+                      priority={false}
+                    />
+                  ) : (
+                    <div className="flex aspect-[2/3] w-full items-center justify-center border border-dashed border-white/20 px-5 text-center text-xs leading-relaxed text-[#A8A29E]">
+                      Informe Homem ou Mulher no seu perfil para personalizar o modelo corporal.
+                    </div>
+                  )}
+                  <div className="absolute inset-0" aria-label="Marcadores das cinco regiões corporais">
+                    {MARKERS.map((marker) => (
+                      <span
+                        key={marker.id}
+                        className="absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[#F87171] bg-[#171717]/95 font-display text-xs text-white shadow-[0_3px_10px_rgba(0,0,0,.35)]"
+                        style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
+                        title={`Região ${REGION_INDEX[marker.region]}: ${marker.region}`}
+                        aria-label={`Região ${REGION_INDEX[marker.region]}: ${marker.region}`}
+                      >
+                        {REGION_INDEX[marker.region]}
+                      </span>
+                    ))}
+                  </div>
+                </div>
 
-              <div className="mt-4 flex items-center justify-center gap-4 text-[10px] uppercase text-[#A8A29E]"><span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full bg-[#F87171]" /> Gordura</span><span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full border-2 border-[#86EFAC]" /> Músculo</span></div>
+                <p className="mt-3 max-w-[260px] text-center text-[10px] leading-relaxed text-[#78716C]">
+                  {sex ? `Modelo ${SEX_LABELS[sex].toLowerCase()} ilustrativo. Volume ${BIOTYPE_LABELS[biotype].toLowerCase()} definido automaticamente pela Tanita e pelo IMC.` : 'O modelo será personalizado assim que o sexo for informado no perfil.'}
+                </p>
+              </div>
+
+              <div className="order-3 space-y-3">
+                <p className="pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#78716C] xl:text-right">Lado direito</p>
+                <SegmentCard title="braço direito" reading={readings['braço direito']} align="right" />
+                <SegmentCard title="perna direita" reading={readings['perna direita']} align="right" />
+              </div>
             </div>
 
-            <div className="order-3">
-              <p className="pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#78716C] xl:text-right">Lado direito</p>
-              <SegmentReading title="Braço direito" fat={readings['braço direito'].fat} muscle={readings['braço direito'].muscle} align="right" />
-              <SegmentReading title="Perna direita" fat={readings['perna direita'].fat} muscle={readings['perna direita'].muscle} align="right" />
+            <div className="mx-auto mt-5 max-w-[520px]">
+              <SegmentCard title="tronco" reading={readings.tronco} />
             </div>
           </div>
 
