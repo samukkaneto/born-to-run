@@ -8,12 +8,6 @@ import { addCalendarDays, calendarMonth, cycleProgress, cycleWeek, parseCalendar
 import type { AssignedWorkout } from '@/types'
 
 const WEEK_DAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
-const LEVEL_LABELS: Record<string, string> = {
-  iniciante: 'Iniciante',
-  intermediario: 'Intermediário',
-  avancado: 'Avançado',
-}
-
 type View = 'today' | 'calendar' | 'cycle'
 
 export default function AthleteTrainingPlan({
@@ -145,7 +139,7 @@ export default function AthleteTrainingPlan({
             return (
               <article key={id} className="border-t-4 border-t-[#171717] bg-white">
                 <div className="grid gap-4 border-x border-b border-[#E5E1D8] p-5 sm:grid-cols-[1fr_auto] sm:items-end">
-                  <div><p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#DC2626]">{LEVEL_LABELS[first.level] ?? first.level}</p><h3 className="mt-1 font-display text-2xl uppercase text-[#171717]">{first.cycle_name}</h3><p className="mt-2 text-sm text-[#57534E]">{first.cycle_starts_on && formatDate(first.cycle_starts_on)} a {first.cycle_ends_on && formatDate(first.cycle_ends_on)}</p></div>
+                  <div><p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#DC2626]">Mesociclo</p><h3 className="mt-1 font-display text-2xl uppercase text-[#171717]">{first.cycle_name}</h3><p className="mt-2 text-sm text-[#57534E]">{first.cycle_starts_on && formatDate(first.cycle_starts_on)} a {first.cycle_ends_on && formatDate(first.cycle_ends_on)}</p></div>
                   <p className="text-sm font-semibold text-[#171717]">{items.length} sessões · {weeks.size} semanas</p>
                 </div>
                 <div className="divide-y divide-[#E5E1D8] border-x border-b border-[#E5E1D8]">
@@ -177,7 +171,7 @@ function WorkoutDetail({ workout }: { workout: AssignedWorkout }) {
   const visual = getTrainingTypeVisual(workout.training_type)
   return (
     <article className="relative overflow-hidden border border-[#E5E1D8] bg-white p-5" style={{ borderLeftWidth: 6, borderLeftColor: visual.color }}>
-      <div className="flex flex-wrap items-center gap-2"><span className="badge" style={{ backgroundColor: visual.background, color: visual.text, borderColor: visual.border }}>{visual.label}</span><span className="badge badge-gray">{LEVEL_LABELS[workout.level] ?? workout.level}</span></div>
+      <div className="flex flex-wrap items-center gap-2"><span className="badge" style={{ backgroundColor: visual.background, color: visual.text, borderColor: visual.border }}>{visual.label}</span></div>
       <h3 className="mt-3 font-condensed text-xl font-semibold uppercase text-[#171717]">{workout.title}</h3>
       <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-[#44403C]">{workout.description}</p>
       <p className="mt-4 flex items-start gap-2 border-t border-[#E5E1D8] pt-3 text-sm text-[#57534E]"><Target size={15} className="mt-0.5 shrink-0 text-[#DC2626]" aria-hidden="true" /><span><strong className="text-[#171717]">Objetivo:</strong> {workout.objective}</span></p>

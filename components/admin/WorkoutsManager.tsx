@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import {
   Calendar,
   Dumbbell,
+  Eraser,
   Layers3,
   Pencil,
   Plus,
@@ -21,16 +22,6 @@ import WorkoutWorkbookImporter from '@/components/admin/WorkoutWorkbookImporter'
 import { TRAINING_TYPES, TRAINING_TYPE_VISUALS, getTrainingTypeVisual } from '@/lib/workouts/training-types'
 import type { MemberProfile, TrainingCycle, TrainingGroup, WorkoutWithAssignments } from '@/types'
 
-const LEVEL_LABELS: Record<string, string> = {
-  iniciante: 'Iniciante',
-  intermediario: 'Intermediário',
-  avancado: 'Avançado',
-}
-const LEVEL_BADGES: Record<string, string> = {
-  iniciante: 'badge-green',
-  intermediario: 'badge-orange',
-  avancado: 'badge-red',
-}
 const MEMBER_STATUS_LABELS: Record<MemberProfile['membership_status'], string> = {
   pending: 'Pendente',
   active: 'Ativo',
@@ -47,6 +38,16 @@ function recipientLabel(workout: WorkoutWithAssignments) {
   return parts.join(' + ') || 'Sem destinatários'
 }
 
+function recipientNames(workout: WorkoutWithAssignments, members: MemberProfile[], groups: TrainingGroup[]) {
+  const memberIds = workout.workout_assignments
+    ?.flatMap((item) => item.athlete_user_id ? [item.athlete_user_id] : []) ?? []
+  const groupIds = workout.workout_assignments
+    ?.flatMap((item) => item.group_id ? [item.group_id] : []) ?? []
+  const memberMap = new Map(members.map((member) => [member.user_id, member.full_name]))
+  const groupMap = new Map(groups.map((group) => [group.id, group.name]))
+  return { memberIds, groupIds, memberMap, groupMap }
+}
+
 export default function WorkoutsManager({
   workouts,
   members,
@@ -60,7 +61,14 @@ export default function WorkoutsManager({
 }) {
   const { toast } = useToast()
   const [search, setSearch] = useState('')
-  const [level, setLevel] = useState('todos')
+  const [athleteFilter, setAthleteFilter] = useState('')
+  const [groupFilter, setGroupFilter] = useState('')
+  const [cycleFilter, setCycleFilter] = useState('')
+  const [typeFilter, setTypeFilter] = useState('todos')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+  const [withoutDate, setWithoutDate] = useState(false)
+  const [withoutCycle, setWithoutCycle] = useState(false)
   const [memberSearch, setMemberSearch] = useState('')
   const [primaryAthleteId, setPrimaryAthleteId] = useState('')
   const [modal, setModal] = useState<'create' | WorkoutWithAssignments | null>(null)
@@ -96,15 +104,52 @@ export default function WorkoutsManager({
     [groups, existingGroupIds],
   )
 
+  const filtersActive =
+    search.trim() !== ''
+    || athleteFilter !== ''
+    || groupFilter !== ''
+    || cycleFilter !== ''
+    || typeFilter !== 'todos'
+    || dateFrom !== ''
+    || dateTo !== ''
+    || withoutDate
+    || withoutCycle
+
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase()
     return workouts.filter((workout) => {
-      if (level !== 'todos' && workout.level !== level) return false
+      const assignmentMemberIds = workout.workout_assignments
+        ?.flatMap((item) => item.athlete_user_id ? [item.athlete_user_id] : []) ?? []
+      const assignmentGroupIds = workout.workout_assignments
+        ?.flatMap((item) => item.group_id ? [item.group_id] : []) ?? []
+      if (athleteFilter && !assignmentMemberIds.includes(athleteFilter)) return false
+      if (groupFilter && !assignmentGroupIds.includes(groupFilter)) return false
+      if (cycleFilter && workout.training_cycle_id !== cycleFilter) return false
+      if (typeFilter !== 'todos' && workout.training_type !== typeFilter) return false
+      if (dateFrom && (!workout.scheduled_date || workout.scheduled_date < dateFrom)) return false
+      if (dateTo && (!workout.scheduled_date || workout.scheduled_date > dateTo)) return false
+      if (withoutDate && workout.scheduled_date) return false
+      if (withoutCycle && workout.training_cycle_id) return false
       if (!query) return true
       return [workout.title, workout.description, workout.objective]
         .some((value) => value.toLowerCase().includes(query))
     })
-  }, [workouts, search, level])
+  }, [
+    workouts, search, athleteFilter, groupFilter, cycleFilter,
+    typeFilter, dateFrom, dateTo, withoutDate, withoutCycle,
+  ])
+
+  function clearFilters() {
+    setSearch('')
+    setAthleteFilter('')
+    setGroupFilter('')
+    setCycleFilter('')
+    setTypeFilter('todos')
+    setDateFrom('')
+    setDateTo('')
+    setWithoutDate(false)
+    setWithoutCycle(false)
+  }
 
   const visibleMembers = useMemo(() => {
     const query = memberSearch.trim().toLowerCase()
@@ -204,41 +249,106 @@ export default function WorkoutsManager({
 
       <WorkoutWorkbookImporter members={members} groups={groups} preferredAthleteId={primaryAthleteId} />
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#78716C]" aria-hidden="true" />
-          <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar treino por título, descrição ou objetivo…" className="input-base pl-10" aria-label="Buscar treinos" />
+      <div className="space-y-3 rounded-xl border border-[#E5E1D8] bg-white p-4">
+        <div className="flex flex-wrap items-center gap-2 text-[#44403C]">
+          <p className="mr-auto font-condensed text-sm font-semibold uppercase tracking-[0.06em]">Filtros</p>
+          <span className="text-sm text-[#78716C]">{filtered.length} treino{filtered.length === 1 ? '' : 's'}{filtersActive ? ' encontrado' + (filtered.length === 1 ? '' : 's') : ''}</span>
+          {filtersActive && (
+            <button type="button" onClick={clearFilters} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-[#D6D3D1] px-2.5 text-xs font-semibold text-[#57534E] transition-colors hover:bg-[#FAFAF9]" aria-label="Limpar filtros">
+              <Eraser size={13} aria-hidden="true" /> Limpar filtros
+            </button>
+          )}
         </div>
-        <select value={level} onChange={(event) => setLevel(event.target.value)} className="input-base bg-white sm:w-48" aria-label="Filtrar por nível">
-          <option value="todos">Todos os níveis</option>
-          <option value="iniciante">Iniciante</option>
-          <option value="intermediario">Intermediário</option>
-          <option value="avancado">Avançado</option>
-        </select>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div>
+            <label htmlFor="filter-athlete" className="mb-1 block text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]">Atleta</label>
+            <select id="filter-athlete" value={athleteFilter} onChange={(event) => setAthleteFilter(event.target.value)} className="input-base bg-white">
+              <option value="">Todos os atletas</option>
+              {members.map((member) => <option key={member.user_id} value={member.user_id}>{member.full_name}</option>)}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="filter-group" className="mb-1 block text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]">Grupo</label>
+            <select id="filter-group" value={groupFilter} onChange={(event) => setGroupFilter(event.target.value)} className="input-base bg-white">
+              <option value="">Todos os grupos</option>
+              {groups.map((group) => <option key={group.id} value={group.id}>{group.name}</option>)}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="filter-cycle" className="mb-1 block text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]">Mesociclo</label>
+            <select id="filter-cycle" value={cycleFilter} onChange={(event) => setCycleFilter(event.target.value)} className="input-base bg-white">
+              <option value="">Todos os mesociclos</option>
+              {cycles.map((cycle) => <option key={cycle.id} value={cycle.id}>{cycle.name}</option>)}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="filter-type" className="mb-1 block text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]">Tipo e cor</label>
+            <select id="filter-type" value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)} className="input-base bg-white">
+              <option value="todos">Todos os tipos</option>
+              {TRAINING_TYPES.map((type) => <option key={type} value={type}>{TRAINING_TYPE_VISUALS[type].label}</option>)}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="filter-date-from" className="mb-1 block text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]">Data a partir de</label>
+            <input id="filter-date-from" type="date" value={dateFrom} onChange={(event) => setDateFrom(event.target.value)} className="input-base bg-white" />
+          </div>
+          <div>
+            <label htmlFor="filter-date-to" className="mb-1 block text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]">Data até</label>
+            <input id="filter-date-to" type="date" value={dateTo} onChange={(event) => setDateTo(event.target.value)} className="input-base bg-white" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="flex min-h-10 cursor-pointer items-center gap-2 rounded-md px-1 text-sm text-[#44403C]">
+              <input type="checkbox" checked={withoutDate} onChange={(event) => setWithoutDate(event.target.checked)} className="accent-[#DC2626]" /> Sem data agendada
+            </label>
+            <label className="flex min-h-10 cursor-pointer items-center gap-2 rounded-md px-1 text-sm text-[#44403C]">
+              <input type="checkbox" checked={withoutCycle} onChange={(event) => setWithoutCycle(event.target.checked)} className="accent-[#DC2626]" /> Sem mesociclo
+            </label>
+          </div>
+          <div className="relative flex items-start">
+            <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#78716C]" aria-hidden="true" />
+            <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar título, descrição ou objetivo…" className="input-base bg-white pl-10" aria-label="Buscar treinos" />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-end">
         <button type="button" onClick={() => openEditor('create')} className="btn-primary"><Plus size={16} aria-hidden="true" /> Novo treino</button>
       </div>
 
       <div className="space-y-3">
-        {filtered.length > 0 ? filtered.map((workout) => (
-          <article key={workout.id} className="card relative flex items-start gap-4 overflow-hidden p-4 sm:p-5">
-            <span className="absolute inset-y-0 left-0 w-1.5" style={{ backgroundColor: getTrainingTypeVisual(workout.training_type).color }} aria-hidden="true" />
-            <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-lg sm:flex" style={{ backgroundColor: getTrainingTypeVisual(workout.training_type).background, color: getTrainingTypeVisual(workout.training_type).text }}><Dumbbell size={19} aria-hidden="true" /></div>
-            <div className="min-w-0 flex-1">
-              <div className="mb-1 flex flex-wrap items-center gap-2">
-                <h3 className="font-condensed text-base font-semibold uppercase tracking-[0.03em] text-[#171717]">{workout.title}</h3>
-                <span className={`badge ${LEVEL_BADGES[workout.level] || 'badge-gray'}`}>{LEVEL_LABELS[workout.level] || workout.level}</span>
-                <span className="badge" style={{ backgroundColor: getTrainingTypeVisual(workout.training_type).background, borderColor: getTrainingTypeVisual(workout.training_type).border, color: getTrainingTypeVisual(workout.training_type).text }}>{getTrainingTypeVisual(workout.training_type).label}</span>
-                <span className="badge badge-gray"><Users size={11} aria-hidden="true" /> {recipientLabel(workout)}</span>
+        {filtered.length > 0 ? filtered.map((workout) => {
+          const visual = getTrainingTypeVisual(workout.training_type)
+          const { memberIds, groupIds, memberMap, groupMap } = recipientNames(workout, members, groups)
+          return (
+            <article key={workout.id} className="card relative flex items-start gap-4 overflow-hidden p-4 sm:p-5">
+              <span className="absolute inset-y-0 left-0 w-1.5" style={{ backgroundColor: visual.color }} aria-hidden="true" />
+              <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-lg sm:flex" style={{ backgroundColor: visual.background, color: visual.text }}><Dumbbell size={19} aria-hidden="true" /></div>
+              <div className="min-w-0 flex-1">
+                <div className="mb-1 flex flex-wrap items-center gap-2">
+                  <h3 className="font-condensed text-base font-semibold uppercase tracking-[0.03em] text-[#171717]">{workout.title}</h3>
+                  <span className="badge" style={{ backgroundColor: visual.background, borderColor: visual.border, color: visual.text }}>{visual.label}</span>
+                  <span className="badge badge-gray"><Users size={11} aria-hidden="true" /> {recipientLabel(workout)}</span>
+                </div>
+                <p className="line-clamp-2 text-sm text-[#57534E]">{workout.description}</p>
+                <p className="mt-1.5 flex items-center gap-1.5 text-xs text-[#57534E]"><Calendar size={11} aria-hidden="true" /> {workout.scheduled_date ? formatDate(workout.scheduled_date) : 'Sem data'} · {workout.objective}</p>
+                {(memberIds.length > 0 || groupIds.length > 0) && (
+                  <p className="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs text-[#78716C]">
+                    <Layers3 size={11} aria-hidden="true" />
+                    {groupIds.map((id) => <span key={`group-${id}`} className="rounded bg-[#F5F5F4] px-1.5 py-0.5">{groupMap.get(id) ?? 'Grupo'}</span>)}
+                    {memberIds.map((id) => <span key={`member-${id}`} className="rounded bg-[#F5F5F4] px-1.5 py-0.5">{memberMap.get(id) ?? 'Atleta'}</span>)}
+                  </p>
+                )}
+                {workout.training_cycle_id && (
+                  <p className="mt-1.5 text-xs text-[#78716C]">Mesociclo: {cycles.find((cycle) => cycle.id === workout.training_cycle_id)?.name ?? 'Vinculado'}</p>
+                )}
               </div>
-              <p className="line-clamp-2 text-sm text-[#57534E]">{workout.description}</p>
-              <p className="mt-1.5 flex items-center gap-1.5 text-xs text-[#57534E]"><Calendar size={11} aria-hidden="true" /> {workout.scheduled_date ? formatDate(workout.scheduled_date) : 'Sem data'} · {workout.objective}</p>
-            </div>
-            <div className="flex shrink-0 gap-1">
-              <button type="button" onClick={() => openEditor(workout)} className="min-h-11 rounded-lg p-2.5 text-[#57534E] transition-colors hover:bg-[#F5F5F4] hover:text-[#171717]" aria-label={`Editar treino ${workout.title}`}><Pencil size={16} /></button>
-              <button type="button" onClick={() => setToDelete(workout)} className="min-h-11 rounded-lg p-2.5 text-[#57534E] transition-colors hover:bg-[#FEE2E2] hover:text-[#DC2626]" aria-label={`Remover treino ${workout.title}`}><Trash2 size={16} /></button>
-            </div>
-          </article>
-        )) : (
+              <div className="flex shrink-0 gap-1">
+                <button type="button" onClick={() => openEditor(workout)} className="min-h-11 rounded-lg p-2.5 text-[#57534E] transition-colors hover:bg-[#F5F5F4] hover:text-[#171717]" aria-label={`Editar treino ${workout.title}`}><Pencil size={16} /></button>
+                <button type="button" onClick={() => setToDelete(workout)} className="min-h-11 rounded-lg p-2.5 text-[#57534E] transition-colors hover:bg-[#FEE2E2] hover:text-[#DC2626]" aria-label={`Remover treino ${workout.title}`}><Trash2 size={16} /></button>
+              </div>
+            </article>
+          )
+        }) : (
           <div className="card p-10 text-center text-[#57534E]"><Dumbbell size={28} className="mx-auto mb-3 opacity-40" aria-hidden="true" /><p className="text-sm">{workouts.length === 0 ? 'Nenhum treino cadastrado. Crie a primeira prescrição para um atleta ou grupo.' : 'Nenhum treino encontrado com esses filtros.'}</p></div>
         )}
       </div>
@@ -256,7 +366,7 @@ export default function WorkoutsManager({
           <div><label htmlFor="workout-description" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Descrição</label><textarea id="workout-description" name="description" defaultValue={editing?.description ?? ''} maxLength={5000} rows={5} required className="input-base resize-none" placeholder="Descreva aquecimento, séries, pausas e desaquecimento…" /></div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div><label htmlFor="workout-objective" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Objetivo</label><input id="workout-objective" name="objective" defaultValue={editing?.objective ?? ''} maxLength={500} required className="input-base" placeholder="Ex: Melhorar o pace" /></div>
-            <div><label htmlFor="workout-level" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Nível</label><select id="workout-level" name="level" defaultValue={editing?.level ?? 'iniciante'} className="input-base bg-white"><option value="iniciante">Iniciante</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option></select></div>
+            <div><label htmlFor="workout-date" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Data agendada</label><input id="workout-date" type="date" name="scheduled_date" defaultValue={editing?.scheduled_date ?? ''} className="input-base bg-white" /></div>
           </div>
           <div>
             <label htmlFor="workout-training-type" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Tipo e cor do treino</label>
@@ -271,7 +381,6 @@ export default function WorkoutsManager({
               ))}
             </div>
           </div>
-          <div><label htmlFor="workout-date" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Data opcional</label><input id="workout-date" name="scheduled_date" type="date" defaultValue={editing?.scheduled_date ?? ''} className="input-base" /></div>
           <div><label htmlFor="workout-cycle" className="mb-1.5 block font-condensed text-sm font-semibold uppercase tracking-[0.06em] text-[#44403C]">Mesociclo opcional</label><select id="workout-cycle" name="training_cycle_id" defaultValue={editing?.training_cycle_id ?? ''} className="input-base bg-white"><option value="">Treino avulso</option>{cycles.map((cycle) => <option key={cycle.id} value={cycle.id}>{cycle.name} · {formatDate(cycle.starts_on)} a {formatDate(cycle.ends_on)}</option>)}</select></div>
 
           <fieldset className="space-y-3 rounded-xl border border-[#E5E1D8] p-4">

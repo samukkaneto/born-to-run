@@ -9,12 +9,6 @@ import { formatDate } from '@/lib/utils'
 import { useToast } from '@/components/ui/Toaster'
 import type { MemberProfile, TrainingGroup } from '@/types'
 
-const LEVEL_LABELS = {
-  iniciante: 'Iniciante',
-  intermediario: 'Intermediário',
-  avancado: 'Avançado',
-} as const
-
 export default function WorkoutWorkbookImporter({
   members,
   groups,
@@ -31,7 +25,6 @@ export default function WorkoutWorkbookImporter({
   const [error, setError] = useState('')
   const [fileName, setFileName] = useState('')
   const [drafts, setDrafts] = useState<ImportedWorkoutDraft[]>([])
-  const [level, setLevel] = useState<keyof typeof LEVEL_LABELS>('iniciante')
   const [cycleName, setCycleName] = useState('')
   const [memberIds, setMemberIds] = useState<string[]>([])
   const [groupIds, setGroupIds] = useState<string[]>([])
@@ -100,7 +93,6 @@ export default function WorkoutWorkbookImporter({
           objective: draft.objective,
           training_type: draft.trainingType,
         })),
-        level,
         memberIds,
         groupIds,
       )
@@ -152,16 +144,10 @@ export default function WorkoutWorkbookImporter({
             <>
               <div role="status" className="flex items-center gap-2 rounded-lg border border-[#BBF7D0] bg-[#F0FDF4] px-3 py-2 text-sm text-[#166534]"><CheckCircle2 size={16} aria-hidden="true" /> {drafts.length} treino(s) reconhecido(s) em “{fileName}”. Revise antes de publicar.</div>
 
-              <div className="grid gap-4 lg:grid-cols-4">
+              <div className="grid gap-4 lg:grid-cols-3">
                 <div>
                   <label htmlFor="import-cycle-name" className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]">Nome do mesociclo</label>
                   <input id="import-cycle-name" value={cycleName} onChange={(event) => setCycleName(event.target.value)} maxLength={120} className="input-base" placeholder="Ex: Base · Agosto 2026" />
-                </div>
-                <div>
-                  <label htmlFor="import-level" className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]">Nível do ciclo</label>
-                  <select id="import-level" value={level} onChange={(event) => setLevel(event.target.value as keyof typeof LEVEL_LABELS)} className="input-base bg-white">
-                    {Object.entries(LEVEL_LABELS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-                  </select>
                 </div>
                 <fieldset className="rounded-lg border border-[#E5E1D8] p-3">
                   <legend className="px-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#57534E]"><Layers3 size={13} className="mr-1 inline" aria-hidden="true" /> Grupos</legend>

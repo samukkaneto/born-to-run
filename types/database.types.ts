@@ -1076,6 +1076,29 @@ export type Database = {
         }
         Returns: string
       }
+      staff_save_workout_v3: {
+        Args: {
+          target_description: string
+          target_group_ids: string[]
+          target_member_ids: string[]
+          target_objective: string
+          target_scheduled_date: string
+          target_title: string
+          target_training_cycle_id: string
+          target_training_type: string
+          target_workout_id: string
+        }
+        Returns: string
+      }
+      staff_import_training_cycle_v2: {
+        Args: {
+          target_group_ids: string[]
+          target_items: Json
+          target_member_ids: string[]
+          target_name: string
+        }
+        Returns: string
+      }
       staff_set_team_joined_at: {
         Args: { target_team_joined_at: string; target_user_id: string }
         Returns: boolean

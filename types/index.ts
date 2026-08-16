@@ -35,8 +35,7 @@ export type Comment = Tables<'comments'> & {
   profiles?: Pick<PublicProfile, 'id' | 'user_id' | 'full_name' | 'avatar_url'>
 }
 export type Like = Tables<'likes'>
-export type Workout = Omit<Tables<'workouts'>, 'level' | 'audience' | 'training_type'> & {
-  level: 'iniciante' | 'intermediario' | 'avancado'
+export type Workout = Omit<Tables<'workouts'>, 'audience' | 'training_type'> & {
   audience: 'team' | 'targeted'
   training_type: TrainingType
 }
@@ -63,7 +62,6 @@ export type AssignedWorkout = Pick<
   | 'id'
   | 'title'
   | 'description'
-  | 'level'
   | 'objective'
   | 'scheduled_date'
   | 'training_type'

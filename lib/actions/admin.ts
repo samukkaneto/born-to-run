@@ -17,7 +17,6 @@ export type ImportedWorkoutInput = {
   training_type: string
 }
 
-const VALID_LEVELS = ['iniciante', 'intermediario', 'avancado'] as const
 const VALID_STATUSES: MembershipStatus[] = ['pending', 'active', 'suspended', 'rejected']
 
 async function requireRole(allowedRoles: UserRole[], message: string) {
@@ -69,7 +68,6 @@ function parseWorkoutForm(formData: FormData) {
   const title = cleanText(formData.get('title'), 160)
   const description = cleanText(formData.get('description'), 5000)
   const objective = cleanText(formData.get('objective'), 500)
-  const level = String(formData.get('level') ?? '')
   const trainingType = String(formData.get('training_type') ?? '')
   const scheduledDate = safeDate(formData.get('scheduled_date'))
   const memberIds = uniqueUuids(formData.getAll('member_ids'))
@@ -79,9 +77,6 @@ function parseWorkoutForm(formData: FormData) {
   if (title.length < 3) return { error: 'Informe um título com pelo menos 3 caracteres.' }
   if (!description) return { error: 'A descrição do treino é obrigatória.' }
   if (!objective) return { error: 'Informe o objetivo do treino.' }
-  if (!VALID_LEVELS.includes(level as (typeof VALID_LEVELS)[number])) {
-    return { error: 'Selecione um nível válido.' }
-  }
   if (!isTrainingType(trainingType)) return { error: 'Selecione um tipo de treino válido.' }
   if (scheduledDate === 'invalid') return { error: 'Informe uma data válida.' }
   if (!memberIds || !groupIds) return { error: 'A lista de destinatários é inválida.' }
@@ -95,7 +90,6 @@ function parseWorkoutForm(formData: FormData) {
       title,
       description,
       objective,
-      level: level as (typeof VALID_LEVELS)[number],
       trainingType,
       scheduledDate,
       audience: 'targeted' as const,
@@ -136,13 +130,12 @@ async function saveWorkout(id: string | null, formData: FormData): Promise<Admin
   const parsed = parseWorkoutForm(formData)
   if ('error' in parsed) return { error: parsed.error }
 
-  const { data, error } = await supabase.rpc('staff_save_workout_v2', {
+  const { data, error } = await supabase.rpc('staff_save_workout_v3', {
     // O gerador do Supabase tipa argumentos de RPC como não nulos, embora
     // PostgreSQL aceite NULL para distinguir criação de edição.
     target_workout_id: id as string,
     target_title: parsed.data.title,
     target_description: parsed.data.description,
-    target_level: parsed.data.level,
     target_objective: parsed.data.objective,
     target_scheduled_date: parsed.data.scheduledDate as string,
     target_member_ids: parsed.data.memberIds,
@@ -176,7 +169,6 @@ export async function deleteWorkout(id: string): Promise<AdminActionResult> {
 export async function importWorkoutPlan(
   cycleName: string,
   items: ImportedWorkoutInput[],
-  level: string,
   memberIds: string[],
   groupIds: string[],
 ): Promise<AdminActionResult> {
@@ -184,9 +176,6 @@ export async function importWorkoutPlan(
   if (authError || !user) return { error: authError ?? 'Não autenticado.' }
   const cleanedCycleName = cleanText(cycleName, 120)
   if (cleanedCycleName.length < 3) return { error: 'Informe um nome para o mesociclo.' }
-  if (!VALID_LEVELS.includes(level as (typeof VALID_LEVELS)[number])) {
-    return { error: 'Selecione um nível válido.' }
-  }
   if (!Array.isArray(items) || items.length < 1 || items.length > 62) {
     return { error: 'A importação deve conter entre 1 e 62 treinos.' }
   }
@@ -230,10 +219,9 @@ export async function importWorkoutPlan(
     })
   }
 
-  const { data, error } = await supabase.rpc('staff_import_training_cycle', {
+  const { data, error } = await supabase.rpc('staff_import_training_cycle_v2', {
     target_name: cleanedCycleName,
     target_items: cleanedItems,
-    target_level: level,
     target_member_ids: uniqueMemberIds,
     target_group_ids: uniqueGroupIds,
   })
