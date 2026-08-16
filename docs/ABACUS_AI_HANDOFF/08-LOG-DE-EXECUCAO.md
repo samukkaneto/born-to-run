@@ -1,5 +1,20 @@
 # Log de execução
 
+## 16/08/2026 — handoff da próxima execução, sem alterações funcionais
+
+- Proprietário decidiu que outra IA poderá assumir o projeto antes da renovação de créditos do Codex.
+- Consolidado no documento `26` o backlog ainda não executado, com contexto técnico e critérios de aceite.
+- Registrada a rejeição da silhueta geométrica, da anatomia divergente no PDF e das letras de `logo-on-light.png`.
+- Registradas a inconsistência da legenda `GORDURA`/`MÚSCULO` e a necessidade de anatomia científica homem/mulher com variação controlada de biotipo.
+- Registrado erro segmentar percebido pelo proprietário; campo exato ainda precisa ser reproduzido nas três imagens originais.
+- OCR deve operar como preenchimento assistido com revisão/edição humana e validações cruzadas.
+- Registrada pesquisa pendente de exportação Tanita em CSV/XLS/XLSX ou outro formato estruturado.
+- Registrada reorganização do painel de treinos por atleta, mesociclo, período, grupo e tipo/cor.
+- Registrada paridade obrigatória entre ferramentas de treinador e administrador.
+- Registrada remoção do nível redundante de treino/mesociclo, preservando nível de jornada e migrations históricas.
+- Registradas a correção da âncora `Conheça o treinador` e a restauração do PNG original sem adulteração.
+- Loja mantida fora de escopo. Nenhum componente, migration, dado ou deployment funcional foi alterado neste registro.
+
 ## 15/08/2026 — Avaliação Tetrapolar premium, PDF completo e identidade
 
 - Analisadas as referências Tanita e as seis imagens fornecidas pelo proprietário; a interface Tanita foi tratada como referência de conteúdo, não como identidade visual.

@@ -1,5 +1,7 @@
 # Born to Run — briefing oficial para Abacus AI / Fable 5
 
+> **Handoff prioritário de 16/08/2026:** antes de executar qualquer redesign ou correção, leia `docs/ABACUS_AI_HANDOFF/26-HANDOFF-IMEDIATO-ANATOMIA-OCR-TREINOS-E-MARCA.md`. Ele registra tarefas ainda não implementadas e correções posteriores ao último release, incluindo anatomia rejeitada, logo original, segurança do OCR e gestão de treinos.
+
 > Se esta execução do Fable 5 estiver no supercomputador isolado da Abacus AI e não possuir histórico, leia primeiro `docs/ABACUS_AI_HANDOFF/15-CONTEXTO-COMPLETO-PARA-IA-SEM-HISTORICO.md`. Abacus AI é a plataforma; Fable 5 é o modelo. O proprietário concede carta branca visual e espera uma reformulação premium substancial, não apenas retoques.
 
 Este é o documento principal de contexto visual e de produto. Ele deve ser lido junto das seis pranchas presentes em `design-refs/`, do status técnico em `CURRENT_IMPLEMENTATION_STATUS.md` e do índice de entrega `docs/ABACUS_AI_HANDOFF/00-LEIA-PRIMEIRO.md`.

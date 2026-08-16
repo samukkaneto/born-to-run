@@ -1,5 +1,11 @@
 # Pendências e ponto de retomada
 
+## Retomada prioritária de 16/08/2026 — ler o documento 26
+
+Não iniciar pela loja. O backlog imediato ainda não implementado é: restaurar o logo PNG original sem alterar letras; fazer `Conheça o treinador` abrir diretamente o bloco de Robson; reproduzir e bloquear o erro de leitura segmentar; garantir revisão manual; pesquisar exportação Tanita CSV/XLS/XLSX; substituir integralmente o boneco por anatomia científica original e consistente entre app/PDF; reorganizar treinos por atleta/mesociclo; remover nível redundante de treino sem tocar no nível de jornada.
+
+O documento `26-HANDOFF-IMEDIATO-ANATOMIA-OCR-TREINOS-E-MARCA.md` contém ordem de execução, arquivos afetados, riscos de schema e critérios de aceite. O estado atual publicado continua em `9aafa8f`; nada dessa nova fila deve ser tratado como pronto.
+
 ## Retomada mais recente — validar a Avaliação Tetrapolar premium com dados reais
 
 A avaliação e o PDF premium estão publicados. A próxima ação exata é Samuel testar a própria avaliação no modo Aluno e Robson testar no modo Atleta, comparar os 25 valores com as três imagens Healthy Edge Lite, baixar o PDF em Android/desktop e registrar uma segunda medição para validar a evolução. O título oficial é `Avaliação Tetrapolar Segmentada`; não reintroduzir a descrição rejeitada. OCR continua com revisão humana. Loja continua em espera.
