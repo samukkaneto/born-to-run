@@ -39,13 +39,16 @@ describe('leitura de relatório Tanita', () => {
     expect(result.labels.bodyFatCategory).toBe('healthy')
   })
 
-  it('extrai gordura e massa muscular dos cinco segmentos', () => {
+  it('extrai gordura e massa muscular dos cinco segmentos dentro do bloco Segmental Data', () => {
     const result = parseTanitaOcrText(`
-      Left Arm Fat 37.8 % Muscle Mass 1.8 kg
-      Right Arm Fat 39.8 % Muscle Mass 1.5 kg
-      Trunk Fat 36.4 % Muscle Mass 21.8 kg
-      Left Leg Fat 33.6 % Muscle Mass 6.3 kg
-      Right Leg Fat 33.6 % Muscle Mass 6.3 kg
+      Segmental Data
+      Left Right
+      Fat 37.8 % Fat 39.8 %
+      Muscle Mass 1.8 kg Muscle Mass 1.5 kg
+      Fat 36.4 %
+      Muscle Mass 21.8 kg
+      Fat 33.6 % Fat 33.6 %
+      Muscle Mass 6.3 kg Muscle Mass 6.3 kg
     `)
 
     expect(result.measurements).toMatchObject({
@@ -60,6 +63,19 @@ describe('leitura de relatório Tanita', () => {
       segment_right_leg_fat_pct: 33.6,
       segment_right_leg_muscle_kg: 6.3,
     })
+  })
+
+  it('não contamina os campos segmentares com a massa muscular geral quando não há bloco segmentar', () => {
+    const result = parseTanitaOcrText(`
+      Muscle Mass 37.7 kg
+      Left Arm Fat 35.7 % Muscle Mass 1.8 kg
+      Right Arm Fat 39.8 % Muscle Mass 1.5 kg
+    `)
+    // Sem o cabeçalho "Segmental Data" o texto é ambíguo; o parser antigo
+    // capturava o valor geral (37.7) nos campos do braço, por isso o bloco
+    // é o único caminho confiável para dados segmentares.
+    expect(result.measurements.segment_left_arm_muscle_kg).toBeUndefined()
+    expect(result.measurements.muscle_mass_kg).toBe(37.7)
   })
 
   it('rejeita números impossíveis em vez de preencher silenciosamente', () => {
