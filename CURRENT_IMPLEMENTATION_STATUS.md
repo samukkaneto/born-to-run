@@ -1,6 +1,8 @@
 # Born to Run — status real de implementação
 
-Atualizado em **15/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
+Atualizado em **16/08/2026**. Este arquivo separa o que já está implementado e validado do que ainda depende de decisão ou insumo do proprietário.
+
+> Handoff de 16/08/2026: nenhuma funcionalidade nova foi implementada depois de `9aafa8f`. O proprietário rejeitou a anatomia geométrica e as letras do logo adaptado, relatou erro segmentar e definiu a próxima fila: OCR com revisão manual e pesquisa de exportação, anatomia científica comum ao app/PDF, gestão de treinos por atleta/mesociclo sem nível redundante, logo PNG original e âncora direta para Robson. A especificação completa está em `docs/ABACUS_AI_HANDOFF/26-HANDOFF-IMEDIATO-ANATOMIA-OCR-TREINOS-E-MARCA.md`. Loja continua pausada.
 
 > Estado mais recente: os modos continuam separados e o OCR Healthy Edge Lite continua calibrado. A área privada agora se chama **Avaliação Tetrapolar Segmentada**, possui mapa corporal de cinco regiões, equilíbrio bilateral e evolução; o PDF contém três páginas com resultados gerais, segmentos, foto circular e histórico. A identidade do acesso usa logo transparente sem filtros e favicon oficial. Publicação: PR `#34`, merge `6a38acc`, CI da `main` `31894361903` e Vercel `dpl_DoAT7djHUS9JgJSBDZUP5Ew477ZS` `READY`. Consulte `docs/ABACUS_AI_HANDOFF/25-AVALIACAO-TETRAPOLAR-PREMIUM-PDF-E-IDENTIDADE.md`. OCR, Supabase e loja não mudaram neste bloco.
 

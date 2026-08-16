@@ -29,6 +29,7 @@ Atualizado em 15/08/2026. Esta pasta é o ponto de entrada canônico para uma IA
 23. `23-PRESCRICAO-PRIVADA-MESOCICLO-E-TANITA-3-FOTOS.md` — destinatários técnicos no modo atleta, calendário/mesociclo privado, Tanita padronizada em três imagens e galeria sem legenda obrigatória.
 24. `24-MODOS-SEPARADOS-MOBILE-E-OCR-TANITA-CALIBRADO.md` — separação integral entre gestão e atleta, correção do modal Android, OCR posicional calibrado nas três telas reais e pesquisa de exportação Tanita.
 25. `25-AVALIACAO-TETRAPOLAR-PREMIUM-PDF-E-IDENTIDADE.md` — mapa corporal segmentado, evolução, PDF completo em três páginas, logo transparente e favicon oficial.
+26. `26-HANDOFF-IMEDIATO-ANATOMIA-OCR-TREINOS-E-MARCA.md` — backlog prioritário ainda não implementado, com correções anatômicas, segurança do OCR, gestão de treinos, logo original e âncora do treinador.
 
 ## Fontes complementares no repositório
 

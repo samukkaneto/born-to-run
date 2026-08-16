@@ -2,7 +2,7 @@
 
 ## Instrução de uso
 
-Este documento foi escrito para uma instância isolada do Fable 5, executada dentro da plataforma Abacus AI, que não conhece nenhuma conversa anterior. Leia este arquivo antes de propor ou alterar qualquer tela. Em seguida leia `00`, `02`, `03`, `05`, `07` e `16` desta pasta.
+Este documento foi escrito para uma IA isolada que não conhece nenhuma conversa anterior. Leia este arquivo antes de propor ou alterar qualquer tela. Em seguida leia `00`, `02`, `03`, `05`, `07` e `26` desta pasta. O documento `26` contém a fila imediata ainda não implementada e prevalece sobre aprovações visuais presumidas em relatórios históricos.
 
 ## O que é a Born to Run
 
@@ -41,6 +41,8 @@ Estados de acesso: `pending`, `active`, `suspended`, `rejected`. Papel e status 
 Aplicação Next.js 16.3, React, TypeScript, Tailwind e Supabase, hospedada na Vercel. O domínio oficial é `equipeborntorun.com`. Auth, SMTP Resend, e-mail profissional, RLS, Storage e CI/CD já existem. O repositório oficial é `samukkaneto/born-to-run`.
 
 Checkpoint publicado em 15/08/2026: PR `#34`, merge `6a38acc`, CI da `main` `31894361903` e Vercel `dpl_DoAT7djHUS9JgJSBDZUP5Ew477ZS` `READY`. Os modos continuam separados e o OCR continua calibrado. A versão atual acrescenta a **Avaliação Tetrapolar Segmentada** premium com mapa corporal, equilíbrio bilateral, evolução, PDF completo em três páginas, logo transparente e favicon oficial. As fontes permanecem autocontidas. Não houve alteração de Supabase nem da loja neste bloco.
+
+Handoff de 16/08/2026: o estado acima está publicado, mas não está integralmente aprovado. O proprietário rejeitou a silhueta geométrica, a anatomia diferente no PDF e as letras de `logo-on-light.png`; também relatou um valor segmentar incorreto. Exigiu anatomia científica original, revisão manual segura do OCR, pesquisa de exportação Tanita, gestão de treinos filtrável sem nível redundante, logo PNG original e âncora direta para Robson. Nada disso foi implementado ainda. Ler `26-HANDOFF-IMEDIATO-ANATOMIA-OCR-TREINOS-E-MARCA.md`.
 
 A versão atual é uma PWA instalável pelo navegador. Ela pode aparecer como aplicativo no Android, funcionar em tela própria e ter ícone, mas não é um APK nativo. O aplicativo Android profissional será outra fase, após o piloto e a estabilização das regras de negócio. Não fingir que um APK já existe.
 
@@ -83,7 +85,7 @@ O equipamento Tanita gera PDF ou imagem visualmente fraca, com termos em inglês
 6. comparar avaliações ao longo do tempo sem emitir diagnóstico médico automático;
 7. permitir impressão/PDF bonito.
 
-O fluxo atual já exige as três imagens reais na ordem Resumo/Faixas/Segmentos. O parser foi calibrado pelas posições fixas do Healthy Edge Lite: a amostra privada recuperou os 14 indicadores gerais preenchidos e 10/10 segmentos; frequência cardíaca vazia permaneceu vazia. O app apresenta corpo humano por região e seis tendências; o PDF apresenta 15 indicadores gerais, 10 leituras segmentares e histórico em três páginas A4. Continuar exigindo conferência humana e nunca emitir diagnóstico automático. Ler os documentos `24` e `25` antes de alterar OCR, modal, avaliação ou PDF.
+O fluxo atual já exige as três imagens reais na ordem Resumo/Faixas/Segmentos. O parser foi calibrado pelas posições fixas do Healthy Edge Lite: a amostra privada recuperou os 14 indicadores gerais preenchidos e 10/10 segmentos; frequência cardíaca vazia permaneceu vazia. O app apresenta corpo humano por região e seis tendências; o PDF apresenta 15 indicadores gerais, 10 leituras segmentares e histórico em três páginas A4. Entretanto, um segmento incorreto foi percebido depois e a anatomia atual foi rejeitada. Continuar exigindo conferência humana, permitir correção explícita e nunca emitir diagnóstico automático. Ler os documentos `24`, `25` e `26` antes de alterar OCR, modal, avaliação ou PDF.
 
 ## Loja
 
@@ -97,13 +99,13 @@ Liberdade visual não permite mudar fatos, inventar atletas/premiações, remove
 
 ## Próximas fases, em ordem racional
 
-1. validar no Android real a avaliação calibrada e o PDF premium descritos nos documentos `24` e `25`;
-2. piloto com as contas de administrador e treinador já ativas e novos atletas reais;
-3. validar o OCR em novas amostras do mesmo padrão e acrescentar importador CSV somente se o software Tanita realmente exportar um arquivo utilizável;
-4. redesign completo pelo Fable 5 preservando contratos e o significado das cores de treino;
+1. executar o handoff imediato do documento `26`, começando pela segurança da revisão dos dados;
+2. validar no Android real a avaliação corrigida e o PDF com a mesma anatomia aprovada;
+3. reorganizar a gestão de treinos por atleta/mesociclo e remover o nível redundante com migration compatível;
+4. executar piloto com as contas de administrador e treinador já ativas e novos atletas reais;
 5. transformar gestão de textos/fotos institucionais em CMS mais amplo para dar autonomia ao proprietário;
 6. aplicativo Android nativo e distribuição;
-7. loja transacional;
+7. loja transacional, somente quando o proprietário retirar a pausa;
 8. avaliar APIs oficiais Garmin/Strava com consentimento e conformidade.
 
 ## Atualização indispensável de 11/08/2026
@@ -113,3 +115,7 @@ Robson já é `coach/active`; não orientar novo cadastro técnico. Administrado
 ## Atualização indispensável de 15/08/2026
 
 Não confundir poder técnico com identidade esportiva. Samuel e Robson não usam menus híbridos: `/admin/*` é gestão, `/dashboard/*` é aluno/atleta e o seletor de modo é a única ponte. O modal Tanita móvel usa `100dvh` e rolagem interna. O OCR é calibrado para as três telas 16:9 do Healthy Edge Lite; qualquer redesign do Fable 5 deve preservar os campos, a ordem Foto 1/2/3, a revisão humana e a privacidade.
+
+## Atualização indispensável de 16/08/2026
+
+Não usar o boneco geométrico nem `logo-on-light.png` como referência aprovada. O próximo executor deve seguir o documento `26`: mesma anatomia científica no app/PDF, gordura e músculo rotulados, variações homem/mulher e biotipo, dados segmentares revisáveis, pesquisa de exportação Tanita, filtros de treinos por atleta/mesociclo e remoção apenas do nível de treino. Administrador conserva todas as ferramentas do treinador para QA. Loja permanece pausada.

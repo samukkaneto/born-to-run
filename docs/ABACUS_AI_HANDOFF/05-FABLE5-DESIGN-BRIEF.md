@@ -1,5 +1,7 @@
 # Fable 5 — direção visual e limites técnicos
 
+> Atualização 16/08/2026: este briefing vale para qualquer IA de design/implementação, não apenas Fable 5. A próxima execução deve seguir primeiro o documento `26`. A silhueta geométrica atual da avaliação e `logo-on-light.png` foram rejeitados; não devem ser refinados ou tratados como aprovados.
+
 ## Relação Abacus AI × Fable 5
 
 Abacus AI é a plataforma onde o proprietário executará o trabalho. Fable 5 é o modelo escolhido dentro da plataforma, possivelmente em um supercomputador isolado e sem histórico. Por isso, esse modelo deve receber também o arquivo `15-CONTEXTO-COMPLETO-PARA-IA-SEM-HISTORICO.md`.
@@ -25,6 +27,10 @@ Direção desejada:
 As cores dos cards de treino possuem significado definido pelo Prof. Robson e não podem ser trocadas apenas por preferência estética: azul-claro = descanso; amarelo = ritmo contínuo; roxo = intervalado rápido; verde = leve a moderado; mostarda = potência aeróbia; vermelho = competição. A Fable 5 pode melhorar tipografia, hierarquia, ícones, motion e contraste, preservando essa associação.
 
 Na loja, preto/carbono continua sendo base premium, com cores esportivas como apoio. Aplicações claras usam a versão completa de letras escuras; peças escuras usam a versão completa de letras claras. Nome, slogan e corredores nunca podem desaparecer do logotipo.
+
+Correção obrigatória para login/cadastro: o proprietário determinou que `public/logo.png` é a referência canônica e rejeitou letras reconstruídas/adaptadas. Antes de qualquer troca, confirmar visualmente o PNG original; adaptar o fundo para contraste sem modificar os pixels, proporção, tipografia ou transparência do logo.
+
+Na avaliação, substituir integralmente a silhueta geométrica por uma família anatômica original de padrão científico, com versões masculina/feminina e biotipos controlados. Aplicativo e PDF devem reutilizar os mesmos arquivos mestres. As legendas `GORDURA` e `MÚSCULO` precisam aparecer completas e consistentes.
 
 ## Contratos que o design não pode remover
 

@@ -2,6 +2,8 @@
 
 Atualizado em 15/08/2026. Este documento registra o bloco visual executado depois que a calibração do OCR Tanita foi aprovada pelo proprietário.
 
+> **Correção posterior de 16/08/2026:** este documento preserva o histórico do que foi publicado, mas a silhueta geométrica do mapa corporal e a variante `logo-on-light.png` foram rejeitadas pelo proprietário. Também foi relatado um valor segmentar incorreto que precisa ser reproduzido. Não usar esses pontos como referência aprovada. O backlog substitutivo e os critérios de aceite estão em `26-HANDOFF-IMEDIATO-ANATOMIA-OCR-TREINOS-E-MARCA.md`.
+
 ## Decisões obrigatórias do produto
 
 - o nome oficial da tela e do documento é **Avaliação Tetrapolar Segmentada**;

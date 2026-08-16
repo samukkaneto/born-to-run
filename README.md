@@ -4,6 +4,7 @@ Site institucional e aplicativo privado da equipe Born to Run, de Descalvado–S
 
 ## Leia primeiro
 
+- `docs/ABACUS_AI_HANDOFF/26-HANDOFF-IMEDIATO-ANATOMIA-OCR-TREINOS-E-MARCA.md` — próxima execução ainda não implementada e critérios de aceite.
 - `README-FABLE5.md` — visão do produto e direção visual para Abacus/Fable.
 - `CURRENT_IMPLEMENTATION_STATUS.md` — estado técnico e pendências reais.
 - `SUPABASE_OPERATIONS.md` — migrations, recuperação de admin, advisors e smoke test.
