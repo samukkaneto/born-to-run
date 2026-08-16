@@ -37,17 +37,33 @@ export type TanitaExtraction = {
 
 const NUMBER = '(\\d{1,4}(?:[.,]\\d{1,2})?)'
 
-function segmentPatterns(englishRegion: string, portugueseRegion: string, unit: '%' | 'kg') {
-  const englishMetric = unit === '%'
-    ? `(?:Body\\s*)?Fat[^0-9]{0,18}${NUMBER}\\s*%`
-    : `Muscle\\s*Mass[^0-9]{0,18}${NUMBER}\\s*kg`
-  const portugueseMetric = unit === '%'
-    ? `Gordura[^0-9]{0,18}${NUMBER}\\s*%`
-    : `Massa\\s*muscular[^0-9]{0,18}${NUMBER}\\s*kg`
-  return [
-    new RegExp(`\\b${englishRegion}.{0,90}?${englishMetric}`, 'i'),
-    new RegExp(`\\b${portugueseRegion}.{0,90}?${portugueseMetric}`, 'i'),
-  ]
+const SEGMENTAL_DATA_HEADER = /Segmental\s*Data|Dados\s*segmentares/i
+
+function extractSegmentalBlock(rawText: string) {
+  // Bloco Segmental Data do Healthy Edge Lite (BC-1500): a partir do cabeçalho,
+  // os valores aparecem em ordem fixa — gordura (braço E, braço D, tronco,
+  // perna E, perna D) e depois músculo na mesma ordem — sem o nome do membro
+  // na linha do valor, apenas "Left" / "Right" no cabeçalho da tabela.
+  const index = rawText.search(SEGMENTAL_DATA_HEADER)
+  if (index === -1) return null
+  const block = rawText.slice(index)
+  const fatValues = [
+    ...block.matchAll(new RegExp('\\bFat\\s+' + NUMBER + '\\s*%', 'gi')),
+  ].map((match) => match[1])
+  const muscleValues = [
+    ...block.matchAll(new RegExp('\\bMuscle\\s*Mass\\s+' + NUMBER + '\\s*kg', 'gi')),
+  ].map((match) => match[1])
+  const order = ['left_arm', 'right_arm', 'trunk', 'left_leg', 'right_leg'] as const
+  const result: Partial<Record<string, number>> = {}
+  for (const [position, value] of fatValues.slice(0, 5).entries()) {
+    const parsedFat = parseNumber(value)
+    if (parsedFat !== null) result[`segment_${order[position]}_fat_pct`] = parsedFat
+  }
+  for (const [position, value] of muscleValues.slice(0, 5).entries()) {
+    const parsedMuscle = parseNumber(value)
+    if (parsedMuscle !== null) result[`segment_${order[position]}_muscle_kg`] = parsedMuscle
+  }
+  return result
 }
 
 const PATTERNS: Record<TanitaMeasurementKey, RegExp[]> = {
@@ -113,16 +129,18 @@ const PATTERNS: Record<TanitaMeasurementKey, RegExp[]> = {
     new RegExp(`\\bHeart\\s*Rate[^0-9]{0,18}${NUMBER}\\s*(?:bpm)?`, 'i'),
     new RegExp(`\\bFrequ[eê]ncia\\s*card[ií]aca[^0-9]{0,18}${NUMBER}`, 'i'),
   ],
-  segment_left_arm_fat_pct: segmentPatterns('Left Arm', 'Bra[cç]o esquerdo', '%'),
-  segment_right_arm_fat_pct: segmentPatterns('Right Arm', 'Bra[cç]o direito', '%'),
-  segment_trunk_fat_pct: segmentPatterns('Trunk', 'Tronco', '%'),
-  segment_left_leg_fat_pct: segmentPatterns('Left Leg', 'Perna esquerda', '%'),
-  segment_right_leg_fat_pct: segmentPatterns('Right Leg', 'Perna direita', '%'),
-  segment_left_arm_muscle_kg: segmentPatterns('Left Arm', 'Bra[cç]o esquerdo', 'kg'),
-  segment_right_arm_muscle_kg: segmentPatterns('Right Arm', 'Bra[cç]o direito', 'kg'),
-  segment_trunk_muscle_kg: segmentPatterns('Trunk', 'Tronco', 'kg'),
-  segment_left_leg_muscle_kg: segmentPatterns('Left Leg', 'Perna esquerda', 'kg'),
-  segment_right_leg_muscle_kg: segmentPatterns('Right Leg', 'Perna direita', 'kg'),
+  // Dados segmentares são extraídos exclusivamente pelo bloco
+  // extractSegmentalBlock (ordem fixa da tabela Segmental Data).
+  segment_left_arm_fat_pct: [],
+  segment_right_arm_fat_pct: [],
+  segment_trunk_fat_pct: [],
+  segment_left_leg_fat_pct: [],
+  segment_right_leg_fat_pct: [],
+  segment_left_arm_muscle_kg: [],
+  segment_right_arm_muscle_kg: [],
+  segment_trunk_muscle_kg: [],
+  segment_left_leg_muscle_kg: [],
+  segment_right_leg_muscle_kg: [],
 }
 
 const LIMITS: Record<TanitaMeasurementKey, [number, number]> = {
@@ -209,8 +227,46 @@ export function parseTanitaOcrText(rawText: string): TanitaExtraction {
     if (value !== null) measurements[key] = value
   }
 
+  // Dados segmentares do bloco Healthy Edge Lite têm precedência quando o
+  // cabeçalho "Segmental Data" existe: os valores vêm em ordem fixa,
+  // sem o nome do membro na linha do valor (Left/Right apenas no cabeçalho).
+  const segmentalBlock = extractSegmentalBlock(rawText)
+  if (segmentalBlock) {
+    for (const entry of Object.entries(segmentalBlock)) {
+      const key = entry[0] as TanitaMeasurementKey
+      const value = entry[1]
+      if (typeof value === 'number') {
+        const [minimum, maximum] = LIMITS[key]
+        if (value >= minimum && value <= maximum) measurements[key] = value
+      }
+    }
+  }
+
   const detectedCount = Object.keys(measurements).length
   const warnings: string[] = []
+
+  // ── Sanidade segmentar: a soma dos músculos dos 5 segmentos deve bater
+  //    com a massa muscular geral (margem de 2.5 kg por medição).
+  const segmentMuscleKeys: TanitaMeasurementKey[] = [
+    'segment_left_arm_muscle_kg',
+    'segment_right_arm_muscle_kg',
+    'segment_trunk_muscle_kg',
+    'segment_left_leg_muscle_kg',
+    'segment_right_leg_muscle_kg',
+  ]
+  const segmentMuscleSum = segmentMuscleKeys.reduce(
+    (total, key) => total + Number(measurements[key] ?? 0),
+    0,
+  )
+  const totalSegmentMuscle = Object.keys(measurements).filter((key) => segmentMuscleKeys.includes(key as TanitaMeasurementKey)).length
+  if (totalSegmentMuscle === 5 && measurements.muscle_mass_kg !== undefined) {
+    const delta = Math.abs(segmentMuscleSum - measurements.muscle_mass_kg)
+    if (delta > 2.5) {
+      warnings.push(
+        `A soma dos músculos segmentares (${segmentMuscleSum.toFixed(1)} kg) diverge da massa muscular geral (${measurements.muscle_mass_kg} kg). Confira o bloco “Segmental Data” do relatório.`,
+      )
+    }
+  }
   if (detectedCount === 0) {
     warnings.push('Nenhuma medida foi reconhecida. Verifique a nitidez do arquivo ou preencha os campos manualmente.')
   } else if (detectedCount < 5) {
