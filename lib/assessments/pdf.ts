@@ -313,7 +313,7 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
   drawSegmentCallout(405, 462, 'Perna direita', data.segment_right_leg_fat_pct, data.segment_right_leg_muscle_kg, 'right', [310, 527])
   // Card TRONCO na faixa livre entre o quadro segmental (y=280) e a figura (y=430).
   pageTwo.drawRectangle({ x: 218, y: 330, width: 160, height: 52, color: offWhite, borderColor: border, borderWidth: 0.8 })
-  pageTwo.drawLine({ start: { x: 298, y: 378 }, end: markerTrunk, thickness: 0.8, color: muted })
+  pageTwo.drawLine({ start: { x: 298, y: 378 }, end: { x: markerTrunk[0], y: markerTrunk[1] }, thickness: 0.8, color: muted })
   pageTwo.drawText('TRONCO', { x: 230, y: 361, size: 7.5, font: bold, color: softRed })
   pageTwo.drawText(measurement(data.segment_trunk_fat_pct, '%'), { x: 230, y: 340, size: 13, font: bold, color: softRed })
   pageTwo.drawText('gordura', { x: 270, y: 342, size: 6.5, font: regular, color: muted })
