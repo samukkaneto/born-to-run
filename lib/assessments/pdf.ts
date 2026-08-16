@@ -44,6 +44,8 @@ export type AssessmentPdfData = Pick<
   | 'segment_right_leg_fat_pct'
   | 'segment_right_leg_muscle_kg'
   | 'notes'
+  | 'sex'
+  | 'biotype'
 > & {
   athleteName: string
   avatarUrl?: string | null
@@ -264,38 +266,58 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
   drawHeader(pageTwo, 'COMPOSIÇÃO CORPORAL', 'MAPA SEGMENTADO', 2)
   pageTwo.drawText('LEITURA POR REGIÃO', { x: 32, y: 678, size: 9, font: bold, color: red })
   pageTwo.drawText('Gordura corporal e massa muscular em braços, tronco e pernas.', { x: 32, y: 662, size: 9, font: regular, color: stone })
+
+  // Figura anatômica oficial (mesma família usada no aplicativo).
+  const anatomySex: 'male' | 'female' = data.sex === 'female' ? 'female' : 'male'
+  const anatomyBiotype: 'lean' | 'mid' | 'large' = data.biotype === 'lean' || data.biotype === 'large' ? data.biotype : 'mid'
+  const anatomyPath = `/brand/anatomy-${anatomySex}-${anatomyBiotype}.png`
   const bodyCenterX = 298
-  pageTwo.drawCircle({ x: bodyCenterX, y: 622, size: 19, color: border })
-  pageTwo.drawRectangle({ x: bodyCenterX - 27, y: 492, width: 54, height: 111, color: border, borderColor: muted, borderWidth: 1 })
-  pageTwo.drawLine({ start: { x: bodyCenterX - 23, y: 585 }, end: { x: bodyCenterX - 72, y: 510 }, thickness: 19, color: border })
-  pageTwo.drawLine({ start: { x: bodyCenterX + 23, y: 585 }, end: { x: bodyCenterX + 72, y: 510 }, thickness: 19, color: border })
-  pageTwo.drawLine({ start: { x: bodyCenterX - 14, y: 497 }, end: { x: bodyCenterX - 30, y: 397 }, thickness: 24, color: border })
-  pageTwo.drawLine({ start: { x: bodyCenterX + 14, y: 497 }, end: { x: bodyCenterX + 30, y: 397 }, thickness: 24, color: border })
-  ;[[bodyCenterX - 51, 542], [bodyCenterX + 51, 542], [bodyCenterX, 550], [bodyCenterX - 25, 447], [bodyCenterX + 25, 447]].forEach(([x, y], index) => {
+  let anatomyImage: PDFImage | null = null
+  try {
+    anatomyImage = await document.embedPng(await fetchBytes(anatomyPath))
+  } catch {
+    anatomyImage = null
+  }
+  const figureWidth = 170
+  const figureHeight = 255
+  const figureX = bodyCenterX - figureWidth / 2
+  const figureTop = 430
+  if (anatomyImage) pageTwo.drawImage(anatomyImage, { x: figureX, y: figureTop, width: figureWidth, height: figureHeight })
+  // Marcadores calibrados sobre a silhueta real da ilustração (braços afastados, figura centralizada).
+  const markerTrunk: [number, number] = [298, 578]
+  const markerPositions: Array<[number, number]> = [
+    [269, 609], // braço esquerdo
+    [327, 609], // braço direito
+    markerTrunk, // tronco
+    [286, 527], // perna esquerda
+    [310, 527], // perna direita
+  ]
+  markerPositions.forEach(([x, y], index) => {
     pageTwo.drawCircle({ x, y, size: index === 2 ? 11 : 9, color: carbon })
     pageTwo.drawCircle({ x, y, size: index === 2 ? 7 : 6, borderColor: green, borderWidth: 2, color: red })
   })
 
-  function drawSegmentCallout(x: number, y: number, label: string, fat: number | null, muscle: number | null, side: 'left' | 'right') {
+  function drawSegmentCallout(x: number, y: number, label: string, fat: number | null, muscle: number | null, side: 'left' | 'right', target: [number, number]) {
     pageTwo.drawRectangle({ x, y, width: 158, height: 58, color: offWhite, borderColor: border, borderWidth: 0.8 })
     pageTwo.drawText(safePdfText(label).toUpperCase(), { x: x + 12, y: y + 40, size: 7.5, font: bold, color: carbon })
     pageTwo.drawText(measurement(fat, '%'), { x: x + 12, y: y + 16, size: 13, font: bold, color: red })
     pageTwo.drawText('gordura', { x: x + 52, y: y + 18, size: 7, font: regular, color: muted })
     pageTwo.drawText(measurement(muscle, ' kg'), { x: x + 92, y: y + 16, size: 11, font: bold, color: green })
     const lineStart = side === 'left' ? x + 158 : x
-    const lineEnd = side === 'left' ? bodyCenterX - 66 : bodyCenterX + 66
-    pageTwo.drawLine({ start: { x: lineStart, y: y + 29 }, end: { x: lineEnd, y: y + 29 }, thickness: 0.8, color: muted })
+    pageTwo.drawLine({ start: { x: lineStart, y: y + 29 }, end: { x: target[0], y: target[1] }, thickness: 0.8, color: muted })
   }
 
-  drawSegmentCallout(32, 545, 'Braço esquerdo', data.segment_left_arm_fat_pct, data.segment_left_arm_muscle_kg, 'left')
-  drawSegmentCallout(405, 545, 'Braço direito', data.segment_right_arm_fat_pct, data.segment_right_arm_muscle_kg, 'right')
-  drawSegmentCallout(32, 423, 'Perna esquerda', data.segment_left_leg_fat_pct, data.segment_left_leg_muscle_kg, 'left')
-  drawSegmentCallout(405, 423, 'Perna direita', data.segment_right_leg_fat_pct, data.segment_right_leg_muscle_kg, 'right')
-  pageTwo.drawRectangle({ x: 218, y: 346, width: 160, height: 55, color: carbon })
-  pageTwo.drawText('TRONCO', { x: 230, y: 382, size: 7.5, font: bold, color: softRed })
-  pageTwo.drawText(measurement(data.segment_trunk_fat_pct, '%'), { x: 230, y: 360, size: 14, font: bold, color: softRed })
-  pageTwo.drawText(measurement(data.segment_trunk_muscle_kg, ' kg'), { x: 302, y: 360, size: 12, font: bold, color: softGreen })
-
+  drawSegmentCallout(32, 590, 'Braço esquerdo', data.segment_left_arm_fat_pct, data.segment_left_arm_muscle_kg, 'left', [269, 609])
+  drawSegmentCallout(405, 590, 'Braço direito', data.segment_right_arm_fat_pct, data.segment_right_arm_muscle_kg, 'right', [327, 609])
+  drawSegmentCallout(32, 462, 'Perna esquerda', data.segment_left_leg_fat_pct, data.segment_left_leg_muscle_kg, 'left', [286, 527])
+  drawSegmentCallout(405, 462, 'Perna direita', data.segment_right_leg_fat_pct, data.segment_right_leg_muscle_kg, 'right', [310, 527])
+  // Card TRONCO na faixa livre entre o quadro segmental (y=280) e a figura (y=430).
+  pageTwo.drawRectangle({ x: 218, y: 330, width: 160, height: 52, color: offWhite, borderColor: border, borderWidth: 0.8 })
+  pageTwo.drawLine({ start: { x: 298, y: 378 }, end: { x: markerTrunk[0], y: markerTrunk[1] }, thickness: 0.8, color: muted })
+  pageTwo.drawText('TRONCO', { x: 230, y: 361, size: 7.5, font: bold, color: softRed })
+  pageTwo.drawText(measurement(data.segment_trunk_fat_pct, '%'), { x: 230, y: 340, size: 13, font: bold, color: softRed })
+  pageTwo.drawText('gordura', { x: 270, y: 342, size: 6.5, font: regular, color: muted })
+  pageTwo.drawText(measurement(data.segment_trunk_muscle_kg, ' kg'), { x: 312, y: 340, size: 11, font: bold, color: softGreen })
   pageTwo.drawText('QUADRO SEGMENTAL COMPLETO', { x: 32, y: 316, size: 9, font: bold, color: red })
   pageTwo.drawRectangle({ x: 32, y: 280, width: 531, height: 25, color: carbon })
   ;[['REGIÃO', 44], ['GORDURA', 286], ['MÚSCULO', 394], ['EQUILÍBRIO', 485]].forEach(([label, x]) => pageTwo.drawText(label as string, { x: x as number, y: 289, size: 7.2, font: bold, color: white }))

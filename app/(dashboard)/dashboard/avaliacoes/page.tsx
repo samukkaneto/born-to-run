@@ -45,7 +45,7 @@ export default async function AvaliacoesPage() {
   const [assessmentsResult, profileResult] = await Promise.all([
     supabase
       .from('body_assessments')
-      .select('*, body_assessment_files (*)')
+      .select('*, sex, biotype, body_assessment_files (*)')
       .eq('athlete_user_id', user.id)
       .order('assessed_at', { ascending: false }),
     supabase
@@ -172,6 +172,8 @@ export default async function AvaliacoesPage() {
                 segment_right_leg_fat_pct: latest.segment_right_leg_fat_pct,
                 segment_right_leg_muscle_kg: latest.segment_right_leg_muscle_kg,
                 notes: latest.notes,
+                sex: latest.sex,
+                biotype: latest.biotype,
                 history: assessments.map((assessment) => ({
                   assessed_at: assessment.assessed_at,
                   weight_kg: assessment.weight_kg,

@@ -1,10 +1,10 @@
 # Handoff imediato: anatomia, OCR, treinos e marca
 
-Atualizado em 16/08/2026. Este é o documento operacional prioritário para qualquer IA que assumir o projeto depois da revisão `9aafa8f` da `main`.
+Atualizado em 16/08/2026. Este é o documento operacional prioritário para qualquer IA que assumir o projeto.
 
 ## Instrução principal
 
-As tarefas deste documento **ainda não foram implementadas**. O proprietário pediu que fossem registradas para execução posterior pelo Codex ou por outra IA. Não confundir o release publicado descrito no documento `25` com aprovação visual definitiva.
+Blocos **A (OCR)**, **C (anatomia)** e **E (logo/âncora)** já foram **concluídos e mesclados na `main`** (ver seções de status abaixo). Os blocos pendentes são **B (exportação Tanita)** e **D (gerenciamento de treinos)**. Não confundir o release publicado descrito no documento `25` com aprovação visual definitiva.
 
 A próxima IA deve primeiro ler, nesta ordem:
 
@@ -27,7 +27,15 @@ A próxima IA deve primeiro ler, nesta ordem:
 - Toda alteração concluída deve atualizar os relatórios e ser enviada ao GitHub.
 - A loja continua pausada. Não gastar tempo ou créditos com catálogo ou mockups neste bloco.
 
-## Correções posteriores ao release 25
+## Status dos blocos (16/08/2026)
+
+- **Bloco A (OCR Tanita): concluído.** PR #38 mesclado: extração determinística de blocos, correção dos segmentos braço/perna (`undefined` no layout Healthy Edge Lite), orientação esquerda/direita pela pessoa avaliada e sanity check de soma de massa muscular. Ground truth em `OCR_TANITA_GROUND_TRUTH.md` (fora do Git).
+- **Bloco C (anatomia): concluído.** Família própria de 6 masters transparentes 1536×2304 em `public/brand/anatomy-{male,female}-{lean,mid,large}.png` (geração própria a partir de referências do proprietário, sem copiar terceiros). Colunas `sex`/`biotype` adicionadas a `body_assessments` (migration `20260816200000_body_assessments_physique_type.sql`), RPC `staff_save_body_assessment_v5` (`20260816200100_staff_save_body_assessment_v5.sql`), helper `lib/assessments/anatomy-assets.ts`. O app (`SegmentedBodyMap.tsx`) e o PDF (`lib/assessments/pdf.ts`) usam o **mesmo ativo** por variante. Seletores explícitos de sexo/biotipo no app e no modal de edição; nenhum rótulo de gordura/músculo fica dentro do PNG (componentes React, vermelho/verde). Marcadores calibrados sobre a arte real. Apropriado visualmente pelo proprietário (amostra masculina intermediária aprovada antes da família).
+- **Bloco E (logo/âncora): concluído.** PR #37 mesclado: `logo-on-light.png` substituído por `logo-com-contorno.png` nos layouts de autenticação, âncora `#treinador` na `/sobre` com `scroll-margin` e CTA da home apontando para `/sobre#treinador`.
+- **Bloco B: pendente** (não iniciar importador antes de confirmar software/equipamento no computador de medição).
+- **Bloco D: pendente** (WorkoutsManager com filtros por atleta/mesociclo e remoção do campo `level`).
+
+## Correções posteriores ao release 25 (arquivo original)
 
 O release `6a38acc` entregou mapa segmentado, PDF e identidade, mas o proprietário rejeitou pontos visuais e de precisão depois de testar:
 

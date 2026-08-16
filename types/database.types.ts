@@ -87,6 +87,7 @@ export type Database = {
           assessed_by: string
           athlete_user_id: string
           basal_metabolic_rate: number | null
+          biotype: string | null
           bmi: number | null
           body_fat_category: string | null
           body_fat_pct: number | null
@@ -113,6 +114,7 @@ export type Database = {
           segment_right_leg_muscle_kg: number | null
           segment_trunk_fat_pct: number | null
           segment_trunk_muscle_kg: number | null
+          sex: string | null
           source_mime_type: string | null
           source_path: string | null
           updated_at: string
@@ -124,6 +126,7 @@ export type Database = {
           assessed_by: string
           athlete_user_id: string
           basal_metabolic_rate?: number | null
+          biotype?: string | null
           bmi?: number | null
           body_fat_category?: string | null
           body_fat_pct?: number | null
@@ -150,6 +153,7 @@ export type Database = {
           segment_right_leg_muscle_kg?: number | null
           segment_trunk_fat_pct?: number | null
           segment_trunk_muscle_kg?: number | null
+          sex?: string | null
           source_mime_type?: string | null
           source_path?: string | null
           updated_at?: string
@@ -161,6 +165,7 @@ export type Database = {
           assessed_by?: string
           athlete_user_id?: string
           basal_metabolic_rate?: number | null
+          biotype?: string | null
           bmi?: number | null
           body_fat_category?: string | null
           body_fat_pct?: number | null
@@ -188,6 +193,7 @@ export type Database = {
           segment_trunk_fat_pct?: number | null
           segment_trunk_muscle_kg?: number | null
           source_mime_type?: string | null
+          sex?: string | null
           source_path?: string | null
           updated_at?: string
           visceral_fat_level?: number | null
@@ -1021,6 +1027,20 @@ export type Database = {
           target_athlete_user_id: string
           target_measurements: Json
           target_notes: string
+          target_source_mime_types: string[]
+          target_source_paths: string[]
+        }
+        Returns: string
+      }
+      staff_save_body_assessment_v5: {
+        Args: {
+          target_assessed_at: string
+          target_assessment_id: string
+          target_athlete_user_id: string
+          target_biotype: string
+          target_measurements: Json
+          target_notes: string
+          target_sex: string
           target_source_mime_types: string[]
           target_source_paths: string[]
         }

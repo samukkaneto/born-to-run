@@ -569,7 +569,15 @@ export async function saveBodyAssessment(
     }
   }
 
-  const { data, error } = await supabase.rpc('staff_save_body_assessment_v4', {
+  const submittedSex = String(formData.get('sex') ?? '').trim()
+  const submittedBiotype = String(formData.get('biotype') ?? '').trim()
+  if (submittedSex && !['male', 'female'].includes(submittedSex)) {
+    return { error: 'Selecione a variante ilustrada masculina ou feminina.' }
+  }
+  if (submittedBiotype && !['lean', 'mid', 'large'].includes(submittedBiotype)) {
+    return { error: 'Selecione o biotipo ilustrado (leve, intermediário ou maior volume).' }
+  }
+  const { data, error } = await supabase.rpc('staff_save_body_assessment_v5', {
     target_assessment_id: assessmentId as string,
     target_athlete_user_id: athleteUserId,
     target_assessed_at: assessedAt,
@@ -577,6 +585,8 @@ export async function saveBodyAssessment(
     target_source_paths: uploadedPaths,
     target_source_mime_types: uploadedMimes,
     target_notes: notes,
+    target_sex: submittedSex || ('' as string),
+    target_biotype: submittedBiotype || ('' as string),
   })
 
   if (error || !data) {
