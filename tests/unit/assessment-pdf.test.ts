@@ -1,6 +1,30 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { PDFDocument } from 'pdf-lib'
 import { buildAssessmentPdf } from '@/lib/assessments/pdf'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const repositoryRoot = join(fileURLToPath(import.meta.url), '..', '..', '..')
+
+const anatomyPng = {
+  male: readFileSync(join(repositoryRoot, 'public/brand/anatomy-male-mid.png')),
+  female: readFileSync(join(repositoryRoot, 'public/brand/anatomy-female-mid.png')),
+}
+
+vi.stubGlobal(
+  'fetch',
+  vi.fn(async (url: string | URL) => {
+    const urlString = typeof url === 'string' ? url : url.toString()
+    if (urlString.startsWith('/brand/anatomy-male')) {
+      return new Response(anatomyPng.male, { status: 200, headers: { 'content-type': 'image/png' } })
+    }
+    if (urlString.startsWith('/brand/anatomy-female')) {
+      return new Response(anatomyPng.female, { status: 200, headers: { 'content-type': 'image/png' } })
+    }
+    return new Response('not found', { status: 404 })
+  }),
+)
 
 describe('PDF premium da avaliação', () => {
   it('gera três páginas A4 com resultados, segmentos e evolução', async () => {
@@ -34,6 +58,8 @@ describe('PDF premium da avaliação', () => {
       segment_right_leg_fat_pct: 33.6,
       segment_right_leg_muscle_kg: 6.3,
       notes: 'Documento técnico de teste.',
+      sex: 'male',
+      biotype: 'mid',
       history: [
         { assessed_at: '2026-06-21', weight_kg: 63.1, body_fat_pct: 36.4, muscle_mass_kg: 37.2, body_water_pct: 45.9, bmi: 25.3, visceral_fat_level: 9 },
         { assessed_at: '2026-07-21', weight_kg: 61.8, body_fat_pct: 35.7, muscle_mass_kg: 37.7, body_water_pct: 46.7, bmi: 24.8, visceral_fat_level: 8 },

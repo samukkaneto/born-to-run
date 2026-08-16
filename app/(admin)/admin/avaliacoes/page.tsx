@@ -12,7 +12,7 @@ export default async function AdminAvaliacoesPage() {
   if (!profile || !['admin', 'coach'].includes(profile.role)) redirect('/admin')
 
   const [assessmentsResult, athletesResult] = await Promise.all([
-    supabase.from('body_assessments').select('*, body_assessment_files (*)').order('assessed_at', { ascending: false }),
+    supabase.from('body_assessments').select('*, sex, biotype, body_assessment_files (*)').order('assessed_at', { ascending: false }),
     supabase
       .from('profiles')
       .select(MEMBER_PROFILE_COLUMNS)

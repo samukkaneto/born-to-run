@@ -155,12 +155,16 @@ export default function AssessmentManager({
   const [error, setError] = useState('')
   const [draft, setDraft] = useState<AssessmentDraft>(() => emptyDraft())
   const [ocrState, setOcrState] = useState<{ status: 'idle' | 'reading' | 'done' | 'error'; progress: number; message: string }>({ status: 'idle', progress: 0, message: '' })
+  const [illustrationSex, setIllustrationSex] = useState('')
+  const [illustrationBiotype, setIllustrationBiotype] = useState('')
   const editing = modal && modal !== 'create' ? modal : null
   const athleteNames = new Map(athletes.map((athlete) => [athlete.user_id, athlete.full_name]))
 
   function openCreate() {
     setError('')
     setDraft(emptyDraft())
+    setIllustrationSex('')
+    setIllustrationBiotype('')
     setOcrState({ status: 'idle', progress: 0, message: '' })
     setModal('create')
   }
@@ -168,6 +172,8 @@ export default function AssessmentManager({
   function openEdit(assessment: AssessmentView) {
     setError('')
     setDraft(draftFromAssessment(assessment))
+    setIllustrationSex(assessment.sex ?? '')
+    setIllustrationBiotype(assessment.biotype ?? '')
     setOcrState({ status: 'idle', progress: 0, message: '' })
     setModal(assessment)
   }
@@ -278,7 +284,11 @@ export default function AssessmentManager({
             {ocrState.status !== 'idle' && <div className={`mt-3 border px-3 py-2 text-xs ${ocrState.status === 'error' ? 'border-[#FECACA] bg-[#FEF2F2] text-[#B91C1C]' : 'border-[#BFDBFE] bg-white text-[#1E3A8A]'}`} role={ocrState.status === 'error' ? 'alert' : 'status'}><div className="flex items-start gap-2">{ocrState.status === 'reading' ? <LoaderCircle size={15} className="mt-0.5 animate-spin" /> : ocrState.status === 'done' ? <CheckCircle2 size={15} className="mt-0.5 text-[#15803D]" /> : <FileSearch size={15} className="mt-0.5" />}<span>{ocrState.message}</span></div>{ocrState.status === 'reading' && <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#DBEAFE]"><div className="h-full bg-[#2563EB]" style={{ width: `${Math.round(ocrState.progress * 100)}%` }} /></div>}</div>}
           </fieldset>
 
-          <div><label htmlFor="body-fat-category" className="mb-1.5 block font-condensed text-sm font-semibold uppercase text-[#44403C]">Faixa de gordura corporal</label><select id="body-fat-category" name="body_fat_category" value={draft.body_fat_category} onChange={(event) => updateDraft('body_fat_category', event.target.value)} className="input-base bg-white"><option value="">Não informada</option><option value="underfat">Abaixo da faixa</option><option value="healthy">Saudável</option><option value="overfat">Acima da faixa</option><option value="obese">Obesidade</option></select></div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div><label htmlFor="body-fat-category" className="mb-1.5 block font-condensed text-sm font-semibold uppercase text-[#44403C]">Faixa de gordura corporal</label><select id="body-fat-category" name="body_fat_category" value={draft.body_fat_category} onChange={(event) => updateDraft('body_fat_category', event.target.value)} className="input-base bg-white"><option value="">Não informada</option><option value="underfat">Abaixo da faixa</option><option value="healthy">Saudável</option><option value="overfat">Acima da faixa</option><option value="obese">Obesidade</option></select></div>
+            <div><label htmlFor="illustration-sex" className="mb-1.5 block font-condensed text-sm font-semibold uppercase text-[#44403C]">Ilustração · sexo</label><select id="illustration-sex" name="sex" value={illustrationSex} onChange={(event) => setIllustrationSex(event.target.value)} className="input-base bg-white"><option value="">Não informada</option><option value="male">Masculino</option><option value="female">Feminino</option></select><p className="mt-1 text-[11px] text-[#78716C]">Modelo anatômico exibido no mapa segmentado (app e PDF). Escolha explícita.</p></div>
+          </div>
+          <div><label htmlFor="illustration-biotype" className="mb-1.5 block font-condensed text-sm font-semibold uppercase text-[#44403C]">Ilustração · biotipo</label><select id="illustration-biotype" name="biotype" value={illustrationBiotype} onChange={(event) => setIllustrationBiotype(event.target.value)} className="input-base bg-white"><option value="">Não informada (aplica intermediário)</option><option value="lean">Leve</option><option value="mid">Intermediário</option><option value="large">Maior volume</option></select></div>
 
           {FIELD_GROUPS.map((group) => <fieldset key={group.title} className="border border-[#E5E1D8] p-4"><legend className="px-1 font-condensed text-sm font-semibold uppercase text-[#44403C]">{group.title}</legend><p className="mb-3 text-xs text-[#78716C]">{group.description}</p><div className="grid gap-4 sm:grid-cols-2">{group.fields.map((field) => <MeasurementInput key={field.id} {...field} value={draft[field.id]} onChange={updateDraft} />)}</div></fieldset>)}
 

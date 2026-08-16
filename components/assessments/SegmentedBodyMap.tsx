@@ -1,3 +1,9 @@
+'use client'
+
+import { useState } from 'react'
+import Image from 'next/image'
+import { createClient } from '@/lib/supabase/client'
+import { anatomyAssetPath, type AnatomyBiotype, type AnatomySex, BIOTYPE_LABELS, SEX_LABELS } from '@/lib/assessments/anatomy-assets'
 import type { BodyAssessment } from '@/types'
 
 function formatMetric(value: number | null, suffix: string) {
@@ -63,7 +69,42 @@ function BalanceReading({
   )
 }
 
+/** Marcadores sobre a ilustração. Percentuais do container (x horizontal,
+ *  y vertical), calibrados na família anatômica aprovada (fonte vista de
+ *  frente, braços levemente afastados). */
+const MARKERS: Array<{ id: string; region: 'braço esquerdo' | 'braço direito' | 'tronco' | 'perna esquerda' | 'perna direita'; x: number; y: number; dot: 'muscle' | 'fat' }> = [
+  { id: 'left-arm', region: 'braço esquerdo', x: 34, y: 30, dot: 'muscle' },
+  { id: 'right-arm', region: 'braço direito', x: 66, y: 30, dot: 'muscle' },
+  { id: 'trunk', region: 'tronco', x: 50, y: 42, dot: 'fat' },
+  { id: 'left-leg', region: 'perna esquerda', x: 43, y: 62, dot: 'muscle' },
+  { id: 'right-leg', region: 'perna direita', x: 57, y: 62, dot: 'muscle' },
+]
+
+/** Escolhe as leituras corretas por região. */
+function readingsFor(assessment: BodyAssessment) {
+  return {
+    'braço esquerdo': { fat: assessment.segment_left_arm_fat_pct, muscle: assessment.segment_left_arm_muscle_kg },
+    'braço direito': { fat: assessment.segment_right_arm_fat_pct, muscle: assessment.segment_right_arm_muscle_kg },
+    'tronco': { fat: assessment.segment_trunk_fat_pct, muscle: assessment.segment_trunk_muscle_kg },
+    'perna esquerda': { fat: assessment.segment_left_leg_fat_pct, muscle: assessment.segment_left_leg_muscle_kg },
+    'perna direita': { fat: assessment.segment_right_leg_fat_pct, muscle: assessment.segment_right_leg_muscle_kg },
+  }
+}
+
+function isSex(value: unknown): value is AnatomySex {
+  return value === 'male' || value === 'female'
+}
+
+function isBiotype(value: unknown): value is AnatomyBiotype {
+  return value === 'lean' || value === 'mid' || value === 'large'
+}
+
 export default function SegmentedBodyMap({ assessment }: { assessment: BodyAssessment }) {
+  const [sex, setSex] = useState<AnatomySex | null>(isSex(assessment.sex) ? assessment.sex : null)
+  const [biotype, setBiotype] = useState<AnatomyBiotype>(isBiotype(assessment.biotype) ? assessment.biotype : 'mid')
+  const [sexSelectionNote, setSexSelectionNote] = useState('')
+  const [saving, setSaving] = useState(false)
+
   const hasData = [
     assessment.segment_left_arm_fat_pct,
     assessment.segment_left_arm_muscle_kg,
@@ -77,6 +118,29 @@ export default function SegmentedBodyMap({ assessment }: { assessment: BodyAsses
     assessment.segment_right_leg_muscle_kg,
   ].some((metric) => metric !== null)
 
+  const readings = readingsFor(assessment)
+  const assetPath = anatomyAssetPath(sex, biotype)
+
+  async function persistIllustrationChoice(nextSex: AnatomySex | null, nextBiotype: AnatomyBiotype) {
+    if (saving) return
+    setSaving(true)
+    setSexSelectionNote('')
+    try {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('body_assessments')
+        .update({ sex: nextSex, biotype: nextBiotype })
+        .eq('id', assessment.id)
+      if (error) throw error
+      setSex(nextSex)
+      setBiotype(nextBiotype)
+    } catch {
+      setSexSelectionNote('Não foi possível salvar sua escolha de ilustração. Ela permanece apenas nesta sessão.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
   return (
     <section className="overflow-hidden border border-[#292524] bg-[#171717] text-white" aria-labelledby="segmented-body-title">
       <div className="border-b border-white/10 px-5 py-5 sm:px-6">
@@ -89,42 +153,86 @@ export default function SegmentedBodyMap({ assessment }: { assessment: BodyAsses
           <div className="grid gap-x-6 px-5 py-6 sm:px-6 xl:grid-cols-[minmax(150px,1fr)_240px_minmax(150px,1fr)] xl:items-center">
             <div className="order-2 xl:order-1">
               <p className="pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#78716C]">Lado esquerdo</p>
-              <SegmentReading title="Braço esquerdo" fat={assessment.segment_left_arm_fat_pct} muscle={assessment.segment_left_arm_muscle_kg} />
-              <SegmentReading title="Perna esquerda" fat={assessment.segment_left_leg_fat_pct} muscle={assessment.segment_left_leg_muscle_kg} />
+              <SegmentReading title="Braço esquerdo" fat={readings['braço esquerdo'].fat} muscle={readings['braço esquerdo'].muscle} />
+              <SegmentReading title="Perna esquerda" fat={readings['perna esquerda'].fat} muscle={readings['perna esquerda'].muscle} />
             </div>
 
-            <div className="order-1 mx-auto flex w-full max-w-[240px] flex-col items-center xl:order-2">
-              <svg viewBox="0 0 220 390" className="h-[330px] w-[190px] sm:h-[360px] sm:w-[210px]" role="img" aria-labelledby="body-map-svg-title body-map-svg-description">
-                <title id="body-map-svg-title">Corpo humano com cinco regiões avaliadas</title>
-                <desc id="body-map-svg-description">Braços, tronco e pernas possuem marcadores de gordura corporal e massa muscular.</desc>
-                <circle cx="110" cy="34" r="25" fill="#E7E5E4" />
-                <path d="M92 68 Q110 57 128 68 L147 151 Q138 205 129 221 L91 221 Q82 205 73 151 Z" fill="#D6D3D1" stroke="#78716C" strokeWidth="2" />
-                <path d="M78 89 C61 100 49 120 40 144 L22 207" fill="none" stroke="#D6D3D1" strokeLinecap="round" strokeWidth="23" />
-                <path d="M142 89 C159 100 171 120 180 144 L198 207" fill="none" stroke="#D6D3D1" strokeLinecap="round" strokeWidth="23" />
-                <path d="M97 217 L85 285 L76 369" fill="none" stroke="#D6D3D1" strokeLinecap="round" strokeWidth="30" />
-                <path d="M123 217 L135 285 L144 369" fill="none" stroke="#D6D3D1" strokeLinecap="round" strokeWidth="30" />
-                <path d="M61 96 L36 150 L23 206 M159 96 L184 150 L197 206 M96 230 L84 294 L76 369 M124 230 L136 294 L144 369" fill="none" stroke="#A8A29E" strokeLinecap="round" strokeWidth="2" opacity="0.7" />
-                {[[46, 142], [174, 142], [110, 142], [84, 290], [136, 290]].map(([cx, cy], index) => (
-                  <g key={`${cx}-${cy}`}>
-                    <circle cx={cx} cy={cy} r="11" fill="#171717" stroke="#86EFAC" strokeWidth="4" />
-                    <circle cx={cx} cy={cy} r="4" fill="#F87171" />
-                    {index === 2 && <circle cx={cx} cy={cy} r="17" fill="none" stroke="#F87171" strokeWidth="1" opacity="0.5" />}
-                  </g>
-                ))}
-                <text x="38" y="126" fill="#A8A29E" fontSize="10" textAnchor="middle">E</text>
-                <text x="182" y="126" fill="#A8A29E" fontSize="10" textAnchor="middle">D</text>
-              </svg>
-              <div className="w-full border-t border-white/10 pt-4 text-center">
-                <p className="font-condensed text-sm font-semibold uppercase">Tronco</p>
-                <p className="mt-1 text-xs text-[#A8A29E]"><strong className="text-[#FCA5A5]">{formatMetric(assessment.segment_trunk_fat_pct, '%')}</strong> gordura · <strong className="text-[#86EFAC]">{formatMetric(assessment.segment_trunk_muscle_kg, ' kg')}</strong> músculo</p>
+            <div className="order-1 mx-auto flex w-full flex-col items-center xl:order-2">
+              <div className="relative w-full max-w-[260px]">
+                <Image
+                  src={assetPath}
+                  alt="Ilustração anatômica com as cinco regiões avaliadas: braços, tronco e pernas"
+                  width={260}
+                  height={390}
+                  className="h-auto w-full"
+                  priority={false}
+                />
+                <div className="absolute inset-0" aria-hidden="true">
+                  {MARKERS.map((marker) => {
+                    const reading = readings[marker.region]
+                    return (
+                      <span key={marker.id} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${marker.x}%`, top: `${marker.y}%` }}>
+                        {marker.dot === 'muscle' ? (
+                          <span className="block h-4 w-4 rounded-full border-[3px] border-[#86EFAC] bg-[#171717]" />
+                        ) : (
+                          <span className="block h-5 w-5 rounded-full border-[3px] border-[#F87171] bg-[#171717]" />
+                        )}
+                        
+                        {reading.fat !== null || reading.muscle !== null ? (
+                          <span className="pointer-events-none absolute left-1/2 top-full mt-1 w-max -translate-x-1/2 whitespace-nowrap rounded border border-white/15 bg-[#171717]/95 px-2 py-1 text-[10px] leading-tight">
+                            <span className="text-[#FCA5A5]"><strong className="text-white">{formatMetric(reading.fat, '%')}</strong> gordura</span>
+                            <span className="mx-1 text-white/40">·</span>
+                            <span className="text-[#86EFAC]"><strong className="text-white">{formatMetric(reading.muscle, ' kg')}</strong> músculo</span>
+                          </span>
+                        ) : null}
+                      </span>
+                    )
+                  })}
+                </div>
               </div>
+
+              <div className="mt-4 flex w-full max-w-[260px] items-stretch gap-1.5">
+                <select
+                  aria-label="Modelo ilustrado"
+                  value={sex ?? ''}
+                  onChange={(event) => {
+                    const next = isSex(event.target.value) ? event.target.value : null
+                    persistIllustrationChoice(next, biotype)
+                  }}
+                  disabled={saving}
+                  className="flex-1 rounded-md border border-white/15 bg-[#292524] px-2 py-1.5 text-[11px] text-white outline-none transition-colors focus:border-[#F87171]"
+                >
+                  <option value="">Não informado</option>
+                  <option value="male">Masculino</option>
+                  <option value="female">Feminino</option>
+                </select>
+                <select
+                  aria-label="Biotipo ilustrado"
+                  value={biotype}
+                  onChange={(event) => {
+                    const next = isBiotype(event.target.value) ? event.target.value : 'mid'
+                    persistIllustrationChoice(sex, next)
+                  }}
+                  disabled={saving}
+                  className="flex-1 rounded-md border border-white/15 bg-[#292524] px-2 py-1.5 text-[11px] text-white outline-none transition-colors focus:border-[#F87171]"
+                >
+                  <option value="lean">Leve</option>
+                  <option value="mid">Intermediário</option>
+                  <option value="large">Maior volume</option>
+                </select>
+              </div>
+              {sexSelectionNote && <p role="status" className="mt-2 text-center text-[10px] text-[#FCA5A5]">{sexSelectionNote}</p>}
+              <p className="mt-2 max-w-[260px] text-center text-[10px] text-[#78716C]">
+                Modelo anatômico ilustrativo da região avaliada. {SEX_LABELS[sex ?? 'male']} · {BIOTYPE_LABELS[biotype]}.
+              </p>
+
               <div className="mt-4 flex items-center justify-center gap-4 text-[10px] uppercase text-[#A8A29E]"><span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full bg-[#F87171]" /> Gordura</span><span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full border-2 border-[#86EFAC]" /> Músculo</span></div>
             </div>
 
             <div className="order-3">
               <p className="pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#78716C] xl:text-right">Lado direito</p>
-              <SegmentReading title="Braço direito" fat={assessment.segment_right_arm_fat_pct} muscle={assessment.segment_right_arm_muscle_kg} align="right" />
-              <SegmentReading title="Perna direita" fat={assessment.segment_right_leg_fat_pct} muscle={assessment.segment_right_leg_muscle_kg} align="right" />
+              <SegmentReading title="Braço direito" fat={readings['braço direito'].fat} muscle={readings['braço direito'].muscle} align="right" />
+              <SegmentReading title="Perna direita" fat={readings['perna direita'].fat} muscle={readings['perna direita'].muscle} align="right" />
             </div>
           </div>
 
