@@ -1,0 +1,56 @@
+Healthy Edge Lite Db.sdf Healthy Edge Lite
+File Edit Users Help
+ANA LUCIA CARDOSO New Measurement User Profile First Previous Next Newest Week Month Year Prev View
+Show Measurements
+Scale
+Pedometer
+BP-Heart Rate Monitor
+All Measurements
+Measurements Analysis Graphs
+TANITA
+Monitoring Your Health
+Measurement
+Date & Time 21/07/26 6:52
+Scale BC-1500
+Comments AVALIACAO SEMESTRAL DE BIOIMPEDANCIA
+TETRAPOLAR SEGMENTADA
+Environmental Conditions
+Temperature 15.0 C
+Humidity 65.0 %
+Pressure mbar
+Weight
+Weight 61.8 kg BMI 24.8
+Body Fat
+Percentage 35.7 % Mass 22.1 kg
+Body Fat Range Healthy Fat Free Mass 39.7 kg
+Visceral Fat Rating 8.0
+Body Water
+Percentage 46.7 % Mass 28.9 kg
+Other
+Muscle Mass 37.7 kg Bone Mass 2.0 kg
+Heart Rate bpm
+Current Condition
+Basal Metabolic Rate 1202 kcal Metabolic Age 51.0 yrs
+Daily Calorie Intake 2188 kcal Physique Rating 5-Standard
+Analysis Graphs Segmental Data
+Body Mass Index (BMI)
+24.8
+0 10 20 30 40 50 60 70 80 90 100
+Body Fat (%)
+35.7
+0 10 20 30 40 50 60 70
+Body Water (%)
+46.7
+0 10 20 30 40 50 60 70 80
+Visceral Fat Rating
+8.0
+0 10 20 30 40 50
+Analysis for 63 year old Female
+Segmental Data
+Left Right
+Fat 37.8 % Fat 39.8 %
+Muscle Mass 1.8 kg Muscle Mass 1.5 kg
+Fat 36.4 %
+Muscle Mass 21.8 kg
+Fat 33.6 % Fat 33.6 %
+Muscle Mass 6.3 kg Muscle Mass 6.3 kg
