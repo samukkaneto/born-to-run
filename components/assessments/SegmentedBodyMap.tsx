@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
-import { anatomyAssetPath, type AnatomyBiotype, type AnatomySex, BIOTYPE_LABELS, SEX_LABELS } from '@/lib/assessments/anatomy-assets'
+import { anatomyAssetPath, classifyIllustrationBiotype, type AnatomyBiotype, type AnatomySex, BIOTYPE_LABELS, SEX_LABELS } from '@/lib/assessments/anatomy-assets'
 import type { BodyAssessment } from '@/types'
 
 function formatMetric(value: number | null, suffix: string) {
@@ -101,7 +101,21 @@ function isBiotype(value: unknown): value is AnatomyBiotype {
 
 export default function SegmentedBodyMap({ assessment }: { assessment: BodyAssessment }) {
   const [sex, setSex] = useState<AnatomySex | null>(isSex(assessment.sex) ? assessment.sex : null)
-  const [biotype, setBiotype] = useState<AnatomyBiotype>(isBiotype(assessment.biotype) ? assessment.biotype : 'mid')
+  // A escolha manual salva tem prioridade. Sem ela, o biotipo é classificado
+  // automaticamente pela balança Tanita (percentual de gordura e physique
+  // rating) ou, na ausência de avaliação, pelo IMC — conforme regra do
+  // proprietário: a balança é mais específica que o IMC (fisiculturista).
+  const autoBiotype = useMemo<AnatomyBiotype>(
+    () =>
+      classifyIllustrationBiotype({
+        sex: assessment.sex,
+        bodyFatPct: assessment.body_fat_pct,
+        bmi: assessment.bmi,
+        physiqueRating: assessment.physique_rating,
+      }) ?? 'mid',
+    [assessment.sex, assessment.body_fat_pct, assessment.bmi, assessment.physique_rating],
+  )
+  const [biotype, setBiotype] = useState<AnatomyBiotype>(isBiotype(assessment.biotype) ? assessment.biotype : autoBiotype)
   const [sexSelectionNote, setSexSelectionNote] = useState('')
   const [saving, setSaving] = useState(false)
 
