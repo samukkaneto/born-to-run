@@ -47,7 +47,7 @@ export default function AuthLayout({
           </Link>
 
           <div className="max-w-2xl pb-8">
-            <p className="section-kicker mb-6">Comunidade privada · desde {site.foundedYear}</p>
+            <p className="section-kicker mb-6">Movimento e saúde · desde {site.foundedYear}</p>
             <p className="font-display text-6xl uppercase leading-[0.88] text-[#171717] xl:text-7xl">
               Seu ritmo.
               <br />
@@ -96,7 +96,7 @@ export default function AuthLayout({
               />
             </Link>
             <p className="mt-1 font-condensed text-[11px] font-semibold uppercase tracking-[0.2em] text-[#57534E]">
-              Comunidade exclusiva da equipe
+              Treinamento, movimento e saúde para todos
             </p>
           </div>
 
