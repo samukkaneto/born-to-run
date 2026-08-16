@@ -4,7 +4,7 @@ Atualizado em 16/08/2026. Este é o documento operacional prioritário para qual
 
 ## Instrução principal
 
-Blocos **A (OCR)**, **C (anatomia)** e **E (logo/âncora)** já foram **concluídos e mesclados na `main`** (ver seções de status abaixo). Os blocos pendentes são **B (exportação Tanita)** e **D (gerenciamento de treinos)**. Não confundir o release publicado descrito no documento `25` com aprovação visual definitiva.
+Blocos **A (OCR)**, **C (anatomia)**, **D (gerenciamento de treinos)** e **E (logo/âncora)** já foram **concluídos e mesclados na `main`** (ver seções de status abaixo). O único bloco pendente é **B (exportação Tanita)**. Não confundir o release publicado descrito no documento `25` com aprovação visual definitiva.
 
 A próxima IA deve primeiro ler, nesta ordem:
 
@@ -33,7 +33,7 @@ A próxima IA deve primeiro ler, nesta ordem:
 - **Bloco C (anatomia): concluído.** Família própria de 6 masters transparentes 1536×2304 em `public/brand/anatomy-{male,female}-{lean,mid,large}.png` (geração própria a partir de referências do proprietário, sem copiar terceiros). Colunas `sex`/`biotype` adicionadas a `body_assessments` (migration `20260816200000_body_assessments_physique_type.sql`), RPC `staff_save_body_assessment_v5` (`20260816200100_staff_save_body_assessment_v5.sql`), helper `lib/assessments/anatomy-assets.ts`. O app (`SegmentedBodyMap.tsx`) e o PDF (`lib/assessments/pdf.ts`) usam o **mesmo ativo** por variante. Seletores explícitos de sexo/biotipo no app e no modal de edição; nenhum rótulo de gordura/músculo fica dentro do PNG (componentes React, vermelho/verde). Marcadores calibrados sobre a arte real. Apropriado visualmente pelo proprietário (amostra masculina intermediária aprovada antes da família).
 - **Bloco E (logo/âncora): concluído.** PR #37 mesclado: `logo-on-light.png` substituído por `logo-com-contorno.png` nos layouts de autenticação, âncora `#treinador` na `/sobre` com `scroll-margin` e CTA da home apontando para `/sobre#treinador`.
 - **Bloco B: pendente** (não iniciar importador antes de confirmar software/equipamento no computador de medição).
-- **Bloco D: pendente** (WorkoutsManager com filtros por atleta/mesociclo e remoção do campo `level`).
+- **Bloco D: concluído.** PR #40 mesclado: campo `level` de treino/mesociclo removido de toda a experiência de prescrição (modal, importador de planilha e plano do atleta). O campo permanece na tabela `workouts` como legado interno (migration `20260816210000_treino_sem_nivel.sql`, já aplicada em produção, sem migração de dados e sem editar migrations históricas); RPCs `staff_save_workout_v3`, `staff_import_training_cycle_v2` e `get_my_assigned_workouts` (sem expor `level` ao atleta) criados; `admin.ts` migrado para v3/v2. O nível de jornada da gamificação permanece intacto. `WorkoutsManager.tsx` reorganizado com painel de filtros: atleta, grupo, mesociclo, tipo/cor, período de datas (de/até), treinos sem data, sem mesociclo e busca textual, com contador de resultados e botão de limpar filtros; os cards exibem nomes de destinatários e mesociclo vinculado.
 
 ## Correções posteriores ao release 25 (arquivo original)
 
@@ -65,6 +65,10 @@ Transformar o OCR em preenchimento assistido e auditável, nunca em fonte de ver
 - Uma nova leitura não pode apagar correções manuais sem confirmação explícita.
 - Manter as três imagens originais privadas e acessíveis durante a conferência.
 - Adicionar testes com as três imagens reais sem versionar dados pessoais ou arquivos privados no Git.
+
+## Bloco D — resultado final (PR #40)
+
+Decisão de arquitetura sobre o campo `level`: **mantido como legado interno** na tabela `workouts` (mesociclos importados herdam `'iniciante'`, preservando a constraint existente). Racional: dados históricos intactos, nenhuma migração de dados, rollout seguro (RPCs v2 continuam executáveis enquanto o front antigo roda) e zero risco na constraint `CHECK`. O resultado final atende aos critérios de aceite: nenhum fluxo exige, edita ou exibe nível para criar treino ou importar mesociclo, e a intensidade continua representada exclusivamente pelas seis categorias cromáticas do Prof. Robson.
 
 ### Critérios de aceite
 
