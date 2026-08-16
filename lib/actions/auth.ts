@@ -146,7 +146,15 @@ export async function resetPassword(
   })
 
   if (error) {
-    return { error: 'Erro ao enviar e-mail. Verifique o endereço digitado.' }
+    if (error.status === 429 || error.code === 'over_email_send_rate_limit') {
+      return { error: 'Muitas solicitações de recuperação foram feitas. Aguarde alguns minutos antes de pedir outro link.' }
+    }
+
+    if (error.code === 'email_address_invalid') {
+      return { error: 'O endereço de e-mail informado é inválido.' }
+    }
+
+    return { error: 'Não foi possível enviar o e-mail agora. Tente novamente em alguns instantes.' }
   }
 
   return { success: 'E-mail enviado! Verifique sua caixa de entrada.' }
