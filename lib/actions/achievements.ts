@@ -64,6 +64,7 @@ export async function saveRaceResult(id: string | null, formData: FormData): Pro
   if (error) return { error: 'Não foi possível salvar o resultado.' }
   revalidatePath('/dashboard/conquistas')
   revalidatePath('/dashboard/perfil')
+  revalidatePath('/dashboard/evolucao')
   return { success: true }
 }
 
@@ -80,5 +81,6 @@ export async function deleteRaceResult(id: string): Promise<RaceResultActionResu
   if (error || count !== 1) return { error: 'Não foi possível remover o resultado.' }
   revalidatePath('/dashboard/conquistas')
   revalidatePath('/dashboard/perfil')
+  revalidatePath('/dashboard/evolucao')
   return { success: true }
 }

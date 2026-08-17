@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation'
 import { Activity, Gauge, Route, TrendingUp } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
-import { formatPace, summarizeEvolution } from '@/lib/evolution'
+import { formatPace, summarizeEvolution, summarizePersonalBests } from '@/lib/evolution'
+import PersonalBestGrid from '@/components/evolution/PersonalBestGrid'
 import { formatDate } from '@/lib/utils'
 
 export default async function EvolucaoPage() {
@@ -16,10 +17,11 @@ export default async function EvolucaoPage() {
   ])
 
   const activities = [
-    ...(postsResult.data ?? []).map((post) => ({ distanceKm: Number(post.distance_km), durationMinutes: post.duration_minutes ? Number(post.duration_minutes) : null, createdAt: post.created_at })),
-    ...(racesResult.data ?? []).map((race) => ({ distanceKm: Number(race.distance_km), durationMinutes: race.duration_seconds ? Number(race.duration_seconds) / 60 : null, createdAt: race.event_date })),
+    ...(postsResult.data ?? []).map((post) => ({ distanceKm: Number(post.distance_km), durationMinutes: post.duration_minutes ? Number(post.duration_minutes) : null, createdAt: post.created_at, source: 'atividade' as const })),
+    ...(racesResult.data ?? []).map((race) => ({ distanceKm: Number(race.distance_km), durationMinutes: race.duration_seconds ? Number(race.duration_seconds) / 60 : null, createdAt: race.event_date, source: 'prova' as const })),
   ]
   const summary = summarizeEvolution(activities)
+  const personalBests = summarizePersonalBests(activities)
   const maxMonth = Math.max(...summary.months.map((month) => month.distanceKm), 1)
   const assessments = assessmentsResult.data ?? []
   const firstAssessment = assessments.at(0)
@@ -65,6 +67,8 @@ export default async function EvolucaoPage() {
           ))}
         </div>
       </section>
+
+      <PersonalBestGrid records={personalBests} />
 
       <section>
         <h2 className="font-condensed text-xl font-semibold uppercase text-[#171717]">Composição corporal</h2>
