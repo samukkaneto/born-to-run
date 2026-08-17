@@ -304,14 +304,15 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
   const figureX = bodyCenterX - figureWidth / 2
   const figureTop = 402
   if (anatomyImage) pageTwo.drawImage(anatomyImage, { x: figureX, y: figureTop, width: figureWidth, height: figureHeight })
-  // Marcadores recalibrados sobre a mesma silhueta, agora com afastamento vertical dos callouts.
-  const markerTrunk: [number, number] = [298, 538]
+  // Pontos anatômicos explícitos: bíceps, bíceps, abdômen e coxas.
+  // Os endpoints ficam dentro da silhueta visível para nunca apontarem para a cabeça.
+  const markerTrunk: [number, number] = [298, 530]
   const markerPositions: Array<[number, number]> = [
-    [271, 566], // braço esquerdo
-    [325, 566], // braço direito
-    markerTrunk, // tronco
-    [287, 491], // perna esquerda
-    [309, 491], // perna direita
+    [271, 545], // braço esquerdo — bíceps
+    [325, 545], // braço direito — bíceps
+    markerTrunk, // tronco — abdômen
+    [287, 500], // perna esquerda — coxa
+    [309, 500], // perna direita — coxa
   ]
   markerPositions.forEach(([x, y], index) => {
     pageTwo.drawCircle({ x, y, size: index === 2 ? 11 : 9, color: carbon })
