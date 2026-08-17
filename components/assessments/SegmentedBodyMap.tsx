@@ -60,6 +60,31 @@ function AnatomyCallout({
   )
 }
 
+function MobileAnatomyCallout({
+  title,
+  reading,
+  side,
+  className,
+}: {
+  title: SegmentRegion
+  reading: SegmentReadingValue
+  side: 'left' | 'right' | 'center'
+  className: string
+}) {
+  const alignment = side === 'left' ? 'text-right' : side === 'right' ? 'text-left' : 'text-center'
+  const metrics = side === 'left' ? 'justify-end' : side === 'right' ? 'justify-start' : 'justify-center'
+
+  return (
+    <div className={`absolute z-30 px-0.5 ${alignment} ${className}`} aria-label={`Dados do ${title}`}>
+      <p className="font-condensed text-[9px] font-semibold uppercase leading-tight tracking-[0.08em] text-[#F5F5F4]">{title}</p>
+      <div className={`mt-1 flex flex-wrap gap-x-1.5 gap-y-0.5 text-[8px] uppercase leading-tight tracking-[0.02em] ${metrics}`}>
+        <span className="text-[#FCA5A5]">G <strong className="font-semibold text-white">{formatMetric(reading.fat, '%')}</strong></span>
+        <span className="text-[#86EFAC]">M <strong className="font-semibold text-white">{formatMetric(reading.muscle, ' kg')}</strong></span>
+      </div>
+    </div>
+  )
+}
+
 function SegmentList({ readings }: { readings: Record<SegmentRegion, SegmentReadingValue> }) {
   return (
     <div className="mt-5 border-y border-white/10 md:hidden" aria-label="Dados segmentares em lista">
@@ -72,6 +97,46 @@ function SegmentList({ readings }: { readings: Record<SegmentRegion, SegmentRead
           </div>
         </div>
       ))}
+    </div>
+  )
+}
+
+function MobileAnatomyStage({ assetPath, sex, readings }: { assetPath: string; sex: AnatomySex | null; readings: Record<SegmentRegion, SegmentReadingValue> }) {
+  return (
+    <div className="relative mx-auto aspect-[4/5] w-full max-w-[520px] overflow-hidden border-x border-white/10 bg-[#111111]" aria-label="Mapa anatômico mobile com apontamentos por região">
+      <div className="absolute left-1/2 top-[3%] z-0 aspect-[2/3] w-[62%] -translate-x-1/2">
+        <Image
+          src={assetPath}
+          alt={`Ilustração anatômica ${sex ? SEX_LABELS[sex].toLowerCase() : 'de referência'} com linhas de dados sobre braços, tronco e pernas`}
+          fill
+          sizes="62vw"
+          className="object-contain"
+          priority={false}
+        />
+      </div>
+
+      <MobileAnatomyCallout title="braço esquerdo" reading={readings['braço esquerdo']} side="left" className="left-[1%] top-[19%] w-[35%]" />
+      <MobileAnatomyCallout title="braço direito" reading={readings['braço direito']} side="right" className="right-[1%] top-[19%] w-[35%]" />
+      <MobileAnatomyCallout title="perna esquerda" reading={readings['perna esquerda']} side="left" className="left-[1%] top-[61%] w-[35%]" />
+      <MobileAnatomyCallout title="perna direita" reading={readings['perna direita']} side="right" className="right-[1%] top-[61%] w-[35%]" />
+      <MobileAnatomyCallout title="tronco" reading={readings.tronco} side="center" className="bottom-[3%] left-1/2 w-[42%] -translate-x-1/2" />
+
+      <svg className="pointer-events-none absolute inset-0 z-20 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <g fill="none" stroke="#A8A29E" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.22">
+          <polyline points="39,29 35,25 35,22" />
+          <polyline points="61,29 65,25 65,22" />
+          <polyline points="44,65 36,67 35,64" />
+          <polyline points="56,65 64,67 65,64" />
+          <polyline points="50,42 50,63 50,84" />
+        </g>
+        <g fill="#F87171">
+          <circle cx="39" cy="29" r="0.7" />
+          <circle cx="61" cy="29" r="0.7" />
+          <circle cx="44" cy="65" r="0.7" />
+          <circle cx="56" cy="65" r="0.7" />
+          <circle cx="50" cy="42" r="0.7" />
+        </g>
+      </svg>
     </div>
   )
 }
@@ -207,17 +272,8 @@ export default function SegmentedBodyMap({ assessment, profileSex }: { assessmen
                 </svg>
               </div>
 
-              <div className="mx-auto w-full max-w-[420px] md:hidden">
-                <div className="relative aspect-[2/3] w-full overflow-hidden border-x border-white/10 bg-[#111111]">
-                  <Image
-                    src={assetPath}
-                    alt={`Ilustração anatômica ${sex ? SEX_LABELS[sex].toLowerCase() : 'de referência'} com dados segmentares`}
-                    fill
-                    sizes="92vw"
-                    className="object-contain"
-                    priority={false}
-                  />
-                </div>
+              <div className="mx-auto w-full md:hidden">
+                <MobileAnatomyStage assetPath={assetPath} sex={sex} readings={readings} />
                 <SegmentList readings={readings} />
               </div>
 
