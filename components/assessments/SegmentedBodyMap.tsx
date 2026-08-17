@@ -37,8 +37,8 @@ function SegmentCard({
   const index = REGION_INDEX[title]
 
   return (
-    <article className={`rounded border border-white/10 bg-[#1D1D1D] p-4 shadow-[0_12px_28px_rgba(0,0,0,.12)] ${align === 'right' ? 'xl:text-right' : ''}`}>
-      <div className={`flex items-start gap-3 ${align === 'right' ? 'xl:flex-row-reverse' : ''}`}>
+    <article className={`min-w-0 overflow-hidden rounded border border-white/10 bg-[#1D1D1D] p-3 shadow-[0_12px_28px_rgba(0,0,0,.12)] ${align === 'right' ? 'sm:text-right' : ''}`}>
+      <div className={`flex items-start gap-3 ${align === 'right' ? 'sm:flex-row-reverse' : ''}`}>
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#F87171]/70 bg-[#171717] font-display text-sm text-white" aria-hidden="true">{index}</span>
         <div className="min-w-0">
           <p className="font-condensed text-sm font-semibold uppercase tracking-[0.08em] text-white">{title}</p>
@@ -46,11 +46,11 @@ function SegmentCard({
         </div>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3 border-t border-white/10 pt-3">
-        <div className={align === 'right' ? 'xl:text-right' : ''}>
+        <div className={align === 'right' ? 'sm:text-right' : ''}>
           <p className="text-[10px] uppercase tracking-[0.08em] text-[#FCA5A5]">Gordura corporal</p>
           <p className="mt-1 text-base font-semibold text-white">{formatMetric(reading.fat, '%')}</p>
         </div>
-        <div className={align === 'right' ? 'xl:text-right' : ''}>
+        <div className={align === 'right' ? 'sm:text-right' : ''}>
           <p className="text-[10px] uppercase tracking-[0.08em] text-[#86EFAC]">Músculo</p>
           <p className="mt-1 text-base font-semibold text-white">{formatMetric(reading.muscle, ' kg')}</p>
         </div>
@@ -172,14 +172,14 @@ export default function SegmentedBodyMap({ assessment, profileSex }: { assessmen
               </div>
             </div>
 
-            <div className="grid items-start gap-5 xl:grid-cols-[minmax(190px,1fr)_260px_minmax(190px,1fr)] xl:gap-6">
-              <div className="order-2 space-y-3 xl:order-1">
+            <div className="grid min-w-0 items-start gap-3 [grid-template-columns:minmax(0,1fr)_minmax(150px,180px)_minmax(0,1fr)] max-md:[grid-template-columns:1fr]">
+              <div className="order-2 min-w-0 space-y-3">
                 <p className="pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#78716C]">Lado esquerdo</p>
                 <SegmentCard title="braço esquerdo" reading={readings['braço esquerdo']} />
                 <SegmentCard title="perna esquerda" reading={readings['perna esquerda']} />
               </div>
 
-              <div className="order-1 mx-auto flex w-full max-w-[260px] flex-col items-center xl:order-2">
+              <div className="order-1 mx-auto flex w-full max-w-[180px] min-w-0 flex-col items-center">
                 <div className="relative w-full">
                   {assetPath ? (
                     <Image
@@ -195,36 +195,38 @@ export default function SegmentedBodyMap({ assessment, profileSex }: { assessmen
                       Informe Homem ou Mulher no seu perfil para personalizar o modelo corporal.
                     </div>
                   )}
-                  <div className="absolute inset-0" aria-label="Marcadores das cinco regiões corporais">
-                    {MARKERS.map((marker) => (
-                      <span
-                        key={marker.id}
-                        className="absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[#F87171] bg-[#171717]/95 font-display text-xs text-white shadow-[0_3px_10px_rgba(0,0,0,.35)]"
-                        style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
-                        title={`Região ${REGION_INDEX[marker.region]}: ${marker.region}`}
-                        aria-label={`Região ${REGION_INDEX[marker.region]}: ${marker.region}`}
-                      >
-                        {REGION_INDEX[marker.region]}
-                      </span>
-                    ))}
-                  </div>
+                  {assetPath && (
+                    <div className="absolute inset-0" aria-label="Marcadores das cinco regiões corporais">
+                      {MARKERS.map((marker) => (
+                        <span
+                          key={marker.id}
+                          className="absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[#F87171] bg-[#171717]/95 font-display text-xs text-white shadow-[0_3px_10px_rgba(0,0,0,.35)]"
+                          style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
+                          title={`Região ${REGION_INDEX[marker.region]}: ${marker.region}`}
+                          aria-label={`Região ${REGION_INDEX[marker.region]}: ${marker.region}`}
+                        >
+                          {REGION_INDEX[marker.region]}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                <p className="mt-3 max-w-[260px] text-center text-[10px] leading-relaxed text-[#78716C]">
+                <p className="mt-3 max-w-[180px] text-center text-[10px] leading-relaxed text-[#78716C]">
                   {sex ? `Modelo ${SEX_LABELS[sex].toLowerCase()} ilustrativo. Volume ${BIOTYPE_LABELS[biotype].toLowerCase()} definido automaticamente pela Tanita e pelo IMC.` : 'O modelo será personalizado assim que o sexo for informado no perfil.'}
                 </p>
+                <div className="mt-4 w-full">
+                  <SegmentCard title="tronco" reading={readings.tronco} />
+                </div>
               </div>
 
-              <div className="order-3 space-y-3">
-                <p className="pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#78716C] xl:text-right">Lado direito</p>
+              <div className="order-3 min-w-0 space-y-3">
+                <p className="pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#78716C] sm:text-right">Lado direito</p>
                 <SegmentCard title="braço direito" reading={readings['braço direito']} align="right" />
                 <SegmentCard title="perna direita" reading={readings['perna direita']} align="right" />
               </div>
             </div>
 
-            <div className="mx-auto mt-5 max-w-[520px]">
-              <SegmentCard title="tronco" reading={readings.tronco} />
-            </div>
           </div>
 
           <div className="border-t border-white/10 bg-[#111111] px-5 py-4 sm:px-6">
