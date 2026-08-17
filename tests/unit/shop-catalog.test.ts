@@ -38,4 +38,23 @@ describe('catálogo reservado da Born to Run', () => {
       expect(product.colors.length).toBeGreaterThan(0)
     }
   })
+
+  it('mapeia somente imagens reais para as variantes publicadas', () => {
+    const productsWithRealColorImages = catalogProducts.filter((product) => product.colorImages)
+
+    expect(productsWithRealColorImages.map((product) => product.name)).toEqual([
+      'Camiseta técnica',
+      'Regata performance',
+      'Top feminino performance',
+      'Short de corrida',
+      'Manga longa técnica',
+    ])
+
+    for (const product of productsWithRealColorImages) {
+      expect(Object.keys(product.colorImages ?? {})).toHaveLength(1)
+      expect(Object.values(product.colorImages ?? {})[0]).toMatch(/^\/shop-preview\/.+\.png$/)
+    }
+
+    expect(catalogProducts.filter((product) => !product.colorImages).length).toBeGreaterThan(0)
+  })
 })
