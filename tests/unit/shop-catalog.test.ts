@@ -11,7 +11,7 @@ describe('catálogo reservado da Born to Run', () => {
   })
 
   it('mantém referências auditáveis e datadas para todos os produtos', () => {
-    expect(catalogProducts.length).toBeGreaterThanOrEqual(10)
+    expect(catalogProducts).toHaveLength(13)
 
     for (const product of catalogProducts) {
       expect(product.reference.url).toMatch(/^https:\/\//)
@@ -48,6 +48,14 @@ describe('catálogo reservado da Born to Run', () => {
       'Top feminino performance',
       'Short de corrida',
       'Manga longa técnica',
+      'Moletom da equipe',
+      'Garrafa térmica 550 ml',
+      'Boné esportivo',
+      'Viseira dry-fit',
+      'Mochila saco esportiva',
+      'Toalha esportiva',
+      'Caneca oficial 325 ml',
+      'Copo térmico 500 ml',
     ])
 
     for (const product of productsWithRealColorImages) {
@@ -55,6 +63,7 @@ describe('catálogo reservado da Born to Run', () => {
       expect(Object.values(product.colorImages ?? {})[0]).toMatch(/^\/shop-preview\/.+\.png$/)
     }
 
-    expect(catalogProducts.filter((product) => !product.colorImages).length).toBeGreaterThan(0)
+    expect(productsWithRealColorImages).toHaveLength(13)
+    expect(catalogProducts.every((product) => product.colorImages)).toBe(true)
   })
 })

@@ -32,8 +32,6 @@ function product(entry: Omit<CatalogProduct, 'price'>): CatalogProduct {
 }
 
 const checkedAt = '2026-08-11'
-const apparel = '/shop-preview/apparel-color-collection-v2.webp'
-const accessories = '/shop-preview/accessories-color-collection.webp'
 
 export const catalogProducts: CatalogProduct[] = [
   product({
@@ -85,7 +83,8 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Moletom da equipe', category: 'Vestuário',
     description: 'Camada confortável para concentração, viagem e pós-prova.',
     material: 'Moletom flanelado personalizado', referenceCost: 89.99,
-    image: apparel, imagePosition: '90% center', imageZoom: 3.5,
+    image: '/shop-preview/moletom-equipe-carbono-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
+    colorImages: { [colors.carbon.name]: '/shop-preview/moletom-equipe-carbono-catalogo.png' },
     colors: [colors.yellow, colors.carbon, colors.blue, colors.pink],
     reference: { label: 'FuturaIM — moletom personalizado', url: 'https://www.futuraim.com.br/moletom-personalizado', checkedAt },
   }),
@@ -93,7 +92,8 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Garrafa térmica 550 ml', category: 'Hidratação',
     description: 'Hidratação da rotina ao treino com acabamento resistente.',
     material: 'Corpo térmico personalizado com tampa metálica', referenceCost: 62.8,
-    image: accessories, imagePosition: '14% 45%', imageZoom: 4,
+    image: '/shop-preview/garrafa-termica-lima-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
+    colorImages: { [colors.lime.name]: '/shop-preview/garrafa-termica-lima-catalogo.png' },
     colors: [colors.lime, colors.pink, colors.blue, colors.carbon],
     reference: { label: 'Brussax — garrafa térmica personalizada 550 ml', url: 'https://shopee.com.br/brussaxpersonalizados', checkedAt },
   }),
@@ -101,7 +101,8 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Boné esportivo', category: 'Acessórios',
     description: 'Proteção ajustável com visual leve para corrida ao ar livre.',
     material: 'Tecido esportivo respirável com aplicação personalizada', referenceCost: 38.9,
-    image: accessories, imagePosition: '43% 16%', imageZoom: 4,
+    image: '/shop-preview/bone-esportivo-azul-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
+    colorImages: { [colors.blue.name]: '/shop-preview/bone-esportivo-azul-catalogo.png' },
     colors: [colors.blue, colors.lime, colors.pink, colors.white, colors.carbon],
     reference: { label: 'Mercado Livre — boné esportivo personalizado', url: 'https://lista.mercadolivre.com.br/bone-esportivo-personalizado', checkedAt },
   }),
@@ -109,7 +110,8 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Viseira dry-fit', category: 'Acessórios',
     description: 'Aba esportiva leve para treinos e provas sob sol forte.',
     material: 'Dry-fit ajustável, disponível em múltiplas cores', referenceCost: 45,
-    image: accessories, imagePosition: '79% 17%', imageZoom: 4,
+    image: '/shop-preview/viseira-dry-fit-carbono-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
+    colorImages: { [colors.carbon.name]: '/shop-preview/viseira-dry-fit-carbono-catalogo.png' },
     colors: [colors.carbon, colors.pink, colors.lime, colors.yellow, colors.blue, colors.white],
     reference: { label: 'Mercado Livre — viseira premium dry-fit personalizada', url: 'https://lista.mercadolivre.com.br/bone-dry-fit-personalizado', checkedAt },
   }),
@@ -117,7 +119,8 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Mochila saco esportiva', category: 'Acessórios',
     description: 'Praticidade para levar o essencial aos treinos e provas.',
     material: 'Microfibra personalizada com cordões reforçados', referenceCost: 18.4,
-    image: accessories, imagePosition: '50% 62%', imageZoom: 4,
+    image: '/shop-preview/mochila-saco-turquesa-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
+    colorImages: { [colors.cyan.name]: '/shop-preview/mochila-saco-turquesa-catalogo.png' },
     colors: [colors.cyan, colors.pink, colors.lime, colors.blue, colors.carbon],
     reference: { label: 'Brindes Mil — mochila saco em microfibra', url: 'https://brindesmil.com.br/produtos/mochila-saco/', checkedAt },
   }),
@@ -125,7 +128,8 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Toalha esportiva', category: 'Acessórios',
     description: 'Compacta, leve e adequada para treinos intensos.',
     material: 'Tecido esportivo refrescante personalizado', referenceCost: 32,
-    image: accessories, imagePosition: '15% 84%', imageZoom: 4,
+    image: '/shop-preview/toalha-esportiva-carbono-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
+    colorImages: { [colors.carbon.name]: '/shop-preview/toalha-esportiva-carbono-catalogo.png' },
     colors: [colors.carbon, colors.yellow, colors.pink, colors.lime, colors.blue, colors.cyan],
     reference: { label: 'Elo7 — toalha esportiva personalizada', url: 'https://www.elo7.com.br/lista/toalhas-esportiva-personalizadas', checkedAt },
   }),
@@ -133,14 +137,17 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Caneca oficial 325 ml', category: 'Casa',
     description: 'A identidade da equipe também nos momentos de descanso.',
     material: 'Cerâmica branca personalizada por sublimação', referenceCost: 30,
-    image: accessories, imagePosition: '91% 62%', imageZoom: 5.5, colors: [colors.white],
+    image: '/shop-preview/caneca-oficial-branca-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
+    colorImages: { [colors.white.name]: '/shop-preview/caneca-oficial-branca-catalogo.png' },
+    colors: [colors.white],
     reference: { label: 'Nedd Publicidade — caneca de cerâmica', url: 'https://www.neddpublicidade.com.br/produto/caneca-branca-personalizada', checkedAt },
   }),
   product({
     name: 'Copo térmico 500 ml', category: 'Hidratação',
     description: 'Parede térmica e tampa para acompanhar deslocamentos e eventos.',
     material: 'Aço inox personalizado, livre de BPA', referenceCost: 59.9,
-    image: accessories, imagePosition: '82% 84%', imageZoom: 4.5,
+    image: '/shop-preview/copo-termico-laranja-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
+    colorImages: { [colors.orange.name]: '/shop-preview/copo-termico-laranja-catalogo.png' },
     colors: [colors.orange, colors.lime, colors.pink, colors.blue, colors.carbon],
     reference: { label: 'Teremaq — copo térmico inox 500 ml', url: 'https://www.teremaq.com.br/produto/copo-termico-tipo-stanley-personalizado', checkedAt },
   }),
