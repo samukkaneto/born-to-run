@@ -304,9 +304,9 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
   const figureX = bodyCenterX - figureWidth / 2
   const figureTop = 402
   if (anatomyImage) pageTwo.drawImage(anatomyImage, { x: figureX, y: figureTop, width: figureWidth, height: figureHeight })
-  // Pontos anatômicos explícitos: bíceps, bíceps, abdômen e coxas.
-  // Os endpoints ficam dentro da silhueta visível para nunca apontarem para a cabeça.
-  const markerTrunk: [number, number] = [298, 530]
+  // Pontos anatômicos explícitos: bíceps, bíceps, abdômen superior e coxas.
+  // O endpoint do tronco fica acima do umbigo e distante da região genital.
+  const markerTrunk: [number, number] = [298, 550]
   const markerPositions: Array<[number, number]> = [
     [271, 545], // braço esquerdo — bíceps
     [325, 545], // braço direito — bíceps
