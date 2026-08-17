@@ -19,7 +19,19 @@ export async function updateProfile(formData: FormData): Promise<ProfileActionRe
   const cidade = cleanText(formData.get('cidade'), 100)
   const personalGoal = cleanText(formData.get('personal_goal'), 200)
   const bio = cleanText(formData.get('bio'), 300)
+  const sexValue = cleanText(formData.get('sex'), 20)
+  const sex = sexValue === 'male' || sexValue === 'female' ? sexValue : null
+  const age = parseOptionalNumber(formData.get('age'))
+  const weightKg = parseOptionalNumber(formData.get('weight_kg'))
+  const heightCm = parseOptionalNumber(formData.get('height_cm'))
+  const showAge = formData.get('show_age') === 'on'
+  const showBodyData = formData.get('show_body_data') === 'on'
+
   if (fullName.length < 2) return { error: 'Informe seu nome completo.' }
+  if (sexValue && !sex) return { error: 'Selecione Homem ou Mulher para o parâmetro corporal.' }
+  if (age !== null && (!Number.isInteger(age) || age < 13 || age > 120)) return { error: 'Informe uma idade entre 13 e 120 anos.' }
+  if (weightKg !== null && (weightKg < 20 || weightKg > 400)) return { error: 'Informe um peso entre 20 e 400 kg.' }
+  if (heightCm !== null && (heightCm < 100 || heightCm > 250)) return { error: 'Informe uma altura entre 100 e 250 cm.' }
 
   const { data: current, error: lookupError } = await supabase
     .from('profiles')
@@ -75,8 +87,26 @@ export async function updateProfile(formData: FormData): Promise<ProfileActionRe
     : await supabase.from('personal_goals').delete().eq('user_id', user.id)
   if (goalResult.error) return { error: 'O perfil foi salvo, mas não foi possível atualizar sua meta privada.' }
 
+  const healthResult = await supabase.from('member_health_profiles').upsert({
+    user_id: user.id,
+    sex,
+    age,
+    weight_kg: weightKg,
+    height_cm: heightCm,
+    show_age: showAge,
+    show_body_data: showBodyData,
+  }, { onConflict: 'user_id' })
+  if (healthResult.error) return { error: 'O perfil foi salvo, mas não foi possível atualizar seus dados físicos.' }
+
   revalidatePath('/dashboard', 'layout')
   revalidatePath('/dashboard/perfil')
   revalidatePath('/dashboard/feed')
+  revalidatePath('/dashboard/avaliacoes')
   return { success: true }
+}
+
+function parseOptionalNumber(value: FormDataEntryValue | null) {
+  if (typeof value !== 'string' || value.trim() === '') return null
+  const normalized = Number(value.replace(',', '.'))
+  return Number.isFinite(normalized) ? normalized : null
 }

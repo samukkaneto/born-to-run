@@ -64,7 +64,7 @@ export const SEX_LABELS: Record<AnatomySex, string> = {
  *
  * Fallback IMC (OMS, sem avaliação Tanita):
  *   <18,5 magro · 18,5–24,9 normal · >=25 sobrepeso/obesidade
- * Sem nenhum dado, retorna null (o apresentador usa 'mid' e o seletor manual).
+ * Sem sexo informado, a apresentação não escolhe um modelo corporal automaticamente.
  */
 export interface BodyDataForIllustration {
   sex?: string | null
@@ -72,8 +72,10 @@ export interface BodyDataForIllustration {
   bodyFatPct?: number | null
   /** BMI da avaliação mais recente ou do perfil */
   bmi?: number | null
-  /** Physique rating da balança Tanita (1–9); ajustam retratos atípicos */
+  /** Physique rating da balança Tanita (1–9); ajusta retratos atípicos */
   physiqueRating?: number | null
+  /** Nível de gordura visceral da Tanita; 1–12 saudável e 13–59 excessivo */
+  visceralFatLevel?: number | null
 }
 
 /** Faixas de %G por sexo que separam magro / saudável / sobrepeso / obeso.
@@ -83,6 +85,7 @@ export interface BodyDataForIllustration {
  *  não estiver disponível; os limites de sobrepeso/obesidade seguem
  *  Gallagher et al. (base da tabela Tanita). */
 function classifyByBodyFatPct(sex: AnatomySex | null, pct: number | null | undefined, rating: number | null | undefined): AnatomyBiotype | null {
+  if (!sex) return null
   const low = sex === 'female' ? 16 : 11
   const high = sex === 'female' ? 30 : 22
   if (!Number.isFinite(pct) || (pct as number) <= 0) return null
@@ -96,6 +99,10 @@ function classifyByBodyFatPct(sex: AnatomySex | null, pct: number | null | undef
   return 'large'
 }
 
+function hasExcessVisceralFat(level: number | null | undefined) {
+  return Number.isFinite(level) && (level as number) >= 13
+}
+
 function classifyByBmi(bmi: number | null | undefined): AnatomyBiotype | null {
   if (!Number.isFinite(bmi) || (bmi as number) <= 0) return null
   const value = bmi as number
@@ -106,8 +113,13 @@ function classifyByBmi(bmi: number | null | undefined): AnatomyBiotype | null {
 
 /** Escolhe o biotipo: Tanita (%G) tem prioridade; IMC é o fallback. */
 export function classifyIllustrationBiotype(data: BodyDataForIllustration | null | undefined): AnatomyBiotype | null {
-  const sex: AnatomySex | null = data?.sex === 'female' ? 'female' : 'male'
+  const sex: AnatomySex | null = data?.sex === 'female' || data?.sex === 'male' ? data.sex : null
   const byTanita = classifyByBodyFatPct(sex, data?.bodyFatPct ?? null, data?.physiqueRating ?? null)
+  const excessVisceralFat = hasExcessVisceralFat(data?.visceralFatLevel ?? null)
+  // Ratings 8–9 representam um corpo magro/musculoso e não devem ser
+  // transformados em um retrato maior apenas por um sinal isolado.
+  if (byTanita === 'lean' && (data?.physiqueRating === 8 || data?.physiqueRating === 9)) return 'lean'
+  if (byTanita === 'large' || excessVisceralFat) return 'large'
   if (byTanita) return byTanita
   return classifyByBmi(data?.bmi ?? null)
 }

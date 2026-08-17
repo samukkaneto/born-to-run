@@ -8,7 +8,7 @@ import { formatDate } from '@/lib/utils'
 import AssessmentPdfButton from '@/components/assessments/AssessmentPdfButton'
 import AssessmentEvolution from '@/components/assessments/AssessmentEvolution'
 import SegmentedBodyMap from '@/components/assessments/SegmentedBodyMap'
-import type { BodyAssessment } from '@/types'
+import type { BodyAssessment, MemberHealthProfile } from '@/types'
 
 type AssessmentView = BodyAssessment & {
   body_assessment_files: { slot: number; storage_path: string; mime_type: string }[]
@@ -42,7 +42,7 @@ export default async function AvaliacoesPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const [assessmentsResult, profileResult] = await Promise.all([
+  const [assessmentsResult, profileResult, healthProfileResult] = await Promise.all([
     supabase
       .from('body_assessments')
       .select('*, sex, biotype, body_assessment_files (*)')
@@ -53,12 +53,14 @@ export default async function AvaliacoesPage() {
       .select(MEMBER_PROFILE_COLUMNS)
       .eq('user_id', user.id)
       .maybeSingle(),
+    supabase.from('member_health_profiles').select('*').eq('user_id', user.id).maybeSingle(),
   ])
-  if (assessmentsResult.error || profileResult.error) {
+  if (assessmentsResult.error || profileResult.error || healthProfileResult.error) {
     throw new Error('Não foi possível carregar suas avaliações.')
   }
 
   const assessments = (assessmentsResult.data ?? []) as AssessmentView[]
+  const healthProfile = healthProfileResult.data as MemberHealthProfile | null
   const latest = assessments[0]
   const previous = assessments[1]
   const latestSourceUrl = await createMediaUrl(supabase, 'assessment-files', latest?.source_path)
@@ -137,7 +139,7 @@ export default async function AvaliacoesPage() {
                   <ReferenceBar label="Gordura visceral" metricValue={latest.visceral_fat_level} min={1} max={30} suffix="" />
                 </div>
               </section>
-              <SegmentedBodyMap assessment={latest} />
+              <SegmentedBodyMap assessment={latest} profileSex={healthProfile?.sex} />
             </div>
             <div className="mt-8"><AssessmentEvolution assessments={assessments} /></div>
             <div className="mt-5 flex flex-wrap items-start gap-3">

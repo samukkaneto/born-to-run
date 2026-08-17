@@ -66,6 +66,17 @@ describe('classifyIllustrationBiotype', () => {
     expect(classifyIllustrationBiotype({ sex: 'male', bodyFatPct: 15, physiqueRating: 3 })).toBe('large')
   })
 
+  it('usa gordura visceral excessiva como sinal de maior volume quando não há exceção muscular', () => {
+    expect(classifyIllustrationBiotype({ sex: 'male', bodyFatPct: 18, visceralFatLevel: 13 })).toBe('large')
+    expect(classifyIllustrationBiotype({ sex: 'female', bmi: 22, visceralFatLevel: 12 })).toBe('mid')
+    expect(classifyIllustrationBiotype({ sex: 'male', bodyFatPct: 10, physiqueRating: 9, visceralFatLevel: 20 })).toBe('lean')
+  })
+
+  it('não escolhe uma silhueta por sexo quando o perfil não informou o dado', () => {
+    expect(classifyIllustrationBiotype({ bmi: 30 })).toBe('large')
+    expect(classifyIllustrationBiotype({ bodyFatPct: 30, bmi: 30 })).toBe('large')
+  })
+
   it('usa o IMC como fallback quando não há avaliação Tanita', () => {
     expect(classifyIllustrationBiotype({ sex: 'male', bmi: 17 })).toBe('lean')
     expect(classifyIllustrationBiotype({ sex: 'female', bmi: 22 })).toBe('mid')
