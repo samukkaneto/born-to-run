@@ -1,4 +1,3 @@
-'use client'
 
 import { useMemo } from 'react'
 import Image from 'next/image'
@@ -17,22 +16,6 @@ type SegmentReadingValue = {
   muscle: number | null
 }
 
-const REGION_INDEX: Record<SegmentRegion, string> = {
-  'braço esquerdo': '1',
-  'braço direito': '2',
-  tronco: '3',
-  'perna esquerda': '4',
-  'perna direita': '5',
-}
-
-const REGION_MARKERS: Record<SegmentRegion, { x: number; y: number }> = {
-  'braço esquerdo': { x: 31, y: 31 },
-  'braço direito': { x: 69, y: 31 },
-  tronco: { x: 50, y: 42 },
-  'perna esquerda': { x: 42, y: 67 },
-  'perna direita': { x: 58, y: 67 },
-}
-
 const REGIONS: SegmentRegion[] = ['braço esquerdo', 'braço direito', 'tronco', 'perna esquerda', 'perna direita']
 
 function readingsFor(assessment: BodyAssessment): Record<SegmentRegion, SegmentReadingValue> {
@@ -49,29 +32,29 @@ function isSex(value: unknown): value is AnatomySex {
   return value === 'male' || value === 'female'
 }
 
-function SegmentOverlay({ title, reading }: { title: SegmentRegion; reading: SegmentReadingValue }) {
-  const marker = REGION_MARKERS[title]
-  const index = REGION_INDEX[title]
+function AnatomyCallout({
+  title,
+  reading,
+  side,
+  top,
+}: {
+  title: SegmentRegion
+  reading: SegmentReadingValue
+  side: 'left' | 'right'
+  top: string
+}) {
+  const isLeft = side === 'left'
 
   return (
     <div
-      className="absolute z-10 w-[clamp(92px,30%,132px)] -translate-x-1/2 -translate-y-1/2 rounded-md border border-white/20 bg-[#171717]/95 px-2 py-1.5 text-left shadow-[0_5px_16px_rgba(0,0,0,.45)] backdrop-blur-[2px] sm:px-2.5 sm:py-2"
-      style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
+      className={`absolute z-10 w-[min(100%,220px)] px-1 ${isLeft ? 'right-0 text-right' : 'left-0 text-left'}`}
+      style={{ top }}
       aria-label={`Dados do ${title}`}
     >
-      <div className="flex items-start gap-1.5 border-b border-white/10 pb-1">
-        <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-[#F87171] text-[9px] font-semibold text-white" aria-hidden="true">{index}</span>
-        <p className="min-w-0 font-condensed text-[9px] font-semibold uppercase leading-tight tracking-[0.05em] text-white sm:text-[10px]">{title}</p>
-      </div>
-      <div className="mt-1.5 grid grid-cols-2 gap-1.5 text-[8px] leading-tight sm:text-[9px]">
-        <div className="min-w-0">
-          <p className="uppercase tracking-[0.04em] text-[#FCA5A5]">Gordura</p>
-          <p className="mt-0.5 whitespace-nowrap font-semibold text-white">{formatMetric(reading.fat, '%')}</p>
-        </div>
-        <div className="min-w-0">
-          <p className="uppercase tracking-[0.04em] text-[#86EFAC]">Músculo</p>
-          <p className="mt-0.5 whitespace-nowrap font-semibold text-white">{formatMetric(reading.muscle, ' kg')}</p>
-        </div>
+      <p className="font-condensed text-[11px] font-semibold uppercase leading-tight tracking-[0.12em] text-[#F5F5F4] sm:text-xs">{title}</p>
+      <div className={`mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[10px] uppercase leading-tight tracking-[0.04em] sm:text-[11px] ${isLeft ? 'justify-end' : 'justify-start'}`}>
+        <span className="text-[#FCA5A5]">Gordura <strong className="font-semibold text-white">{formatMetric(reading.fat, '%')}</strong></span>
+        <span className="text-[#86EFAC]">Músculo <strong className="font-semibold text-white">{formatMetric(reading.muscle, ' kg')}</strong></span>
       </div>
     </div>
   )
@@ -79,16 +62,13 @@ function SegmentOverlay({ title, reading }: { title: SegmentRegion; reading: Seg
 
 function SegmentList({ readings }: { readings: Record<SegmentRegion, SegmentReadingValue> }) {
   return (
-    <div className="mt-4 grid grid-cols-1 gap-2 sm:hidden" aria-label="Dados segmentares em lista">
+    <div className="mt-5 border-y border-white/10 md:hidden" aria-label="Dados segmentares em lista">
       {REGIONS.map((region) => (
-        <div key={region} className="flex items-center justify-between gap-3 rounded border border-white/10 bg-[#1D1D1D] px-3 py-2">
-          <div className="flex min-w-0 items-center gap-2">
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[#F87171]/70 text-[9px] text-white" aria-hidden="true">{REGION_INDEX[region]}</span>
-            <span className="font-condensed text-[10px] font-semibold uppercase tracking-[0.06em] text-white">{region}</span>
-          </div>
-          <div className="flex shrink-0 gap-2 text-[9px]">
-            <span className="text-[#FCA5A5]">{formatMetric(readings[region].fat, '%')}</span>
-            <span className="text-[#86EFAC]">{formatMetric(readings[region].muscle, ' kg')}</span>
+        <div key={region} className="flex items-center justify-between gap-3 border-b border-white/10 py-3 last:border-b-0">
+          <span className="font-condensed text-[11px] font-semibold uppercase tracking-[0.08em] text-white">{region}</span>
+          <div className="flex shrink-0 flex-wrap justify-end gap-x-3 gap-y-1 text-[10px] uppercase">
+            <span className="text-[#FCA5A5]">Gordura <strong className="font-semibold text-white">{formatMetric(readings[region].fat, '%')}</strong></span>
+            <span className="text-[#86EFAC]">Músculo <strong className="font-semibold text-white">{formatMetric(readings[region].muscle, ' kg')}</strong></span>
           </div>
         </div>
       ))}
@@ -175,8 +155,8 @@ export default function SegmentedBodyMap({ assessment, profileSex }: { assessmen
             <div className="border-b border-white/10 pb-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div className="min-w-0">
-                  <p className="font-condensed text-xs font-semibold uppercase tracking-[0.14em] text-[#A8A29E]">Leituras por região</p>
-                  <p className="mt-1 max-w-2xl text-xs leading-relaxed text-[#78716C]">Os dados aparecem diretamente sobre a região correspondente da ilustração. O número identifica a área e as duas cores separam gordura corporal de músculo.</p>
+                  <p className="font-condensed text-xs font-semibold uppercase tracking-[0.14em] text-[#A8A29E]">Leituras anatômicas</p>
+                  <p className="mt-1 max-w-2xl text-xs leading-relaxed text-[#78716C]">Linhas-guia apontam para cada região corporal. Gordura aparece em vermelho e músculo em verde, como em uma prancha de anatomia.</p>
                 </div>
                 <div className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 text-[10px] uppercase tracking-[0.08em] text-[#A8A29E]" aria-label="Legenda das métricas">
                   <span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-[#F87171]" aria-hidden="true" /> Gordura corporal</span>
@@ -185,24 +165,65 @@ export default function SegmentedBodyMap({ assessment, profileSex }: { assessmen
               </div>
             </div>
 
-            <div className="mx-auto mt-5 w-full max-w-[520px]">
-              <div className="relative mx-auto aspect-[2/3] w-full max-w-[420px] overflow-hidden rounded border border-white/10 bg-[#111111]">
-                <Image
-                  src={assetPath}
-                  alt={`Ilustração anatômica ${sex ? SEX_LABELS[sex].toLowerCase() : 'de referência'} com dados sobre braços, tronco e pernas`}
-                  fill
-                  sizes="(max-width: 640px) 92vw, 420px"
-                  className="object-contain"
-                  priority={false}
-                />
-                <div className="absolute inset-0" aria-label="Dados posicionados sobre as cinco regiões corporais">
-                  {REGIONS.map((region) => <SegmentOverlay key={region} title={region} reading={readings[region]} />)}
+            <div className="mx-auto mt-5 w-full max-w-[900px]">
+              <div className="relative hidden grid-cols-[minmax(0,1fr)_minmax(250px,420px)_minmax(0,1fr)] items-stretch gap-x-4 md:grid">
+                <div className="relative">
+                  <AnatomyCallout title="braço esquerdo" reading={readings['braço esquerdo']} side="left" top="21%" />
+                  <AnatomyCallout title="tronco" reading={readings.tronco} side="left" top="41%" />
+                  <AnatomyCallout title="perna esquerda" reading={readings['perna esquerda']} side="left" top="68%" />
                 </div>
+
+                <div className="relative mx-auto aspect-[2/3] w-full max-w-[420px] overflow-hidden border-x border-white/10 bg-[#111111]">
+                  <Image
+                    src={assetPath}
+                    alt={`Ilustração anatômica ${sex ? SEX_LABELS[sex].toLowerCase() : 'de referência'} com linhas de dados sobre braços, tronco e pernas`}
+                    fill
+                    sizes="(max-width: 900px) 46vw, 420px"
+                    className="object-contain"
+                    priority={false}
+                  />
+                </div>
+
+                <div className="relative">
+                  <AnatomyCallout title="braço direito" reading={readings['braço direito']} side="right" top="21%" />
+                  <AnatomyCallout title="perna direita" reading={readings['perna direita']} side="right" top="68%" />
+                </div>
+
+                <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                  <g fill="none" stroke="#A8A29E" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.16">
+                    <polyline points="39,28 29,28 22,23" />
+                    <polyline points="50,41 29,41 22,42" />
+                    <polyline points="44,66 29,66 22,70" />
+                    <polyline points="61,28 71,28 78,23" />
+                    <polyline points="56,66 71,66 78,70" />
+                  </g>
+                  <g fill="#F87171">
+                    <circle cx="39" cy="28" r="0.45" />
+                    <circle cx="50" cy="41" r="0.45" />
+                    <circle cx="44" cy="66" r="0.45" />
+                    <circle cx="61" cy="28" r="0.45" />
+                    <circle cx="56" cy="66" r="0.45" />
+                  </g>
+                </svg>
               </div>
+
+              <div className="mx-auto w-full max-w-[420px] md:hidden">
+                <div className="relative aspect-[2/3] w-full overflow-hidden border-x border-white/10 bg-[#111111]">
+                  <Image
+                    src={assetPath}
+                    alt={`Ilustração anatômica ${sex ? SEX_LABELS[sex].toLowerCase() : 'de referência'} com dados segmentares`}
+                    fill
+                    sizes="92vw"
+                    className="object-contain"
+                    priority={false}
+                  />
+                </div>
+                <SegmentList readings={readings} />
+              </div>
+
               <p className="mt-3 text-center text-[10px] leading-relaxed text-[#78716C]">
                 {sex ? `Modelo ${SEX_LABELS[sex].toLowerCase()} ilustrativo. Volume ${BIOTYPE_LABELS[biotype].toLowerCase()} definido automaticamente pela Tanita e pelo IMC.` : 'Modelo de referência visual. Informe o sexo no perfil para personalizar a anatomia sem alterar os dados desta avaliação.'}
               </p>
-              <SegmentList readings={readings} />
             </div>
           </div>
 
