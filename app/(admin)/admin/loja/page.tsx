@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import { Download, ShieldCheck, Sparkles } from 'lucide-react'
 import ProductCatalog from '@/components/shop/ProductCatalog'
 import { catalogProducts } from '@/lib/shop/catalog'
@@ -13,15 +12,6 @@ export default function AdminStorePage() {
   return (
     <div className="space-y-10 pb-8">
       <section className="relative isolate overflow-hidden rounded-[2rem] bg-[#171717] text-white shadow-card-lg">
-        <Image
-          src="/shop-preview/apparel-premium.webp"
-          alt="Coleção esportiva premium em preto Born to Run"
-          fill
-          priority
-          className="-z-20 object-cover object-center"
-          sizes="(max-width: 768px) 100vw, 1024px"
-        />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black via-black/80 to-black/15" />
         <div className="max-w-xl px-6 py-12 sm:px-10 sm:py-16">
           <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/30 px-3 py-1.5 font-condensed text-xs font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-sm">
             <Sparkles size={14} aria-hidden="true" /> Coleção oficial
@@ -55,16 +45,11 @@ export default function AdminStorePage() {
           imagePosition: product.imagePosition,
           imageZoom: product.imageZoom,
           imageFit: product.imageFit,
+          colorImages: product.colorImages,
           colors: product.colors,
         }))} />
       </section>
 
-      <section className="relative overflow-hidden rounded-[2rem] bg-[#171717] shadow-card-lg">
-        <div className="grid md:grid-cols-2">
-          <div className="relative aspect-[4/3]"><Image src="/shop-preview/accessories.webp" alt="Acessórios pretos da coleção Born to Run" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" /></div>
-          <div className="relative aspect-[4/3]"><Image src="/shop-preview/accessories-color-collection.webp" alt="Acessórios coloridos da coleção Born to Run" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" /></div>
-        </div>
-      </section>
     </div>
   )
 }
