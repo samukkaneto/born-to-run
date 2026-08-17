@@ -178,17 +178,18 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
 
   function drawHeader(page: PDFPage, lineOne: string, lineTwo: string, pageNumber: number) {
     const { width, height } = page.getSize()
-    page.drawRectangle({ x: 0, y: height - 132, width, height: 132, color: carbon })
-    page.drawRectangle({ x: 0, y: height - 138, width, height: 6, color: red })
+    // Cabeçalho claro para impressão: preserva a identidade sem criar uma faixa preta de alto consumo.
+    page.drawRectangle({ x: 0, y: height - 132, width, height: 132, color: white })
+    page.drawRectangle({ x: 0, y: height - 138, width, height: 4, color: red })
     if (logo) {
       const dimensions = logo.scaleToFit(166, 94)
       page.drawImage(logo, { x: 30, y: height - 112, width: dimensions.width, height: dimensions.height })
     } else {
-      page.drawText('BORN TO RUN', { x: 32, y: height - 76, size: 23, font: bold, color: white })
-      page.drawText('TREINAMENTO E SAÚDE', { x: 32, y: height - 94, size: 8, font: bold, color: softRed })
+      page.drawText('BORN TO RUN', { x: 32, y: height - 76, size: 23, font: bold, color: carbon })
+      page.drawText('TREINAMENTO E SAÚDE', { x: 32, y: height - 94, size: 8, font: bold, color: red })
     }
-    page.drawText(safePdfText(lineOne), { x: 226, y: height - 59, size: 11, font: bold, color: softRed })
-    page.drawText(safePdfText(lineTwo), { x: 226, y: height - 91, size: 24, font: bold, color: offWhite })
+    page.drawText(safePdfText(lineOne), { x: 226, y: height - 59, size: 11, font: bold, color: red })
+    page.drawText(safePdfText(lineTwo), { x: 226, y: height - 91, size: 24, font: bold, color: carbon })
     page.drawText(`PÁGINA ${pageNumber} / 3`, { x: width - 92, y: height - 116, size: 7.5, font: bold, color: muted })
   }
 
@@ -327,10 +328,10 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
     pageTwo.drawLine({ start: { x: lineStart, y: y + 29 }, end: { x: target[0], y: target[1] }, thickness: 0.8, color: muted })
   }
 
-  drawSegmentCallout(32, 590, 'Braço esquerdo', data.segment_left_arm_fat_pct, data.segment_left_arm_muscle_kg, 'left', [269, 609])
-  drawSegmentCallout(405, 590, 'Braço direito', data.segment_right_arm_fat_pct, data.segment_right_arm_muscle_kg, 'right', [327, 609])
-  drawSegmentCallout(32, 462, 'Perna esquerda', data.segment_left_leg_fat_pct, data.segment_left_leg_muscle_kg, 'left', [286, 527])
-  drawSegmentCallout(405, 462, 'Perna direita', data.segment_right_leg_fat_pct, data.segment_right_leg_muscle_kg, 'right', [310, 527])
+  drawSegmentCallout(32, 590, 'Braço esquerdo', data.segment_left_arm_fat_pct, data.segment_left_arm_muscle_kg, 'left', markerPositions[0])
+  drawSegmentCallout(405, 590, 'Braço direito', data.segment_right_arm_fat_pct, data.segment_right_arm_muscle_kg, 'right', markerPositions[1])
+  drawSegmentCallout(32, 462, 'Perna esquerda', data.segment_left_leg_fat_pct, data.segment_left_leg_muscle_kg, 'left', markerPositions[3])
+  drawSegmentCallout(405, 462, 'Perna direita', data.segment_right_leg_fat_pct, data.segment_right_leg_muscle_kg, 'right', markerPositions[4])
   // Card TRONCO na faixa livre entre o quadro segmental (y=280) e a figura (y=430).
   pageTwo.drawRectangle({ x: 218, y: 330, width: 160, height: 52, color: offWhite, borderColor: border, borderWidth: 0.8 })
   pageTwo.drawLine({ start: { x: 298, y: 378 }, end: { x: markerTrunk[0], y: markerTrunk[1] }, thickness: 0.8, color: muted })
