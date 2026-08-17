@@ -297,19 +297,21 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
   } catch {
     anatomyImage = null
   }
-  const figureWidth = 170
-  const figureHeight = 255
+  // A figura fica deliberadamente menor e mais baixa para preservar respiro entre o subtítulo,
+  // os callouts laterais e a palavra PERNA da tabela segmental abaixo.
+  const figureWidth = 156
+  const figureHeight = 234
   const figureX = bodyCenterX - figureWidth / 2
-  const figureTop = 430
+  const figureTop = 402
   if (anatomyImage) pageTwo.drawImage(anatomyImage, { x: figureX, y: figureTop, width: figureWidth, height: figureHeight })
-  // Marcadores calibrados sobre a silhueta real da ilustração (braços afastados, figura centralizada).
-  const markerTrunk: [number, number] = [298, 578]
+  // Marcadores recalibrados sobre a mesma silhueta, agora com afastamento vertical dos callouts.
+  const markerTrunk: [number, number] = [298, 538]
   const markerPositions: Array<[number, number]> = [
-    [269, 609], // braço esquerdo
-    [327, 609], // braço direito
+    [271, 566], // braço esquerdo
+    [325, 566], // braço direito
     markerTrunk, // tronco
-    [286, 527], // perna esquerda
-    [310, 527], // perna direita
+    [287, 491], // perna esquerda
+    [309, 491], // perna direita
   ]
   markerPositions.forEach(([x, y], index) => {
     pageTwo.drawCircle({ x, y, size: index === 2 ? 11 : 9, color: carbon })
