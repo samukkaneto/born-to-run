@@ -127,14 +127,14 @@ function MobileAnatomyStage({ assetPath, sex, readings }: { assetPath: string; s
           <polyline points="61,29 65,25 65,22" />
           <polyline points="44,65 36,67 35,64" />
           <polyline points="56,65 64,67 65,64" />
-          <polyline points="50,42 50,63 50,84" />
+          <polyline points="50,36 50,63 50,84" />
         </g>
         <g fill="#F87171">
           <circle cx="39" cy="29" r="0.7" />
           <circle cx="61" cy="29" r="0.7" />
           <circle cx="44" cy="65" r="0.7" />
           <circle cx="56" cy="65" r="0.7" />
-          <circle cx="50" cy="42" r="0.7" />
+          <circle cx="50" cy="36" r="0.7" />
         </g>
       </svg>
     </div>
