@@ -128,8 +128,8 @@ export default async function AvaliacoesPage() {
                 <p className="mt-2 text-xs leading-relaxed text-[#78716C]">As setas mostram apenas a variação entre medições; não representam diagnóstico ou classificação clínica.</p>
               </div>
             )}
-            <div className="mt-6 grid min-w-0 gap-5 xl:grid-cols-2 xl:items-start">
-              <section className="border border-[#E5E1D8] bg-white p-5" aria-labelledby="reference-ranges">
+            <div className="mt-6 space-y-5">
+              <section className="w-full border border-[#E5E1D8] bg-white p-5" aria-labelledby="reference-ranges">
                 <h3 id="reference-ranges" className="font-condensed text-base font-semibold uppercase text-[#171717]">Faixas de referência</h3>
                 <p className="mt-1 text-xs leading-relaxed text-[#78716C]">Versão traduzida da Foto 2. O marcador mostra a posição do resultado na escala visual, sem substituir avaliação profissional.</p>
                 <div className="mt-5 space-y-5">
