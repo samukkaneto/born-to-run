@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { formatDate, formatRelativeTime, getInitials, getTodayCalendarDate } from '@/lib/utils'
 import {
-  Rss, Dumbbell, Megaphone, User, ArrowRight, Calendar, MapPin,
+  Rss, Dumbbell, Megaphone, User, ClipboardList, TrendingUp, ArrowRight, Calendar, MapPin,
 } from 'lucide-react'
 
 /**
@@ -87,12 +87,14 @@ export default async function DashboardPage() {
       </div>
 
       {/* Atalhos rápidos */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {[
-          { href: '/dashboard/feed',        icon: Rss,      label: 'Feed'        },
-          { href: '/dashboard/treinos',     icon: Dumbbell, label: 'Treinos'     },
-          { href: '/dashboard/comunicados', icon: Megaphone,label: 'Comunicados' },
-          { href: '/dashboard/perfil',      icon: User,     label: 'Perfil'      },
+          { href: '/dashboard/feed',        icon: Rss,         label: 'Feed'        },
+          { href: '/dashboard/treinos',     icon: Dumbbell,    label: 'Treinos'     },
+          { href: '/dashboard/avaliacoes',  icon: ClipboardList, label: 'Avaliações' },
+          { href: '/dashboard/evolucao',    icon: TrendingUp,  label: 'Evolução'    },
+          { href: '/dashboard/comunicados', icon: Megaphone,   label: 'Comunicados' },
+          { href: '/dashboard/perfil',      icon: User,        label: 'Perfil'      },
         ].map(({ href, icon: Icon, label }) => (
           <Link
             key={href}
