@@ -82,6 +82,7 @@ export async function createPost(formData: FormData): Promise<FeedActionResult> 
 
   revalidatePath('/dashboard/feed')
   revalidatePath('/dashboard')
+  revalidatePath('/dashboard/evolucao')
   return { success: true }
 }
 
@@ -178,5 +179,6 @@ export async function deletePost(postId: string): Promise<FeedActionResult> {
   await removeMedia(supabase, 'post-images', post.photo_url)
   revalidatePath('/dashboard/feed')
   revalidatePath('/dashboard')
+  revalidatePath('/dashboard/evolucao')
   return { success: true }
 }
