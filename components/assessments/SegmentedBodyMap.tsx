@@ -156,7 +156,7 @@ export default function SegmentedBodyMap({ assessment, profileSex }: { assessmen
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div className="min-w-0">
                   <p className="font-condensed text-xs font-semibold uppercase tracking-[0.14em] text-[#A8A29E]">Leituras anatômicas</p>
-                  <p className="mt-1 max-w-2xl text-xs leading-relaxed text-[#78716C]">Linhas-guia apontam para cada região corporal. Gordura aparece em vermelho e músculo em verde, como em uma prancha de anatomia.</p>
+                  <p className="mt-1 max-w-2xl text-xs leading-relaxed text-[#78716C]">Linhas-guia apontam para cada região corporal. Gordura aparece em vermelho e músculo em verde.</p>
                 </div>
                 <div className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 text-[10px] uppercase tracking-[0.08em] text-[#A8A29E]" aria-label="Legenda das métricas">
                   <span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-[#F87171]" aria-hidden="true" /> Gordura corporal</span>
