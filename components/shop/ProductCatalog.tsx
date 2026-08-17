@@ -14,6 +14,7 @@ export type StorefrontProduct = {
   image: string
   imagePosition?: string
   imageZoom?: number
+  imageFit?: 'contain' | 'cover'
   colors: CatalogColor[]
 }
 
@@ -35,13 +36,14 @@ function ProductCard({ product }: { product: StorefrontProduct }) {
 
   return (
     <article className="card group overflow-hidden">
-      <div className="relative aspect-[4/3] overflow-hidden bg-[#171717]">
+      <div className={`relative aspect-[4/3] overflow-hidden ${product.imageFit === 'contain' ? 'bg-[#F4F1EC]' : 'bg-[#171717]'}`}>
         <Image
           key={`${product.name}-${selected.name}`}
           src={product.image}
           alt={`${product.name} na cor ${selected.name}`}
           fill
-          className="object-cover transition-[transform,filter] duration-300"
+          className={`${product.imageFit === 'contain' ? 'object-contain' : 'object-cover'} transition-[transform,filter] duration-300`}
+
           style={{
             objectPosition: product.imagePosition ?? 'center',
             transformOrigin: product.imagePosition ?? 'center',

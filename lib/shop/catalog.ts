@@ -10,6 +10,7 @@ export type CatalogProduct = {
   image: string
   imagePosition?: string
   imageZoom?: number
+  imageFit?: 'contain' | 'cover'
   colors: CatalogColor[]
   reference: { label: string; url: string; checkedAt: string }
 }
@@ -38,7 +39,7 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Camiseta técnica', category: 'Vestuário',
     description: 'Modelagem leve para treinos, provas e uso diário da equipe.',
     material: 'Malha dry-fit 100% poliéster com personalização colorida', referenceCost: 35.99,
-    image: '/shop-preview/apparel-main.webp', imagePosition: '84% center', imageZoom: 4.2,
+    image: '/shop-preview/camiseta-tecnica-carbono-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
     colors: [colors.lime, colors.pink, colors.blue, colors.carbon, colors.white],
     reference: { label: 'FuturaIM — camiseta dry-fit masculina', url: 'https://www.futuraim.com.br/produto/camiseta-dry-fit-masculina', checkedAt },
   }),
@@ -46,7 +47,7 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Regata performance', category: 'Vestuário',
     description: 'Respirabilidade e liberdade de movimento para os dias mais quentes.',
     material: 'Dry-fit personalizado para uso esportivo', referenceCost: 79.9,
-    image: '/shop-preview/apparel-main.webp', imagePosition: '52% center', imageZoom: 4.2,
+    image: '/shop-preview/regata-performance-carbono-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
     colors: [colors.pink, colors.lime, colors.cyan, colors.yellow, colors.carbon],
     reference: { label: 'D21 Fitness — regata dry-fit personalizada', url: 'https://www.d21fitness.com.br/regata/regata-dry-fit-personalizada', checkedAt },
   }),
@@ -54,7 +55,7 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Top feminino performance', category: 'Vestuário',
     description: 'Suporte e conforto para corrida e treinamento funcional.',
     material: 'Poliamida esportiva personalizada', referenceCost: 79.9,
-    image: apparel, imagePosition: '52% 38%', imageZoom: 3.5,
+    image: '/shop-preview/top-feminino-rosa-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
     colors: [colors.lime, colors.pink, colors.blue, colors.carbon],
     reference: { label: 'D21 Fitness — top personalizado em poliamida', url: 'https://www.d21fitness.com.br/', checkedAt },
   }),
@@ -62,7 +63,7 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Short de corrida', category: 'Vestuário',
     description: 'Leve, versátil e desenvolvido para acompanhar passadas longas.',
     material: 'Poliamida esportiva personalizada', referenceCost: 89.9,
-    image: apparel, imagePosition: '48% 82%', imageZoom: 3.5,
+    image: '/shop-preview/short-corrida-carbono-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
     colors: [colors.pink, colors.lime, colors.cyan, colors.carbon],
     reference: { label: 'D21 Fitness — short personalizado em poliamida', url: 'https://www.d21fitness.com.br/short/short-personalizado-fitness-poliamida', checkedAt },
   }),
@@ -70,7 +71,7 @@ export const catalogProducts: CatalogProduct[] = [
     name: 'Manga longa técnica', category: 'Vestuário',
     description: 'Proteção e conforto térmico sem perder respirabilidade.',
     material: 'Dry Performance sublimado de manga longa', referenceCost: 58,
-    image: apparel, imagePosition: '14% center', imageZoom: 3.5,
+    image: '/shop-preview/manga-longa-azul-catalogo.png', imagePosition: 'center', imageZoom: 1, imageFit: 'contain',
     colors: [colors.blue, colors.pink, colors.lime, colors.carbon],
     reference: { label: 'ST47 — camiseta Dry Performance manga longa', url: 'https://st47.com.br/produto/camiseta-dryfit-sublimada-manga-longa/', checkedAt },
   }),

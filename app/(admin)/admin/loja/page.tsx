@@ -54,6 +54,7 @@ export default function AdminStorePage() {
           image: product.image,
           imagePosition: product.imagePosition,
           imageZoom: product.imageZoom,
+          imageFit: product.imageFit,
           colors: product.colors,
         }))} />
       </section>
