@@ -78,8 +78,8 @@ function MobileAnatomyCallout({
     <div className={`absolute z-30 px-0.5 ${alignment} ${className}`} aria-label={`Dados do ${title}`}>
       <p className="font-condensed text-[9px] font-semibold uppercase leading-tight tracking-[0.08em] text-[#F5F5F4]">{title}</p>
       <div className={`mt-1 flex flex-wrap gap-x-1.5 gap-y-0.5 text-[8px] uppercase leading-tight tracking-[0.02em] ${metrics}`}>
-        <span className="text-[#FCA5A5]">G <strong className="font-semibold text-white">{formatMetric(reading.fat, '%')}</strong></span>
-        <span className="text-[#86EFAC]">M <strong className="font-semibold text-white">{formatMetric(reading.muscle, ' kg')}</strong></span>
+        <span className="text-[#FCA5A5]">Gordura <strong className="font-semibold text-white">{formatMetric(reading.fat, '%')}</strong></span>
+        <span className="text-[#86EFAC]">Músculo <strong className="font-semibold text-white">{formatMetric(reading.muscle, ' kg')}</strong></span>
       </div>
     </div>
   )
