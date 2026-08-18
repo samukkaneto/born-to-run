@@ -323,8 +323,9 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
     pageTwo.drawRectangle({ x, y, width: 158, height: 58, color: offWhite, borderColor: border, borderWidth: 0.8 })
     pageTwo.drawText(safePdfText(label).toUpperCase(), { x: x + 12, y: y + 40, size: 7.5, font: bold, color: carbon })
     pageTwo.drawText(measurement(fat, '%'), { x: x + 12, y: y + 16, size: 13, font: bold, color: red })
-    pageTwo.drawText('gordura', { x: x + 52, y: y + 18, size: 7, font: regular, color: muted })
+    pageTwo.drawText('Gordura', { x: x + 52, y: y + 18, size: 6.5, font: regular, color: muted })
     pageTwo.drawText(measurement(muscle, ' kg'), { x: x + 92, y: y + 16, size: 11, font: bold, color: green })
+    pageTwo.drawText('Músculo', { x: x + 126, y: y + 18, size: 6.5, font: regular, color: muted })
     const lineStart = side === 'left' ? x + 158 : x
     pageTwo.drawLine({ start: { x: lineStart, y: y + 29 }, end: { x: target[0], y: target[1] }, thickness: 0.8, color: muted })
   }
@@ -338,8 +339,9 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
   pageTwo.drawLine({ start: { x: 298, y: 378 }, end: { x: markerTrunk[0], y: markerTrunk[1] }, thickness: 0.8, color: muted })
   pageTwo.drawText('TRONCO', { x: 230, y: 361, size: 7.5, font: bold, color: carbon })
   pageTwo.drawText(measurement(data.segment_trunk_fat_pct, '%'), { x: 230, y: 340, size: 13, font: bold, color: red })
-  pageTwo.drawText('gordura', { x: 270, y: 342, size: 6.5, font: regular, color: muted })
+  pageTwo.drawText('Gordura', { x: 270, y: 342, size: 6.5, font: regular, color: muted })
   pageTwo.drawText(measurement(data.segment_trunk_muscle_kg, ' kg'), { x: 312, y: 340, size: 11, font: bold, color: green })
+  pageTwo.drawText('Músculo', { x: 346, y: 342, size: 6.5, font: regular, color: muted })
   pageTwo.drawText('QUADRO SEGMENTAL COMPLETO', { x: 32, y: 316, size: 9, font: bold, color: red })
   pageTwo.drawRectangle({ x: 32, y: 280, width: 531, height: 25, color: carbon })
   ;[['REGIÃO', 44], ['GORDURA', 286], ['MÚSCULO', 394], ['EQUILÍBRIO', 485]].forEach(([label, x]) => pageTwo.drawText(label as string, { x: x as number, y: 289, size: 7.2, font: bold, color: white }))
@@ -356,8 +358,18 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
     pageTwo.drawText(safePdfText(label), { x: 44, y: y + 12, size: 9, font: bold, color: carbon })
     pageTwo.drawText(measurement(fat, '%'), { x: 286, y: y + 12, size: 9, font: bold, color: red })
     pageTwo.drawText(measurement(muscle, ' kg'), { x: 394, y: y + 12, size: 9, font: bold, color: green })
-    const balance = fat === null || oppositeFat === null || muscle === null || oppositeMuscle === null ? '-' : `G ${Math.abs(Number(fat) - Number(oppositeFat)).toFixed(1)} | M ${Math.abs(Number(muscle) - Number(oppositeMuscle)).toFixed(1)}`
-    pageTwo.drawText(balance, { x: 485, y: y + 12, size: 7.5, font: regular, color: stone })
+    const balance = fat === null || oppositeFat === null || muscle === null || oppositeMuscle === null
+      ? null
+      : {
+          fat: Math.abs(Number(fat) - Number(oppositeFat)).toFixed(1),
+          muscle: Math.abs(Number(muscle) - Number(oppositeMuscle)).toFixed(1),
+        }
+    if (!balance) {
+      pageTwo.drawText('-', { x: 485, y: y + 12, size: 7.5, font: regular, color: stone })
+    } else {
+      pageTwo.drawText(`Gordura: ${balance.fat} p.p.`, { x: 485, y: y + 19, size: 5.7, font: regular, color: stone })
+      pageTwo.drawText(`Músculo: ${balance.muscle} kg`, { x: 485, y: y + 8, size: 5.7, font: regular, color: stone })
+    }
   })
   drawFooter(pageTwo)
 
