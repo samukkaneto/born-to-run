@@ -22,6 +22,18 @@ function isCrossSite(request: Request): boolean {
   return request.headers.get('sec-fetch-site') === 'cross-site'
 }
 
+function isAllowedOrigin(request: Request): boolean {
+  const origin = request.headers.get('origin')
+  if (!origin) return true
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://equipeborntorun.com'
+  try {
+    return new URL(origin).origin === new URL(siteUrl).origin
+  } catch {
+    return false
+  }
+}
+
 function clientIdentifier(request: Request): string {
   return (
     request.headers.get('x-vercel-forwarded-for') ??
@@ -43,7 +55,7 @@ function exceedsRateLimit(identifier: string): boolean {
 }
 
 export async function POST(request: Request) {
-  if (isCrossSite(request)) {
+  if (isCrossSite(request) || !isAllowedOrigin(request)) {
     return json({ error: 'Origem não permitida.' }, 403)
   }
 
@@ -77,16 +89,27 @@ export async function POST(request: Request) {
     )
   }
 
-  const resendResponse = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'Idempotency-Key': await createContactIdempotencyKey(validation.value),
-    },
-    body: JSON.stringify(createContactEmail(validation.value, site.contact.email)),
-    cache: 'no-store',
-  }).catch(() => null)
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 8_000)
+  let resendResponse: Response | null = null
+
+  try {
+    resendResponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'Idempotency-Key': await createContactIdempotencyKey(validation.value),
+      },
+      body: JSON.stringify(createContactEmail(validation.value, site.contact.email)),
+      cache: 'no-store',
+    })
+  } catch {
+    resendResponse = null
+  } finally {
+    clearTimeout(timeoutId)
+  }
 
   if (!resendResponse?.ok) {
     console.error('Falha ao entregar contato pela Resend.', {
