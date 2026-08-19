@@ -28,6 +28,8 @@ vi.stubGlobal(
 
 describe('PDF premium da avaliação', () => {
   it('gera três páginas A4 com resultados, segmentos e evolução', async () => {
+    const fetchMock = vi.mocked(fetch)
+    fetchMock.mockClear()
     const bytes = await buildAssessmentPdf({
       athleteName: 'Atleta de Teste',
       assessed_at: '2026-07-21',
@@ -59,6 +61,7 @@ describe('PDF premium da avaliação', () => {
       segment_right_leg_muscle_kg: 6.3,
       notes: 'Documento técnico de teste.',
       sex: 'male',
+      profileSex: 'female',
       biotype: 'mid',
       history: [
         { assessed_at: '2026-06-21', weight_kg: 63.1, body_fat_pct: 36.4, muscle_mass_kg: 37.2, body_water_pct: 45.9, bmi: 25.3, visceral_fat_level: 9 },
@@ -66,6 +69,7 @@ describe('PDF premium da avaliação', () => {
       ],
     })
 
+    expect(fetchMock.mock.calls.some(([url]) => url === '/brand/anatomy-female-large.png')).toBe(true)
     expect(new TextDecoder().decode(bytes.slice(0, 5))).toBe('%PDF-')
     const document = await PDFDocument.load(bytes)
     expect(document.getPageCount()).toBe(3)

@@ -1,7 +1,7 @@
 'use client'
 
 import type { PDFFont, PDFImage, PDFPage, RGB } from 'pdf-lib'
-import { autoAnatomyAssetPath } from '@/lib/assessments/anatomy-assets'
+import { ANATOMY_MARKERS, autoAnatomyAssetPath } from '@/lib/assessments/anatomy-assets'
 import type { BodyAssessment } from '@/types'
 
 type AssessmentHistoryPoint = Pick<
@@ -304,16 +304,21 @@ export async function buildAssessmentPdf(data: AssessmentPdfData) {
   const figureX = bodyCenterX - figureWidth / 2
   const figureTop = 402
   if (anatomyImage) pageTwo.drawImage(anatomyImage, { x: figureX, y: figureTop, width: figureWidth, height: figureHeight })
-  // Pontos anatômicos explícitos: bíceps, bíceps, abdômen superior e coxas.
-  // O endpoint do tronco fica acima do umbigo e distante da região genital.
-  const markerTrunk: [number, number] = [298, 550]
-  const markerPositions: Array<[number, number]> = [
-    [271, 545], // braço esquerdo — bíceps
-    [325, 545], // braço direito — bíceps
-    markerTrunk, // tronco — abdômen
-    [287, 500], // perna esquerda — coxa
-    [309, 500], // perna direita — coxa
+  // Pontos anatômicos normalizados no master 2:3. A conversão usa a mesma
+  // moldura da figura para manter braços, tronco e pernas alinhados em todos
+  // os assets feminino/masculino e lean/mid/large.
+  const markerPoint = (point: readonly [number, number]): [number, number] => [
+    figureX + figureWidth * point[0],
+    figureTop + figureHeight * (1 - point[1]),
   ]
+  const markerPositions: Array<[number, number]> = [
+    markerPoint(ANATOMY_MARKERS.leftArm),
+    markerPoint(ANATOMY_MARKERS.rightArm),
+    markerPoint(ANATOMY_MARKERS.trunk),
+    markerPoint(ANATOMY_MARKERS.leftLeg),
+    markerPoint(ANATOMY_MARKERS.rightLeg),
+  ]
+  const markerTrunk = markerPositions[2]
   markerPositions.forEach(([x, y], index) => {
     pageTwo.drawCircle({ x, y, size: index === 2 ? 11 : 9, color: carbon })
     pageTwo.drawCircle({ x, y, size: index === 2 ? 7 : 6, borderColor: green, borderWidth: 2, color: red })

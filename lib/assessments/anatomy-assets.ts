@@ -25,6 +25,19 @@ export const ANATOMY_ASSETS: Record<AnatomySex, Record<AnatomyBiotype, string>> 
   },
 } as const
 
+/**
+ * Pontos de referência normalizados na imagem anatômica (origem no canto
+ * superior esquerdo). Os seis masters usam a mesma moldura 2:3; manter os
+ * pontos aqui evita que o PDF e o sistema apontem para posições diferentes.
+ */
+export const ANATOMY_MARKERS = {
+  leftArm: [0.325, 0.31],
+  rightArm: [0.675, 0.31],
+  trunk: [0.5, 0.37],
+  leftLeg: [0.43, 0.58],
+  rightLeg: [0.57, 0.58],
+} as const
+
 /** Resolve o caminho do master. Nunca inventa sexo: quando não houver
  *  escolha explícita, usa o modelo masculino intermediário como base
  *  neutra de apresentação e o seletor da interface decide a variante. */
