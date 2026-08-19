@@ -175,6 +175,7 @@ export default async function AvaliacoesPage() {
                 segment_right_leg_muscle_kg: latest.segment_right_leg_muscle_kg,
                 notes: latest.notes,
                 sex: latest.sex,
+                profileSex: healthProfile?.sex === 'male' || healthProfile?.sex === 'female' ? healthProfile.sex : null,
                 biotype: latest.biotype,
                 history: assessments.map((assessment) => ({
                   assessed_at: assessment.assessed_at,

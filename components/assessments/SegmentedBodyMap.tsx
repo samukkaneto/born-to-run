@@ -123,15 +123,15 @@ function MobileAnatomyStage({ assetPath, sex, readings }: { assetPath: string; s
 
       <svg className="pointer-events-none absolute inset-0 z-20 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         <g fill="none" stroke="#A8A29E" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.22">
-          <polyline points="39,29 35,25 35,22" />
-          <polyline points="61,29 65,25 65,22" />
+          <polyline points="39,26 35,25 35,22" />
+          <polyline points="61,26 65,25 65,22" />
           <polyline points="44,65 36,67 35,64" />
           <polyline points="56,65 64,67 65,64" />
           <polyline points="50,36 50,63 50,84" />
         </g>
         <g fill="#F87171">
-          <circle cx="39" cy="29" r="0.7" />
-          <circle cx="61" cy="29" r="0.7" />
+          <circle cx="39" cy="26" r="0.7" />
+          <circle cx="61" cy="26" r="0.7" />
           <circle cx="44" cy="65" r="0.7" />
           <circle cx="56" cy="65" r="0.7" />
           <circle cx="50" cy="36" r="0.7" />
@@ -256,17 +256,17 @@ export default function SegmentedBodyMap({ assessment, profileSex }: { assessmen
 
                 <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                   <g fill="none" stroke="#A8A29E" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.16">
-                    <polyline points="39,28 29,28 22,23" />
+                    <polyline points="42,31 29,31 22,23" />
                     <polyline points="50,41 29,41 22,42" />
                     <polyline points="44,66 29,66 22,70" />
-                    <polyline points="61,28 71,28 78,23" />
+                    <polyline points="58,31 71,31 78,23" />
                     <polyline points="56,66 71,66 78,70" />
                   </g>
                   <g fill="#F87171">
-                    <circle cx="39" cy="28" r="0.45" />
+                    <circle cx="42" cy="31" r="0.45" />
                     <circle cx="50" cy="41" r="0.45" />
                     <circle cx="44" cy="66" r="0.45" />
-                    <circle cx="61" cy="28" r="0.45" />
+                    <circle cx="58" cy="31" r="0.45" />
                     <circle cx="56" cy="66" r="0.45" />
                   </g>
                 </svg>
